@@ -1,0 +1,193 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(toast) {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4000;
+  pointer-events: none;
+
+  @include m(center) {
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  @include m(top) {
+    top: 8%;
+  }
+
+  @include m(bottom) {
+    bottom: 8%;
+  }
+
+  @include m(primary) {
+    @include e(inner) {
+      background: var(--lk-color-primary-soft);
+      border-color: var(--lk-color-primary);
+    }
+    @include e(text) {
+      color: var(--lk-color-primary);
+    }
+  }
+
+  @include m(success) {
+    @include e(inner) {
+      background: var(--lk-color-success-soft);
+      border-color: var(--lk-color-success);
+    }
+    @include e(text) {
+      color: var(--lk-color-success);
+    }
+  }
+
+  @include m(warning) {
+    @include e(inner) {
+      background: var(--lk-color-warning-soft);
+      border-color: var(--lk-color-warning);
+    }
+    @include e(text) {
+      color: var(--lk-color-warning);
+    }
+  }
+
+  @include m(error) {
+    @include e(inner) {
+      background: var(--lk-color-danger-soft);
+      border-color: var(--lk-color-danger);
+    }
+    @include e(text) {
+      color: var(--lk-color-danger);
+    }
+  }
+
+  @include m(info) {
+    @include e(inner) {
+      background: var(--lk-color-info-soft);
+      border-color: var(--lk-color-info);
+    }
+    @include e(text) {
+      color: var(--lk-color-info);
+    }
+  }
+
+  @include e(overlay) {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--lk-fill-quaternary);
+    pointer-events: auto;
+
+    @include when(lock) {
+      pointer-events: auto;
+    }
+  }
+
+  @include e(inner) {
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--lk-rpx-200);
+    max-width: 80vw;
+    padding: var(--lk-rpx-24) var(--lk-rpx-40);
+    border-radius: var(--lk-border-radius-base);
+    background: var(--lk-bg-elevated);
+    box-shadow: var(--lk-shadow-base);
+    border: 1px solid var(--lk-color-border-light);
+  }
+
+  @include e(text) {
+    font-size: var(--lk-font-size-md);
+    color: var(--lk-text-primary);
+    font-weight: 500;
+    line-height: 1.5;
+    text-align: center;
+  }
+}
+
+@include b(toast-manager) {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 4500;
+}
+
+@include b(toast-mgr) {
+  @include e(item) {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    &.pos-top {
+      top: 8%;
+    }
+    &.pos-center {
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+    &.pos-bottom {
+      bottom: 8%;
+    }
+  }
+
+  @include e(inner) {
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--lk-rpx-180);
+    max-width: 80vw;
+    padding: var(--lk-rpx-20) var(--lk-rpx-32);
+    border-radius: 999px;
+    background: var(--lk-bg-elevated);
+    box-shadow: var(--lk-shadow-base);
+    border: 1px solid var(--lk-color-border-light);
+  }
+}
+
+@keyframes lk-slide-up-fade {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes lk-slide-down-fade {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes lk-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes lk-zoom-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

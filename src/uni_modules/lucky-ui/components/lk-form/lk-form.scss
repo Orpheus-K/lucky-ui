@@ -1,0 +1,181 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(form) {
+  display: flex;
+  flex-direction: column;
+
+  &:not(.lk-form--border) {
+    & > .lk-form-item:not(:first-child) {
+      margin-top: var(--lk-form-item-gap);
+    }
+  }
+
+  @include m(border) {
+    background: var(--lk-bg-container);
+  }
+
+  @include m(card) {
+    margin: var(--lk-spacing-md);
+    border-radius: var(--lk-radius-lg);
+    background: var(--lk-bg-container);
+    overflow: hidden;
+  }
+}
+
+@include b(form-item) {
+  --_gap-x: var(--lk-spacing-xl);
+  --_label-color: var(--lk-text-primary);
+  --_error-color: var(--lk-color-danger);
+  --_label-fs: var(--lk-font-size-md);
+  --_error-fs: var(--lk-font-size-xs);
+  --_padding-y: var(--lk-spacing-lg);
+  --_padding-x: var(--lk-spacing-md);
+
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: background-color 0.2s ease;
+
+  @include e(body) {
+    display: flex;
+    align-items: center;
+    padding: var(--_padding-y) var(--_padding-x);
+    min-height: var(--lk-rpx-104);
+    box-sizing: border-box;
+  }
+
+  @include e(label) {
+    flex-shrink: 0;
+    width: var(--lk-rpx-160);
+    font-size: var(--_label-fs);
+    color: var(--_label-color);
+    display: flex;
+    align-items: center;
+    margin-right: var(--_gap-x);
+    overflow: hidden;
+  }
+
+  @include e(star) {
+    color: var(--_error-color);
+    width: var(--lk-rpx-16);
+    margin-right: var(--lk-rpx-8);
+    display: inline-flex;
+    justify-content: center;
+    flex-shrink: 0;
+
+    @include when(hidden) {
+      visibility: hidden;
+    }
+
+    &--right {
+      margin-right: 0;
+      margin-left: var(--lk-rpx-8);
+    }
+  }
+
+  @include e(label-text) {
+    flex: 1;
+    display: inline-block;
+    text-align: justify;
+    text-align-last: justify;
+    // 强制 3 个字匹配 4 个字的视觉宽度
+    // 如果标签对齐方式是右对齐，则不使用两端对齐
+    .lk-form-item--left & {
+      text-align: justify;
+      text-align-last: justify;
+    }
+
+    .lk-form-item--right & {
+      text-align: right;
+      text-align-last: right;
+    }
+  }
+
+  @include e(content) {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+    overflow: hidden;
+  }
+
+  @include e(arrow) {
+    margin-left: var(--lk-rpx-8);
+    color: var(--lk-text-placeholder);
+    opacity: 0.8;
+  }
+
+  @include e(error) {
+    padding: 0 var(--_padding-x) var(--lk-spacing-xs);
+    font-size: var(--_error-fs);
+    color: var(--_error-color);
+    animation: lk-form-error-in 0.2s ease;
+  }
+
+  @include m(border) {
+    background-color: var(--lk-bg-container);
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: var(--_padding-x);
+      right: 0;
+      height: var(--lk-rpx-2);
+      background: var(--lk-color-border-light);
+      z-index: 1;
+      transform: scaleY(0.5);
+    }
+    &:last-child::after {
+      display: none;
+    }
+  }
+
+  @include m(link) {
+    &:active {
+      background-color: var(--lk-bg-active);
+    }
+  }
+
+  ::v-deep .lk-input {
+    text-align: left;
+    .lk-input__inner {
+      text-align: left;
+    }
+  }
+
+  @include m(top) {
+    .lk-form-item__body {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .lk-form-item__label {
+      width: 100%;
+      margin-bottom: var(--lk-spacing-xs);
+      margin-right: 0;
+    }
+    .lk-form-item__content {
+      width: 100%;
+      justify-content: flex-start;
+      text-align: left;
+    }
+  }
+
+  @include when(error) {
+    .lk-form-item__label {
+      color: var(--_error-color);
+    }
+  }
+}
+
+@keyframes lk-form-error-in {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--lk-rpx-4) * -1));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

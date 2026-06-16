@@ -1,0 +1,131 @@
+/* F:\luckyone\ui\src\uni_modules\lucky-ui\components\lk-segmented\lk-segmented.scss */
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(segmented) {
+  /* 变量 */
+  --lk-seg-height: auto;
+  --lk-seg-radius: var(--lk-radius-full);
+  --lk-seg-duration: var(--lk-transition-fast);
+  --lk-seg-easing: cubic-bezier(0.22, 1, 0.36, 1);
+  --lk-seg-inset: var(--lk-rpx-6);
+  --lk-seg-gutter: var(--lk-rpx-0);
+
+  --lk-seg-track-bg: var(--lk-fill-tertiary);
+  --lk-seg-slider-bg: var(--lk-color-primary);
+  --lk-seg-text: var(--lk-color-primary);
+  --lk-seg-text-active: var(--lk-color-white);
+  --lk-seg-text-disabled: var(--lk-text-placeholder);
+
+  position: relative;
+  display: inline-flex;
+  width: max-content;
+  align-items: stretch;
+  background: var(--lk-seg-track-bg);
+  padding: var(--lk-seg-inset);
+  border-radius: var(--lk-seg-radius);
+  height: var(--lk-seg-height);
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @include m(block) {
+    display: flex;
+    width: 100%;
+    .lk-segmented__item {
+      flex: 1;
+    }
+  }
+
+  @include m(sm) {
+    font-size: var(--lk-rpx-22);
+    .lk-segmented__item {
+      min-height: var(--lk-rpx-60);
+      padding: var(--lk-spacing-xs) var(--lk-spacing-md);
+    }
+  }
+  @include m(md) {
+    font-size: var(--lk-rpx-24);
+    .lk-segmented__item {
+      min-height: var(--lk-rpx-72);
+    }
+  }
+  @include m(lg) {
+    font-size: var(--lk-rpx-28);
+    .lk-segmented__item {
+      min-height: var(--lk-rpx-88);
+      padding: var(--lk-spacing-md) var(--lk-spacing-xl);
+    }
+  }
+
+  /* 滑块 */
+  @include e(slider) {
+    position: absolute;
+    top: var(--lk-seg-inset);
+    bottom: var(--lk-seg-inset);
+    left: 0;
+    background: var(--lk-seg-slider-bg);
+    border-radius: var(--lk-seg-radius);
+    box-shadow:
+      0 var(--lk-rpx-2) var(--lk-rpx-8) rgba(0, 0, 0, 0.06),
+      0 var(--lk-rpx-1) var(--lk-rpx-2) rgba(0, 0, 0, 0.04);
+    z-index: 1;
+    pointer-events: none;
+    will-change: width, transform;
+  }
+
+  /* item */
+  @include e(item) {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: var(--lk-seg-gutter);
+    &:last-child {
+      margin-right: 0;
+    }
+
+    padding: var(--lk-spacing-sm) var(--lk-spacing-lg);
+    min-height: var(--lk-rpx-72);
+    border-radius: var(--lk-seg-radius);
+    color: var(--lk-seg-text);
+    font-weight: 500;
+    transition: color var(--lk-seg-duration) ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    @include when(active) {
+      color: var(--lk-seg-text-active);
+    }
+    @include when(disabled) {
+      color: var(--lk-seg-text-disabled);
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    &:active:not(.is-active):not(.is-disabled) {
+      opacity: 0.75;
+    }
+  }
+
+  @include e(label) {
+    line-height: 1;
+    color: inherit;
+  }
+}
+
+/* 当被 scroll-view 包裹时，取消最大宽度限制以允许横向滚动 */
+uni-scroll-view,
+scroll-view {
+  .lk-segmented {
+    max-width: none;
+  }
+}

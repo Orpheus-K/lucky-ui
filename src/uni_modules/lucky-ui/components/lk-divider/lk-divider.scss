@@ -1,0 +1,75 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(divider) {
+  --lk-divider-color: var(--lk-color-border-light);
+  --lk-divider-text-color: var(--lk-text-secondary);
+  --lk-divider-font-size: var(--lk-font-size-sm);
+  --lk-divider-margin: var(--lk-spacing-xl);
+  --lk-divider-thickness: var(--lk-rpx-2);
+  --lk-divider-content-padding: var(--lk-spacing-md);
+
+  display: flex;
+  align-items: center;
+  margin: var(--lk-divider-margin) 0;
+  color: var(--lk-divider-text-color);
+  font-size: var(--lk-divider-font-size);
+
+  @include e(left) {
+    flex: 1;
+    box-sizing: border-box;
+    height: 1px;
+    border-top: var(--lk-divider-thickness) solid var(--lk-divider-color);
+  }
+
+  @include e(right) {
+    flex: 1;
+    box-sizing: border-box;
+    height: 1px;
+    border-top: var(--lk-divider-thickness) solid var(--lk-divider-color);
+  }
+
+  @include e(content) {
+    padding: 0 var(--lk-divider-content-padding);
+    white-space: nowrap;
+  }
+
+  @include when(has-text) {
+    @include m(left) {
+      .lk-divider__left {
+        flex: 0 0 var(--lk-spacing-xl);
+      }
+    }
+    @include m(right) {
+      .lk-divider__right {
+        flex: 0 0 var(--lk-spacing-xl);
+      }
+    }
+  }
+
+  @include when(dashed) {
+    .lk-divider__left,
+    .lk-divider__right {
+      border-top-style: dashed;
+    }
+  }
+
+  @include when(hairline) {
+    --lk-divider-thickness: var(--lk-rpx-1);
+  }
+
+  @include when(vertical) {
+    display: inline-flex;
+    width: 0;
+    height: 1em;
+    margin: 0 var(--lk-spacing-md);
+    vertical-align: middle;
+    border-left: var(--lk-divider-thickness) solid var(--lk-divider-color);
+    position: relative;
+    top: calc(var(--lk-rpx-1) * -1); // 视觉微调
+    flex: none;
+
+    @include when(dashed) {
+      border-left-style: dashed;
+    }
+  }
+}

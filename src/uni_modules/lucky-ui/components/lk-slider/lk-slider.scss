@@ -1,0 +1,134 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(slider) {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--lk-rpx-60);
+  user-select: none;
+  touch-action: none;
+
+  --lk-slider-track-height: var(--lk-rpx-6);
+  --lk-slider-thumb-size: var(--lk-rpx-32);
+  --lk-slider-thumb-shadow: var(--lk-shadow-sm);
+  --lk-slider-thumb-bg: var(--lk-color-white);
+  --lk-slider-active-bg: var(--lk-color-primary);
+  --lk-slider-inactive-bg: var(--lk-fill-tertiary);
+
+  // 变量注入点（供 props 覆盖）
+  --_active-bg: var(--lk-slider-active-bg);
+  --_inactive-bg: var(--lk-slider-inactive-bg);
+
+  // 小号
+  @include m(small) {
+    --lk-slider-track-height: var(--lk-rpx-4);
+    --lk-slider-thumb-size: var(--lk-rpx-24);
+  }
+
+  // 大号
+  @include m(large) {
+    --lk-slider-track-height: var(--lk-rpx-10);
+    --lk-slider-thumb-size: var(--lk-rpx-44);
+  }
+
+  @include e(track-container) {
+    position: relative;
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  @include e(track) {
+    width: 100%;
+    height: var(--lk-slider-track-height);
+    background: var(--lk-slider-inactive-bg);
+    border-radius: 999px;
+  }
+
+  @include e(stop) {
+    position: absolute;
+    height: var(--lk-slider-track-height);
+    width: var(--lk-slider-track-height);
+    border-radius: 50%;
+    background-color: var(--lk-color-white);
+    opacity: 0.6;
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @include e(bar) {
+    position: absolute;
+    height: var(--lk-slider-track-height);
+    background: var(--lk-slider-active-bg);
+    border-radius: 999px;
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.5, 1);
+    z-index: 1; // 盖住默认的 stop
+  }
+
+  @include e(thumb-wrapper) {
+    position: absolute;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: left 0.2s cubic-bezier(0.25, 0.8, 0.5, 1);
+    z-index: 2;
+  }
+
+  @include e(thumb) {
+    position: relative;
+    width: var(--lk-slider-thumb-size);
+    height: var(--lk-slider-thumb-size);
+    border-radius: 50%;
+    background: var(--lk-slider-thumb-bg);
+    box-shadow: var(--lk-slider-thumb-shadow);
+    transition: transform 0.2s;
+    display: flex;
+    justify-content: center;
+  }
+
+  @include e(tooltip) {
+    position: absolute;
+    bottom: calc(var(--lk-slider-thumb-size) + var(--lk-rpx-10));
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--lk-color-primary);
+    color: var(--lk-color-white);
+    font-size: var(--lk-rpx-22);
+    padding: var(--lk-rpx-4) var(--lk-rpx-12);
+    border-radius: var(--lk-radius-sm);
+    white-space: nowrap;
+    pointer-events: none;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: var(--lk-rpx-8) solid transparent;
+      border-top-color: var(--lk-color-primary);
+    }
+  }
+
+  @include e(value) {
+    margin-left: var(--lk-rpx-24);
+    font-size: var(--lk-rpx-26);
+    color: var(--lk-text-secondary);
+  }
+
+  @include when(dragging) {
+    @include e(thumb) {
+      transform: scale(1.2);
+    }
+  }
+
+  @include when(disabled) {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}

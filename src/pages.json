@@ -1,0 +1,117 @@
+{
+  "pages": [
+    {
+      "path": "pages/app-main/index",
+      "style": {
+        "navigationBarTitleText": "Lucky UI",
+        "navigationStyle": "custom"
+      }
+    }
+  ],
+  "subPackages": [
+    {
+      "root": "pages_sub",
+      "name": "sub-pages",
+      "pages": [
+        {
+          "path": "showcase/index",
+          "style": {
+            "navigationBarTitleText": "组件展示",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "component-detail/index",
+          "style": {
+            "navigationBarTitleText": "组件详情",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "playground/index",
+          "style": {
+            "navigationBarTitleText": "Playground",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "i18n-preview/index",
+          "style": {
+            "navigationBarTitleText": "i18n Preview",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "pull-refresh-page/index",
+          "style": {
+            "navigationBarTitleText": "页面下拉刷新",
+            "navigationStyle": "default",
+            "enablePullDownRefresh": true,
+            "backgroundTextStyle": "@bgTxtStyle"
+          }
+        },
+        {
+          "path": "search/index",
+          "style": {
+            "navigationBarTitleText": "搜索",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "auth/index",
+          "style": {
+            "navigationBarTitleText": "登录",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "edit-profile/index",
+          "style": {
+            "navigationBarTitleText": "编辑资料",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "analytics/index",
+          "style": {
+            "navigationBarTitleText": "数据分析",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "check-in/index",
+          "style": {
+            "navigationBarTitleText": "每日签到",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "settings/index",
+          "style": {
+            "navigationBarTitleText": "设置",
+            "navigationStyle": "custom"
+          }
+        }
+      ]
+    }
+  ],
+  "globalStyle": {
+    "navigationStyle": "custom",
+    "navigationBarTitleText": "Lucky UI",
+    "navigationBarBackgroundColor": "@navBgColor",
+    "navigationBarTextStyle": "@navTxtStyle",
+    "backgroundColor": "@bgColor",
+    "backgroundTextStyle": "@bgTxtStyle",
+    "backgroundColorTop": "@bgColorTop",
+    "backgroundColorBottom": "@bgColorBottom",
+    "app-plus": {
+      "bounce": "none"
+    }
+  },
+  "preloadRule": {
+    "pages/app-main/index": {
+      "network": "all",
+      "packages": ["pages_sub"]
+    }
+  }
+}

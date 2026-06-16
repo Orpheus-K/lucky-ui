@@ -1,0 +1,75 @@
+// 工具类: 间距 (Spacing)
+@use '../tokens/spacing' as theme;
+
+// 定义间距令牌的映射，键为类名后缀，值为 SCSS 变量
+$spacing-map: (
+  'xxs': theme.$spacing-xxs,
+  'xs': theme.$spacing-xs,
+  'sm': theme.$spacing-sm,
+  'md': theme.$spacing-md,
+  'lg': theme.$spacing-lg,
+  'xl': theme.$spacing-xl,
+  'xxl': theme.$spacing-xxl,
+  'xxxl': theme.$spacing-xxxl,
+);
+
+// 定义要生成的属性和方向
+$properties: (
+  'm': 'margin',
+  'p': 'padding',
+);
+$directions: (
+  't': 'top',
+  'r': 'right',
+  'b': 'bottom',
+  'l': 'left',
+  'x': (
+    'left',
+    'right',
+  ),
+  'y': (
+    'top',
+    'bottom',
+  ),
+);
+
+@each $prop-abbr, $prop-full in $properties {
+  // 生成全局间距类, e.g., .m-sm, .p-md
+  @each $space-name, $space-value in $spacing-map {
+    .#{$prop-abbr}-#{$space-name} {
+      #{$prop-full}: $space-value !important;
+    }
+  }
+
+  // 生成方向性间距类, e.g., .mt-sm, .px-md
+  @each $dir-abbr, $dir-full in $directions {
+    @each $space-name, $space-value in $spacing-map {
+      // 如果方向是 x 或 y 轴
+      @if type-of($dir-full) == 'list' {
+        .#{$prop-abbr}#{$dir-abbr}-#{$space-name} {
+          @each $d in $dir-full {
+            #{$prop-full}-#{$d}: $space-value !important;
+          }
+        }
+      } @else {
+        // 如果方向是 t, r, b, l
+        .#{$prop-abbr}#{$dir-abbr}-#{$space-name} {
+          #{$prop-full}-#{$dir-full}: $space-value !important;
+        }
+      }
+    }
+  }
+}
+
+// 自动外边距，用于水平居中等
+.m-auto {
+  margin: auto !important;
+}
+.mx-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.my-auto {
+  margin-top: auto !important;
+  margin-bottom: auto !important;
+}

@@ -1,0 +1,33 @@
+// 设计令牌: 层级 (Z-Index)
+// 层级设计原则：
+// 1. 页面内容层 (1-99): 普通页面元素
+// 2. 导航层 (100-499): 固定导航、Tabbar、Navbar
+// 3. 弹出层 (500-899): Dropdown、Tooltip、Popover
+// 4. 遮罩层 (900-999): Overlay/Mask
+// 5. 模态层 (1000-1499): Popup、ActionSheet、Picker
+// 6. 高优先级模态层 (1500-1999): Modal、Dialog
+// 7. 消息层 (2000-2499): Toast、Notify、Loading
+// 8. 调试层 (9999): 开发调试工具
+
+$z-index-base: 1; // 基础层，用于常规元素
+$z-index-content: 10; // 内容层，用于需要浮于基础层之上的内容
+
+$z-index-sticky: 100; // 吸顶/吸底元素
+$z-index-navbar: 200; // 顶部导航栏
+$z-index-tabbar: 300; // 底部 Tabbar
+$z-index-fab: 400; // 悬浮按钮 FAB
+
+$z-index-dropdown: 500; // 下拉菜单
+$z-index-tooltip: 600; // 提示框
+$z-index-popover: 700; // 气泡弹出
+
+$z-index-overlay: 900; // 遮罩层 (Mask)
+
+$z-index-popup: 1000; // 弹出层 (Popup, ActionSheet, Picker)
+$z-index-modal: 1500; // 模态框 (Modal, Dialog) - 优先级高于 Popup
+
+$z-index-toast: 2000; // 轻提示 (Toast)
+$z-index-notify: 2100; // 通知消息 (Notify)
+$z-index-loading: 2200; // 全局加载 (Loading)
+
+$z-index-top: 9999; // 最高层，用于特殊调试或强制置顶

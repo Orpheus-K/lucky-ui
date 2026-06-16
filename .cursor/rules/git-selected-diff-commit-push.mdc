@@ -1,0 +1,24 @@
+---
+description: 选中 diff 文件的提交与推送执行规范
+alwaysApply: true
+---
+
+# Selected Diff Commit Push
+
+## 目标
+
+- 严格只提交用户指定文件，避免误提交流水线产物或无关改动。
+- 在 PowerShell 环境下稳定完成 add / commit / push。
+
+## 执行规则
+
+- 若用户给出“Unstaged files to stage”清单，只 `git add` 清单内文件；提交前后都要 `git status --short` 复核。
+- 发现清单外文件（如 `test-results/` 目录）时，不自动加入提交。
+- 在 PowerShell 中不要使用 `&&` 串联命令，改为分步执行并逐步检查返回结果。
+- 提交信息保持简洁（1 行标题 + 可选 1-2 行原因），语义匹配改动类型（`fix`/`refactor`/`feat`）。
+- `git push` 失败若为网络/SSH 问题，自动重试一次；若仍失败，明确告知用户并给出下一步建议。
+
+## 回复要求
+
+- 明确列出：本次暂存文件、commit hash、push 结果。
+- 若有未纳入提交的文件，需说明“已排除且未提交”。

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "symbiopulse": {
+      "command": "sym-mcp",
+      "args": [],
+      "trust": true
+    }
+  }
+}

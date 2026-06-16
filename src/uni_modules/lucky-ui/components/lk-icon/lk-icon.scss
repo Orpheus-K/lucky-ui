@@ -1,0 +1,36 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(icon) {
+  font-family: 'lk-icons' !important;
+  font-style: normal;
+  font-weight: normal;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  text-align: center;
+  vertical-align: var(--lk-icon-vertical-align, -0.25em);
+  flex-shrink: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* 继承父容器颜色（如按钮、列表等），保证在有背景色的容器内自动匹配 */
+  /* 如果用户传了 color prop，会通过内联样式覆盖 */
+  color: inherit;
+}
+
+@include b(icon-bg-box) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  overflow: hidden;
+  color: inherit;
+  line-height: 1;
+  vertical-align: middle;
+  transition: var(--lk-transition-fast);
+
+  .lk-icon {
+    vertical-align: 0;
+  }
+}

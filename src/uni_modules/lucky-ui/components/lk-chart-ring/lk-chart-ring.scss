@@ -1,0 +1,15 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(chart-ring) {
+  position: relative;
+  width: 100%;
+  min-height: var(--lk-rpx-160);
+  overflow: visible;
+  z-index: var(--lk-z-index-tooltip);
+
+  @include e(canvas) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+}

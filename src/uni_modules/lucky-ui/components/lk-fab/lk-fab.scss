@@ -1,0 +1,131 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(fab) {
+  position: fixed;
+  pointer-events: none;
+
+  @include e(container) {
+    position: fixed;
+    pointer-events: auto;
+  }
+
+  @include e(main) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--fab-color);
+    color: var(--lk-color-white);
+    box-shadow: var(--lk-shadow-base);
+    transition:
+      transform 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+      box-shadow 0.3s ease;
+    will-change: transform;
+
+    &:active {
+      transform: scale(0.92);
+    }
+
+    @include when(expanded) {
+      box-shadow: var(--lk-shadow-lg);
+    }
+
+    @include when(dragging) {
+      transform: scale(1.05);
+      box-shadow: var(--lk-shadow-lg);
+    }
+
+    @include when(blur) {
+      background: var(--lk-bg-elevated);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+
+      // 根据主题色调整
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: var(--fab-color);
+        opacity: 0.7;
+        z-index: -1;
+      }
+    }
+  }
+
+  @include e(icon) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @include e(action) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--lk-bg-elevated);
+    color: var(--lk-text-primary);
+    box-shadow: var(--lk-shadow-base);
+    transition:
+      transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+      opacity 0.3s ease;
+    will-change: transform, opacity;
+    pointer-events: auto;
+
+    &:active {
+      transform: scale(0.9) !important;
+    }
+
+    @include when(disabled) {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    @include when(at-right) {
+      .lk-fab__action-label {
+        right: calc(100% + var(--lk-rpx-16));
+        left: auto;
+      }
+    }
+
+    @include when(at-left) {
+      .lk-fab__action-label {
+        left: calc(100% + var(--lk-rpx-16));
+        right: auto;
+      }
+    }
+
+    @include when(blur) {
+      background: var(--lk-bg-elevated);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+
+      // 暗色模式适配
+      @media (prefers-color-scheme: dark) {
+        background: var(--lk-bg-elevated);
+      }
+    }
+  }
+
+  @include e(action-label) {
+    position: absolute;
+    right: calc(100% + var(--lk-rpx-16));
+    white-space: nowrap;
+    font-size: var(--lk-font-size-sm);
+    color: var(--lk-text-primary);
+    background: var(--lk-bg-elevated);
+    padding: var(--lk-rpx-8) var(--lk-rpx-16);
+    border-radius: var(--lk-radius-md);
+    box-shadow: var(--lk-shadow-sm);
+  }
+}

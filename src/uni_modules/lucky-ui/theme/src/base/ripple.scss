@@ -1,0 +1,109 @@
+// Ripple & Press 全局交互效果
+// - 支持亮色/暗色主题自适应
+// - 波纹效果：点击时从触点扩散
+// - 按压效果：轻微缩放 + 透明度变化
+
+// 1. 波纹效果 (Ripple)
+.lk-ripple {
+  position: relative;
+  overflow: hidden;
+  // 允许组件自定义波纹颜色，默认跟随主题
+  --lk-ripple-color: var(--lk-color-ripple);
+}
+
+// 暗色主题下的波纹颜色
+.lk-theme-dark .lk-ripple,
+.lk-ripple[data-theme='dark'] {
+  --lk-ripple-color: var(--lk-color-ripple);
+}
+
+.lk-ripple__content {
+  position: relative;
+  z-index: 1;
+}
+
+.lk-ripple__wave {
+  position: absolute;
+  left: var(--lk-ripple-x);
+  top: var(--lk-ripple-y);
+  width: var(--lk-ripple-size);
+  height: var(--lk-ripple-size);
+  border-radius: 999px;
+  background: var(--lk-ripple-color);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.lk-ripple--active .lk-ripple__wave {
+  animation: lk-ripple-expand 800ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes lk-ripple-expand {
+  0% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+// 2. 按压效果 (Pressable) - 通用点击态
+.lk-pressable {
+  transition:
+    transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.15s ease,
+    background-color 0.15s ease;
+
+  &:active,
+  &.lk-pressable--active {
+    transform: scale(0.98);
+    opacity: 0.85;
+  }
+}
+
+// 轻量级按压（用于小按钮、图标等）
+.lk-pressable--light {
+  &:active,
+  &.lk-pressable--active {
+    transform: scale(0.95);
+  }
+}
+
+// 无缩放按压（仅透明度变化）
+.lk-pressable--opacity {
+  &:active,
+  &.lk-pressable--active {
+    transform: none;
+    opacity: 0.7;
+  }
+}
+
+// 3. 高亮背景效果 (Highlight)
+.lk-highlight {
+  position: relative;
+  transition: background-color 0.15s ease;
+
+  &:active,
+  &.lk-highlight--active {
+    background-color: var(--lk-bg-active) !important;
+  }
+}
+
+// 暗色主题高亮
+.lk-theme-dark .lk-highlight,
+.lk-highlight[data-theme='dark'] {
+  &:active,
+  &.lk-highlight--active {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+  }
+}
+
+// 4. 组合效果：波纹 + 按压
+.lk-interactive {
+  @extend .lk-ripple;
+  @extend .lk-pressable;
+}

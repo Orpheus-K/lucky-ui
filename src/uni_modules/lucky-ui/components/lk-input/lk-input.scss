@@ -1,0 +1,207 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(input) {
+  --_height: var(--lk-control-height-md);
+  --_fs: var(--lk-control-font-size-md);
+  --_px: var(--lk-control-padding-x-md);
+  --_radius: var(--lk-radius-lg);
+  --_border: var(--lk-color-border-light);
+  --_border-hover: var(--lk-color-primary);
+  --_border-active: var(--lk-color-primary);
+  --_placeholder: var(--lk-text-placeholder);
+  --_bg: var(--lk-bg-input);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: var(--_height);
+  background: var(--_bg);
+  border-radius: var(--_radius);
+  padding: 0 var(--_px);
+  box-sizing: border-box;
+
+  :root.lk-theme-booting & {
+    transition: none !important;
+  }
+
+  // No Border and Padding for Form Style (Tencent Style)
+  @include when(borderless) {
+    border-color: transparent !important;
+    background-color: transparent !important;
+    padding-left: 0;
+    padding-right: 0;
+    box-shadow: none !important;
+    min-height: 0;
+    height: auto;
+
+    .lk-input__inner {
+      text-align: left;
+    }
+
+    &:focus-within {
+      box-shadow: none !important;
+    }
+  }
+
+  @include m(sm) {
+    --_height: var(--lk-control-height-sm);
+    --_fs: var(--lk-control-font-size-sm);
+    --_px: var(--lk-control-padding-x-sm);
+    --_radius: var(--lk-radius-md);
+  }
+
+  @include m(lg) {
+    --_height: var(--lk-control-height-lg);
+    --_fs: var(--lk-control-font-size-lg);
+    --_px: var(--lk-control-padding-x-lg);
+    --_radius: var(--lk-radius-full);
+  }
+
+  @include e(inner) {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    font-size: var(--_fs);
+    background: transparent;
+    border: 0 !important;
+    box-shadow: none !important;
+    outline: none;
+    padding: 0;
+    color: var(--lk-text-primary);
+    line-height: normal;
+
+    &::placeholder {
+      color: var(--lk-text-placeholder);
+    }
+  }
+
+  @include e(prefix) {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    color: var(--lk-text-secondary);
+    flex-shrink: 0;
+    // 调整图标与输入内容的间距，使其看起来更均匀
+    margin-right: var(--lk-spacing-sm);
+  }
+
+  @include e(balance) {
+    width: var(--lk-rpx-48);
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
+  @include e(suffix) {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    color: var(--lk-text-secondary);
+    flex-shrink: 0;
+    margin-left: var(--lk-spacing-sm);
+  }
+
+  @include e(clear) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: var(--lk-spacing-xs);
+    color: var(--lk-text-secondary);
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: var(--lk-spacing-xxs);
+    border-radius: var(--lk-radius-sm);
+    transition:
+      background var(--lk-transition-fast),
+      color var(--lk-transition-fast);
+
+    &:active {
+      background: var(--lk-bg-active);
+    }
+  }
+
+  @include e(count) {
+    margin-left: var(--lk-spacing-xs);
+    font-size: var(--lk-rpx-22);
+    color: var(--lk-text-secondary);
+  }
+
+  // 假输入框样式
+  @include e(fake) {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  @include e(fake-text) {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--lk-text-placeholder);
+    font-size: var(--_fs);
+  }
+
+  &.has-value {
+    .lk-input__fake-text {
+      color: var(--lk-text-primary);
+    }
+  }
+
+  // 假输入框状态
+  @include when(fake) {
+    cursor: pointer;
+
+    &:active {
+      background: var(--lk-bg-active);
+    }
+  }
+
+  @include when(disabled) {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  @include when(readonly) {
+    background: var(--lk-bg-disabled);
+  }
+
+  // 密码明暗切换按钮
+  @include e(password-toggle) {
+    display: flex;
+    align-items: center;
+    margin-left: var(--lk-spacing-xs);
+    color: var(--lk-text-secondary);
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: var(--lk-spacing-xxs);
+    border-radius: var(--lk-radius-sm);
+    transition: color var(--lk-transition-fast);
+
+    &:active {
+      color: var(--lk-color-primary);
+    }
+  }
+
+  // 输入内容对齐方式
+  @include e(inner) {
+    &--center {
+      text-align: center;
+    }
+    &--right {
+      text-align: right;
+    }
+  }
+
+  /* 表单错误态（父 .lk-form-item.is-error 加的类） */
+  :global(.lk-form-item.is-error) & {
+    border-color: var(--lk-color-danger);
+    box-shadow: 0 0 0 var(--lk-rpx-4) var(--lk-color-danger-soft);
+  }
+}

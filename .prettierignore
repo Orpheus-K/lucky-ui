@@ -1,0 +1,29 @@
+# 依赖目录
+node_modules
+dist
+.temp
+.cache
+
+# 构建产物
+dist
+unpackage
+build
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
+
+# 锁文件
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# 其他
+*.min.js
+*.min.css
+
+# Markdown 可能包含代码示例，根据需要调整
+# docs/**/*.md

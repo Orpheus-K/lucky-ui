@@ -1,0 +1,250 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(upload) {
+  --lk-upload-preview-size: calc(var(--lk-control-height-lg) * 1.875);
+  --lk-upload-gap: var(--lk-spacing-sm);
+  --lk-upload-radius: var(--lk-radius-lg);
+  --lk-upload-bg: var(--lk-fill-tertiary);
+  --lk-upload-bg-active: var(--lk-fill-secondary);
+  --lk-upload-border: var(--lk-color-border-light);
+  --lk-upload-border-active: var(--lk-color-primary);
+  --lk-upload-text: var(--lk-text-secondary);
+  --lk-upload-text-weak: var(--lk-text-tertiary);
+  --lk-upload-file-icon-bg: var(--lk-bg-container);
+  --lk-upload-mask-bg: var(--lk-overlay-bg);
+  --lk-upload-mask-surface-bg: var(--lk-bg-elevated);
+  --lk-upload-mask-surface-text: var(--lk-text-primary);
+  --lk-upload-mask-text: var(--lk-color-white);
+  --lk-upload-del-bg: var(--lk-fill-secondary);
+  --lk-upload-del-border: var(--lk-color-border-light);
+  --lk-upload-del-icon-color: var(--lk-text-secondary);
+  --lk-upload-status-bg: var(--lk-color-success);
+  --lk-upload-status-icon-color: var(--lk-color-white);
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin: calc(var(--lk-upload-gap) * -0.5);
+
+  @include when(disabled) {
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  @include e(item) {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--lk-upload-preview-size);
+    height: var(--lk-upload-preview-size);
+    margin: calc(var(--lk-upload-gap) * 0.5);
+    overflow: hidden;
+    border: var(--lk-rpx-1) solid var(--lk-upload-border);
+    border-radius: var(--lk-upload-radius);
+    background: var(--lk-upload-bg);
+    color: var(--lk-upload-text);
+    box-sizing: border-box;
+
+    @include when(image) {
+      background: var(--lk-bg-container);
+    }
+
+    @include when(file) {
+      @include when(uploading) {
+        .lk-upload__file {
+          opacity: 0;
+        }
+
+        .lk-upload__mask {
+          --lk-upload-mask-text: var(--lk-upload-mask-surface-text);
+
+          background: var(--lk-upload-mask-surface-bg);
+          color: var(--lk-upload-mask-surface-text);
+        }
+
+        .lk-upload__mask-text {
+          color: var(--lk-upload-mask-surface-text);
+        }
+      }
+
+      @include when(fail) {
+        .lk-upload__file {
+          opacity: 0;
+        }
+
+        .lk-upload__mask {
+          --lk-upload-mask-text: var(--lk-upload-mask-surface-text);
+
+          background: var(--lk-upload-mask-surface-bg);
+          color: var(--lk-upload-mask-surface-text);
+        }
+
+        .lk-upload__mask-text {
+          color: var(--lk-upload-mask-surface-text);
+        }
+      }
+    }
+  }
+
+  @include e(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  @include e(file) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: var(--lk-spacing-sm);
+    color: var(--lk-upload-text);
+    box-sizing: border-box;
+  }
+
+  @include e(file-icon) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--lk-rpx-72);
+    height: var(--lk-rpx-72);
+    margin-bottom: var(--lk-spacing-xs);
+    border-radius: var(--lk-radius-md);
+    background: var(--lk-upload-file-icon-bg);
+  }
+
+  @include e(file-name) {
+    max-width: var(--lk-rpx-140);
+    overflow: hidden;
+    color: var(--lk-upload-text);
+    font-size: var(--lk-font-size-xs);
+    line-height: 1.3;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @include e(mask) {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--lk-spacing-sm);
+    background: var(--lk-upload-mask-bg);
+    color: var(--lk-upload-mask-text);
+    box-sizing: border-box;
+
+    &--fail {
+      cursor: pointer;
+    }
+  }
+
+  @include e(mask-text) {
+    margin-top: var(--lk-spacing-xs);
+    color: var(--lk-upload-mask-text);
+    font-size: var(--lk-font-size-sm);
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  @include e(progress) {
+    width: 70%;
+    height: var(--lk-rpx-8);
+    overflow: hidden;
+    border-radius: var(--lk-rpx-4);
+    background: var(--lk-bg-container);
+  }
+
+  @include e(progress-bar) {
+    height: 100%;
+    border-radius: var(--lk-rpx-4);
+    background: var(--lk-color-primary);
+    transition: width 0.2s ease;
+  }
+
+  @include e(del) {
+    position: absolute;
+    top: var(--lk-rpx-8);
+    right: var(--lk-rpx-8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--lk-rpx-34);
+    height: var(--lk-rpx-34);
+    border: var(--lk-rpx-1) solid var(--lk-upload-del-border);
+    border-radius: var(--lk-radius-full);
+    background: var(--lk-upload-del-bg);
+    color: var(--lk-upload-del-icon-color);
+    z-index: 2;
+  }
+
+  @include e(status-icon) {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--lk-rpx-44);
+    height: var(--lk-rpx-36);
+    border-radius: var(--lk-radius-md) 0 0 0;
+    background: var(--lk-upload-status-bg);
+    color: var(--lk-upload-status-icon-color);
+  }
+
+  @include e(add) {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: var(--lk-upload-preview-size);
+    height: var(--lk-upload-preview-size);
+    margin: calc(var(--lk-upload-gap) * 0.5);
+    overflow: hidden;
+    border: var(--lk-rpx-2) dashed var(--lk-upload-border);
+    border-radius: var(--lk-upload-radius);
+    background: var(--lk-upload-bg);
+    color: var(--lk-upload-text);
+    font-size: var(--lk-font-size-sm);
+    box-sizing: border-box;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
+
+    &:active {
+      border-color: var(--lk-upload-border-active);
+      background: var(--lk-upload-bg-active);
+      color: var(--lk-upload-border-active);
+      transform: scale(0.98);
+    }
+  }
+
+  @include e(add-text) {
+    margin-top: var(--lk-spacing-xs);
+    font-size: var(--lk-font-size-sm);
+    line-height: 1.2;
+  }
+
+  @include e(count) {
+    margin-top: var(--lk-rpx-4);
+    color: var(--lk-upload-text-weak);
+    font-size: var(--lk-font-size-xs);
+    line-height: 1.2;
+  }
+}
+
+.lk-upload-wrapper {
+  overflow: hidden;
+  width: 100%;
+}

@@ -1,0 +1,87 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(progress) {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  @include e(track) {
+    position: relative;
+    flex: 1;
+    height: var(--lk-rpx-12);
+    background: var(--lk-fill-tertiary);
+    border-radius: var(--lk-rpx-100);
+    overflow: hidden;
+    /* #ifdef H5 */
+    transform: translateZ(0);
+    /* #endif */
+  }
+
+  @include e(bar) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: var(--lk-color-primary);
+    border-radius: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--lk-color-white);
+    font-size: var(--lk-rpx-20);
+    transition: width var(--lk-transition-base);
+    backface-visibility: hidden;
+  }
+
+  @include e(stripe) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.18) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.18) 50%,
+      rgba(255, 255, 255, 0.18) 75%,
+      transparent 75%,
+      transparent
+    );
+    background-size: var(--lk-rpx-80) var(--lk-rpx-80);
+    border-radius: inherit;
+    pointer-events: none;
+    /* #ifdef H5 */
+    transform: translateZ(0);
+    /* #endif */
+
+    &.is-animated {
+      animation: lk-progress-move 2s linear infinite;
+    }
+  }
+
+  @include e(text) {
+    font-size: var(--lk-rpx-24);
+    color: var(--lk-text-secondary);
+    min-width: var(--lk-rpx-80);
+    text-align: right;
+    margin-left: var(--lk-spacing-sm);
+  }
+
+  @include e(text-in) {
+    font-size: var(--lk-rpx-20);
+    color: var(--lk-color-white);
+    padding: 0 var(--lk-spacing-xxs);
+    white-space: nowrap;
+  }
+}
+
+@keyframes lk-progress-move {
+  0% {
+    background-position: var(--lk-rpx-80) 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}

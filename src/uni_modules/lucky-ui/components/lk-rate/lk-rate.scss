@@ -1,0 +1,24 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(rate) {
+  display: inline-flex;
+  align-items: center;
+
+  @include when(disabled) {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  @include when(readonly) {
+    pointer-events: none;
+  }
+
+  @include e(item) {
+    cursor: pointer;
+    line-height: 1;
+
+    &:not(:first-child) {
+      margin-left: var(--lk-spacing-xs);
+    }
+  }
+}

@@ -1,0 +1,66 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(number-roller) {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: var(--lk-number-roller-digit-height);
+  line-height: var(--lk-number-roller-digit-height);
+  color: var(--lk-text-primary);
+  --lk-number-roller-digit-height: var(--lk-rpx-56);
+  --lk-number-roller-speed: 800ms;
+  --lk-number-roller-easing: cubic-bezier(0.33, 1, 0.68, 1);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings:
+    'tnum' 1,
+    'lnum' 1;
+
+  & > view:not(:first-child) {
+    margin-left: var(--lk-rpx-4);
+  }
+
+  @include e(segment) {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+  }
+
+  @include e(window) {
+    position: relative;
+    overflow: hidden;
+    height: var(--lk-number-roller-digit-height);
+    min-width: var(--lk-rpx-44);
+    vertical-align: middle;
+  }
+
+  @include e(track) {
+    display: flex;
+    flex-direction: column;
+    transition-property: transform;
+    transition-duration: var(--lk-number-roller-speed);
+    transition-timing-function: var(--lk-number-roller-easing);
+  }
+
+  @include e(digit) {
+    height: var(--lk-number-roller-digit-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    line-height: var(--lk-number-roller-digit-height);
+    font-size: 1em;
+    vertical-align: middle;
+  }
+
+  @include e(symbol) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6em;
+    color: var(--lk-text-secondary);
+    padding: 0 var(--lk-rpx-4);
+    height: var(--lk-number-roller-digit-height);
+    line-height: var(--lk-number-roller-digit-height);
+    vertical-align: middle;
+  }
+}

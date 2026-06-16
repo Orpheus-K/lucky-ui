@@ -1,0 +1,14 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(overlay) {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--lk-overlay-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // opacity 初始态由 .lk-transition 控制。
+}

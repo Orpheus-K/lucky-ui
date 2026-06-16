@@ -1,0 +1,54 @@
+﻿@use '../../theme/src/mixins/bem' as *;
+
+@include b(demo-block) {
+  // Demo 预览底色默认使用弱填充，避免与组件容器默认白底重叠
+  background: var(--lk-demo-block-bg);
+  border-radius: var(--lk-rpx-32);
+  padding: var(--lk-demo-block-padding);
+  box-shadow: var(--lk-demo-block-shadow);
+  border: var(--lk-demo-block-border-width) solid var(--lk-demo-block-border);
+  display: flex;
+  flex-direction: column;
+
+  /* #ifdef MP */
+  margin-top: var(--lk-demo-block-self-gap);
+  /* #endif */
+
+  & > view:not(:first-child),
+  & > text:not(:first-child) {
+    margin-top: var(--lk-rpx-32);
+  }
+
+  @include e(header) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--lk-rpx-10);
+  }
+
+  @include e(title) {
+    color: var(--lk-text-primary);
+    font-size: var(--lk-rpx-32);
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  @include e(desc) {
+    color: var(--lk-text-secondary);
+    font-size: var(--lk-rpx-24);
+    line-height: 1.5;
+  }
+
+  @include e(body) {
+    display: flex;
+    flex-direction: column;
+
+    & > view:not(:first-child),
+    & > text:not(:first-child) {
+      margin-top: var(--lk-rpx-28);
+    }
+
+    @include when(no-pad) {
+      padding: 0;
+    }
+  }
+}

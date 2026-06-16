@@ -1,0 +1,26 @@
+// 混入: 布局 (Layout)
+
+// 解释：尽管现在 flex/grid 是主流，但在某些场景（如富文本渲染）下依然有用。
+@mixin clearfix {
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+// @param {String} $direction - flex-direction, 默认为 row
+// @param {String} $align - align-items, 默认为 center
+// @param {String} $justify - justify-content, 默认为 center
+@mixin flex-center($direction: row, $align: center, $justify: center) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: $align;
+  justify-content: $justify;
+}
+
+@mixin absolute-center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

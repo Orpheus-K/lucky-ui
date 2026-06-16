@@ -1,0 +1,6251 @@
+{
+  ".agents": {
+    "path": ".agents",
+    "files": [],
+    "file_count": 0,
+    "extensions": {},
+    "symbols": [],
+    "keywords": [
+      "agents"
+    ],
+    "fingerprint": "c47d6f96ec9bdbec"
+  },
+  ".agents/skills": {
+    "path": ".agents/skills",
+    "files": [],
+    "file_count": 0,
+    "extensions": {},
+    "symbols": [],
+    "keywords": [
+      "agents",
+      "skills"
+    ],
+    "fingerprint": "4d6478e26cf9751c"
+  },
+  ".agents/skills/lucky-ui-component": {
+    "path": ".agents/skills/lucky-ui-component",
+    "files": [
+      "SKILL.md"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".md": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "agents",
+      "component",
+      "lucky",
+      "skill",
+      "skills"
+    ],
+    "fingerprint": "7bb802d7d56331c2"
+  },
+  ".agents/skills/lucky-ui-docs": {
+    "path": ".agents/skills/lucky-ui-docs",
+    "files": [
+      "SKILL.md"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".md": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "agents",
+      "docs",
+      "lucky",
+      "skill",
+      "skills"
+    ],
+    "fingerprint": "387ed34328fc9073"
+  },
+  ".agents/skills/lucky-ui-icon": {
+    "path": ".agents/skills/lucky-ui-icon",
+    "files": [
+      "SKILL.md"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".md": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "agents",
+      "icon",
+      "lucky",
+      "skill",
+      "skills"
+    ],
+    "fingerprint": "fb475c4d31bff898"
+  },
+  ".agents/skills/lucky-ui-theme": {
+    "path": ".agents/skills/lucky-ui-theme",
+    "files": [
+      "SKILL.md"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".md": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "agents",
+      "lucky",
+      "skill",
+      "skills",
+      "theme"
+    ],
+    "fingerprint": "926ca155b6a96908"
+  },
+  ".agents/skills/playwright-cli": {
+    "path": ".agents/skills/playwright-cli",
+    "files": [
+      "SKILL.md"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".md": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "agents",
+      "cli",
+      "playwright",
+      "skill",
+      "skills"
+    ],
+    "fingerprint": "401febd43402b8ef"
+  },
+  ".gemini": {
+    "path": ".gemini",
+    "files": [
+      "GEMINI.md",
+      "settings.json"
+    ],
+    "file_count": 2,
+    "extensions": {
+      ".md": 1,
+      ".json": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "gemini",
+      "json",
+      "settings"
+    ],
+    "fingerprint": "0006043ee0db9a05"
+  },
+  "ai": {
+    "path": "ai",
+    "files": [
+      "uniapp-component-prompt-template.md"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".md": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "component",
+      "prompt",
+      "template",
+      "uniapp"
+    ],
+    "fingerprint": "f25d989aa94453af"
+  },
+  "assets": {
+    "path": "assets",
+    "files": [],
+    "file_count": 0,
+    "extensions": {},
+    "symbols": [],
+    "keywords": [
+      "assets"
+    ],
+    "fingerprint": "8f845d685fb42a2c"
+  },
+  "assets/bootstrap-icons-selected": {
+    "path": "assets/bootstrap-icons-selected",
+    "files": [
+      "alarm-fill.svg",
+      "alarm.svg",
+      "app-indicator.svg",
+      "app.svg",
+      "apple-music.svg",
+      "arrow-90deg-down.svg",
+      "arrow-90deg-left.svg",
+      "arrow-90deg-right.svg",
+      "arrow-90deg-up.svg",
+      "arrow-bar-down.svg",
+      "arrow-bar-left.svg",
+      "arrow-bar-right.svg",
+      "arrow-bar-up.svg",
+      "arrow-clockwise.svg",
+      "arrow-counterclockwise.svg",
+      "arrow-down-circle-fill.svg",
+      "arrow-down-circle.svg",
+      "arrow-down-left-circle-fill.svg",
+      "arrow-down-left-circle.svg",
+      "arrow-down-left-square-fill.svg",
+      "arrow-down-left-square.svg",
+      "arrow-down-left.svg",
+      "arrow-down-right-circle-fill.svg",
+      "arrow-down-right-circle.svg",
+      "arrow-down-right-square-fill.svg",
+      "arrow-down-right-square.svg",
+      "arrow-down-right.svg",
+      "arrow-down-short.svg",
+      "arrow-down-square-fill.svg",
+      "arrow-down-square.svg"
+    ],
+    "file_count": 1031,
+    "extensions": {
+      ".svg": 1031
+    },
+    "symbols": [],
+    "keywords": [
+      "1x2",
+      "3x2",
+      "3x3",
+      "90deg",
+      "add",
+      "adjustable",
+      "alarm",
+      "album",
+      "all",
+      "alt",
+      "angle",
+      "app"
+    ],
+    "fingerprint": "152acf05894b7ee3"
+  },
+  "docs": {
+    "path": "docs",
+    "files": [
+      "ANIMATION_FIX.md",
+      "COMPONENT_COMPLETION_SUMMARY.md",
+      "COMPONENT_DEMO_PLAN.md",
+      "DEMO_IMPLEMENTATION_PLAN.md",
+      "NEW_ARCHITECTURE.md",
+      "OPEN_SOURCE_COMPONENT_SCORE.md",
+      "TESTING_GUIDE.md",
+      "TEST_PAGE_STYLES.md",
+      "TEST_PAGE_STYLES_QUICK_REF.md",
+      "TRANSITION_SUMMARY.md",
+      "USE_TRANSITION_GUIDE.md",
+      "Z_INDEX_GUIDE.md",
+      "index.md",
+      "package.json"
+    ],
+    "file_count": 14,
+    "extensions": {
+      ".md": 13,
+      ".json": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "animation_fix",
+      "component_completion_summary",
+      "component_demo_plan",
+      "demo_implementation_plan",
+      "docs",
+      "index",
+      "json",
+      "new_architecture",
+      "open_source_component_score",
+      "package",
+      "test_page_styles",
+      "test_page_styles_quick_ref"
+    ],
+    "fingerprint": "ce7283c851b0a45d"
+  },
+  "docs/.vitepress": {
+    "path": "docs/.vitepress",
+    "files": [
+      "config.ts"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".ts": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "config",
+      "docs",
+      "vitepress"
+    ],
+    "fingerprint": "a3fc82d2f42de81c"
+  },
+  "docs/.vitepress/cache": {
+    "path": "docs/.vitepress/cache",
+    "files": [],
+    "file_count": 0,
+    "extensions": {},
+    "symbols": [],
+    "keywords": [
+      "cache",
+      "docs",
+      "vitepress"
+    ],
+    "fingerprint": "d9d9c77113237fb8"
+  },
+  "docs/.vitepress/theme": {
+    "path": "docs/.vitepress/theme",
+    "files": [
+      "Layout.vue",
+      "index.ts",
+      "style.css"
+    ],
+    "file_count": 3,
+    "extensions": {
+      ".ts": 1,
+      ".vue": 1,
+      ".css": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "css",
+      "docs",
+      "index",
+      "layout",
+      "style",
+      "theme",
+      "vitepress",
+      "vue"
+    ],
+    "fingerprint": "c99273a58c146c56"
+  },
+  "docs/.vitepress/theme/components": {
+    "path": "docs/.vitepress/theme/components",
+    "files": [
+      "HomePage.vue",
+      "PhonePreview.vue",
+      "PropsPlayground.vue"
+    ],
+    "file_count": 3,
+    "extensions": {
+      ".vue": 3
+    },
+    "symbols": [],
+    "keywords": [
+      "components",
+      "docs",
+      "homepage",
+      "phonepreview",
+      "propsplayground",
+      "theme",
+      "vitepress",
+      "vue"
+    ],
+    "fingerprint": "24e521babee10be8"
+  },
+  "docs/components": {
+    "path": "docs/components",
+    "files": [
+      "action-sheet.md",
+      "anchor.md",
+      "avatar.md",
+      "backtop.md",
+      "badge.md",
+      "button.md",
+      "calendar-picker.md",
+      "calendar.md",
+      "card.md",
+      "carousel.md",
+      "cell.md",
+      "chart-bar.md",
+      "chart-line.md",
+      "chart-lite.md",
+      "chart-pie.md",
+      "checkbox.md",
+      "choice.md",
+      "collapse.md",
+      "countdown.md",
+      "curtain.md",
+      "divider.md",
+      "dropdown.md",
+      "empty.md",
+      "fab.md",
+      "form.md",
+      "grid.md",
+      "hooks-utils.md",
+      "horizontal-scroll.md",
+      "icon.md",
+      "image.md"
+    ],
+    "file_count": 69,
+    "extensions": {
+      ".md": 69
+    },
+    "symbols": [],
+    "keywords": [
+      "action",
+      "anchor",
+      "avatar",
+      "backtop",
+      "badge",
+      "bar",
+      "button",
+      "calendar",
+      "card",
+      "carousel",
+      "cell",
+      "chart"
+    ],
+    "fingerprint": "ee4ae63c830c9de7"
+  },
+  "docs/components/basic": {
+    "path": "docs/components/basic",
+    "files": [
+      "avatar.md",
+      "badge.md",
+      "button.md",
+      "cell.md",
+      "divider.md",
+      "icon.md",
+      "index.md",
+      "tag.md"
+    ],
+    "file_count": 8,
+    "extensions": {
+      ".md": 8
+    },
+    "symbols": [],
+    "keywords": [
+      "avatar",
+      "badge",
+      "basic",
+      "button",
+      "cell",
+      "components",
+      "divider",
+      "docs",
+      "icon",
+      "index",
+      "tag"
+    ],
+    "fingerprint": "b4e41eba6d43b90c"
+  },
+  "docs/guide": {
+    "path": "docs/guide",
+    "files": [
+      "i18n.md",
+      "index.md",
+      "install.md",
+      "theme.md"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".md": 4
+    },
+    "symbols": [],
+    "keywords": [
+      "docs",
+      "guide",
+      "i18n",
+      "index",
+      "install",
+      "theme"
+    ],
+    "fingerprint": "24bb6a389f995939"
+  },
+  "eslint-rules": {
+    "path": "eslint-rules",
+    "files": [
+      "no-unsupported-tags.js"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".js": 1
+    },
+    "symbols": [
+      "rawname",
+      "unsupported_tags_in_mini_program"
+    ],
+    "keywords": [
+      "eslint",
+      "rawname",
+      "rules",
+      "tags",
+      "unsupported",
+      "unsupported_tags_in_mini_program"
+    ],
+    "fingerprint": "ae421b738801653c"
+  },
+  "scripts": {
+    "path": "scripts",
+    "files": [
+      "check-config.py",
+      "clean-docs.py",
+      "compat-check.js",
+      "export-showcase-report.js",
+      "fix-doc-preview-and-missing.py",
+      "scan-doc-preview-issues.py",
+      "sync-doc-spec-sections.js",
+      "type-check-changed.js",
+      "upgrade-placeholder-docs.py",
+      "validate-sfc.js",
+      "write-docs-2.py",
+      "write-docs.py",
+      "write-index.py"
+    ],
+    "file_count": 13,
+    "extensions": {
+      ".py": 8,
+      ".js": 5
+    },
+    "symbols": [
+      "applytofile",
+      "arg",
+      "args",
+      "bad",
+      "base",
+      "bin",
+      "block",
+      "buildspecblock",
+      "cachedir",
+      "cases",
+      "changed",
+      "clean_file",
+      "collectvuefiles",
+      "component_root",
+      "componentname",
+      "content",
+      "default_base",
+      "demofile",
+      "doc_root",
+      "enrich_doc",
+      "entries",
+      "extractarrayliteral",
+      "filecontent",
+      "files",
+      "fullpath",
+      "getcomponentnamefromdoc",
+      "gitdifffiles",
+      "index",
+      "main",
+      "match",
+      "next",
+      "normalize_frontmatter",
+      "normalizepath",
+      "normalizetailnewline",
+      "now",
+      "options",
+      "output_path",
+      "parseargs",
+      "parsecasesliteral",
+      "path"
+    ],
+    "keywords": [
+      "and",
+      "applytofile",
+      "arg",
+      "args",
+      "bad",
+      "base",
+      "bin",
+      "block",
+      "buildspecblock",
+      "cachedir",
+      "cases",
+      "changed"
+    ],
+    "fingerprint": "f562b44c0ca753e4"
+  },
+  "src": {
+    "path": "src",
+    "files": [
+      "App.vue",
+      "env.d.ts",
+      "main.ts",
+      "manifest.json",
+      "pages.json",
+      "shime-uni.d.ts",
+      "theme.json",
+      "uni.scss"
+    ],
+    "file_count": 8,
+    "extensions": {
+      ".vue": 1,
+      ".ts": 3,
+      ".json": 3,
+      ".scss": 1
+    },
+    "symbols": [
+      "app",
+      "componentcustomoptions",
+      "createapp",
+      "hooks",
+      "pinia"
+    ],
+    "keywords": [
+      "app",
+      "componentcustomoptions",
+      "createapp",
+      "env",
+      "hooks",
+      "json",
+      "main",
+      "manifest",
+      "pages",
+      "pinia",
+      "scss",
+      "shime"
+    ],
+    "fingerprint": "b527c4a043c11b52"
+  },
+  "src/components": {
+    "path": "src/components",
+    "files": [
+      "theme-debugger.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "components",
+      "debugger",
+      "src",
+      "theme",
+      "vue"
+    ],
+    "fingerprint": "48c9e512e5fd783b"
+  },
+  "src/components/demos": {
+    "path": "src/components/demos",
+    "files": [
+      "action-sheet-demo.vue",
+      "anchor-demo.vue",
+      "avatar-demo.vue",
+      "backtop-demo.vue",
+      "badge-demo.vue",
+      "button-demo.vue",
+      "calendar-demo.vue",
+      "calendar-picker-demo.vue",
+      "card-demo.vue",
+      "carousel-demo.vue",
+      "cell-demo.vue",
+      "chart-bar-demo.vue",
+      "chart-line-demo.vue",
+      "chart-lite-demo.vue",
+      "chart-pie-demo.vue",
+      "checkbox-demo.vue",
+      "choice-demo.vue",
+      "collapse-demo.vue",
+      "countdown-demo.vue",
+      "curtain-demo.vue",
+      "divider-demo.vue",
+      "dropdown-demo.vue",
+      "empty-demo.vue",
+      "fab-demo.vue",
+      "form-demo.vue",
+      "grid-demo.vue",
+      "hooks-utils-demo.vue",
+      "horizontal-scroll-demo.vue",
+      "icon-demo.vue",
+      "image-demo.vue"
+    ],
+    "file_count": 70,
+    "extensions": {
+      ".vue": 70
+    },
+    "symbols": [],
+    "keywords": [
+      "action",
+      "anchor",
+      "avatar",
+      "backtop",
+      "badge",
+      "bar",
+      "basic",
+      "button",
+      "calendar",
+      "card",
+      "carousel",
+      "cell"
+    ],
+    "fingerprint": "9c5a57a5107289f4"
+  },
+  "src/components/showcase": {
+    "path": "src/components/showcase",
+    "files": [
+      "component-case.vue",
+      "showcase-cases.ts"
+    ],
+    "file_count": 2,
+    "extensions": {
+      ".vue": 1,
+      ".ts": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "case",
+      "cases",
+      "component",
+      "components",
+      "showcase",
+      "src",
+      "vue"
+    ],
+    "fingerprint": "39be2737a4983311"
+  },
+  "src/pages": {
+    "path": "src/pages",
+    "files": [],
+    "file_count": 0,
+    "extensions": {},
+    "symbols": [],
+    "keywords": [
+      "pages",
+      "src"
+    ],
+    "fingerprint": "f3f7fce1c80d3420"
+  },
+  "src/pages/app-main": {
+    "path": "src/pages/app-main",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "app",
+      "index",
+      "main",
+      "pages",
+      "src",
+      "vue"
+    ],
+    "fingerprint": "4f9a95a33c899b70"
+  },
+  "src/pages/app-main/tabs": {
+    "path": "src/pages/app-main/tabs",
+    "files": [
+      "cart-tab.vue",
+      "detail-tab.vue",
+      "home-tab.vue",
+      "mine-tab.vue",
+      "overview-tab.vue"
+    ],
+    "file_count": 5,
+    "extensions": {
+      ".vue": 5
+    },
+    "symbols": [],
+    "keywords": [
+      "app",
+      "cart",
+      "detail",
+      "home",
+      "main",
+      "mine",
+      "overview",
+      "pages",
+      "src",
+      "tab",
+      "tabs",
+      "vue"
+    ],
+    "fingerprint": "55f08aa389182595"
+  },
+  "src/pages/app-main/tabs/components": {
+    "path": "src/pages/app-main/tabs/components",
+    "files": [
+      "cart-content.vue",
+      "detail-content.vue",
+      "home-content.vue",
+      "mine-content.vue",
+      "overview-content.vue"
+    ],
+    "file_count": 5,
+    "extensions": {
+      ".vue": 5
+    },
+    "symbols": [],
+    "keywords": [
+      "app",
+      "cart",
+      "components",
+      "content",
+      "detail",
+      "home",
+      "main",
+      "mine",
+      "overview",
+      "pages",
+      "src",
+      "tabs"
+    ],
+    "fingerprint": "11f454819a3b0128"
+  },
+  "src/pages/order-detail": {
+    "path": "src/pages/order-detail",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "detail",
+      "index",
+      "order",
+      "pages",
+      "src",
+      "vue"
+    ],
+    "fingerprint": "379341c1848045d8"
+  },
+  "src/pages/tabbar": {
+    "path": "src/pages/tabbar",
+    "files": [],
+    "file_count": 0,
+    "extensions": {},
+    "symbols": [],
+    "keywords": [
+      "pages",
+      "src",
+      "tabbar"
+    ],
+    "fingerprint": "16ef8fbc51c63888"
+  },
+  "src/pages/tabbar/cart": {
+    "path": "src/pages/tabbar/cart",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "cart",
+      "index",
+      "pages",
+      "src",
+      "tabbar",
+      "vue"
+    ],
+    "fingerprint": "876d3c760faf16cc"
+  },
+  "src/pages/tabbar/detail": {
+    "path": "src/pages/tabbar/detail",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "detail",
+      "index",
+      "pages",
+      "src",
+      "tabbar",
+      "vue"
+    ],
+    "fingerprint": "496e91c60fa35688"
+  },
+  "src/pages/tabbar/home": {
+    "path": "src/pages/tabbar/home",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "home",
+      "index",
+      "pages",
+      "src",
+      "tabbar",
+      "vue"
+    ],
+    "fingerprint": "2dd5baf2d9edaf11"
+  },
+  "src/pages/tabbar/mine": {
+    "path": "src/pages/tabbar/mine",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "index",
+      "mine",
+      "pages",
+      "src",
+      "tabbar",
+      "vue"
+    ],
+    "fingerprint": "8dbeb7e0116d9bb4"
+  },
+  "src/pages/tabbar/overview": {
+    "path": "src/pages/tabbar/overview",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "index",
+      "overview",
+      "pages",
+      "src",
+      "tabbar",
+      "vue"
+    ],
+    "fingerprint": "b25d5295cf13f43f"
+  },
+  "src/pages/todo": {
+    "path": "src/pages/todo",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "index",
+      "pages",
+      "src",
+      "todo",
+      "vue"
+    ],
+    "fingerprint": "4196e71cd78aa39d"
+  },
+  "src/pages_sub": {
+    "path": "src/pages_sub",
+    "files": [],
+    "file_count": 0,
+    "extensions": {},
+    "symbols": [],
+    "keywords": [
+      "pages_sub",
+      "src"
+    ],
+    "fingerprint": "032d5bb1c7872a96"
+  },
+  "src/pages_sub/analytics": {
+    "path": "src/pages_sub/analytics",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "analytics",
+      "index",
+      "pages_sub",
+      "src",
+      "vue"
+    ],
+    "fingerprint": "efb6a03f887121a9"
+  },
+  "src/pages_sub/auth": {
+    "path": "src/pages_sub/auth",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "auth",
+      "index",
+      "pages_sub",
+      "src",
+      "vue"
+    ],
+    "fingerprint": "bf65457b6bbe93d2"
+  },
+  "src/pages_sub/check-in": {
+    "path": "src/pages_sub/check-in",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "check",
+      "index",
+      "pages_sub",
+      "src",
+      "vue"
+    ],
+    "fingerprint": "1de1c323b8b84b9f"
+  },
+  "src/pages_sub/component-detail": {
+    "path": "src/pages_sub/component-detail",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "component",
+      "detail",
+      "index",
+      "pages_sub",
+      "src",
+      "vue"
+    ],
+    "fingerprint": "7420c92a2e873ff0"
+  },
+  "src/pages_sub/edit-profile": {
+    "path": "src/pages_sub/edit-profile",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "edit",
+      "index",
+      "pages_sub",
+      "profile",
+      "src",
+      "vue"
+    ],
+    "fingerprint": "e124e8b4c952f1f3"
+  },
+  "src/pages_sub/playground": {
+    "path": "src/pages_sub/playground",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "index",
+      "pages_sub",
+      "playground",
+      "src",
+      "vue"
+    ],
+    "fingerprint": "9e3e2fb6197b2852"
+  },
+  "src/pages_sub/product-detail": {
+    "path": "src/pages_sub/product-detail",
+    "files": [],
+    "file_count": 0,
+    "extensions": {},
+    "symbols": [],
+    "keywords": [
+      "detail",
+      "pages_sub",
+      "product",
+      "src"
+    ],
+    "fingerprint": "afdfabbf46fc3867"
+  },
+  "src/pages_sub/search": {
+    "path": "src/pages_sub/search",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "index",
+      "pages_sub",
+      "search",
+      "src",
+      "vue"
+    ],
+    "fingerprint": "4a7d1725bb216951"
+  },
+  "src/pages_sub/settings": {
+    "path": "src/pages_sub/settings",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "index",
+      "pages_sub",
+      "settings",
+      "src",
+      "vue"
+    ],
+    "fingerprint": "ffc64dbd4874511e"
+  },
+  "src/static": {
+    "path": "src/static",
+    "files": [
+      "logo.png"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".png": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "logo",
+      "png",
+      "src",
+      "static"
+    ],
+    "fingerprint": "d28a107cb3eee9cd"
+  },
+  "src/stores": {
+    "path": "src/stores",
+    "files": [
+      "index.ts",
+      "theme.ts"
+    ],
+    "file_count": 2,
+    "extensions": {
+      ".ts": 2
+    },
+    "symbols": [
+      "allowed",
+      "init",
+      "raw",
+      "readstoredtabbarmode",
+      "settabbarmode",
+      "tabbar_mode_storage_key",
+      "tabbarmode",
+      "tabbarmodevalue",
+      "usethemestore"
+    ],
+    "keywords": [
+      "allowed",
+      "index",
+      "init",
+      "raw",
+      "readstoredtabbarmode",
+      "settabbarmode",
+      "src",
+      "stores",
+      "tabbar_mode_storage_key",
+      "tabbarmode",
+      "tabbarmodevalue",
+      "theme"
+    ],
+    "fingerprint": "0f0ac4001f291304"
+  },
+  "src/styles": {
+    "path": "src/styles",
+    "files": [
+      "test-page.scss"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".scss": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "page",
+      "scss",
+      "src",
+      "styles",
+      "test"
+    ],
+    "fingerprint": "82164af9b4dd4755"
+  },
+  "src/uni_modules": {
+    "path": "src/uni_modules",
+    "files": [],
+    "file_count": 0,
+    "extensions": {},
+    "symbols": [],
+    "keywords": [
+      "src",
+      "uni_modules"
+    ],
+    "fingerprint": "f11f964f52e341d0"
+  },
+  "src/uni_modules/lucky-ui": {
+    "path": "src/uni_modules/lucky-ui",
+    "files": [
+      "components.d.ts",
+      "index.ts"
+    ],
+    "file_count": 2,
+    "extensions": {
+      ".ts": 2
+    },
+    "symbols": [],
+    "keywords": [
+      "components",
+      "index",
+      "lucky",
+      "src",
+      "uni_modules"
+    ],
+    "fingerprint": "323fdbc39f3a98de"
+  },
+  "src/uni_modules/lucky-ui/assets": {
+    "path": "src/uni_modules/lucky-ui/assets",
+    "files": [],
+    "file_count": 0,
+    "extensions": {},
+    "symbols": [],
+    "keywords": [
+      "assets",
+      "lucky",
+      "src",
+      "uni_modules"
+    ],
+    "fingerprint": "5711b6fc39687fb3"
+  },
+  "src/uni_modules/lucky-ui/assets/bootstrap-icons-selected": {
+    "path": "src/uni_modules/lucky-ui/assets/bootstrap-icons-selected",
+    "files": [
+      "alarm-fill.svg",
+      "alarm.svg",
+      "app-indicator.svg",
+      "app.svg",
+      "apple-music.svg",
+      "arrow-90deg-down.svg",
+      "arrow-90deg-left.svg",
+      "arrow-90deg-right.svg",
+      "arrow-90deg-up.svg",
+      "arrow-bar-down.svg",
+      "arrow-bar-left.svg",
+      "arrow-bar-right.svg",
+      "arrow-bar-up.svg",
+      "arrow-clockwise.svg",
+      "arrow-counterclockwise.svg",
+      "arrow-down-circle-fill.svg",
+      "arrow-down-circle.svg",
+      "arrow-down-left-circle-fill.svg",
+      "arrow-down-left-circle.svg",
+      "arrow-down-left-square-fill.svg",
+      "arrow-down-left-square.svg",
+      "arrow-down-left.svg",
+      "arrow-down-right-circle-fill.svg",
+      "arrow-down-right-circle.svg",
+      "arrow-down-right-square-fill.svg",
+      "arrow-down-right-square.svg",
+      "arrow-down-right.svg",
+      "arrow-down-short.svg",
+      "arrow-down-square-fill.svg",
+      "arrow-down-square.svg"
+    ],
+    "file_count": 1031,
+    "extensions": {
+      ".svg": 1031
+    },
+    "symbols": [],
+    "keywords": [
+      "1x2",
+      "3x2",
+      "3x3",
+      "90deg",
+      "add",
+      "adjustable",
+      "alarm",
+      "album",
+      "all",
+      "alt",
+      "angle",
+      "app"
+    ],
+    "fingerprint": "6dc9106c4ff6e836"
+  },
+  "src/uni_modules/lucky-ui/components": {
+    "path": "src/uni_modules/lucky-ui/components",
+    "files": [
+      "index.ts"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".ts": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "components",
+      "index",
+      "lucky",
+      "src",
+      "uni_modules"
+    ],
+    "fingerprint": "928f613c542dcdb7"
+  },
+  "src/uni_modules/lucky-ui/components/common": {
+    "path": "src/uni_modules/lucky-ui/components/common",
+    "files": [],
+    "file_count": 0,
+    "extensions": {},
+    "symbols": [],
+    "keywords": [
+      "common",
+      "components",
+      "lucky",
+      "src",
+      "uni_modules"
+    ],
+    "fingerprint": "ece03da9c5902788"
+  },
+  "src/uni_modules/lucky-ui/components/common/props": {
+    "path": "src/uni_modules/lucky-ui/components/common/props",
+    "files": [
+      "index.ts"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".ts": 1
+    },
+    "symbols": [
+      "baseprops",
+      "commonprops",
+      "lkprophelper"
+    ],
+    "keywords": [
+      "baseprops",
+      "common",
+      "commonprops",
+      "components",
+      "index",
+      "lkprophelper",
+      "lucky",
+      "props",
+      "src",
+      "uni_modules"
+    ],
+    "fingerprint": "70060dbc7c13a3c7"
+  },
+  "src/uni_modules/lucky-ui/components/demo-block": {
+    "path": "src/uni_modules/lucky-ui/components/demo-block",
+    "files": [
+      "demo-block.scss",
+      "demo-block.vue"
+    ],
+    "file_count": 2,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "block",
+      "components",
+      "demo",
+      "lucky",
+      "scss",
+      "src",
+      "uni_modules",
+      "vue"
+    ],
+    "fingerprint": "a539db36a26000bc"
+  },
+  "src/uni_modules/lucky-ui/components/lk-action-sheet": {
+    "path": "src/uni_modules/lucky-ui/components/lk-action-sheet",
+    "files": [
+      "action-sheet.props.ts",
+      "action-sheet.utils.ts",
+      "lk-action-sheet.scss",
+      "lk-action-sheet.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "actionsheetemits",
+      "actionsheetprops",
+      "canselectaction",
+      "createactionsheetpayload",
+      "resolveactionsheetcancelclass",
+      "resolveactionsheetcanceltext",
+      "resolveactionsheetitemclass",
+      "resolveactionsheetitemstyle",
+      "resolveactionsheetlistclass",
+      "resolveactionsheetrootstyle",
+      "shouldcloseafteraction",
+      "shouldrenderactionsheethead"
+    ],
+    "keywords": [
+      "action",
+      "actionsheetemits",
+      "actionsheetprops",
+      "canselectaction",
+      "components",
+      "createactionsheetpayload",
+      "lucky",
+      "props",
+      "resolveactionsheetcancelclass",
+      "resolveactionsheetcanceltext",
+      "resolveactionsheetitemclass",
+      "resolveactionsheetitemstyle"
+    ],
+    "fingerprint": "686e6211dffb4dda"
+  },
+  "src/uni_modules/lucky-ui/components/lk-anchor": {
+    "path": "src/uni_modules/lucky-ui/components/lk-anchor",
+    "files": [
+      "anchor.props.ts",
+      "anchor.utils.ts",
+      "lk-anchor-link.vue",
+      "lk-anchor.scss",
+      "lk-anchor.vue"
+    ],
+    "file_count": 5,
+    "extensions": {
+      ".ts": 2,
+      ".vue": 2,
+      ".scss": 1
+    },
+    "symbols": [
+      "active",
+      "anchorlinkprops",
+      "anchorprops",
+      "anchortarget",
+      "anchortargetinput",
+      "canclickanchorlink",
+      "effectivescrolltop",
+      "item",
+      "nextitem",
+      "normalizeanchortargets",
+      "offset",
+      "parsed",
+      "reached",
+      "resolveactiveanchorbyscroll",
+      "resolveanchorlinkactive",
+      "resolveanchorlinkclass",
+      "resolveanchornumber",
+      "resolveanchoroffset",
+      "resolveanchorprogrammaticstate",
+      "resolveanchorscrollintoviewid",
+      "resolveanchorscrolltop",
+      "resolveanchorstyle",
+      "resolveanchortargetid",
+      "target",
+      "targets"
+    ],
+    "keywords": [
+      "active",
+      "anchor",
+      "anchorlinkprops",
+      "anchorprops",
+      "anchortarget",
+      "anchortargetinput",
+      "canclickanchorlink",
+      "components",
+      "effectivescrolltop",
+      "item",
+      "link",
+      "lucky"
+    ],
+    "fingerprint": "cf47a38fb89ff7e5"
+  },
+  "src/uni_modules/lucky-ui/components/lk-avatar": {
+    "path": "src/uni_modules/lucky-ui/components/lk-avatar",
+    "files": [
+      "avatar.props.ts",
+      "avatar.utils.ts",
+      "lk-avatar.scss",
+      "lk-avatar.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "avatarprops",
+      "avatarshape",
+      "resolveavatarborderradius",
+      "resolveavatarclass",
+      "resolveavatarfallbacktext",
+      "resolveavatarstyle",
+      "shouldshowavatarimage"
+    ],
+    "keywords": [
+      "avatar",
+      "avatarprops",
+      "avatarshape",
+      "components",
+      "lucky",
+      "props",
+      "resolveavatarborderradius",
+      "resolveavatarclass",
+      "resolveavatarfallbacktext",
+      "resolveavatarstyle",
+      "scss",
+      "shouldshowavatarimage"
+    ],
+    "fingerprint": "e801a9230b48df53"
+  },
+  "src/uni_modules/lucky-ui/components/lk-backtop": {
+    "path": "src/uni_modules/lucky-ui/components/lk-backtop",
+    "files": [
+      "backtop.props.ts",
+      "backtop.utils.ts",
+      "lk-backtop.scss",
+      "lk-backtop.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "backtopemits",
+      "backtopprops",
+      "backtopshape",
+      "backtopsize",
+      "createbacktoppayload",
+      "resolvebacktopclass",
+      "resolvebacktopstyle",
+      "resolvebacktopvisible",
+      "resolvebacktopwrapperstyle",
+      "shouldbacktopscrollpage"
+    ],
+    "keywords": [
+      "backtop",
+      "backtopemits",
+      "backtopprops",
+      "backtopshape",
+      "backtopsize",
+      "components",
+      "createbacktoppayload",
+      "lucky",
+      "props",
+      "resolvebacktopclass",
+      "resolvebacktopstyle",
+      "resolvebacktopvisible"
+    ],
+    "fingerprint": "2c83e83a84bb6a73"
+  },
+  "src/uni_modules/lucky-ui/components/lk-badge": {
+    "path": "src/uni_modules/lucky-ui/components/lk-badge",
+    "files": [
+      "badge.props.ts",
+      "badge.utils.ts",
+      "lk-badge.scss",
+      "lk-badge.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "badgeemits",
+      "badgeprops",
+      "badgetype",
+      "badgevalue",
+      "resolvebadgeclass",
+      "resolvebadgeclickpayload",
+      "resolvebadgedisplayvalue",
+      "resolvebadgestyle",
+      "shouldshowbadge"
+    ],
+    "keywords": [
+      "badge",
+      "badgeemits",
+      "badgeprops",
+      "badgetype",
+      "badgevalue",
+      "components",
+      "lucky",
+      "props",
+      "resolvebadgeclass",
+      "resolvebadgeclickpayload",
+      "resolvebadgedisplayvalue",
+      "resolvebadgestyle"
+    ],
+    "fingerprint": "c75169a9ae18e5cf"
+  },
+  "src/uni_modules/lucky-ui/components/lk-button": {
+    "path": "src/uni_modules/lucky-ui/components/lk-button",
+    "files": [
+      "button.props.ts",
+      "button.utils.ts",
+      "lk-button.scss",
+      "lk-button.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "buttonemits",
+      "buttonnativeeventname",
+      "buttonnativetype",
+      "buttonopentype",
+      "buttonprops",
+      "buttonshape",
+      "buttonsize",
+      "buttonvariant",
+      "isbuttonnativedisabled",
+      "isbuttonrippleenabled",
+      "resolvebuttonclass",
+      "resolvebuttonformtype",
+      "shouldemitbuttonevent"
+    ],
+    "keywords": [
+      "button",
+      "buttonemits",
+      "buttonnativeeventname",
+      "buttonnativetype",
+      "buttonopentype",
+      "buttonprops",
+      "buttonshape",
+      "buttonsize",
+      "buttonvariant",
+      "components",
+      "isbuttonnativedisabled",
+      "isbuttonrippleenabled"
+    ],
+    "fingerprint": "9f1a26fbe556485a"
+  },
+  "src/uni_modules/lucky-ui/components/lk-calendar": {
+    "path": "src/uni_modules/lucky-ui/components/lk-calendar",
+    "files": [
+      "calendar.props.ts",
+      "calendar.utils.ts",
+      "lk-calendar.scss",
+      "lk-calendar.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "addcalendardays",
+      "addcalendarmonths",
+      "calendaremits",
+      "calendarmode",
+      "calendarprops",
+      "calendarsize",
+      "calendarvalue",
+      "calendarviewmode",
+      "clampcalendarweekstart",
+      "createcalendarday",
+      "createcalendardays",
+      "createcalendarmarkermap",
+      "currentmonth",
+      "currentyear",
+      "cursordate",
+      "date",
+      "datetext",
+      "day",
+      "enddate",
+      "exists",
+      "first",
+      "formatcalendardate",
+      "getcalendarmonthstart",
+      "getcalendarviewdatevalue",
+      "getcalendarweekstart",
+      "gridstart",
+      "hascalendarblockeddatebetween",
+      "inrange",
+      "iscalendarblockeddate",
+      "iscalendardateinrange",
+      "iscalendaroutofbounds",
+      "israngeend",
+      "israngestart",
+      "limit",
+      "list",
+      "map",
+      "match",
+      "month",
+      "next",
+      "normalizecalendarvalue"
+    ],
+    "keywords": [
+      "addcalendardays",
+      "addcalendarmonths",
+      "calendar",
+      "calendaremits",
+      "calendarmode",
+      "calendarprops",
+      "calendarsize",
+      "calendarvalue",
+      "calendarviewmode",
+      "clampcalendarweekstart",
+      "components",
+      "createcalendarday"
+    ],
+    "fingerprint": "298b9333e98e4146"
+  },
+  "src/uni_modules/lucky-ui/components/lk-card": {
+    "path": "src/uni_modules/lucky-ui/components/lk-card",
+    "files": [
+      "card.props.ts",
+      "card.utils.ts",
+      "lk-card.scss",
+      "lk-card.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "cardemits",
+      "cardprops",
+      "resolvecardbodystyle",
+      "resolvecardclass",
+      "resolvecardfooterstyle",
+      "resolvecardheaderstyle",
+      "resolvecardrootstyle",
+      "resolvecardstyle",
+      "shadow"
+    ],
+    "keywords": [
+      "card",
+      "cardemits",
+      "cardprops",
+      "components",
+      "lucky",
+      "props",
+      "resolvecardbodystyle",
+      "resolvecardclass",
+      "resolvecardfooterstyle",
+      "resolvecardheaderstyle",
+      "resolvecardrootstyle",
+      "resolvecardstyle"
+    ],
+    "fingerprint": "9981325c54470dfc"
+  },
+  "src/uni_modules/lucky-ui/components/lk-carousel": {
+    "path": "src/uni_modules/lucky-ui/components/lk-carousel",
+    "files": [
+      "carousel.props.ts",
+      "carousel.utils.ts",
+      "lk-carousel-item.vue",
+      "lk-carousel.scss",
+      "lk-carousel.vue"
+    ],
+    "file_count": 5,
+    "extensions": {
+      ".ts": 2,
+      ".vue": 2,
+      ".scss": 1
+    },
+    "symbols": [
+      "baseheight",
+      "carouselchangesource",
+      "carouseleffect",
+      "carouselemits",
+      "carouselindicatoralign",
+      "carouselindicatorposition",
+      "carouselindicatortype",
+      "carouselitem",
+      "carouselprops",
+      "clampcarouselindex",
+      "getcarousellength",
+      "getcarouselrectheight",
+      "getcarouselswipercurrent",
+      "height",
+      "iscarouselautoplayenabled",
+      "iscarouselcircular",
+      "iscarouselindicatoroutside",
+      "iscarouselindicatorvertical",
+      "resolvecarouselcardstylevars",
+      "resolvecarouselheightprop",
+      "resolvecarouselindicatorclass",
+      "resolvecarouselindicatorinactivecolor",
+      "resolvecarouselindicatorposition",
+      "resolvecarouselindicatorsclass",
+      "resolvecarouselindicatorspace",
+      "resolvecarouselindicatorstyle",
+      "resolvecarouselitemclass",
+      "resolvecarouselnextmargin",
+      "resolvecarouselouterstyle",
+      "resolvecarouselpreviousmargin",
+      "resolvecarouselrootstyle",
+      "resolvecarouselswiperstyle",
+      "shouldshowcarouselindicators",
+      "shouldupdatecarouselactive",
+      "total",
+      "value"
+    ],
+    "keywords": [
+      "baseheight",
+      "carousel",
+      "carouselchangesource",
+      "carouseleffect",
+      "carouselemits",
+      "carouselindicatoralign",
+      "carouselindicatorposition",
+      "carouselindicatortype",
+      "carouselitem",
+      "carouselprops",
+      "clampcarouselindex",
+      "components"
+    ],
+    "fingerprint": "d1024005bcf795ab"
+  },
+  "src/uni_modules/lucky-ui/components/lk-cell": {
+    "path": "src/uni_modules/lucky-ui/components/lk-cell",
+    "files": [
+      "cell.props.ts",
+      "cell.utils.ts",
+      "lk-cell-group.vue",
+      "lk-cell.scss",
+      "lk-cell.vue"
+    ],
+    "file_count": 5,
+    "extensions": {
+      ".ts": 2,
+      ".vue": 2,
+      ".scss": 1
+    },
+    "symbols": [
+      "cellemits",
+      "cellprops",
+      "celltapaction",
+      "resolvecellclass",
+      "resolvecellgroupclass",
+      "resolvecellstyle",
+      "resolvecelltapaction",
+      "shouldtriggercellripple"
+    ],
+    "keywords": [
+      "cell",
+      "cellemits",
+      "cellprops",
+      "celltapaction",
+      "components",
+      "group",
+      "lucky",
+      "props",
+      "resolvecellclass",
+      "resolvecellgroupclass",
+      "resolvecellstyle",
+      "resolvecelltapaction"
+    ],
+    "fingerprint": "e0c822bf80acef92"
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-area": {
+    "path": "src/uni_modules/lucky-ui/components/lk-chart-area",
+    "files": [
+      "chart-area.props.ts",
+      "chart-area.utils.ts",
+      "lk-chart-area.scss",
+      "lk-chart-area.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "areachartpoint",
+      "arechartareatooltipstatesequal",
+      "arrowx",
+      "chartareaemits",
+      "chartareaprops",
+      "gap",
+      "getchartareaeffectstrength",
+      "left",
+      "maxleft",
+      "maxwidth",
+      "minwidth",
+      "resolvechartareaclass",
+      "resolvechartareaheightstyle",
+      "resolvechartarearootstyle",
+      "resolvechartareatooltipstate",
+      "resolvechartareatooltipstyle",
+      "width"
+    ],
+    "keywords": [
+      "area",
+      "areachartpoint",
+      "arechartareatooltipstatesequal",
+      "arrowx",
+      "chart",
+      "chartareaemits",
+      "chartareaprops",
+      "components",
+      "gap",
+      "getchartareaeffectstrength",
+      "left",
+      "lucky"
+    ],
+    "fingerprint": "4b075e6208531216"
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-bar": {
+    "path": "src/uni_modules/lucky-ui/components/lk-chart-bar",
+    "files": [
+      "chart-bar.props.ts",
+      "chart-bar.utils.ts",
+      "lk-chart-bar.scss",
+      "lk-chart-bar.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "arechartbartooltipstatesequal",
+      "arrowx",
+      "autobarwidth",
+      "barwidth",
+      "candidates",
+      "chartbaremits",
+      "chartbarprops",
+      "clampchartbarindex",
+      "gap",
+      "getchartbareffectiveindex",
+      "getchartbarhoverindexfrompoint",
+      "getchartbarmaxvalue",
+      "getchartbarnextautotooltipindex",
+      "getchartbarxaxislabelinterval",
+      "hashover",
+      "innerheight",
+      "innerwidth",
+      "label",
+      "left",
+      "maxbarwidth",
+      "maxleft",
+      "maxwidth",
+      "minwidth",
+      "normalizechartbarvalues",
+      "resolvechartbarheightstyle",
+      "resolvechartbarinitialhoverindex",
+      "resolvechartbaritemcolor",
+      "resolvechartbarlayout",
+      "resolvechartbarrootstyle",
+      "resolvechartbartooltipstate",
+      "resolvechartbartooltipstyle",
+      "resolvechartbartooltiptext",
+      "step",
+      "width",
+      "xlabelheight",
+      "ylabelwidth"
+    ],
+    "keywords": [
+      "arechartbartooltipstatesequal",
+      "arrowx",
+      "autobarwidth",
+      "bar",
+      "barwidth",
+      "candidates",
+      "chart",
+      "chartbaremits",
+      "chartbarprops",
+      "clampchartbarindex",
+      "components",
+      "gap"
+    ],
+    "fingerprint": "19d7510514ff58ec"
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-line": {
+    "path": "src/uni_modules/lucky-ui/components/lk-chart-line",
+    "files": [
+      "chart-line.props.ts",
+      "chart-line.utils.ts",
+      "lk-chart-line.scss",
+      "lk-chart-line.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "arechartlinetooltipstatesequal",
+      "arrowx",
+      "buildchartlinerenderpoints",
+      "chartlineemits",
+      "chartlineprops",
+      "clampchartlineindex",
+      "count",
+      "gap",
+      "getchartlinebeziersegments",
+      "getchartlinehoverindexfrompoint",
+      "getchartlinexaxislabelstride",
+      "index",
+      "innerheight",
+      "innerwidth",
+      "ischartlineautoanimating",
+      "label",
+      "left",
+      "max",
+      "maxleft",
+      "maxwidth",
+      "min",
+      "minwidth",
+      "normalizechartlinevalues",
+      "resolvechartlineautotransition",
+      "resolvechartlineheightstyle",
+      "resolvechartlineinitialhoverindex",
+      "resolvechartlineinterpolatedtooltip",
+      "resolvechartlinelayout",
+      "resolvechartlinerootstyle",
+      "resolvechartlinetooltipstate",
+      "resolvechartlinetooltipstyle",
+      "resolvechartlinetooltiptext",
+      "resolvechartlinevaluerange",
+      "value",
+      "valueratio",
+      "width",
+      "xlabelheight",
+      "ylabelwidth"
+    ],
+    "keywords": [
+      "arechartlinetooltipstatesequal",
+      "arrowx",
+      "buildchartlinerenderpoints",
+      "chart",
+      "chartlineemits",
+      "chartlineprops",
+      "clampchartlineindex",
+      "components",
+      "count",
+      "gap",
+      "getchartlinebeziersegments",
+      "getchartlinehoverindexfrompoint"
+    ],
+    "fingerprint": "7398819ad73a0109"
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-pie": {
+    "path": "src/uni_modules/lucky-ui/components/lk-chart-pie",
+    "files": [
+      "chart-pie.props.ts",
+      "chart-pie.utils.ts",
+      "lk-chart-pie.scss",
+      "lk-chart-pie.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "acc",
+      "activelabel",
+      "angle",
+      "arechartpietooltipstatesequal",
+      "arrowx",
+      "bounds",
+      "candidates",
+      "chart_pie_start_angle",
+      "chartpieemits",
+      "chartpieprops",
+      "clampchartpieindex",
+      "current",
+      "gap",
+      "getchartpiecapsweep",
+      "getchartpieeffectiveindex",
+      "getchartpieindexbyangle",
+      "getchartpienextautotooltipindex",
+      "getchartpieoverlapangle",
+      "getchartpiepercent",
+      "getchartpieslicesweep",
+      "getchartpietotal",
+      "getvalidchartpieslices",
+      "hashover",
+      "index",
+      "ischartpiepointinside",
+      "label",
+      "left",
+      "main",
+      "maxleft",
+      "maxwidth",
+      "minwidth",
+      "normalizechartpieangle",
+      "percent",
+      "resolvechartpiecentertext",
+      "resolvechartpiedonutbounds",
+      "resolvechartpiegeometry",
+      "resolvechartpieheightstyle",
+      "resolvechartpieinitialhoverindex",
+      "resolvechartpierootstyle",
+      "resolvechartpieslicecolor"
+    ],
+    "keywords": [
+      "acc",
+      "activelabel",
+      "angle",
+      "arechartpietooltipstatesequal",
+      "arrowx",
+      "bounds",
+      "candidates",
+      "chart",
+      "chart_pie_start_angle",
+      "chartpieemits",
+      "chartpieprops",
+      "clampchartpieindex"
+    ],
+    "fingerprint": "0b4a1a08be7001fd"
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-radar-lite": {
+    "path": "src/uni_modules/lucky-ui/components/lk-chart-radar-lite",
+    "files": [
+      "chart-radar-lite.props.ts",
+      "chart-radar-lite.utils.ts",
+      "lk-chart-radar-lite.scss",
+      "lk-chart-radar-lite.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "angle",
+      "buildradarlitepoints",
+      "chartradarliteprops",
+      "count",
+      "end",
+      "forward",
+      "getchartradarliteeffectstrength",
+      "getchartradarlitelevels",
+      "getradarliteloopdistance",
+      "getradarlitepoint",
+      "normalizedradarliteitem",
+      "normalizeradarlitedata",
+      "normalizeradarliteloopphase",
+      "phase",
+      "point",
+      "ratio",
+      "resolvechartradarliteclass",
+      "resolvechartradarlitegeometry",
+      "resolvechartradarliteheightstyle",
+      "resolvechartradarliterootstyle",
+      "start"
+    ],
+    "keywords": [
+      "angle",
+      "buildradarlitepoints",
+      "chart",
+      "chartradarliteprops",
+      "components",
+      "count",
+      "end",
+      "forward",
+      "getchartradarliteeffectstrength",
+      "getchartradarlitelevels",
+      "getradarliteloopdistance",
+      "getradarlitepoint"
+    ],
+    "fingerprint": "1f6918740625d8ec"
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-ring": {
+    "path": "src/uni_modules/lucky-ui/components/lk-chart-ring",
+    "files": [
+      "chart-ring.props.ts",
+      "chart-ring.utils.ts",
+      "lk-chart-ring.scss",
+      "lk-chart-ring.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "chartringprops",
+      "colors",
+      "getchartringcapsweep",
+      "getchartringeffectstrength",
+      "getchartringoverlapangle",
+      "getchartringtotal",
+      "max",
+      "normalizechartringsegments",
+      "percent",
+      "resolvechartringcentersubtitle",
+      "resolvechartringcentertitle",
+      "resolvechartringclass",
+      "resolvechartringgeometry",
+      "resolvechartringheightstyle",
+      "resolvechartringrootstyle",
+      "resolvechartringsegmentcolor",
+      "total"
+    ],
+    "keywords": [
+      "chart",
+      "chartringprops",
+      "colors",
+      "components",
+      "getchartringcapsweep",
+      "getchartringeffectstrength",
+      "getchartringoverlapangle",
+      "getchartringtotal",
+      "lucky",
+      "max",
+      "normalizechartringsegments",
+      "percent"
+    ],
+    "fingerprint": "3302fe7815aab1d8"
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-sparkline": {
+    "path": "src/uni_modules/lucky-ui/components/lk-chart-sparkline",
+    "files": [
+      "chart-sparkline.props.ts",
+      "chart-sparkline.utils.ts",
+      "lk-chart-sparkline.scss",
+      "lk-chart-sparkline.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "chartsparklineemits",
+      "chartsparklineprops",
+      "getchartsparklineeffectstrength",
+      "resolvechartsparklineactiveindex",
+      "resolvechartsparklineclass",
+      "resolvechartsparklineheightstyle",
+      "resolvechartsparklinerootstyle",
+      "sparklinepoint"
+    ],
+    "keywords": [
+      "chart",
+      "chartsparklineemits",
+      "chartsparklineprops",
+      "components",
+      "getchartsparklineeffectstrength",
+      "lucky",
+      "props",
+      "resolvechartsparklineactiveindex",
+      "resolvechartsparklineclass",
+      "resolvechartsparklineheightstyle",
+      "resolvechartsparklinerootstyle",
+      "scss"
+    ],
+    "fingerprint": "ca33ceaf2c5242f6"
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-stat-card": {
+    "path": "src/uni_modules/lucky-ui/components/lk-chart-stat-card",
+    "files": [
+      "chart-stat-card.props.ts",
+      "chart-stat-card.utils.ts",
+      "lk-chart-stat-card.scss",
+      "lk-chart-stat-card.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "chartstatcardprops",
+      "resolvechartstatcardclass",
+      "resolvechartstatcardrootstyle",
+      "resolvechartstatcardtrendicon",
+      "resolvechartstatcardtrendlabel",
+      "statcardpoint",
+      "statcardtrend"
+    ],
+    "keywords": [
+      "card",
+      "chart",
+      "chartstatcardprops",
+      "components",
+      "lucky",
+      "props",
+      "resolvechartstatcardclass",
+      "resolvechartstatcardrootstyle",
+      "resolvechartstatcardtrendicon",
+      "resolvechartstatcardtrendlabel",
+      "scss",
+      "src"
+    ],
+    "fingerprint": "d796048dde9132c7"
+  },
+  "src/uni_modules/lucky-ui/components/lk-checkbox": {
+    "path": "src/uni_modules/lucky-ui/components/lk-checkbox",
+    "files": [
+      "checkbox.props.ts",
+      "checkbox.utils.ts",
+      "lk-checkbox-group.vue",
+      "lk-checkbox.scss",
+      "lk-checkbox.vue"
+    ],
+    "file_count": 5,
+    "extensions": {
+      ".ts": 2,
+      ".vue": 2,
+      ".scss": 1
+    },
+    "symbols": [
+      "checkboxemits",
+      "checkboxgroupdirection",
+      "checkboxgroupemits",
+      "checkboxgroupprops",
+      "checkboxicontype",
+      "checkboxprops",
+      "checkboxshape",
+      "checkboxsize",
+      "checkboxvalue",
+      "index",
+      "ischeckboxchecked",
+      "ischeckboxdisabled",
+      "resolvecheckboxclass",
+      "resolvecheckboxgroupclass",
+      "resolvecheckboxgrouptoggle",
+      "resolvecheckboxiconsize",
+      "resolvecheckboxiconstyle",
+      "resolvecheckboxicontype",
+      "resolvecheckboxshape",
+      "resolvecheckboxsize",
+      "resolvecheckboxvalue",
+      "size",
+      "value"
+    ],
+    "keywords": [
+      "checkbox",
+      "checkboxemits",
+      "checkboxgroupdirection",
+      "checkboxgroupemits",
+      "checkboxgroupprops",
+      "checkboxicontype",
+      "checkboxprops",
+      "checkboxshape",
+      "checkboxsize",
+      "checkboxvalue",
+      "components",
+      "group"
+    ],
+    "fingerprint": "1dcaec471bd67426"
+  },
+  "src/uni_modules/lucky-ui/components/lk-choice": {
+    "path": "src/uni_modules/lucky-ui/components/lk-choice",
+    "files": [
+      "choice.props.ts",
+      "choice.utils.ts",
+      "lk-choice.scss",
+      "lk-choice.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "choiceemits",
+      "choiceprops",
+      "choicevalue",
+      "currentvalues",
+      "customstyle",
+      "gaptoken",
+      "ischoiceselected",
+      "resolvechoicecontainerstyle",
+      "resolvechoiceitemclass",
+      "resolvechoicerootclass",
+      "resolvechoiceselection",
+      "selected"
+    ],
+    "keywords": [
+      "choice",
+      "choiceemits",
+      "choiceprops",
+      "choicevalue",
+      "components",
+      "currentvalues",
+      "customstyle",
+      "gaptoken",
+      "ischoiceselected",
+      "lucky",
+      "props",
+      "resolvechoicecontainerstyle"
+    ],
+    "fingerprint": "e41905346c6615e3"
+  },
+  "src/uni_modules/lucky-ui/components/lk-collapse": {
+    "path": "src/uni_modules/lucky-ui/components/lk-collapse",
+    "files": [
+      "collapse.props.ts",
+      "collapse.utils.ts",
+      "lk-collapse-item.vue",
+      "lk-collapse.scss",
+      "lk-collapse.vue"
+    ],
+    "file_count": 5,
+    "extensions": {
+      ".ts": 2,
+      ".vue": 2,
+      ".scss": 1
+    },
+    "symbols": [
+      "collapseemits",
+      "collapseinjectionkey",
+      "collapsename",
+      "collapseprops",
+      "collapsevariant",
+      "getcollapseemitvalue",
+      "resolvecollapsebodystyle",
+      "resolvecollapseheaderclass",
+      "resolvecollapseitemclass",
+      "resolvecollapserootclass",
+      "resolvecollapserootstyle",
+      "resolvecollapsetoggle",
+      "set",
+      "synccollapseactive",
+      "value",
+      "wasopen"
+    ],
+    "keywords": [
+      "collapse",
+      "collapseemits",
+      "collapseinjectionkey",
+      "collapsename",
+      "collapseprops",
+      "collapsevariant",
+      "components",
+      "getcollapseemitvalue",
+      "item",
+      "lucky",
+      "props",
+      "resolvecollapsebodystyle"
+    ],
+    "fingerprint": "a42219ac826ed9aa"
+  },
+  "src/uni_modules/lucky-ui/components/lk-curtain": {
+    "path": "src/uni_modules/lucky-ui/components/lk-curtain",
+    "files": [
+      "curtain.props.ts",
+      "curtain.utils.ts",
+      "lk-curtain.scss",
+      "lk-curtain.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "curtaincloseposition",
+      "curtainclosepositions",
+      "curtainemits",
+      "curtainimagemode",
+      "curtainimagemodes",
+      "curtainlinktype",
+      "curtainlinktypes",
+      "curtainprops",
+      "ensurecurtainnegativeoffset",
+      "iscurtainhttplink",
+      "num",
+      "offset",
+      "resolvecurtaincloseoffset",
+      "resolvecurtainclosestyle",
+      "resolvecurtaincontentstyle",
+      "resolvecurtaincopysuccesstext",
+      "resolvecurtainheight",
+      "resolvecurtainrootstyle",
+      "resolvecurtaintransitionconfig",
+      "resolvecurtainwidth",
+      "shouldclosecurtainonoverlay",
+      "shouldnavigatecurtainlink",
+      "unit"
+    ],
+    "keywords": [
+      "components",
+      "curtain",
+      "curtaincloseposition",
+      "curtainclosepositions",
+      "curtainemits",
+      "curtainimagemode",
+      "curtainimagemodes",
+      "curtainlinktype",
+      "curtainlinktypes",
+      "curtainprops",
+      "ensurecurtainnegativeoffset",
+      "iscurtainhttplink"
+    ],
+    "fingerprint": "fdb95a35d9387bf2"
+  },
+  "src/uni_modules/lucky-ui/components/lk-divider": {
+    "path": "src/uni_modules/lucky-ui/components/lk-divider",
+    "files": [
+      "divider.props.ts",
+      "divider.utils.ts",
+      "lk-divider.scss",
+      "lk-divider.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "dividerposition",
+      "dividerprops",
+      "dividertextposition",
+      "hasdividertext",
+      "ispercent",
+      "isstandarddividerposition",
+      "isstandardposition",
+      "leftratio",
+      "numericvalue",
+      "position",
+      "resolvedividerclass",
+      "resolvedividerlinestyle",
+      "rightratio",
+      "stringposition"
+    ],
+    "keywords": [
+      "components",
+      "divider",
+      "dividerposition",
+      "dividerprops",
+      "dividertextposition",
+      "hasdividertext",
+      "ispercent",
+      "isstandarddividerposition",
+      "isstandardposition",
+      "leftratio",
+      "lucky",
+      "numericvalue"
+    ],
+    "fingerprint": "1a164eafb37cc8fa"
+  },
+  "src/uni_modules/lucky-ui/components/lk-dropdown": {
+    "path": "src/uni_modules/lucky-ui/components/lk-dropdown",
+    "files": [
+      "dropdown.props.ts",
+      "dropdown.utils.ts",
+      "lk-dropdown-item.vue",
+      "lk-dropdown.scss",
+      "lk-dropdown.vue"
+    ],
+    "file_count": 5,
+    "extensions": {
+      ".ts": 2,
+      ".vue": 2,
+      ".scss": 1
+    },
+    "symbols": [
+      "canselectdropdownitem",
+      "createdropdownitempayload",
+      "dropdownemits",
+      "dropdownplacement",
+      "dropdownprops",
+      "dropdowntrigger",
+      "dropdownvalue",
+      "preset",
+      "resolvedropdownitemactive",
+      "resolvedropdownitemclass",
+      "resolvedropdownmaskstyle",
+      "resolvedropdownmenustyle",
+      "resolvedropdownnextopen",
+      "resolvedropdownrootclass",
+      "resolvedropdownrootstyle",
+      "resolvedropdowntransitionconfig",
+      "shouldclosedropdownonselect",
+      "shouldrenderdropdownmask",
+      "shouldtoggledropdownonclick",
+      "shouldtoggledropdownonhover"
+    ],
+    "keywords": [
+      "canselectdropdownitem",
+      "components",
+      "createdropdownitempayload",
+      "dropdown",
+      "dropdownemits",
+      "dropdownplacement",
+      "dropdownprops",
+      "dropdowntrigger",
+      "dropdownvalue",
+      "item",
+      "lucky",
+      "preset"
+    ],
+    "fingerprint": "705156ffd9e81ae8"
+  },
+  "src/uni_modules/lucky-ui/components/lk-fab": {
+    "path": "src/uni_modules/lucky-ui/components/lk-fab",
+    "files": [
+      "fab.props.ts",
+      "fab.utils.ts",
+      "lk-fab.scss",
+      "lk-fab.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "applyfabrubberband",
+      "bottom",
+      "bounds",
+      "canclickfabaction",
+      "distance",
+      "fabdirection",
+      "fabemits",
+      "fabposition",
+      "fabprops",
+      "finalx",
+      "finaly",
+      "needed",
+      "offsettocenter",
+      "predictx",
+      "resolvefabactionclass",
+      "resolvefabactionstyle",
+      "resolvefabbounds",
+      "resolvefabcurrenticon",
+      "resolvefabdirection",
+      "resolvefabdragposition",
+      "resolvefabfinalposition",
+      "resolvefabiconstyle",
+      "resolvefabinitialposition",
+      "resolvefabisatrightside",
+      "resolvefabmainclass",
+      "resolvefabmainstyle",
+      "resolvefabrootstyle",
+      "resolvefabsafebottom",
+      "resolvefabthemecolor",
+      "right",
+      "shouldclosefabonoverlay",
+      "shouldtogglefabonclick",
+      "tofabrpx",
+      "top"
+    ],
+    "keywords": [
+      "applyfabrubberband",
+      "bottom",
+      "bounds",
+      "canclickfabaction",
+      "components",
+      "distance",
+      "fab",
+      "fabdirection",
+      "fabemits",
+      "fabposition",
+      "fabprops",
+      "finalx"
+    ],
+    "fingerprint": "cab8023f9b32d334"
+  },
+  "src/uni_modules/lucky-ui/components/lk-form": {
+    "path": "src/uni_modules/lucky-ui/components/lk-form",
+    "files": [
+      "context.ts",
+      "form.props.ts",
+      "form.utils.ts",
+      "lk-form-item.vue",
+      "lk-form.scss",
+      "lk-form.vue"
+    ],
+    "file_count": 6,
+    "extensions": {
+      ".ts": 3,
+      ".vue": 2,
+      ".scss": 1
+    },
+    "symbols": [
+      "errormessage",
+      "filterformrulesbytrigger",
+      "formemits",
+      "formitemprops",
+      "formlabelalign",
+      "formprops",
+      "formrules",
+      "formvalidatestatus",
+      "formvalidatetrigger",
+      "getformfieldrules",
+      "isemptyformvalue",
+      "message",
+      "normalizeformrules",
+      "normalizevalidateerrors",
+      "resolveformclass",
+      "resolveformitemclass",
+      "resolveformitemlabelstyle",
+      "resolveformitemrequired",
+      "resolveformitemresetvalue",
+      "resolvetargetformfields",
+      "result",
+      "rulevalidator",
+      "triggers",
+      "validateformvalue"
+    ],
+    "keywords": [
+      "components",
+      "context",
+      "errormessage",
+      "filterformrulesbytrigger",
+      "form",
+      "formemits",
+      "formitemprops",
+      "formlabelalign",
+      "formprops",
+      "formrules",
+      "formvalidatestatus",
+      "formvalidatetrigger"
+    ],
+    "fingerprint": "1465b9bec2579e81"
+  },
+  "src/uni_modules/lucky-ui/components/lk-grid": {
+    "path": "src/uni_modules/lucky-ui/components/lk-grid",
+    "files": [
+      "README.md",
+      "grid.props.ts",
+      "grid.utils.ts",
+      "index.ts",
+      "lk-grid.scss",
+      "lk-grid.vue",
+      "types.ts"
+    ],
+    "file_count": 7,
+    "extensions": {
+      ".ts": 4,
+      ".scss": 1,
+      ".vue": 1,
+      ".md": 1
+    },
+    "symbols": [
+      "cols",
+      "gridemits",
+      "gridprops",
+      "index",
+      "paginategriditems",
+      "perpage",
+      "resolvegridclickresult",
+      "resolvegridcontainerclass",
+      "resolvegridgap",
+      "resolvegridinnergapstyle",
+      "resolvegriditemclass",
+      "resolvegriditemkey",
+      "resolvegriditemstyle",
+      "resolvegridstyle",
+      "rowcount"
+    ],
+    "keywords": [
+      "cols",
+      "components",
+      "grid",
+      "gridemits",
+      "gridprops",
+      "index",
+      "lucky",
+      "paginategriditems",
+      "perpage",
+      "props",
+      "readme",
+      "resolvegridclickresult"
+    ],
+    "fingerprint": "1bbc8942d1f89517"
+  },
+  "src/uni_modules/lucky-ui/components/lk-horizontal-scroll": {
+    "path": "src/uni_modules/lucky-ui/components/lk-horizontal-scroll",
+    "files": [
+      "horizontal-scroll.props.ts",
+      "horizontal-scroll.utils.ts",
+      "lk-horizontal-scroll.scss",
+      "lk-horizontal-scroll.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "horizontalscrollprops",
+      "padding",
+      "resolvehorizontalscrollclass",
+      "resolvehorizontalscrollcontainerstyle",
+      "resolvehorizontalscrollrootstyle",
+      "shouldshowhorizontalscrollbar"
+    ],
+    "keywords": [
+      "components",
+      "horizontal",
+      "horizontalscrollprops",
+      "lucky",
+      "padding",
+      "props",
+      "resolvehorizontalscrollclass",
+      "resolvehorizontalscrollcontainerstyle",
+      "resolvehorizontalscrollrootstyle",
+      "scroll",
+      "scss",
+      "shouldshowhorizontalscrollbar"
+    ],
+    "fingerprint": "5aa1a45bd02872c5"
+  },
+  "src/uni_modules/lucky-ui/components/lk-icon": {
+    "path": "src/uni_modules/lucky-ui/components/lk-icon",
+    "files": [
+      "codepoints.ts",
+      "icon.props.ts",
+      "icon.utils.ts",
+      "icons.ts",
+      "lk-icon.scss",
+      "lk-icon.vue"
+    ],
+    "file_count": 6,
+    "extensions": {
+      ".ts": 4,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "builtiniconname",
+      "color",
+      "fontsize",
+      "getbuiltinicon",
+      "iconcharof",
+      "iconemits",
+      "iconmodules",
+      "iconprops",
+      "key",
+      "loader",
+      "resolveiconcolor",
+      "resolveiconsize",
+      "resolveiconstyle",
+      "shouldwarnmissingicon",
+      "svg"
+    ],
+    "keywords": [
+      "builtiniconname",
+      "codepoints",
+      "color",
+      "components",
+      "fontsize",
+      "getbuiltinicon",
+      "icon",
+      "iconcharof",
+      "iconemits",
+      "iconmodules",
+      "iconprops",
+      "icons"
+    ],
+    "fingerprint": "7911f0bd6201e8ce"
+  },
+  "src/uni_modules/lucky-ui/components/lk-icon/fonts": {
+    "path": "src/uni_modules/lucky-ui/components/lk-icon/fonts",
+    "files": [
+      "lk-icons-definitions.css",
+      "lk-icons.base64.ts",
+      "lk-icons.css",
+      "lk-icons.less",
+      "lk-icons.module.less",
+      "lk-icons.scss",
+      "lk-icons.styl",
+      "lk-icons.woff",
+      "lk-icons.woff2"
+    ],
+    "file_count": 9,
+    "extensions": {
+      ".css": 2,
+      ".ts": 1,
+      ".less": 2,
+      ".scss": 1,
+      ".styl": 1,
+      ".woff": 1,
+      ".woff2": 1
+    },
+    "symbols": [
+      "lk_icons_woff_base64"
+    ],
+    "keywords": [
+      "base64",
+      "components",
+      "css",
+      "definitions",
+      "fonts",
+      "icon",
+      "icons",
+      "less",
+      "lk_icons_woff_base64",
+      "lucky",
+      "module",
+      "scss"
+    ],
+    "fingerprint": "c755766dd2358637"
+  },
+  "src/uni_modules/lucky-ui/components/lk-image": {
+    "path": "src/uni_modules/lucky-ui/components/lk-image",
+    "files": [
+      "image.props.ts",
+      "image.utils.ts",
+      "lk-image.scss",
+      "lk-image.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "createimageinitialstate",
+      "imageemits",
+      "imagefit",
+      "imageprops",
+      "resolveimageclickpayload",
+      "resolveimagepreviewpayload",
+      "resolveimagerootstyle",
+      "resolveimagestateonerror",
+      "resolveimagestateonload",
+      "resolveimagestateonsrcchange",
+      "shouldpreviewimage"
+    ],
+    "keywords": [
+      "components",
+      "createimageinitialstate",
+      "image",
+      "imageemits",
+      "imagefit",
+      "imageprops",
+      "lucky",
+      "props",
+      "resolveimageclickpayload",
+      "resolveimagepreviewpayload",
+      "resolveimagerootstyle",
+      "resolveimagestateonerror"
+    ],
+    "fingerprint": "a19f75785bf14b96"
+  },
+  "src/uni_modules/lucky-ui/components/lk-input": {
+    "path": "src/uni_modules/lucky-ui/components/lk-input",
+    "files": [
+      "input.props.ts",
+      "input.utils.ts",
+      "lk-input.scss",
+      "lk-input.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "applyinputmaxlength",
+      "detail",
+      "hasinputvalue",
+      "inputconfirmtype",
+      "inputemits",
+      "inputeventpayload",
+      "inputmode",
+      "inputprops",
+      "inputsize",
+      "inputtype",
+      "inputvalue",
+      "length",
+      "readinputvalue",
+      "resolvefakeinputtext",
+      "resolveinputclass",
+      "resolveinputcount",
+      "resolveinputnativestate",
+      "shouldshowpasswordtoggle",
+      "shouldshowsuffix",
+      "shouldshowtrailingbalance",
+      "target",
+      "text"
+    ],
+    "keywords": [
+      "applyinputmaxlength",
+      "components",
+      "detail",
+      "hasinputvalue",
+      "input",
+      "inputconfirmtype",
+      "inputemits",
+      "inputeventpayload",
+      "inputmode",
+      "inputprops",
+      "inputsize",
+      "inputtype"
+    ],
+    "fingerprint": "28c0216f2f6ea039"
+  },
+  "src/uni_modules/lucky-ui/components/lk-keyboard": {
+    "path": "src/uni_modules/lucky-ui/components/lk-keyboard",
+    "files": [
+      "keyboard.props.ts",
+      "keyboard.utils.ts",
+      "lk-keyboard.scss",
+      "lk-keyboard.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "buildidcardkeyboardlayout",
+      "buildkeyboardrows",
+      "buildnumberkeyboardlayout",
+      "buildplatealphanumkeyboardlayout",
+      "buildplateprovincekeyboardlayout",
+      "cankeyboardinput",
+      "digits",
+      "generatekeyboardnumberkeys",
+      "getnextkeyboardplatemode",
+      "keyboardemits",
+      "keyboardlayoutoptions",
+      "keyboardplatealphanum",
+      "keyboardplatemode",
+      "keyboardplateprovinces",
+      "keyboardpressaction",
+      "keyboardprops",
+      "keyboardtheme",
+      "keyboardtype",
+      "layout",
+      "randomfn",
+      "resolvekeyboardclass",
+      "resolvekeyboardkeyclass",
+      "resolvekeyboardkeystyle",
+      "resolvekeyboardlayout",
+      "resolvekeyboardpressaction",
+      "resolvekeyboardstyle"
+    ],
+    "keywords": [
+      "buildidcardkeyboardlayout",
+      "buildkeyboardrows",
+      "buildnumberkeyboardlayout",
+      "buildplatealphanumkeyboardlayout",
+      "buildplateprovincekeyboardlayout",
+      "cankeyboardinput",
+      "components",
+      "digits",
+      "generatekeyboardnumberkeys",
+      "getnextkeyboardplatemode",
+      "keyboard",
+      "keyboardemits"
+    ],
+    "fingerprint": "fab44d2a1c7751e1"
+  },
+  "src/uni_modules/lucky-ui/components/lk-loading": {
+    "path": "src/uni_modules/lucky-ui/components/lk-loading",
+    "files": [
+      "lk-loading.scss",
+      "lk-loading.vue",
+      "loading.props.ts",
+      "loading.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "loadingprops",
+      "loadingvariant",
+      "normalizeloadingsize",
+      "resolveloadingbarstyle",
+      "resolveloadingheightstyle",
+      "resolveloadingrootclass",
+      "resolveloadingrootstyle",
+      "resolveloadingsquarestyle",
+      "resolveloadingtext",
+      "shouldrenderloadingtext",
+      "value"
+    ],
+    "keywords": [
+      "components",
+      "loading",
+      "loadingprops",
+      "loadingvariant",
+      "lucky",
+      "normalizeloadingsize",
+      "props",
+      "resolveloadingbarstyle",
+      "resolveloadingheightstyle",
+      "resolveloadingrootclass",
+      "resolveloadingrootstyle",
+      "resolveloadingsquarestyle"
+    ],
+    "fingerprint": "feada6f345934542"
+  },
+  "src/uni_modules/lucky-ui/components/lk-meta-row": {
+    "path": "src/uni_modules/lucky-ui/components/lk-meta-row",
+    "files": [
+      "lk-meta-row.scss",
+      "lk-meta-row.vue",
+      "meta-row.props.ts",
+      "meta-row.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "metarowalign",
+      "metarowprops",
+      "normalizemetarowcustomstyle",
+      "resolvemetarowclass",
+      "resolvemetarowrootstyle",
+      "resolvemetarowsidestyle",
+      "resolvemetarowstylevars"
+    ],
+    "keywords": [
+      "components",
+      "lucky",
+      "meta",
+      "metarowalign",
+      "metarowprops",
+      "normalizemetarowcustomstyle",
+      "props",
+      "resolvemetarowclass",
+      "resolvemetarowrootstyle",
+      "resolvemetarowsidestyle",
+      "resolvemetarowstylevars",
+      "row"
+    ],
+    "fingerprint": "4551d565f7112adf"
+  },
+  "src/uni_modules/lucky-ui/components/lk-modal": {
+    "path": "src/uni_modules/lucky-ui/components/lk-modal",
+    "files": [
+      "lk-modal.scss",
+      "lk-modal.vue",
+      "modal.props.ts",
+      "modal.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "cantriggermodalaction",
+      "modalemits",
+      "modalprops",
+      "preset",
+      "resolvemodalfooterclass",
+      "resolvemodalheaderclass",
+      "resolvemodalpanelstyle",
+      "resolvemodalrootstyle",
+      "resolvemodaltext",
+      "resolvemodaltransitionconfig",
+      "resolvemodaltransitiondelay",
+      "resolvemodaltransitionduration",
+      "resolvemodaltransitioneasing",
+      "resolvemodaltransitionname",
+      "shouldclosemodalonoverlay",
+      "shouldmodalheaderrender"
+    ],
+    "keywords": [
+      "cantriggermodalaction",
+      "components",
+      "lucky",
+      "modal",
+      "modalemits",
+      "modalprops",
+      "preset",
+      "props",
+      "resolvemodalfooterclass",
+      "resolvemodalheaderclass",
+      "resolvemodalpanelstyle",
+      "resolvemodalrootstyle"
+    ],
+    "fingerprint": "b1cd34a5ffe4237d"
+  },
+  "src/uni_modules/lucky-ui/components/lk-navbar": {
+    "path": "src/uni_modules/lucky-ui/components/lk-navbar",
+    "files": [
+      "lk-navbar.scss",
+      "lk-navbar.vue",
+      "navbar.props.ts",
+      "navbar.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "capsulegap",
+      "capsuleheight",
+      "capsulereserve",
+      "capsuletop",
+      "defaultpadding",
+      "isnavbarstyleobject",
+      "navbaremits",
+      "navbarmenubuttoninfo",
+      "navbarprops",
+      "navbarstyleobject",
+      "navbartitlealign",
+      "navbarvariant",
+      "resolvenavbarcontentheight",
+      "resolvenavbarcontentstyle",
+      "resolvenavbarmergedstyle",
+      "resolvenavbarplaceholderstyle",
+      "resolvenavbarrootclass",
+      "resolvenavbarsafestyle",
+      "safepadding",
+      "shouldnavigateback"
+    ],
+    "keywords": [
+      "capsulegap",
+      "capsuleheight",
+      "capsulereserve",
+      "capsuletop",
+      "components",
+      "defaultpadding",
+      "isnavbarstyleobject",
+      "lucky",
+      "navbar",
+      "navbaremits",
+      "navbarmenubuttoninfo",
+      "navbarprops"
+    ],
+    "fingerprint": "0f41489c142132d0"
+  },
+  "src/uni_modules/lucky-ui/components/lk-notice-bar": {
+    "path": "src/uni_modules/lucky-ui/components/lk-notice-bar",
+    "files": [
+      "lk-notice-bar.scss",
+      "lk-notice-bar.vue",
+      "notice-bar.props.ts",
+      "notice-bar.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "noticebaremits",
+      "noticebarprops",
+      "noticebarscrollmode",
+      "offset",
+      "resolvenoticebarclickpayload",
+      "resolvenoticebardisplaymessages",
+      "resolvenoticebarinterval",
+      "resolvenoticebarscrollmode",
+      "resolvenoticebarstyle",
+      "resolvenoticebarverticallist",
+      "resolvenoticebarverticalstyle",
+      "scrollmode",
+      "vertical"
+    ],
+    "keywords": [
+      "bar",
+      "components",
+      "lucky",
+      "notice",
+      "noticebaremits",
+      "noticebarprops",
+      "noticebarscrollmode",
+      "offset",
+      "props",
+      "resolvenoticebarclickpayload",
+      "resolvenoticebardisplaymessages",
+      "resolvenoticebarinterval"
+    ],
+    "fingerprint": "79b9789f6ecb613d"
+  },
+  "src/uni_modules/lucky-ui/components/lk-number-roller": {
+    "path": "src/uni_modules/lucky-ui/components/lk-number-roller",
+    "files": [
+      "lk-number-roller.scss",
+      "lk-number-roller.vue",
+      "number-roller.props.ts",
+      "number-roller.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "absoluteint",
+      "buildnumberrollersegments",
+      "changed",
+      "current",
+      "custom",
+      "decimal",
+      "decimalpart",
+      "decimals",
+      "extractnumberrollerdecimallength",
+      "formatnumberrollernumeric",
+      "formatted",
+      "groupedint",
+      "injectnumberrollerseparators",
+      "normalized",
+      "normalizenumberrollervalue",
+      "number_roller_digits_pool",
+      "numberrolleranimateddigits",
+      "numberrollerformatter",
+      "numberrollerprops",
+      "numberrollersegment",
+      "primenumberrollerdigits",
+      "raw",
+      "resolvenumberrollerclass",
+      "resolvenumberrollerrendersegments",
+      "resolvenumberrollerrootstyle",
+      "resolvenumberrollerstyle",
+      "resolvenumberrollertargetdigits",
+      "resolvenumberrollertrackstyle",
+      "result",
+      "sign",
+      "source"
+    ],
+    "keywords": [
+      "absoluteint",
+      "buildnumberrollersegments",
+      "changed",
+      "components",
+      "current",
+      "custom",
+      "decimal",
+      "decimalpart",
+      "decimals",
+      "extractnumberrollerdecimallength",
+      "formatnumberrollernumeric",
+      "formatted"
+    ],
+    "fingerprint": "073994a2a490a22d"
+  },
+  "src/uni_modules/lucky-ui/components/lk-overlay": {
+    "path": "src/uni_modules/lucky-ui/components/lk-overlay",
+    "files": [
+      "lk-overlay.scss",
+      "lk-overlay.vue",
+      "overlay.props.ts",
+      "overlay.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "overlayemits",
+      "overlayprops",
+      "resolveoverlaybackground",
+      "resolveoverlaybasestyle",
+      "resolveoverlaystyle",
+      "resolveoverlayvisible",
+      "shouldcloseoverlayonclick",
+      "shouldlockoverlayscroll",
+      "shouldpreventoverlaytouchmove"
+    ],
+    "keywords": [
+      "components",
+      "lucky",
+      "overlay",
+      "overlayemits",
+      "overlayprops",
+      "props",
+      "resolveoverlaybackground",
+      "resolveoverlaybasestyle",
+      "resolveoverlaystyle",
+      "resolveoverlayvisible",
+      "scss",
+      "shouldcloseoverlayonclick"
+    ],
+    "fingerprint": "4c17629ff279f2ea"
+  },
+  "src/uni_modules/lucky-ui/components/lk-picker": {
+    "path": "src/uni_modules/lucky-ui/components/lk-picker",
+    "files": [
+      "lk-picker.scss",
+      "lk-picker.vue",
+      "picker.props.ts",
+      "picker.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "bucket",
+      "buildcascadepickercolumns",
+      "currentlevel",
+      "getpickeroptionsbyindexes",
+      "getpickervaluebyindexes",
+      "index",
+      "indexes",
+      "normalizepickercolumns",
+      "optionindex",
+      "pickercolumns",
+      "pickeremits",
+      "pickermode",
+      "pickerprimitivevalue",
+      "pickerprops",
+      "pickervalue",
+      "resolvecascadepickerindexes",
+      "resolvepickerclass",
+      "resolvepickercolumns",
+      "resolvepickerdistancebucket",
+      "resolvepickerindexes",
+      "resolvepickerindicatorstyle",
+      "resolvepickeritemlabelclass",
+      "resolvepickermaskstyle",
+      "resolvepickerviewheight",
+      "resolvepickerviewwrapstyle",
+      "selected",
+      "syncpickerinnervaluefrommodel",
+      "value"
+    ],
+    "keywords": [
+      "bucket",
+      "buildcascadepickercolumns",
+      "components",
+      "currentlevel",
+      "getpickeroptionsbyindexes",
+      "getpickervaluebyindexes",
+      "index",
+      "indexes",
+      "lucky",
+      "normalizepickercolumns",
+      "optionindex",
+      "picker"
+    ],
+    "fingerprint": "b2b4c55befe62238"
+  },
+  "src/uni_modules/lucky-ui/components/lk-popup": {
+    "path": "src/uni_modules/lucky-ui/components/lk-popup",
+    "files": [
+      "lk-popup.scss",
+      "lk-popup.vue",
+      "popup.props.ts",
+      "popup.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "applypopuprubberband",
+      "base",
+      "candidates",
+      "canexpandpopupsheet",
+      "closey",
+      "down",
+      "first",
+      "getpopupinitialopentranslatey",
+      "getpopupminsnapy",
+      "getpopuptouchclienty",
+      "ispopupbottomdraggable",
+      "ispopupcontentatlower",
+      "list",
+      "normalizepopupsnappixels",
+      "popup_scroll_bound_eps",
+      "popup_velocity_threshold",
+      "popupemits",
+      "popupposition",
+      "popupprops",
+      "preset",
+      "raw",
+      "resolvepopuppanelstyle",
+      "resolvepopupsize",
+      "resolvepopupsnaptarget",
+      "resolvepopuptransitionconfig",
+      "resolvepopupwrapperclass",
+      "resolvepopupwrapperstyle",
+      "visibleheight"
+    ],
+    "keywords": [
+      "applypopuprubberband",
+      "base",
+      "candidates",
+      "canexpandpopupsheet",
+      "closey",
+      "components",
+      "down",
+      "first",
+      "getpopupinitialopentranslatey",
+      "getpopupminsnapy",
+      "getpopuptouchclienty",
+      "ispopupbottomdraggable"
+    ],
+    "fingerprint": "e634bf7d65104d62"
+  },
+  "src/uni_modules/lucky-ui/components/lk-preload-debugger": {
+    "path": "src/uni_modules/lucky-ui/components/lk-preload-debugger",
+    "files": [
+      "lk-preload-debugger.scss",
+      "lk-preload-debugger.vue",
+      "preload-debugger.props.ts",
+      "preload-debugger.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "createpreloaddebuggerlog",
+      "debuggerposition",
+      "preloaddebuggerlogtype",
+      "preloaddebuggerprops",
+      "resolvepreloaddebuggerbadgeclass",
+      "resolvepreloaddebuggerclass",
+      "resolvepreloaddebuggerstatuslabel",
+      "resolvepreloaddebuggerstyle",
+      "trimpreloaddebuggerlogs"
+    ],
+    "keywords": [
+      "components",
+      "createpreloaddebuggerlog",
+      "debugger",
+      "debuggerposition",
+      "lucky",
+      "preload",
+      "preloaddebuggerlogtype",
+      "preloaddebuggerprops",
+      "props",
+      "resolvepreloaddebuggerbadgeclass",
+      "resolvepreloaddebuggerclass",
+      "resolvepreloaddebuggerstatuslabel"
+    ],
+    "fingerprint": "eaecde204cfe2961"
+  },
+  "src/uni_modules/lucky-ui/components/lk-progress": {
+    "path": "src/uni_modules/lucky-ui/components/lk-progress",
+    "files": [
+      "lk-progress.scss",
+      "lk-progress.vue",
+      "progress.props.ts",
+      "progress.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "formatprogresstext",
+      "normalizeprogresspercentage",
+      "progressemits",
+      "progressprops",
+      "resolveprogressbarstyle",
+      "resolveprogressrootclass",
+      "resolveprogressrootstyle",
+      "resolveprogresstrackstyle",
+      "shouldemitprogresscomplete",
+      "statuscolor"
+    ],
+    "keywords": [
+      "components",
+      "formatprogresstext",
+      "lucky",
+      "normalizeprogresspercentage",
+      "progress",
+      "progressemits",
+      "progressprops",
+      "props",
+      "resolveprogressbarstyle",
+      "resolveprogressrootclass",
+      "resolveprogressrootstyle",
+      "resolveprogresstrackstyle"
+    ],
+    "fingerprint": "f2789369d34f2fc0"
+  },
+  "src/uni_modules/lucky-ui/components/lk-radio": {
+    "path": "src/uni_modules/lucky-ui/components/lk-radio",
+    "files": [
+      "lk-radio-group.vue",
+      "lk-radio.scss",
+      "lk-radio.vue",
+      "radio.props.ts",
+      "radio.utils.ts"
+    ],
+    "file_count": 5,
+    "extensions": {
+      ".vue": 2,
+      ".scss": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "isradiochecked",
+      "isradiodisabled",
+      "radioemits",
+      "radiogroupdirection",
+      "radiogroupemits",
+      "radiogroupprops",
+      "radioicontype",
+      "radioprops",
+      "radioshape",
+      "radiosize",
+      "radiovalue",
+      "resolveradioclass",
+      "resolveradiogroupclass",
+      "resolveradioiconsize",
+      "resolveradioiconstyle",
+      "resolveradioicontype",
+      "resolveradioshape",
+      "resolveradiosize",
+      "resolveradiovalue",
+      "size"
+    ],
+    "keywords": [
+      "components",
+      "group",
+      "isradiochecked",
+      "isradiodisabled",
+      "lucky",
+      "props",
+      "radio",
+      "radioemits",
+      "radiogroupdirection",
+      "radiogroupemits",
+      "radiogroupprops",
+      "radioicontype"
+    ],
+    "fingerprint": "5694e86a37606425"
+  },
+  "src/uni_modules/lucky-ui/components/lk-rate": {
+    "path": "src/uni_modules/lucky-ui/components/lk-rate",
+    "files": [
+      "lk-rate.scss",
+      "lk-rate.vue",
+      "rate.props.ts",
+      "rate.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "createratestars",
+      "getratestarstatus",
+      "normalizedcount",
+      "normalizeratesize",
+      "oldvalue",
+      "rateemits",
+      "rateprops",
+      "ratestarstatus",
+      "resolverateselection",
+      "shouldclear",
+      "value"
+    ],
+    "keywords": [
+      "components",
+      "createratestars",
+      "getratestarstatus",
+      "lucky",
+      "normalizedcount",
+      "normalizeratesize",
+      "oldvalue",
+      "props",
+      "rate",
+      "rateemits",
+      "rateprops",
+      "ratestarstatus"
+    ],
+    "fingerprint": "2bc3b4299c46feea"
+  },
+  "src/uni_modules/lucky-ui/components/lk-segmented": {
+    "path": "src/uni_modules/lucky-ui/components/lk-segmented",
+    "files": [
+      "lk-segmented.scss",
+      "lk-segmented.vue",
+      "segmented.props.ts",
+      "segmented.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "activeindex",
+      "activeitem",
+      "disabled",
+      "offset",
+      "oldvalue",
+      "reselected",
+      "resolvesegmentedrootstyle",
+      "resolvesegmentedselection",
+      "resolvesegmentedsliderstyle",
+      "segmentedemits",
+      "segmentedprops",
+      "segmentedsize",
+      "segmentedvalue",
+      "value"
+    ],
+    "keywords": [
+      "activeindex",
+      "activeitem",
+      "components",
+      "disabled",
+      "lucky",
+      "offset",
+      "oldvalue",
+      "props",
+      "reselected",
+      "resolvesegmentedrootstyle",
+      "resolvesegmentedselection",
+      "resolvesegmentedsliderstyle"
+    ],
+    "fingerprint": "e6ee29461df7a540"
+  },
+  "src/uni_modules/lucky-ui/components/lk-skeleton": {
+    "path": "src/uni_modules/lucky-ui/components/lk-skeleton",
+    "files": [
+      "lk-skeleton.scss",
+      "lk-skeleton.vue",
+      "skeleton.props.ts",
+      "skeleton.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "duration",
+      "resolveskeletonanimatedclass",
+      "resolveskeletonavatarstyle",
+      "resolveskeletonhoststyle",
+      "resolveskeletonindexedvalue",
+      "resolveskeletonrootclass",
+      "resolveskeletonrowstyle",
+      "resolveskeletontitlestyle",
+      "skeletonprops"
+    ],
+    "keywords": [
+      "components",
+      "duration",
+      "lucky",
+      "props",
+      "resolveskeletonanimatedclass",
+      "resolveskeletonavatarstyle",
+      "resolveskeletonhoststyle",
+      "resolveskeletonindexedvalue",
+      "resolveskeletonrootclass",
+      "resolveskeletonrowstyle",
+      "resolveskeletontitlestyle",
+      "scss"
+    ],
+    "fingerprint": "8ce65cc8688ac943"
+  },
+  "src/uni_modules/lucky-ui/components/lk-slider": {
+    "path": "src/uni_modules/lucky-ui/components/lk-slider",
+    "files": [
+      "lk-slider.scss",
+      "lk-slider.vue",
+      "slider.props.ts",
+      "slider.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "changed",
+      "choosesliderthumbindex",
+      "detailx",
+      "dist0",
+      "dist1",
+      "formatsliderdisplayvalue",
+      "formatsliderstepvalue",
+      "getslideremitvalue",
+      "getsliderpercent",
+      "getsliderpointx",
+      "index",
+      "initslidervalue",
+      "newvalue",
+      "nextvalues",
+      "payload",
+      "percent",
+      "range",
+      "rawvalue",
+      "resolvesliderbarstyle",
+      "resolvesliderblockstyle",
+      "resolvesliderrootclass",
+      "resolvesliderrootstyle",
+      "resolvesliderstops",
+      "resolvesliderthumbstyle",
+      "resolveslidertrackstyle",
+      "resolvesliderupdate",
+      "shouldvalidatesliderfield",
+      "slideremits",
+      "sliderpointerevent",
+      "sliderprops",
+      "slidersize",
+      "slidersizevalues",
+      "sliderupdateresult",
+      "slidervalue",
+      "step",
+      "stepcount",
+      "steps",
+      "value"
+    ],
+    "keywords": [
+      "changed",
+      "choosesliderthumbindex",
+      "components",
+      "detailx",
+      "dist0",
+      "dist1",
+      "formatsliderdisplayvalue",
+      "formatsliderstepvalue",
+      "getslideremitvalue",
+      "getsliderpercent",
+      "getsliderpointx",
+      "index"
+    ],
+    "fingerprint": "c3b47f40c4262234"
+  },
+  "src/uni_modules/lucky-ui/components/lk-space": {
+    "path": "src/uni_modules/lucky-ui/components/lk-space",
+    "files": [
+      "lk-space.scss",
+      "lk-space.vue",
+      "space.props.ts",
+      "space.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "colgap",
+      "formatspacegap",
+      "mergedalign",
+      "resolvespacealign",
+      "resolvespaceclass",
+      "resolvespacegaps",
+      "resolvespacestyle",
+      "rowgap",
+      "spacealign",
+      "spacealignvalue",
+      "spacedirection",
+      "spacedirectionvalue",
+      "spacegap",
+      "spacepresetgapmap",
+      "spaceprops",
+      "value"
+    ],
+    "keywords": [
+      "colgap",
+      "components",
+      "formatspacegap",
+      "lucky",
+      "mergedalign",
+      "props",
+      "resolvespacealign",
+      "resolvespaceclass",
+      "resolvespacegaps",
+      "resolvespacestyle",
+      "rowgap",
+      "scss"
+    ],
+    "fingerprint": "602edcecbb18f25c"
+  },
+  "src/uni_modules/lucky-ui/components/lk-stepper": {
+    "path": "src/uni_modules/lucky-ui/components/lk-stepper",
+    "files": [
+      "lk-stepper.scss",
+      "lk-stepper.vue",
+      "stepper.props.ts",
+      "stepper.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "addsteppervalue",
+      "buttonsize",
+      "card",
+      "clampsteppervalue",
+      "formatsteppervalue",
+      "inputwidth",
+      "isstepperminusdisabled",
+      "isstepperplusdisabled",
+      "normalized",
+      "normalizestepperblurvalue",
+      "now",
+      "num",
+      "payload",
+      "readstepperinputvalue",
+      "resolvestepperchange",
+      "resolvestepperclass",
+      "resolvestepperstyle",
+      "shouldvalidatestepperfield",
+      "step",
+      "stepperaction",
+      "stepperchangeresult",
+      "stepperemits",
+      "stepperprops",
+      "steppersize",
+      "steppervalue",
+      "value"
+    ],
+    "keywords": [
+      "addsteppervalue",
+      "buttonsize",
+      "card",
+      "clampsteppervalue",
+      "components",
+      "formatsteppervalue",
+      "inputwidth",
+      "isstepperminusdisabled",
+      "isstepperplusdisabled",
+      "lucky",
+      "normalized",
+      "normalizestepperblurvalue"
+    ],
+    "fingerprint": "230fcf0d95e3cceb"
+  },
+  "src/uni_modules/lucky-ui/components/lk-sticky": {
+    "path": "src/uni_modules/lucky-ui/components/lk-sticky",
+    "files": [
+      "lk-sticky.scss",
+      "lk-sticky.vue",
+      "sticky.props.ts",
+      "sticky.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "resolvestickybasestyle",
+      "resolvestickyclass",
+      "resolvestickyoffset",
+      "resolvestickyrootmargin",
+      "resolvestickystatefromratio",
+      "resolvestickystyle",
+      "resolvestickyviewportoffset",
+      "shouldemitstickychange",
+      "stickycustomstyle",
+      "stickyprops"
+    ],
+    "keywords": [
+      "components",
+      "lucky",
+      "props",
+      "resolvestickybasestyle",
+      "resolvestickyclass",
+      "resolvestickyoffset",
+      "resolvestickyrootmargin",
+      "resolvestickystatefromratio",
+      "resolvestickystyle",
+      "resolvestickyviewportoffset",
+      "scss",
+      "shouldemitstickychange"
+    ],
+    "fingerprint": "ce16bbb5908a03b9"
+  },
+  "src/uni_modules/lucky-ui/components/lk-switch": {
+    "path": "src/uni_modules/lucky-ui/components/lk-switch",
+    "files": [
+      "lk-switch.scss",
+      "lk-switch.vue",
+      "switch.props.ts",
+      "switch.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "cantoggleswitch",
+      "isswitchchecked",
+      "resolveswitchclass",
+      "resolveswitchnextvalue",
+      "resolveswitchprompttext",
+      "resolveswitchstyle",
+      "shouldvalidateswitchfield",
+      "switchemits",
+      "switchprops",
+      "switchsize",
+      "switchvalue"
+    ],
+    "keywords": [
+      "cantoggleswitch",
+      "components",
+      "isswitchchecked",
+      "lucky",
+      "props",
+      "resolveswitchclass",
+      "resolveswitchnextvalue",
+      "resolveswitchprompttext",
+      "resolveswitchstyle",
+      "scss",
+      "shouldvalidateswitchfield",
+      "src"
+    ],
+    "fingerprint": "3c6ee4c6a9746dbc"
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabbar": {
+    "path": "src/uni_modules/lucky-ui/components/lk-tabbar",
+    "files": [
+      "context.ts",
+      "lk-tabbar-item.vue",
+      "lk-tabbar.scss",
+      "lk-tabbar.vue",
+      "tabbar-item.props.ts",
+      "tabbar.props.ts",
+      "tabbar.utils.ts"
+    ],
+    "file_count": 7,
+    "extensions": {
+      ".ts": 4,
+      ".vue": 2,
+      ".scss": 1
+    },
+    "symbols": [
+      "insetbottom",
+      "istabbarbumpitem",
+      "resolvetabbarbadgetext",
+      "resolvetabbarfilliconname",
+      "resolvetabbariconcolor",
+      "resolvetabbarindex",
+      "resolvetabbaritemactive",
+      "resolvetabbaritemclass",
+      "resolvetabbaritemlabelstyle",
+      "resolvetabbarlistitemicon",
+      "resolvetabbarplaceholderstyle",
+      "resolvetabbarrootclass",
+      "resolvetabbarrootstyle",
+      "resolvetabbarsafeareabottom",
+      "resolvetabbarslidermetrics",
+      "resolvetabbarsliderstyle",
+      "resolvetabbarstylelayers",
+      "safeareabottom",
+      "screenheight",
+      "shouldshowtabbarbadge",
+      "shouldswitchtabbarpage",
+      "tabbaremits",
+      "tabbaritemprops",
+      "tabbarmode",
+      "tabbarprops",
+      "tabbarprovide",
+      "tabbarsafeareainfo",
+      "tabbarvalue",
+      "width"
+    ],
+    "keywords": [
+      "components",
+      "context",
+      "insetbottom",
+      "istabbarbumpitem",
+      "item",
+      "lucky",
+      "props",
+      "resolvetabbarbadgetext",
+      "resolvetabbarfilliconname",
+      "resolvetabbariconcolor",
+      "resolvetabbarindex",
+      "resolvetabbaritemactive"
+    ],
+    "fingerprint": "59cac9fa01d68f21"
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabbar-container": {
+    "path": "src/uni_modules/lucky-ui/components/lk-tabbar-container",
+    "files": [
+      "lk-tabbar-container.scss",
+      "lk-tabbar-container.vue",
+      "tabbar-container.props.ts",
+      "tabbar-container.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "gettabbarcontainerpreloadids",
+      "insetbottom",
+      "istabbarcontainerslidingmode",
+      "istabbarcontainerstyleobject",
+      "left",
+      "resolvetabbarcontaineractivebgstyle",
+      "resolvetabbarcontainerbadgetext",
+      "resolvetabbarcontainerclass",
+      "resolvetabbarcontainercopytext",
+      "resolvetabbarcontainerfilliconname",
+      "resolvetabbarcontainericon",
+      "resolvetabbarcontainersafeareabottom",
+      "resolvetabbarcontainerstyle",
+      "safeareabottom",
+      "screenheight",
+      "shouldchangetabbarcontainertab",
+      "shouldshowtabbarcontainerbadge",
+      "tabbarcontaineremits",
+      "tabbarcontainermode",
+      "tabbarcontainerprops",
+      "tabbarcontainersafeareainfo",
+      "tabbarcontainerstyleobject",
+      "width"
+    ],
+    "keywords": [
+      "components",
+      "container",
+      "gettabbarcontainerpreloadids",
+      "insetbottom",
+      "istabbarcontainerslidingmode",
+      "istabbarcontainerstyleobject",
+      "left",
+      "lucky",
+      "props",
+      "resolvetabbarcontaineractivebgstyle",
+      "resolvetabbarcontainerbadgetext",
+      "resolvetabbarcontainerclass"
+    ],
+    "fingerprint": "81b59f3f3413f610"
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabs": {
+    "path": "src/uni_modules/lucky-ui/components/lk-tabs",
+    "files": [
+      "lk-tab-pane.vue",
+      "lk-tabs.scss",
+      "lk-tabs.vue",
+      "tabs.props.ts",
+      "tabs.utils.ts"
+    ],
+    "file_count": 5,
+    "extensions": {
+      ".vue": 2,
+      ".scss": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "clickpayload",
+      "findtabpaneindex",
+      "gettabstouchpoint",
+      "index",
+      "navright",
+      "next",
+      "nextindex",
+      "pane",
+      "removetabpane",
+      "resolvetabnavitemclass",
+      "resolvetabpaneloaded",
+      "resolvetabsinitialvalue",
+      "resolvetabslinestyle",
+      "resolvetabsoverflow",
+      "resolvetabsrootclass",
+      "resolvetabsrootstyle",
+      "resolvetabsscrollable",
+      "resolvetabssetactive",
+      "resolvetabsstretching",
+      "resolvetabsswipe",
+      "tabsemits",
+      "tabsprops",
+      "tabsswipedirection",
+      "tabsswitchsource",
+      "tabstype",
+      "tabsvalue",
+      "tolerance",
+      "upserttabpane"
+    ],
+    "keywords": [
+      "clickpayload",
+      "components",
+      "findtabpaneindex",
+      "gettabstouchpoint",
+      "index",
+      "lucky",
+      "navright",
+      "next",
+      "nextindex",
+      "pane",
+      "props",
+      "removetabpane"
+    ],
+    "fingerprint": "f8bd86369e231aca"
+  },
+  "src/uni_modules/lucky-ui/components/lk-tag": {
+    "path": "src/uni_modules/lucky-ui/components/lk-tag",
+    "files": [
+      "lk-tag.scss",
+      "lk-tag.vue",
+      "tag.props.ts",
+      "tag.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "expandshorthex",
+      "hex",
+      "normalized",
+      "parts",
+      "resolvetagclass",
+      "resolvetageventname",
+      "resolvetagsemanticcolor",
+      "resolvetagstyle",
+      "rgb",
+      "semanticcolor",
+      "tagemits",
+      "tagprops",
+      "tagsize",
+      "tagtype",
+      "tosoftcolor",
+      "value"
+    ],
+    "keywords": [
+      "components",
+      "expandshorthex",
+      "hex",
+      "lucky",
+      "normalized",
+      "parts",
+      "props",
+      "resolvetagclass",
+      "resolvetageventname",
+      "resolvetagsemanticcolor",
+      "resolvetagstyle",
+      "rgb"
+    ],
+    "fingerprint": "eab2512f396f031d"
+  },
+  "src/uni_modules/lucky-ui/components/lk-textarea": {
+    "path": "src/uni_modules/lucky-ui/components/lk-textarea",
+    "files": [
+      "lk-textarea.scss",
+      "lk-textarea.vue",
+      "textarea.props.ts",
+      "textarea.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "applytextareamaxlength",
+      "detail",
+      "istextareanativefocused",
+      "readtextareavalue",
+      "resolvetextareaclass",
+      "resolvetextareacount",
+      "resolvetextareaplaceholder",
+      "shouldshowtextareaclear",
+      "shouldshowtextareafooter",
+      "target",
+      "textareaconfirmtype",
+      "textareaemits",
+      "textareaeventpayload",
+      "textareainputmode",
+      "textareaprops",
+      "textareavariant"
+    ],
+    "keywords": [
+      "applytextareamaxlength",
+      "components",
+      "detail",
+      "istextareanativefocused",
+      "lucky",
+      "props",
+      "readtextareavalue",
+      "resolvetextareaclass",
+      "resolvetextareacount",
+      "resolvetextareaplaceholder",
+      "scss",
+      "shouldshowtextareaclear"
+    ],
+    "fingerprint": "0f9672fe26c33ea8"
+  },
+  "src/uni_modules/lucky-ui/components/lk-timeline": {
+    "path": "src/uni_modules/lucky-ui/components/lk-timeline",
+    "files": [
+      "lk-timeline-item.vue",
+      "lk-timeline.scss",
+      "lk-timeline.vue",
+      "timeline-item.props.ts",
+      "timeline.props.ts",
+      "timeline.utils.ts"
+    ],
+    "file_count": 6,
+    "extensions": {
+      ".vue": 2,
+      ".scss": 1,
+      ".ts": 3
+    },
+    "symbols": [
+      "hastimelineleftcontent",
+      "istimelineitemactive",
+      "resolvetimelineaccentcolor",
+      "resolvetimelinecontext",
+      "resolvetimelinedisplaynumber",
+      "resolvetimelineinheritedvalue",
+      "resolvetimelineitemclass",
+      "resolvetimelineitemstate",
+      "resolvetimelineitemstyle",
+      "resolvetimelinelineanimated",
+      "resolvetimelinelineclass",
+      "resolvetimelinerootclass",
+      "resolvetimelinetrackclass",
+      "timelinedirection",
+      "timelinedotvariant",
+      "timelineitemdotvariant",
+      "timelineitemprops",
+      "timelineitemstatus",
+      "timelinelinemode",
+      "timelinelinevariant",
+      "timelineprops"
+    ],
+    "keywords": [
+      "components",
+      "hastimelineleftcontent",
+      "istimelineitemactive",
+      "item",
+      "lucky",
+      "props",
+      "resolvetimelineaccentcolor",
+      "resolvetimelinecontext",
+      "resolvetimelinedisplaynumber",
+      "resolvetimelineinheritedvalue",
+      "resolvetimelineitemclass",
+      "resolvetimelineitemstate"
+    ],
+    "fingerprint": "214ba6472796858d"
+  },
+  "src/uni_modules/lucky-ui/components/lk-toast": {
+    "path": "src/uni_modules/lucky-ui/components/lk-toast",
+    "files": [
+      "lk-toast-item.vue",
+      "lk-toast-manager.vue",
+      "lk-toast.scss",
+      "lk-toast.vue",
+      "toast-manager.ts",
+      "toast.props.ts",
+      "toast.utils.ts"
+    ],
+    "file_count": 7,
+    "extensions": {
+      ".vue": 3,
+      ".scss": 1,
+      ".ts": 3
+    },
+    "symbols": [
+      "clear",
+      "close",
+      "createtoastitem",
+      "hide",
+      "input",
+      "isstring",
+      "item",
+      "list",
+      "opt",
+      "position",
+      "remove",
+      "resolvetoastmanageritemclass",
+      "resolvetoastmanagertransition",
+      "resolvetoastoverlayclass",
+      "resolvetoastoverlaystyle",
+      "resolvetoastrootclass",
+      "resolvetoastrootstyle",
+      "resolvetoasttransition",
+      "seed",
+      "shouldscheduletoastclose",
+      "show",
+      "toastemits",
+      "toastposition",
+      "toastprops",
+      "toastshowoptions",
+      "toaststore",
+      "toasttransitionname",
+      "toasttransitionnames",
+      "usetoast"
+    ],
+    "keywords": [
+      "clear",
+      "close",
+      "components",
+      "createtoastitem",
+      "hide",
+      "input",
+      "isstring",
+      "item",
+      "list",
+      "lucky",
+      "manager",
+      "opt"
+    ],
+    "fingerprint": "3a2ea9f858fdf44c"
+  },
+  "src/uni_modules/lucky-ui/components/lk-tooltip": {
+    "path": "src/uni_modules/lucky-ui/components/lk-tooltip",
+    "files": [
+      "lk-tooltip.scss",
+      "lk-tooltip.vue",
+      "tooltip.props.ts",
+      "tooltip.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "canmutatetooltipopen",
+      "canupdatetooltipopen",
+      "createtooltippayload",
+      "edge",
+      "getfallbackplacement",
+      "overflowbottom",
+      "overflowleft",
+      "overflowright",
+      "overflowtop",
+      "preset",
+      "resolvetooltipopen",
+      "resolvetooltipplacementclass",
+      "resolvetooltippopstyle",
+      "resolvetooltiptransitionconfig",
+      "shouldkeeptooltipcontenthover",
+      "shouldopentooltipontriggerenter",
+      "shouldtoggletooltipontriggerclick",
+      "tooltipemits",
+      "tooltipopentrigger",
+      "tooltipplacement",
+      "tooltipprops",
+      "tooltiprect",
+      "tooltiptrigger"
+    ],
+    "keywords": [
+      "canmutatetooltipopen",
+      "canupdatetooltipopen",
+      "components",
+      "createtooltippayload",
+      "edge",
+      "getfallbackplacement",
+      "lucky",
+      "overflowbottom",
+      "overflowleft",
+      "overflowright",
+      "overflowtop",
+      "preset"
+    ],
+    "fingerprint": "b06584d227653585"
+  },
+  "src/uni_modules/lucky-ui/components/lk-upload": {
+    "path": "src/uni_modules/lucky-ui/components/lk-upload",
+    "files": [
+      "lk-upload.scss",
+      "lk-upload.vue",
+      "upload.props.ts",
+      "upload.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "afterreadfn",
+      "beforedeletefn",
+      "beforereadfn",
+      "createh5uploadfiles",
+      "creatempimageuploadfiles",
+      "creatempvideouploadfile",
+      "customrequestfn",
+      "getuploadfilename",
+      "info",
+      "isimageurl",
+      "name",
+      "normalized",
+      "path",
+      "uploadaccept",
+      "uploademits",
+      "uploadobjecturlfactory",
+      "uploadprops",
+      "uploadsourcetype",
+      "uploadstatus",
+      "uploaduidfactory"
+    ],
+    "keywords": [
+      "afterreadfn",
+      "beforedeletefn",
+      "beforereadfn",
+      "components",
+      "createh5uploadfiles",
+      "creatempimageuploadfiles",
+      "creatempvideouploadfile",
+      "customrequestfn",
+      "getuploadfilename",
+      "info",
+      "isimageurl",
+      "lucky"
+    ],
+    "fingerprint": "4ca295af4f3b0ab3"
+  },
+  "src/uni_modules/lucky-ui/components/lk-verify-code": {
+    "path": "src/uni_modules/lucky-ui/components/lk-verify-code",
+    "files": [
+      "lk-verify-code.scss",
+      "lk-verify-code.vue",
+      "verify-code.props.ts",
+      "verify-code.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "detailkey",
+      "getverifycodeinputrawvalue",
+      "iskeypayload",
+      "isvaluepayload",
+      "key",
+      "normalizeverifycodevalue",
+      "resolveverifycodeactiveindex",
+      "resolveverifycodecellclass",
+      "resolveverifycodecellstyle",
+      "resolveverifycodecontainerstyle",
+      "resolveverifycodecountdowntext",
+      "resolveverifycodefocusindex",
+      "resolveverifycodeinputvalue",
+      "resolveverifycodekeydownvalue",
+      "resolveverifycoderootclass",
+      "resolveverifycodestatusclass",
+      "shouldfinishverifycode",
+      "value",
+      "verifycodeemits",
+      "verifycodeprops",
+      "verifycodestatus",
+      "verifycodetype",
+      "verifycodevariant"
+    ],
+    "keywords": [
+      "code",
+      "components",
+      "detailkey",
+      "getverifycodeinputrawvalue",
+      "iskeypayload",
+      "isvaluepayload",
+      "key",
+      "lucky",
+      "normalizeverifycodevalue",
+      "props",
+      "resolveverifycodeactiveindex",
+      "resolveverifycodecellclass"
+    ],
+    "fingerprint": "ccfebf6783ccd78d"
+  },
+  "src/uni_modules/lucky-ui/components/lk-virtual-list": {
+    "path": "src/uni_modules/lucky-ui/components/lk-virtual-list",
+    "files": [
+      "lk-virtual-list.scss",
+      "lk-virtual-list.vue",
+      "virtual-list.props.ts",
+      "virtual-list.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "anchorrow",
+      "anyitem",
+      "base",
+      "basevisiblecount",
+      "bottompadding",
+      "clampvirtuallistindex",
+      "deltarows",
+      "dynamic",
+      "end",
+      "extractvirtuallistscrolltop",
+      "itemcount",
+      "itempx",
+      "maxstart",
+      "normalized",
+      "parsed",
+      "renderedheight",
+      "reservepadding",
+      "resolvevirtuallistclass",
+      "resolvevirtuallistitempx",
+      "resolvevirtuallistmetrics",
+      "resolvevirtuallistoverscan",
+      "resolvevirtuallistoverscanboost",
+      "resolvevirtuallistpx",
+      "resolvevirtuallistrootstyle",
+      "resolvevirtualwindow",
+      "shouldemitvirtualprefetch",
+      "shouldemitvirtualreachbottom",
+      "shouldresetvirtualprefetch",
+      "shouldresetvirtualreachbottom",
+      "start",
+      "toppadding",
+      "totalheight",
+      "virtuallistcustomstyle",
+      "virtuallistpositionstrategy",
+      "virtuallistprops",
+      "virtuallistscrollevent",
+      "visiblecount"
+    ],
+    "keywords": [
+      "anchorrow",
+      "anyitem",
+      "base",
+      "basevisiblecount",
+      "bottompadding",
+      "clampvirtuallistindex",
+      "components",
+      "deltarows",
+      "dynamic",
+      "end",
+      "extractvirtuallistscrolltop",
+      "itemcount"
+    ],
+    "fingerprint": "23a9c3eae9f1f461"
+  },
+  "src/uni_modules/lucky-ui/components/lk-waterfall": {
+    "path": "src/uni_modules/lucky-ui/components/lk-waterfall",
+    "files": [
+      "lk-waterfall.scss",
+      "lk-waterfall.vue",
+      "waterfall.props.ts",
+      "waterfall.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "availablewidth",
+      "base",
+      "calculatewaterfallcardheight",
+      "extractwaterfallscrolltop",
+      "height",
+      "isleft",
+      "item",
+      "leftheight",
+      "normalized",
+      "parsed",
+      "percent",
+      "placewaterfallcards",
+      "resolvewaterfallcardstyle",
+      "resolvewaterfallclass",
+      "resolvewaterfallcolumnstyle",
+      "resolvewaterfallcolumnwidth",
+      "resolvewaterfallcontainerstyle",
+      "resolvewaterfallcontentstyle",
+      "resolvewaterfallfooterstyle",
+      "resolvewaterfallpx",
+      "resolvewaterfallrightcolumnleft",
+      "resolvewaterfallskeletonpadding",
+      "resolvewaterfalltotalheight",
+      "resolvewaterfallunit",
+      "rightheight",
+      "scale",
+      "shouldwaterfallloadmore",
+      "waterfallemits",
+      "waterfallloadingstate",
+      "waterfallprops",
+      "waterfallsysteminfo",
+      "waterfallunitcontext"
+    ],
+    "keywords": [
+      "availablewidth",
+      "base",
+      "calculatewaterfallcardheight",
+      "components",
+      "extractwaterfallscrolltop",
+      "height",
+      "isleft",
+      "item",
+      "leftheight",
+      "lucky",
+      "normalized",
+      "parsed"
+    ],
+    "fingerprint": "c26f58b6163f61a4"
+  },
+  "src/uni_modules/lucky-ui/components/lk-watermark": {
+    "path": "src/uni_modules/lucky-ui/components/lk-watermark",
+    "files": [
+      "lk-watermark.scss",
+      "lk-watermark.vue",
+      "watermark.props.ts",
+      "watermark.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "default_watermark_size_map",
+      "normalizewatermarkcontent",
+      "optionalstringnumberprop",
+      "resolvewatermarkcellcount",
+      "resolvewatermarkclass",
+      "resolvewatermarkitems",
+      "resolvewatermarkitemstyle",
+      "resolvewatermarklayerstyle",
+      "resolvewatermarkparams",
+      "resolvewatermarkrootstyle",
+      "sizeconfig",
+      "watermarkprops",
+      "watermarksize",
+      "watermarksizeparams",
+      "watermarkvariant"
+    ],
+    "keywords": [
+      "components",
+      "default_watermark_size_map",
+      "lucky",
+      "normalizewatermarkcontent",
+      "optionalstringnumberprop",
+      "props",
+      "resolvewatermarkcellcount",
+      "resolvewatermarkclass",
+      "resolvewatermarkitems",
+      "resolvewatermarkitemstyle",
+      "resolvewatermarklayerstyle",
+      "resolvewatermarkparams"
+    ],
+    "fingerprint": "89b263eae84d9073"
+  },
+  "src/uni_modules/lucky-ui/composables": {
+    "path": "src/uni_modules/lucky-ui/composables",
+    "files": [
+      "index.ts",
+      "useChartCanvas.ts",
+      "useLocale.ts",
+      "usePagePullRefresh.ts",
+      "useRipple.ts",
+      "useTransition.ts"
+    ],
+    "file_count": 6,
+    "extensions": {
+      ".ts": 6
+    },
+    "symbols": [
+      "activate",
+      "active",
+      "animateto",
+      "animationtype",
+      "anyrecord",
+      "appear",
+      "attachendlisteners",
+      "autosize",
+      "basestyles",
+      "caf",
+      "called",
+      "canvas2dlike",
+      "canvasnode",
+      "canvasnodelike",
+      "chartrenderer",
+      "classes",
+      "clear",
+      "clearretrytimer",
+      "cleartimersandlisteners",
+      "commonpath",
+      "commonresult",
+      "componentpath",
+      "context",
+      "coords",
+      "ctx",
+      "currentdelay",
+      "currentduration",
+      "currenteasing",
+      "currentname",
+      "delay",
+      "delays",
+      "deltams",
+      "detail",
+      "dpr",
+      "duration",
+      "eased",
+      "easing",
+      "easingkey",
+      "easingtype",
+      "easingvalue"
+    ],
+    "keywords": [
+      "activate",
+      "active",
+      "animateto",
+      "animationtype",
+      "anyrecord",
+      "appear",
+      "attachendlisteners",
+      "autosize",
+      "basestyles",
+      "caf",
+      "called",
+      "canvas2dlike"
+    ],
+    "fingerprint": "d55ceca3f4aebb18"
+  },
+  "src/uni_modules/lucky-ui/core": {
+    "path": "src/uni_modules/lucky-ui/core",
+    "files": [],
+    "file_count": 0,
+    "extensions": {},
+    "symbols": [],
+    "keywords": [
+      "core",
+      "lucky",
+      "src",
+      "uni_modules"
+    ],
+    "fingerprint": "01379fd91d478e40"
+  },
+  "src/uni_modules/lucky-ui/core/src": {
+    "path": "src/uni_modules/lucky-ui/core/src",
+    "files": [
+      "index.ts"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".ts": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "core",
+      "index",
+      "lucky",
+      "src",
+      "uni_modules"
+    ],
+    "fingerprint": "967f0f9d4e4acb7f"
+  },
+  "src/uni_modules/lucky-ui/core/src/cache": {
+    "path": "src/uni_modules/lucky-ui/core/src/cache",
+    "files": [
+      "index.ts",
+      "page-cache.ts"
+    ],
+    "file_count": 2,
+    "extensions": {
+      ".ts": 2
+    },
+    "symbols": [
+      "cache",
+      "cached",
+      "cachekey",
+      "cachepagedata",
+      "clearallcache",
+      "clearcache",
+      "clearpagedatacache",
+      "debugmode",
+      "existing",
+      "getcache",
+      "getcachedpagedata",
+      "getcachestats",
+      "getpagestate",
+      "hasrendered",
+      "isfirstvisit",
+      "ispagerendered",
+      "ispagevisited",
+      "log",
+      "markpagerendered",
+      "markpagevisited",
+      "markrendered",
+      "pagedatacache",
+      "pagestatecache",
+      "prefix",
+      "renderedpages",
+      "setpagecachedebug",
+      "state",
+      "usepagecache",
+      "visitcount",
+      "visitedpages"
+    ],
+    "keywords": [
+      "cache",
+      "cached",
+      "cachekey",
+      "cachepagedata",
+      "clearallcache",
+      "clearcache",
+      "clearpagedatacache",
+      "core",
+      "debugmode",
+      "existing",
+      "getcache",
+      "getcachedpagedata"
+    ],
+    "fingerprint": "e64802c8c3ba4c95"
+  },
+  "src/uni_modules/lucky-ui/core/src/chart": {
+    "path": "src/uni_modules/lucky-ui/core/src/chart",
+    "files": [
+      "index.ts",
+      "lite.ts",
+      "motion.ts"
+    ],
+    "file_count": 3,
+    "extensions": {
+      ".ts": 3
+    },
+    "symbols": [
+      "clamp01",
+      "distance",
+      "easeoutcubic",
+      "formatcompactnumber",
+      "getlitechartpositions",
+      "getlitechartrange",
+      "getnearestpointindex",
+      "index",
+      "innerheight",
+      "innerwidth",
+      "litecharteffect",
+      "litechartposition",
+      "loopdistance",
+      "max",
+      "min",
+      "movingwindow",
+      "nearest",
+      "nextdistance",
+      "normalized",
+      "oscillate",
+      "range",
+      "ratio",
+      "valueratio",
+      "values"
+    ],
+    "keywords": [
+      "chart",
+      "clamp01",
+      "core",
+      "distance",
+      "easeoutcubic",
+      "formatcompactnumber",
+      "getlitechartpositions",
+      "getlitechartrange",
+      "getnearestpointindex",
+      "index",
+      "innerheight",
+      "innerwidth"
+    ],
+    "fingerprint": "1e5817d22a838006"
+  },
+  "src/uni_modules/lucky-ui/core/src/preload": {
+    "path": "src/uni_modules/lucky-ui/core/src/preload",
+    "files": [
+      "index.ts",
+      "manager.ts",
+      "queue.ts",
+      "types.ts",
+      "usePreload.ts"
+    ],
+    "file_count": 5,
+    "extensions": {
+      ".ts": 5
+    },
+    "symbols": [
+      "cancelled",
+      "clear",
+      "completed",
+      "failed",
+      "getpreloadmanager",
+      "getpreloadqueue",
+      "handlers",
+      "img",
+      "index",
+      "insertindex",
+      "isloading",
+      "ispaused",
+      "link",
+      "loadedresources",
+      "loader",
+      "manager",
+      "off",
+      "pagedatacache",
+      "pagestopreload",
+      "pause",
+      "preloadedpages",
+      "preloadeventhandler",
+      "preloadeventtype",
+      "preloadimage",
+      "preloadimages",
+      "preloadmanager",
+      "preloadothertabs",
+      "preloadpage",
+      "preloadpages",
+      "priority",
+      "queueindex",
+      "resetpreloadmanager",
+      "resetpreloadqueue",
+      "resourcekey",
+      "resume",
+      "ric",
+      "runningtask",
+      "stats",
+      "task",
+      "taskid"
+    ],
+    "keywords": [
+      "cancelled",
+      "clear",
+      "completed",
+      "core",
+      "failed",
+      "getpreloadmanager",
+      "getpreloadqueue",
+      "handlers",
+      "img",
+      "index",
+      "insertindex",
+      "isloading"
+    ],
+    "fingerprint": "c3cbf0a9dea1826a"
+  },
+  "src/uni_modules/lucky-ui/core/src/tabbar-container": {
+    "path": "src/uni_modules/lucky-ui/core/src/tabbar-container",
+    "files": [
+      "index.ts"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".ts": 1
+    },
+    "symbols": [
+      "debugmode",
+      "getactivetabid",
+      "gettabinstance",
+      "gettabs",
+      "initialtab",
+      "inittabbarcontainer",
+      "instance",
+      "istabvisited",
+      "log",
+      "module",
+      "preloadtab",
+      "preloadtabs",
+      "resettabbarcontainer",
+      "settabbardebug",
+      "state",
+      "switchtab",
+      "tab",
+      "updatetabbadge",
+      "usetabbarcontainer"
+    ],
+    "keywords": [
+      "container",
+      "core",
+      "debugmode",
+      "getactivetabid",
+      "gettabinstance",
+      "gettabs",
+      "index",
+      "initialtab",
+      "inittabbarcontainer",
+      "instance",
+      "istabvisited",
+      "log"
+    ],
+    "fingerprint": "c3007800cac3233e"
+  },
+  "src/uni_modules/lucky-ui/core/src/utils": {
+    "path": "src/uni_modules/lucky-ui/core/src/utils",
+    "files": [
+      "debounce.ts",
+      "format.ts",
+      "index.ts",
+      "platform.ts",
+      "request.ts",
+      "scroll.ts",
+      "throttle.ts",
+      "unit.ts",
+      "validate.ts"
+    ],
+    "file_count": 9,
+    "extensions": {
+      ".ts": 9
+    },
+    "symbols": [
+      "absdiff",
+      "addunit",
+      "animatescrollvalue",
+      "basedefaults",
+      "basicreg",
+      "birthdate",
+      "birthday",
+      "birthmonth",
+      "birthyear",
+      "calculatedcheckcode",
+      "calculateidcardcheckcode",
+      "caniuse",
+      "checkcode",
+      "checkcodes",
+      "citycode",
+      "clamp",
+      "clearsysteminfocache",
+      "countycode",
+      "createrequest",
+      "cubicbezier",
+      "currentyear",
+      "date",
+      "day",
+      "debounce",
+      "default_nav_bar_height",
+      "diff",
+      "dispatchrequest",
+      "distance",
+      "duration",
+      "easing",
+      "formatfilesize",
+      "formatprice",
+      "formatrelative",
+      "formatrelativetime",
+      "formattime",
+      "fulfilledinterceptor",
+      "getdeviceinfo",
+      "getpasswordstrength",
+      "getplatform",
+      "getplatforminfo"
+    ],
+    "keywords": [
+      "absdiff",
+      "addunit",
+      "animatescrollvalue",
+      "basedefaults",
+      "basicreg",
+      "birthdate",
+      "birthday",
+      "birthmonth",
+      "birthyear",
+      "calculatedcheckcode",
+      "calculateidcardcheckcode",
+      "caniuse"
+    ],
+    "fingerprint": "2182bb4b4eb53ded"
+  },
+  "src/uni_modules/lucky-ui/scripts": {
+    "path": "src/uni_modules/lucky-ui/scripts",
+    "files": [
+      "build-icons.svgtofont.js",
+      "fantasticon.config.js",
+      "gen-font-base64.js",
+      "iconset.mobile.config.js",
+      "iconset.mobile.lock.json",
+      "prepare-mobile-icons.js"
+    ],
+    "file_count": 6,
+    "extensions": {
+      ".js": 5,
+      ".json": 1
+    },
+    "symbols": [
+      "all",
+      "base64",
+      "buf",
+      "cfg",
+      "codepointspath",
+      "copied",
+      "dst",
+      "ensureemptydir",
+      "ensureparentdir",
+      "excludere",
+      "explicit",
+      "files",
+      "fsp",
+      "glyphre",
+      "iconcharof",
+      "iconsdir",
+      "inbyexplicit",
+      "inbypattern",
+      "included",
+      "includere",
+      "lk_icons_woff_base64",
+      "lock",
+      "lockpath",
+      "main",
+      "map",
+      "matchany",
+      "moduleroot",
+      "name",
+      "outdir",
+      "outts",
+      "path",
+      "pkgpath",
+      "resolvebootstrapiconsdir",
+      "root",
+      "src",
+      "srcdir",
+      "svgcontent",
+      "svgfontpath",
+      "svgtofont",
+      "toregexlist"
+    ],
+    "keywords": [
+      "all",
+      "base64",
+      "buf",
+      "build",
+      "cfg",
+      "codepointspath",
+      "config",
+      "copied",
+      "dst",
+      "ensureemptydir",
+      "ensureparentdir",
+      "excludere"
+    ],
+    "fingerprint": "6c04dbd59a95cc7c"
+  },
+  "src/uni_modules/lucky-ui/theme": {
+    "path": "src/uni_modules/lucky-ui/theme",
+    "files": [
+      "index.ts"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".ts": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "index",
+      "lucky",
+      "src",
+      "theme",
+      "uni_modules"
+    ],
+    "fingerprint": "40f66a9677fa27e7"
+  },
+  "src/uni_modules/lucky-ui/theme/src": {
+    "path": "src/uni_modules/lucky-ui/theme/src",
+    "files": [
+      "brand-color.ts",
+      "component-vars.scss",
+      "helper.scss",
+      "index.scss",
+      "theme-store.ts"
+    ],
+    "file_count": 5,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 3
+    },
+    "symbols": [
+      "_brandcolor",
+      "_isswitching",
+      "_theme",
+      "applybrandcolor",
+      "applysystemui",
+      "applytodom",
+      "base",
+      "brand_color_storage_key",
+      "brandstylevars",
+      "brandvars",
+      "default_brand_color",
+      "frontcolor",
+      "generatebrandvars",
+      "generateshade",
+      "hextorgb",
+      "inittheme",
+      "isdark",
+      "levels",
+      "loadbrandcolor",
+      "match",
+      "performsettheme",
+      "persistdata",
+      "preset_colors",
+      "ratio",
+      "readstoragevalue",
+      "readstoredbrandcolor",
+      "readstoredtheme",
+      "rgb",
+      "root",
+      "savedcolor",
+      "savedtheme",
+      "serializevars",
+      "setbrandcolor",
+      "switchdelay",
+      "theme",
+      "theme_storage_key",
+      "themeclass",
+      "themestore",
+      "usetheme",
+      "vars"
+    ],
+    "keywords": [
+      "_brandcolor",
+      "_isswitching",
+      "_theme",
+      "applybrandcolor",
+      "applysystemui",
+      "applytodom",
+      "base",
+      "brand",
+      "brand_color_storage_key",
+      "brandstylevars",
+      "brandvars",
+      "color"
+    ],
+    "fingerprint": "d07bc86166d37765"
+  },
+  "src/uni_modules/lucky-ui/theme/src/base": {
+    "path": "src/uni_modules/lucky-ui/theme/src/base",
+    "files": [
+      "_animations.scss",
+      "_global.scss",
+      "_reset.scss",
+      "_theme-transition.scss",
+      "_typography.scss",
+      "index.scss",
+      "ripple.scss"
+    ],
+    "file_count": 7,
+    "extensions": {
+      ".scss": 7
+    },
+    "symbols": [],
+    "keywords": [
+      "_animations",
+      "_global",
+      "_reset",
+      "_theme",
+      "_typography",
+      "base",
+      "index",
+      "lucky",
+      "ripple",
+      "scss",
+      "src",
+      "theme"
+    ],
+    "fingerprint": "8d57fa45de787b0f"
+  },
+  "src/uni_modules/lucky-ui/theme/src/mixins": {
+    "path": "src/uni_modules/lucky-ui/theme/src/mixins",
+    "files": [
+      "_bem.scss",
+      "_hairline.scss",
+      "_layout.scss",
+      "_responsive.scss",
+      "_state.scss",
+      "_text.scss",
+      "index.scss"
+    ],
+    "file_count": 7,
+    "extensions": {
+      ".scss": 7
+    },
+    "symbols": [],
+    "keywords": [
+      "_bem",
+      "_hairline",
+      "_layout",
+      "_responsive",
+      "_state",
+      "_text",
+      "index",
+      "lucky",
+      "mixins",
+      "scss",
+      "src",
+      "theme"
+    ],
+    "fingerprint": "e523d7c6a502b241"
+  },
+  "src/uni_modules/lucky-ui/theme/src/tokens": {
+    "path": "src/uni_modules/lucky-ui/theme/src/tokens",
+    "files": [
+      "_border-radius.scss",
+      "_breakpoints.scss",
+      "_colors.scss",
+      "_motion.scss",
+      "_shadow.scss",
+      "_spacing.scss",
+      "_typography.scss",
+      "_z-index.scss",
+      "index.scss"
+    ],
+    "file_count": 9,
+    "extensions": {
+      ".scss": 9
+    },
+    "symbols": [],
+    "keywords": [
+      "_border",
+      "_breakpoints",
+      "_colors",
+      "_motion",
+      "_shadow",
+      "_spacing",
+      "_typography",
+      "index",
+      "lucky",
+      "radius",
+      "scss",
+      "src"
+    ],
+    "fingerprint": "8f50e74a560733e0"
+  },
+  "src/uni_modules/lucky-ui/theme/src/utilities": {
+    "path": "src/uni_modules/lucky-ui/theme/src/utilities",
+    "files": [
+      "_display.scss",
+      "_spacing.scss",
+      "index.scss"
+    ],
+    "file_count": 3,
+    "extensions": {
+      ".scss": 3
+    },
+    "symbols": [],
+    "keywords": [
+      "_display",
+      "_spacing",
+      "index",
+      "lucky",
+      "scss",
+      "src",
+      "theme",
+      "uni_modules",
+      "utilities"
+    ],
+    "fingerprint": "90ebfbaf3df22f97"
+  },
+  "src/uni_modules/lucky-ui/utils": {
+    "path": "src/uni_modules/lucky-ui/utils",
+    "files": [
+      "chart-colors.ts",
+      "date-utils.ts",
+      "index.ts",
+      "init-lk-icons.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 4
+    },
+    "symbols": [
+      "base",
+      "buildbrandpalette",
+      "clamp01",
+      "css",
+      "cur",
+      "daterangearray",
+      "family",
+      "format",
+      "formatdate",
+      "generatebrandshade",
+      "getcssvarcolor",
+      "hasreadypage",
+      "hextorgb",
+      "initfontoptions",
+      "initlkiconsfont",
+      "loaded",
+      "mime",
+      "mixrgb",
+      "pad",
+      "pages",
+      "parsedate",
+      "ratio",
+      "raw",
+      "resolvebrandbasecolor",
+      "rgb",
+      "rgbafromhex",
+      "rgbtohex",
+      "source",
+      "tohexchannel",
+      "val",
+      "waitforpageready"
+    ],
+    "keywords": [
+      "base",
+      "buildbrandpalette",
+      "chart",
+      "clamp01",
+      "colors",
+      "css",
+      "cur",
+      "date",
+      "daterangearray",
+      "family",
+      "format",
+      "formatdate"
+    ],
+    "fingerprint": "8ad3a858a89dd4d1"
+  },
+  "src/utils": {
+    "path": "src/utils",
+    "files": [
+      "test-page-styles.ts"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".ts": 1
+    },
+    "symbols": [
+      "hex",
+      "testpagecolors",
+      "testpagestyles",
+      "withopacity"
+    ],
+    "keywords": [
+      "hex",
+      "page",
+      "src",
+      "styles",
+      "test",
+      "testpagecolors",
+      "testpagestyles",
+      "utils",
+      "withopacity"
+    ],
+    "fingerprint": "cc0ff079321aedb0"
+  },
+  "test-results": {
+    "path": "test-results",
+    "files": [],
+    "file_count": 0,
+    "extensions": {},
+    "symbols": [],
+    "keywords": [
+      "results",
+      "test"
+    ],
+    "fingerprint": "a3d4d12fb605369a"
+  },
+  "tests": {
+    "path": "tests",
+    "files": [],
+    "file_count": 0,
+    "extensions": {},
+    "symbols": [],
+    "keywords": [
+      "tests"
+    ],
+    "fingerprint": "5a0d9696dc918098"
+  },
+  "tests/miniprogram": {
+    "path": "tests/miniprogram",
+    "files": [
+      "button.spec.js",
+      "run-miniprogram-tests.js",
+      "timeline.spec.js"
+    ],
+    "file_count": 3,
+    "extensions": {
+      ".js": 3
+    },
+    "symbols": [
+      "assert",
+      "base",
+      "buildpath",
+      "buttonnode",
+      "component",
+      "componentpath",
+      "container",
+      "devpath",
+      "firstline",
+      "hoverclass",
+      "itemid",
+      "itemnode",
+      "itempath",
+      "items",
+      "jsontree",
+      "lastline",
+      "path",
+      "resolvebuttoncomponentpath",
+      "resolvecomponentpath",
+      "run",
+      "runbuttonloadingtest",
+      "runbuttonsnapshottest",
+      "runtimelinebasictest",
+      "runtimelinestatustest",
+      "simulate",
+      "timelineid",
+      "timelinepath",
+      "wrapper"
+    ],
+    "keywords": [
+      "assert",
+      "base",
+      "buildpath",
+      "button",
+      "buttonnode",
+      "component",
+      "componentpath",
+      "container",
+      "devpath",
+      "firstline",
+      "hoverclass",
+      "itemid"
+    ],
+    "fingerprint": "887dfa18bef9cb18"
+  },
+  "tests/visual": {
+    "path": "tests/visual",
+    "files": [
+      "button-loading.spec.ts",
+      "card-ripple.spec.ts",
+      "dynamic-visual-showcase.spec.ts",
+      "high-risk-showcase.spec.ts",
+      "needs-hardening-showcase.spec.ts",
+      "screenshot.spec.ts",
+      "toast-animation.spec.ts"
+    ],
+    "file_count": 7,
+    "extensions": {
+      ".ts": 7
+    },
+    "symbols": [
+      "card",
+      "cases",
+      "color",
+      "darkcolor",
+      "dynamic_visual_cases",
+      "getshowcaseurl",
+      "high_risk_cases",
+      "loadbutton",
+      "loadingbutton",
+      "needs_hardening_cases",
+      "toastinner",
+      "visual_cases"
+    ],
+    "keywords": [
+      "animation",
+      "button",
+      "card",
+      "cases",
+      "color",
+      "darkcolor",
+      "dynamic",
+      "dynamic_visual_cases",
+      "getshowcaseurl",
+      "hardening",
+      "high",
+      "high_risk_cases"
+    ],
+    "fingerprint": "6b4ab8f43d922a21"
+  },
+  "docs/assets": {
+    "path": "docs/assets",
+    "files": [
+      "manypixels-empty-license.md"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".md": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "assets",
+      "docs",
+      "empty",
+      "license",
+      "manypixels"
+    ],
+    "fingerprint": "27354b0a5944ebeb"
+  },
+  "src/pages_sub/i18n-preview": {
+    "path": "src/pages_sub/i18n-preview",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "i18n",
+      "index",
+      "pages_sub",
+      "preview",
+      "src",
+      "vue"
+    ],
+    "fingerprint": "e6132a6287419e11"
+  },
+  "src/pages_sub/pull-refresh-page": {
+    "path": "src/pages_sub/pull-refresh-page",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "index",
+      "page",
+      "pages_sub",
+      "pull",
+      "refresh",
+      "src",
+      "vue"
+    ],
+    "fingerprint": "108857788cf834cd"
+  },
+  "src/pages_sub/showcase": {
+    "path": "src/pages_sub/showcase",
+    "files": [
+      "index.vue"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".vue": 1
+    },
+    "symbols": [],
+    "keywords": [
+      "index",
+      "pages_sub",
+      "showcase",
+      "src",
+      "vue"
+    ],
+    "fingerprint": "d7d89b8bc09d5fea"
+  },
+  "src/uni_modules/lucky-ui/components/lk-calendar-picker": {
+    "path": "src/uni_modules/lucky-ui/components/lk-calendar-picker",
+    "files": [
+      "calendar-picker.props.ts",
+      "calendar-picker.utils.ts",
+      "lk-calendar-picker.scss",
+      "lk-calendar-picker.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "calendarpickeremits",
+      "calendarpickerprops",
+      "calendarpickertimeprecision",
+      "calendarpickervalue",
+      "canopencalendarpicker",
+      "date_time_re",
+      "firsttime",
+      "formatcalendarpickertime",
+      "getcalendarpickerdatepart",
+      "getcalendarpickertimemax",
+      "getcalendarpickertimepart",
+      "getcalendarpickertimestep",
+      "getcalendarpickertimeunit",
+      "hour",
+      "mergecalendarpickertime",
+      "minute",
+      "normalizecalendarpickervalue",
+      "parsecalendarpickertime",
+      "parts",
+      "resolvecalendarpickerclass",
+      "resolvecalendarpickerdisplayvalue",
+      "resolvecalendarpickerresetvalue",
+      "second",
+      "seconds",
+      "secondtime",
+      "synccalendarpickerdraft",
+      "total",
+      "values",
+      "withtime"
+    ],
+    "keywords": [
+      "calendar",
+      "calendarpickeremits",
+      "calendarpickerprops",
+      "calendarpickertimeprecision",
+      "calendarpickervalue",
+      "canopencalendarpicker",
+      "components",
+      "date_time_re",
+      "firsttime",
+      "formatcalendarpickertime",
+      "getcalendarpickerdatepart",
+      "getcalendarpickertimemax"
+    ],
+    "fingerprint": "fc23b008ec7bbc97"
+  },
+  "src/uni_modules/lucky-ui/components/lk-countdown": {
+    "path": "src/uni_modules/lucky-ui/components/lk-countdown",
+    "files": [
+      "countdown.props.ts",
+      "countdown.utils.ts",
+      "lk-countdown.scss",
+      "lk-countdown.vue"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".ts": 2,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "char",
+      "countdown_day",
+      "countdown_hour",
+      "countdown_minute",
+      "countdown_second",
+      "countdownemits",
+      "countdownformatter",
+      "countdownprops",
+      "countdownsegmentkind",
+      "countdownsize",
+      "countdowntype",
+      "countdownvariant",
+      "days",
+      "delay",
+      "formatcountdowntime",
+      "getcountdowninterval",
+      "getcountdownscheduledelay",
+      "getcountdowntimedata",
+      "getcountdownvisibleremaining",
+      "hasdaytoken",
+      "hours",
+      "index",
+      "milliseconds",
+      "minutes",
+      "normalizecountdowndisplayremaining",
+      "normalizecountdownduration",
+      "normalizecountdowntargettime",
+      "numeric",
+      "output",
+      "padcountdownvalue",
+      "parsecountdownsegments",
+      "parsed",
+      "resolvecountdownclass",
+      "resolvecountdownrootstyle",
+      "resolvecountdownunitmap",
+      "safetotal",
+      "seconds",
+      "source",
+      "timestamp",
+      "trimmed"
+    ],
+    "keywords": [
+      "char",
+      "components",
+      "countdown",
+      "countdown_day",
+      "countdown_hour",
+      "countdown_minute",
+      "countdown_second",
+      "countdownemits",
+      "countdownformatter",
+      "countdownprops",
+      "countdownsegmentkind",
+      "countdownsize"
+    ],
+    "fingerprint": "4201874d9390dce0"
+  },
+  "src/uni_modules/lucky-ui/components/lk-empty": {
+    "path": "src/uni_modules/lucky-ui/components/lk-empty",
+    "files": [
+      "empty-illustrations.ts",
+      "empty.props.ts",
+      "empty.utils.ts",
+      "lk-empty.scss",
+      "lk-empty.vue"
+    ],
+    "file_count": 5,
+    "extensions": {
+      ".ts": 3,
+      ".scss": 1,
+      ".vue": 1
+    },
+    "symbols": [
+      "accent",
+      "createillustrations",
+      "createpalette",
+      "danger",
+      "description",
+      "emptyemits",
+      "emptylayout",
+      "emptyname",
+      "emptyprops",
+      "filestack",
+      "floor",
+      "getemptyillustrationsrc",
+      "getemptypreset",
+      "hex",
+      "hextorgb",
+      "illustrations",
+      "ink",
+      "isreadablebrandcolor",
+      "mixwithwhite",
+      "monitor",
+      "muted",
+      "normalizehexcolor",
+      "paper",
+      "primary",
+      "resolveemptycolor",
+      "resolveemptydescription",
+      "resolveemptyimage",
+      "resolveemptyimagestyle",
+      "resolveemptyrootclass",
+      "resolveemptyrootstyle",
+      "resolveemptytitle",
+      "rgb",
+      "short",
+      "size",
+      "success",
+      "svg",
+      "svgshell",
+      "title",
+      "tohex",
+      "trimmed"
+    ],
+    "keywords": [
+      "accent",
+      "components",
+      "createillustrations",
+      "createpalette",
+      "danger",
+      "description",
+      "empty",
+      "emptyemits",
+      "emptylayout",
+      "emptyname",
+      "emptyprops",
+      "filestack"
+    ],
+    "fingerprint": "98c9ce423f4b397f"
+  },
+  "src/uni_modules/lucky-ui/components/lk-pull-refresh": {
+    "path": "src/uni_modules/lucky-ui/components/lk-pull-refresh",
+    "files": [
+      "lk-pull-refresh.scss",
+      "lk-pull-refresh.vue",
+      "pull-refresh.props.ts",
+      "pull-refresh.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "getnextpullrefreshscrolltop",
+      "getpullrefreshdistance",
+      "ispullrefreshindicatorvisible",
+      "normalizepullrefreshsuccessduration",
+      "pullrefreshdefaultstyle",
+      "pullrefreshemits",
+      "pullrefreshprops",
+      "pullrefreshstatus",
+      "resolvepullingstatus",
+      "resolvepullrefreshclass",
+      "resolvepullrefreshindicatorstyle",
+      "resolvepullrefreshindicatortext",
+      "resolvepullrefreshinitialstatus",
+      "resolvepullrefreshmergedstyle",
+      "resolvepullrefreshprogress",
+      "resolvepullrefreshrootstyle",
+      "shouldignorepulling",
+      "shouldshowrefreshsuccess"
+    ],
+    "keywords": [
+      "components",
+      "getnextpullrefreshscrolltop",
+      "getpullrefreshdistance",
+      "ispullrefreshindicatorvisible",
+      "lucky",
+      "normalizepullrefreshsuccessduration",
+      "props",
+      "pull",
+      "pullrefreshdefaultstyle",
+      "pullrefreshemits",
+      "pullrefreshprops",
+      "pullrefreshstatus"
+    ],
+    "fingerprint": "ac1067818201500a"
+  },
+  "src/uni_modules/lucky-ui/components/lk-select-list": {
+    "path": "src/uni_modules/lucky-ui/components/lk-select-list",
+    "files": [
+      "lk-select-list.scss",
+      "lk-select-list.vue",
+      "select-list.props.ts",
+      "select-list.utils.ts"
+    ],
+    "file_count": 4,
+    "extensions": {
+      ".scss": 1,
+      ".vue": 1,
+      ".ts": 2
+    },
+    "symbols": [
+      "cssvars",
+      "getselectlisttext",
+      "getselectlistvalue",
+      "index",
+      "isselectlistoptiondisabled",
+      "isselectlistselected",
+      "list",
+      "normalizeselectlistmultiplevalue",
+      "readselectlistoption",
+      "resolveselectlistclass",
+      "resolveselectlistcolumncount",
+      "resolveselectlistitemradius",
+      "resolveselectlistoptionclass",
+      "resolveselectlistselection",
+      "resolveselectliststyle",
+      "selected",
+      "selectlistemits",
+      "selectlistoption",
+      "selectlistprops",
+      "selectlistselectionresult",
+      "selectlistsize",
+      "selectvalue",
+      "value",
+      "vars"
+    ],
+    "keywords": [
+      "components",
+      "cssvars",
+      "getselectlisttext",
+      "getselectlistvalue",
+      "index",
+      "isselectlistoptiondisabled",
+      "isselectlistselected",
+      "list",
+      "lucky",
+      "normalizeselectlistmultiplevalue",
+      "props",
+      "readselectlistoption"
+    ],
+    "fingerprint": "8c37ad59e1ae8013"
+  },
+  "src/uni_modules/lucky-ui/locale": {
+    "path": "src/uni_modules/lucky-ui/locale",
+    "files": [
+      "index.ts"
+    ],
+    "file_count": 1,
+    "extensions": {
+      ".ts": 1
+    },
+    "symbols": [
+      "currentlocale",
+      "formatmessage",
+      "langmessages",
+      "locale",
+      "localecode",
+      "localemessage",
+      "messageschema",
+      "supported_locales",
+      "systemlocale",
+      "translateparams",
+      "value"
+    ],
+    "keywords": [
+      "currentlocale",
+      "formatmessage",
+      "index",
+      "langmessages",
+      "locale",
+      "localecode",
+      "localemessage",
+      "lucky",
+      "messageschema",
+      "src",
+      "supported_locales",
+      "systemlocale"
+    ],
+    "fingerprint": "231a149c1df2a2aa"
+  },
+  "src/uni_modules/lucky-ui/locale/lang": {
+    "path": "src/uni_modules/lucky-ui/locale/lang",
+    "files": [
+      "en.ts",
+      "es.ts",
+      "fr.ts",
+      "ja.ts",
+      "ko.ts",
+      "pt-BR.ts",
+      "zh-Hans.ts",
+      "zh-Hant.ts"
+    ],
+    "file_count": 8,
+    "extensions": {
+      ".ts": 8
+    },
+    "symbols": [],
+    "keywords": [
+      "hans",
+      "hant",
+      "lang",
+      "locale",
+      "lucky",
+      "src",
+      "uni_modules"
+    ],
+    "fingerprint": "8c928431486bb79a"
+  },
+  "tests/unit": {
+    "path": "tests/unit",
+    "files": [
+      "lk-action-sheet.spec.ts",
+      "lk-anchor.spec.ts",
+      "lk-avatar.spec.ts",
+      "lk-backtop.spec.ts",
+      "lk-badge.spec.ts",
+      "lk-button.spec.ts",
+      "lk-calendar-picker.spec.ts",
+      "lk-calendar.spec.ts",
+      "lk-card.spec.ts",
+      "lk-carousel.spec.ts",
+      "lk-cell.spec.ts",
+      "lk-chart-area.spec.ts",
+      "lk-chart-bar.spec.ts",
+      "lk-chart-line.spec.ts",
+      "lk-chart-pie.spec.ts",
+      "lk-chart-radar-lite.spec.ts",
+      "lk-chart-ring.spec.ts",
+      "lk-chart-sparkline.spec.ts",
+      "lk-chart-stat-card.spec.ts",
+      "lk-checkbox.spec.ts",
+      "lk-choice.spec.ts",
+      "lk-collapse.spec.ts",
+      "lk-countdown.spec.ts",
+      "lk-curtain.spec.ts",
+      "lk-custom-entry.spec.ts",
+      "lk-divider.spec.ts",
+      "lk-dropdown.spec.ts",
+      "lk-empty.spec.ts",
+      "lk-fab.spec.ts",
+      "lk-form.spec.ts"
+    ],
+    "file_count": 71,
+    "extensions": {
+      ".ts": 71
+    },
+    "symbols": [
+      "action",
+      "active",
+      "added",
+      "alphanumlayout",
+      "cardstyle",
+      "classes",
+      "columnwidth",
+      "componentexports",
+      "componentsdir",
+      "componentsource",
+      "copy",
+      "custom",
+      "customstyle",
+      "data",
+      "day",
+      "error",
+      "event",
+      "fakefile",
+      "fields",
+      "file",
+      "files",
+      "formatoptions",
+      "getillustrationsrc",
+      "horizontal",
+      "index",
+      "indexfile",
+      "items",
+      "layout",
+      "logs",
+      "makeday",
+      "makefield",
+      "markermap",
+      "missing",
+      "objectstyle",
+      "option",
+      "outer",
+      "overlap",
+      "palette",
+      "params",
+      "passwordtoggle"
+    ],
+    "keywords": [
+      "action",
+      "active",
+      "added",
+      "alphanumlayout",
+      "anchor",
+      "area",
+      "avatar",
+      "backtop",
+      "badge",
+      "bar",
+      "button",
+      "calendar"
+    ],
+    "fingerprint": "1083cbe43b2c0438"
+  }
+}

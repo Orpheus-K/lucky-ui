@@ -1,0 +1,73 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(backtop) {
+  --_size: var(--lk-rpx-88);
+  --_radius: 50%;
+  --_bg: var(--lk-bg-container);
+  --_bg-active: var(--lk-color-primary-soft);
+  --_border: var(--lk-color-border-light);
+  --_color: var(--lk-color-primary);
+  --_shadow: var(--lk-shadow-lg);
+
+  position: fixed;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: var(--_size);
+  height: var(--_size);
+  border: var(--lk-rpx-2) solid var(--_border);
+  border-radius: var(--_radius);
+  background: var(--_bg);
+  color: var(--_color);
+  box-shadow: var(--_shadow);
+  -webkit-tap-highlight-color: transparent;
+  opacity: 0;
+  transform: translateY(var(--lk-rpx-12));
+  transition:
+    opacity var(--lk-transition-fast),
+    transform var(--lk-transition-fast),
+    background var(--lk-transition-fast),
+    border-color var(--lk-transition-fast);
+
+  @include m(sm) {
+    --_size: var(--lk-control-height-sm);
+  }
+  @include m(md) {
+    --_size: var(--lk-control-height-md);
+  }
+  @include m(lg) {
+    --_size: var(--lk-control-height-lg);
+  }
+
+  @include m(shape-square) {
+    --_radius: var(--lk-radius-sm);
+  }
+  @include m(shape-round) {
+    --_radius: var(--lk-radius-full);
+  }
+  @include m(shape-circle) {
+    --_radius: 50%;
+  }
+
+  @include when(visible) {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &:active {
+    background: var(--_bg-active);
+    border-color: var(--lk-color-primary);
+  }
+
+  @include e(icon) {
+    line-height: 1;
+  }
+
+  @include e(text) {
+    margin-top: var(--lk-rpx-2);
+    font-size: var(--lk-font-size-sm);
+    color: inherit;
+    line-height: 1;
+  }
+}

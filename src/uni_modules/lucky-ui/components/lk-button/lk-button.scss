@@ -1,0 +1,175 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(button) {
+  --_h: var(--lk-control-height-md);
+  --_px: var(--lk-control-padding-x-md);
+  --_fs: var(--lk-control-font-size-md);
+  --_radius: var(--lk-radius-md);
+
+  --_bg: var(--lk-color-primary);
+  --_color: var(--lk-color-white);
+  --_border: 0px solid transparent;
+  --_opacity-disabled: 0.6;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+
+  width: auto;
+  height: auto;
+  min-height: var(--_h);
+  min-width: 0;
+  padding: 0 var(--_px);
+  font-size: var(--_fs);
+  border-radius: var(--_radius);
+  background: var(--_bg);
+  color: var(--_color);
+  border: var(--_border);
+
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    opacity 0.2s,
+    background-color 0.2s,
+    transform 0.1s;
+
+  @at-root .lk-theme-dark & {
+    --_color: var(--lk-color-white);
+
+    // 暗色下 outline/soft/text 使用白色文字。
+    &.lk-button--outline,
+    &.lk-button--soft,
+    &.lk-button--text {
+      --_color: var(--lk-color-white);
+    }
+  }
+
+  &::after {
+    border: none;
+  }
+
+  @include m(sm) {
+    --_h: var(--lk-control-height-sm);
+    --_fs: var(--lk-control-font-size-sm);
+    --_px: var(--lk-control-padding-x-sm);
+  }
+
+  @include m(lg) {
+    --_h: var(--lk-control-height-lg);
+    --_fs: var(--lk-control-font-size-lg);
+    --_px: var(--lk-control-padding-x-lg);
+  }
+
+  @include m(shape-square) {
+    --_radius: var(--lk-radius-md);
+  }
+
+  @include m(shape-round) {
+    --_radius: var(--lk-radius-full);
+  }
+
+  @include m(shape-circle) {
+    --_radius: 50%;
+    width: var(--_h);
+    padding: 0;
+
+    .lk-button__icon,
+    .lk-button__loader {
+      margin-right: 0;
+    }
+  }
+
+  @include m(outline) {
+    --_bg: transparent;
+    --_color: var(--lk-text-primary);
+    --_border: var(--lk-rpx-2) solid var(--lk-color-primary);
+  }
+
+  @include m(soft) {
+    --_bg: var(--lk-fill-2);
+    --_color: var(--lk-text-primary);
+  }
+
+  @include m(text) {
+    --_bg: transparent;
+    --_color: var(--lk-text-primary);
+    height: auto;
+    min-height: 0;
+    padding: 0;
+    line-height: 1.5;
+    font-weight: 400;
+
+    &:active:not(.is-disabled):not(.is-loading) {
+      --_color: var(--lk-color-primary);
+      background: transparent;
+      opacity: 0.8;
+    }
+  }
+
+  @include m(outline) {
+    &:active:not(.is-disabled):not(.is-loading) {
+      background: var(--lk-bg-active);
+    }
+  }
+
+  @include m(soft) {
+    &:active:not(.is-disabled):not(.is-loading) {
+      background: var(--lk-bg-active);
+    }
+  }
+
+  &:not(.lk-button--outline):not(.lk-button--soft):not(.lk-button--text) {
+    &:active:not(.is-disabled):not(.is-loading) {
+      background: var(--lk-color-primary-active);
+    }
+  }
+
+  @include when(block) {
+    display: flex;
+    width: 100%;
+  }
+
+  @include when(fill) {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    min-width: 0;
+  }
+
+  @include when(disabled) {
+    opacity: var(--_opacity-disabled);
+    cursor: not-allowed;
+
+    &:active {
+      transform: none;
+    }
+  }
+
+  @include when(loading) {
+    background-color: var(--_bg) !important;
+    cursor: wait;
+
+    &:active {
+      transform: none;
+    }
+  }
+
+  @include e(loader) {
+    margin-right: var(--lk-spacing-xs);
+    width: 1em;
+    height: 1em;
+    border: var(--lk-rpx-2) solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: lk-spin 1s linear infinite;
+  }
+
+  @include e(icon) {
+    margin-right: var(--lk-spacing-xs);
+  }
+}

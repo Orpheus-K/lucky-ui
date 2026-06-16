@@ -1,0 +1,295 @@
+/**
+ * LkTabbar 底部导航栏
+ * 支持三种模式：fixed（简约）、slider（滑块）、bump（中间凸起）
+ */
+
+$tabbar-height: var(--lk-tabbar-height);
+$tabbar-item-height: var(--lk-tabbar-item-height);
+$tabbar-safe-area-bottom: var(--lk-tabbar-safe-area-bottom);
+$tabbar-transition: cubic-bezier(0.4, 0, 0.2, 1); // Material Design 标准曲线
+$tabbar-transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1); // 回弹曲线
+
+.lk-tabbar {
+  position: relative;
+  width: 100%;
+  background-color: var(--lk-tabbar-bg);
+  box-sizing: border-box;
+
+  &--fixed {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  &--border {
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background-color: var(--lk-color-border-light);
+      transform: scaleY(0.5);
+      z-index: 1;
+    }
+  }
+
+  &--safe-area {
+    padding-bottom: var(--lk-tabbar-safe-area-bottom);
+    padding-bottom: $tabbar-safe-area-bottom;
+  }
+
+  &--glass {
+    background: var(--lk-bg-elevated);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    .lk-theme-dark & {
+      background: var(--lk-bg-elevated);
+    }
+  }
+
+  // Slider 模式 - 滑块指示器
+  &__slider {
+    position: absolute;
+    top: var(--lk-spacing-sm);
+    height: $tabbar-item-height;
+    transition:
+      left 0.35s $tabbar-transition,
+      width 0.35s $tabbar-transition;
+    z-index: 0;
+    pointer-events: none;
+
+    &-inner {
+      width: calc(100% - var(--lk-spacing-xl));
+      height: 100%;
+      margin: 0 var(--lk-spacing-sm);
+      background: var(--lk-tabbar-active-color);
+      border-radius: var(--lk-radius-full);
+      opacity: 0.12;
+    }
+  }
+
+  &--slider {
+    .lk-tabbar-item {
+      background: transparent !important;
+
+      &.is-active {
+        background: transparent !important;
+      }
+    }
+  }
+
+  &--bump {
+    overflow: visible;
+
+    .lk-tabbar__wrapper {
+      overflow: visible;
+    }
+  }
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+    height: $tabbar-height;
+    width: 100%;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+
+  &__placeholder {
+    height: $tabbar-height;
+    width: 100%;
+
+    &.lk-tabbar--safe-area {
+      padding-bottom: var(--lk-tabbar-safe-area-bottom);
+      padding-bottom: $tabbar-safe-area-bottom;
+    }
+  }
+}
+
+.lk-tabbar-item {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lk-spacing-xxs);
+  height: $tabbar-item-height;
+  margin: var(--lk-spacing-sm) var(--lk-spacing-sm);
+  min-width: 0;
+  color: var(--lk-tabbar-inactive-color);
+  font-size: var(--lk-font-size-xs);
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: var(--lk-radius-full);
+  z-index: 1;
+
+  transition:
+    color 0.3s $tabbar-transition,
+    background-color 0.3s $tabbar-transition,
+    transform 0.2s $tabbar-transition-bounce;
+
+  // Fixed 模式（默认）- 仅颜色变化
+  .lk-tabbar--fixed & {
+    &.is-active {
+      background: transparent;
+    }
+  }
+
+  // 点击反馈 - 缩放动画增加跟手感
+  &:active {
+    transform: scale(0.92);
+    transition: transform 0.1s ease-out;
+  }
+
+  &--bump {
+    position: relative;
+    flex: none;
+    width: var(--lk-control-height-lg);
+    height: var(--lk-control-height-lg);
+    margin: 0;
+    margin-top: calc(var(--lk-control-height-xs) * -1); // 向上突出
+    z-index: 10;
+    color: var(--lk-color-white);
+    border-radius: 50%;
+
+    // 凸起项始终显示为激活态颜色
+    .lk-tabbar-item__icon {
+      position: relative;
+      z-index: 2;
+    }
+
+    .lk-tabbar-item__label {
+      position: relative;
+      z-index: 2;
+      color: var(--lk-color-white);
+    }
+
+    &:active {
+      transform: scale(0.9);
+
+      .lk-tabbar-item__bump-bg {
+        transform: scale(0.95);
+      }
+    }
+
+    &__bump-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--lk-tabbar-active-color);
+      border-radius: 50%;
+      box-shadow: var(--lk-shadow-base);
+      z-index: 1;
+      transition: transform 0.2s $tabbar-transition-bounce;
+    }
+
+    &.is-active {
+      .lk-tabbar-item__bump-bg {
+        box-shadow: var(--lk-shadow-lg);
+      }
+    }
+  }
+
+  &__icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--lk-control-height-xs);
+    height: var(--lk-control-height-xs);
+    flex-shrink: 0;
+    margin-bottom: var(--lk-spacing-xxs);
+
+    transition: transform 0.2s $tabbar-transition-bounce;
+  }
+
+  &__custom-icon {
+    width: var(--lk-control-height-xs);
+    height: var(--lk-control-height-xs);
+  }
+
+  &__label {
+    max-width: 100%;
+    padding: 0 var(--lk-spacing-xs);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-height: calc(var(--lk-font-size-sm) + var(--lk-spacing-xs));
+    line-height: var(--lk-line-height-base);
+    transition: color 0.3s $tabbar-transition;
+  }
+
+  &__dot {
+    position: absolute;
+    top: 0;
+    right: calc(var(--lk-rpx-4) * -1);
+    width: var(--lk-spacing-md);
+    height: var(--lk-spacing-md);
+    background-color: var(--lk-color-danger);
+    border-radius: 50%;
+    animation: lk-dot-pulse 2s infinite;
+  }
+
+  &__badge {
+    position: absolute;
+    top: calc(var(--lk-rpx-8) * -1);
+    right: calc(var(--lk-rpx-16) * -1);
+    min-width: calc(var(--lk-spacing-md) * 2);
+    height: calc(var(--lk-spacing-md) * 2);
+    padding: 0 var(--lk-rpx-8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--lk-font-size-xs);
+    font-weight: 500;
+    line-height: calc(var(--lk-spacing-md) * 2);
+    text-align: center;
+    color: var(--lk-color-white);
+    background-color: var(--lk-color-danger);
+    border-radius: var(--lk-radius-md);
+    box-sizing: border-box;
+  }
+}
+
+@keyframes lk-dot-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+.lk-theme-dark {
+  .lk-tabbar {
+    background-color: var(--lk-bg-container);
+
+    &--border::before {
+      background-color: var(--lk-color-border-light);
+    }
+
+    &--glass {
+      background: var(--lk-bg-elevated);
+    }
+  }
+
+  .lk-tabbar-item {
+    &.is-active {
+      // 激活颜色由内联样式 style 控制
+    }
+  }
+}

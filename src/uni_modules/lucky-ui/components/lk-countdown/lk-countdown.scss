@@ -1,0 +1,188 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(countdown) {
+  --_height: var(--lk-rpx-56);
+  --_fs: var(--lk-rpx-28);
+  --_value-min: var(--lk-rpx-44);
+  --_gap: var(--lk-rpx-8);
+  --_radius: var(--lk-radius-md);
+  --_color: var(--lk-text-primary);
+  --_soft-bg: var(--lk-fill-1);
+  --_solid-bg: var(--lk-text-primary);
+  --_solid-text: var(--lk-color-white);
+
+  display: inline-flex;
+  align-items: center;
+  color: var(--_color);
+  font-size: var(--_fs);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings:
+    'tnum' 1,
+    'lnum' 1;
+  vertical-align: middle;
+
+  @include m(sm) {
+    --_height: var(--lk-rpx-44);
+    --_fs: var(--lk-rpx-24);
+    --_value-min: var(--lk-rpx-36);
+    --_gap: var(--lk-rpx-6);
+    --_radius: var(--lk-radius-sm);
+  }
+
+  @include m(md) {
+    --_height: var(--lk-rpx-56);
+    --_fs: var(--lk-rpx-28);
+    --_value-min: var(--lk-rpx-44);
+    --_gap: var(--lk-rpx-8);
+  }
+
+  @include m(lg) {
+    --_height: var(--lk-rpx-72);
+    --_fs: var(--lk-rpx-34);
+    --_value-min: var(--lk-rpx-56);
+    --_gap: var(--lk-rpx-10);
+    --_radius: var(--lk-radius-lg);
+  }
+
+  @include m(primary) {
+    --_color: var(--lk-color-primary);
+    --_soft-bg: rgba(var(--lk-brand-rgb), 0.1);
+    --_solid-bg: var(--lk-color-primary);
+  }
+
+  @include m(success) {
+    --_color: var(--lk-color-success);
+    --_soft-bg: var(--lk-color-success-soft);
+    --_solid-bg: var(--lk-color-success);
+  }
+
+  @include m(warning) {
+    --_color: var(--lk-color-warning);
+    --_soft-bg: var(--lk-color-warning-soft);
+    --_solid-bg: var(--lk-color-warning);
+  }
+
+  @include m(danger) {
+    --_color: var(--lk-color-danger);
+    --_soft-bg: var(--lk-color-danger-soft);
+    --_solid-bg: var(--lk-color-danger);
+  }
+
+  @include m(info) {
+    --_color: var(--lk-color-info);
+    --_soft-bg: var(--lk-color-info-soft);
+    --_solid-bg: var(--lk-color-info);
+  }
+
+  @include e(body) {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  @include e(segment) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    line-height: var(--_height);
+    box-sizing: border-box;
+    white-space: nowrap;
+    transition:
+      color var(--lk-transition-fast),
+      background-color var(--lk-transition-fast),
+      box-shadow var(--lk-transition-fast);
+  }
+
+  @include e(affix) {
+    color: var(--lk-text-secondary);
+    font-size: 0.86em;
+    line-height: var(--_height);
+    white-space: nowrap;
+  }
+
+  @include e(prefix) {
+    margin-right: var(--lk-spacing-xs);
+  }
+
+  @include e(suffix) {
+    margin-left: var(--lk-spacing-xs);
+  }
+
+  @include m(plain) {
+    .lk-countdown__segment--value {
+      min-width: 0.62em;
+      font-weight: 600;
+    }
+
+    .lk-countdown__segment--separator,
+    .lk-countdown__segment--unit {
+      color: var(--lk-text-secondary);
+      padding: 0 var(--lk-rpx-4);
+      font-size: 0.86em;
+    }
+  }
+
+  @include m(block) {
+    .lk-countdown__segment--value {
+      min-width: var(--_value-min);
+      height: var(--_height);
+      padding: 0 var(--lk-rpx-8);
+      border-radius: var(--_radius);
+      background: var(--_soft-bg);
+      color: var(--_color);
+      font-weight: 700;
+    }
+
+    .lk-countdown__segment--separator {
+      min-width: var(--lk-rpx-18);
+      color: var(--lk-text-placeholder);
+      font-weight: 600;
+      line-height: var(--_height);
+    }
+
+    .lk-countdown__segment--unit {
+      color: var(--lk-text-secondary);
+      padding: 0 var(--_gap);
+      font-size: 0.78em;
+    }
+
+    .lk-countdown__segment--value + .lk-countdown__segment--value {
+      margin-left: var(--lk-rpx-2);
+    }
+  }
+
+  @include m(card) {
+    .lk-countdown__segment--value {
+      min-width: var(--_value-min);
+      height: var(--_height);
+      padding: 0 var(--lk-rpx-8);
+      border-radius: var(--_radius);
+      background: var(--_solid-bg);
+      color: var(--_solid-text);
+      font-weight: 700;
+      box-shadow: 0 var(--lk-rpx-6) var(--lk-rpx-16) rgba(15, 23, 42, 0.12);
+    }
+
+    .lk-countdown__segment--separator {
+      min-width: var(--lk-rpx-20);
+      color: var(--_color);
+      font-weight: 700;
+      line-height: var(--_height);
+    }
+
+    .lk-countdown__segment--unit {
+      color: var(--lk-text-secondary);
+      padding: 0 var(--_gap);
+      font-size: 0.78em;
+    }
+
+    .lk-countdown__segment--value + .lk-countdown__segment--value {
+      margin-left: var(--lk-rpx-2);
+    }
+  }
+
+  @include when(finished) {
+    opacity: 0.72;
+  }
+}

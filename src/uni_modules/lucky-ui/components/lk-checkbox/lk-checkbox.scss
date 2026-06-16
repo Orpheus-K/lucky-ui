@@ -1,0 +1,186 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(checkbox) {
+  display: inline-flex;
+  align-items: center;
+  margin-right: var(--lk-spacing-md);
+  font-size: var(--lk-font-size-md);
+  line-height: 1.2;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  @include m(sm) {
+    font-size: var(--lk-font-size-sm);
+    .lk-checkbox__icon {
+      width: var(--lk-rpx-36);
+      height: var(--lk-rpx-36);
+    }
+  }
+
+  @include m(md) {
+    font-size: var(--lk-font-size-md);
+    .lk-checkbox__icon {
+      width: var(--lk-rpx-44);
+      height: var(--lk-rpx-44);
+    }
+  }
+
+  @include m(lg) {
+    font-size: var(--lk-font-size-lg);
+    .lk-checkbox__icon {
+      width: var(--lk-rpx-52);
+      height: var(--lk-rpx-52);
+    }
+  }
+
+  @include e(icon-wrap) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @include e(icon) {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: var(--lk-rpx-2) solid var(--lk-color-border);
+    background-color: var(--lk-bg-container);
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+    box-sizing: border-box;
+    flex-shrink: 0;
+
+    @include m(circle) {
+      border-radius: 50%;
+    }
+
+    @include m(square) {
+      border-radius: var(--lk-rpx-8);
+    }
+  }
+
+  @include e(dot) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.6);
+    transition:
+      opacity 0.18s ease,
+      transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    &::after {
+      content: '';
+      width: 45%;
+      height: 45%;
+      // 主色块上的圆点：用 --lk-checkbox-check-color（暗色下 text-inverse 为黑，不适用）
+      background-color: var(--lk-checkbox-check-color);
+      border-radius: 50%;
+    }
+  }
+
+  @include e(check) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.6);
+    transition:
+      opacity 0.18s ease,
+      transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  @include e(dash) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.6);
+    transition:
+      opacity 0.18s ease,
+      transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  @include e(label) {
+    padding-left: var(--lk-spacing-xs);
+    color: var(--lk-text-primary);
+  }
+
+  @include m(checked) {
+    .lk-checkbox__icon {
+      border-color: var(--lk-color-primary);
+      background-color: var(--lk-color-primary);
+    }
+  }
+
+  @include m(indeterminate) {
+    .lk-checkbox__icon {
+      border-color: var(--lk-color-primary);
+      background-color: var(--lk-color-primary);
+    }
+  }
+
+  &.lk-checkbox--checked.lk-checkbox--icon-check {
+    .lk-checkbox__check {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  &.lk-checkbox--checked.lk-checkbox--icon-dot {
+    .lk-checkbox__dot {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  &.lk-checkbox--indeterminate {
+    .lk-checkbox__dash {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @include m(disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+    .lk-checkbox__icon {
+      background-color: var(--lk-bg-disabled);
+    }
+  }
+}
+
+@include b(checkbox-group) {
+  display: flex;
+  flex-wrap: wrap;
+
+  @include m(row) {
+    flex-direction: row;
+  }
+
+  @include m(column) {
+    flex-direction: column;
+    .lk-checkbox {
+      margin-right: 0;
+      margin-bottom: var(--lk-spacing-sm);
+    }
+  }
+}

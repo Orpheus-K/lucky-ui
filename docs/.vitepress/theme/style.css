@@ -1,0 +1,166 @@
+/**
+ * Lucky UI - VitePress Custom Theme Styles
+ */
+
+/* ── 品牌色 ── */
+:root {
+  --vp-font-family-base: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --vp-font-family-mono: "JetBrains Mono", source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+  --lk-font-family-serif: "Cormorant Garamond", "Noto Serif SC", Georgia, "Nimbus Roman No9 L", "Songti SC", serif;
+
+  --vp-c-brand-1: #837fe1;
+  --vp-c-brand-2: #726edd;
+  --vp-c-brand-3: #625ebf;
+  --vp-c-brand-soft: rgba(131, 127, 225, 0.14);
+
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-text: #fff;
+  --vp-button-brand-bg: var(--vp-c-brand-1);
+  --vp-button-brand-hover-border: transparent;
+  --vp-button-brand-hover-text: #fff;
+  --vp-button-brand-hover-bg: var(--vp-c-brand-2);
+  --vp-button-brand-active-border: transparent;
+  --vp-button-brand-active-text: #fff;
+  --vp-button-brand-active-bg: var(--vp-c-brand-3);
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(135deg, #837fe1 0%, #db2777 100%);
+  --vp-home-hero-image-background-image: radial-gradient(ellipse at center, rgba(131, 127, 225, 0.2) 0%, transparent 70%);
+  --vp-home-hero-image-filter: blur(44px);
+}
+
+/* ── 有手机预览时，压缩主内容宽度让出右侧空间 ── */
+html.has-phone-preview .VPDoc {
+  padding-right: 340px;
+}
+
+html.has-phone-preview .VPDoc .aside {
+  display: none;
+}
+
+@media (max-width: 1380px) {
+  html.has-phone-preview .VPDoc {
+    padding-right: 0;
+  }
+}
+
+/* ── 导航栏品牌色 ── */
+.VPNavBar .title {
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+/* ── 首页 Hero ── */
+.VPHero .name {
+  font-weight: 800;
+}
+
+/* ── API 表格样式增强 ── */
+.vp-doc table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.vp-doc table thead tr {
+  background: var(--vp-c-bg-soft);
+}
+
+.vp-doc table th {
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+  padding: 10px 14px;
+  white-space: nowrap;
+}
+
+.vp-doc table td {
+  padding: 9px 14px;
+  vertical-align: top;
+  line-height: 1.6;
+}
+
+.vp-doc table td code {
+  font-size: 12px;
+  background: var(--vp-c-bg-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--vp-c-brand-1);
+  white-space: nowrap;
+}
+
+/* ── 自定义容器增强 ── */
+.vp-doc .custom-block.tip {
+  border-color: var(--vp-c-brand-1);
+}
+
+/* ── 徽标类辅助 ── */
+.badge-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0;
+}
+
+/* ── 组件属性类型高亮 ── */
+.type-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-family: var(--vp-font-family-mono);
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* ── 平台兼容标签 ── */
+.platform-tags {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.platform-tag {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.platform-tag--h5 {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.platform-tag--weapp {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+/* ── 代码块文件名样式 ── */
+.vp-doc div[class*="language-"] .lang {
+  font-size: 11px;
+}
+
+/* ── 页面底部适当留白 ── */
+.VPDoc .vp-doc {
+  padding-bottom: 48px;
+}
+
+/* ── 首页特性卡片 ── */
+.VPFeature .icon {
+  font-size: 28px;
+}
+
+/* ── 自定义首页（layout: false）全宽布局修正 ── */
+.Layout > .VPContent.is-home {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+/* 隐藏首页的 footer，由 HomePage.vue 的 CTA 替代 */
+.Layout > .VPContent.is-home + .VPFooter {
+  display: none;
+}
+

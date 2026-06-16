@@ -1,0 +1,112 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(dropdown) {
+  display: inline-block;
+  position: relative;
+
+  @include e(mask) {
+    position: fixed;
+    inset: 0;
+    background: transparent;
+  }
+
+  @include e(trigger) {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  @include e(menu) {
+    position: absolute;
+    min-width: var(--lk-rpx-220);
+    background: var(--lk-bg-elevated);
+    border: var(--lk-rpx-2) solid var(--lk-color-border-light);
+    border-radius: var(--lk-radius-lg);
+    box-shadow: var(--lk-shadow-base);
+    padding: var(--lk-spacing-xs) 0;
+    z-index: 2400;
+    pointer-events: auto;
+  }
+
+  @include m(placement-bottom) {
+    .lk-dropdown__menu {
+      top: 100%;
+      left: 0;
+      margin-top: var(--lk-spacing-xs);
+    }
+  }
+
+  @include m(placement-top) {
+    .lk-dropdown__menu {
+      bottom: 100%;
+      left: 0;
+      margin-bottom: var(--lk-spacing-xs);
+    }
+  }
+
+  @include m(placement-left) {
+    .lk-dropdown__menu {
+      top: 0;
+      right: 100%;
+      margin-right: var(--lk-spacing-xs);
+    }
+  }
+
+  @include m(placement-right) {
+    .lk-dropdown__menu {
+      top: 0;
+      left: 100%;
+      margin-left: var(--lk-spacing-xs);
+    }
+  }
+}
+
+@include b(dropdown-item) {
+  --_py: var(--lk-spacing-md);
+  --_px: var(--lk-spacing-xl);
+  --_fs: var(--lk-font-size-md);
+  --_gap: var(--lk-spacing-sm);
+
+  display: flex;
+  align-items: center;
+  padding: var(--_py) var(--_px);
+  font-size: var(--_fs);
+  color: var(--lk-text-primary);
+  transition:
+    background var(--lk-transition-fast),
+    color var(--lk-transition-fast);
+
+  & > view:not(:first-child),
+  & > lk-icon:not(:first-child) {
+    margin-left: var(--_gap);
+  }
+
+  // 针对 lk-icon 在不同端可能渲染为不同标签的情况
+  :deep(.lk-icon) + .lk-dropdown-item__label {
+    margin-left: var(--_gap);
+  }
+
+  &:active:not(.is-disabled) {
+    background: var(--lk-bg-active);
+  }
+
+  @include when(active) {
+    color: var(--lk-color-primary);
+    font-weight: 600;
+    background: var(--lk-bg-hover);
+  }
+
+  @include when(disabled) {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  @include e(icon) {
+    color: var(--lk-color-primary);
+  }
+
+  @include e(label) {
+    flex: 1;
+  }
+}

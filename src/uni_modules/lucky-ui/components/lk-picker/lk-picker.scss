@@ -1,0 +1,185 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(picker) {
+  --lk-picker-bg: var(--lk-bg-container);
+  --lk-picker-header-border: var(--lk-color-border-light);
+  --lk-picker-title-color: var(--lk-text-primary);
+  --lk-picker-cancel-color: var(--lk-text-secondary);
+  --lk-picker-confirm-color: var(--lk-color-primary);
+  --lk-picker-item-height: var(--lk-rpx-100);
+
+  width: 100%;
+  background: var(--lk-picker-bg);
+
+  @include m(inline) {
+    border-radius: var(--lk-radius-lg);
+    overflow: hidden;
+  }
+
+  @include e(header) {
+    padding: var(--lk-rpx-28) var(--lk-rpx-36);
+    border-bottom: var(--lk-rpx-2) solid var(--lk-picker-header-border);
+  }
+
+  @include e(toolbar) {
+    height: calc(var(--lk-rpx-100) + var(--lk-rpx-20));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--lk-rpx-36);
+    border-bottom: var(--lk-rpx-2) solid var(--lk-picker-header-border);
+  }
+
+  @include e(title) {
+    font-size: var(--lk-font-size-lg);
+    font-weight: 600;
+    color: var(--lk-picker-title-color);
+  }
+
+  @include e(btn) {
+    padding: var(--lk-rpx-18) var(--lk-rpx-28);
+    font-size: var(--lk-font-size-lg);
+    background: transparent;
+    border: none;
+
+    @include m(cancel) {
+      color: var(--lk-picker-cancel-color);
+    }
+
+    @include m(confirm) {
+      color: var(--lk-picker-confirm-color);
+      font-weight: 500;
+    }
+
+    &:active {
+      opacity: 0.7;
+    }
+  }
+
+  @include e(view-wrap) {
+    position: relative;
+    overflow: hidden;
+    background: var(--lk-picker-bg);
+  }
+
+  @include e(view) {
+    position: relative;
+    display: flex;
+    width: 100%;
+    background: transparent;
+    overflow: hidden;
+  }
+
+  @include e(column) {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  @include e(column-wrapper) {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    will-change: transform;
+    transform-style: preserve-3d;
+  }
+
+  @include e(virtual) {
+    position: relative;
+    width: 100%;
+  }
+
+  @include e(virtual-list) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  @include e(mask) {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: calc((100% - var(--lk-picker-item-height)) / 2);
+    z-index: 3;
+    pointer-events: none;
+    backface-visibility: hidden;
+
+    @include m(top) {
+      top: 0;
+      background: linear-gradient(to bottom, var(--lk-picker-bg) 0%, transparent 100%);
+    }
+
+    @include m(bottom) {
+      bottom: 0;
+      background: linear-gradient(to top, var(--lk-picker-bg) 0%, transparent 100%);
+    }
+  }
+
+  @include e(indicator) {
+    position: absolute;
+    top: calc((100% - var(--lk-picker-item-height)) / 2);
+    left: 0;
+    right: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: transparent;
+  }
+
+  // 无中间底条；分层样式在 item-label（text）上，避免整项节点滚动时频繁重排。
+  @include e(item) {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 0 var(--lk-rpx-24);
+    overflow: hidden;
+    z-index: 2;
+    contain: layout style paint;
+  }
+
+  @include e(item-label) {
+    display: block;
+    max-width: 100%;
+    font-weight: 400;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transform-origin: center center;
+    transition:
+      transform 0.14s ease,
+      color 0.14s ease,
+      font-size 0.14s ease;
+
+    /* #ifdef MP */
+    transition: none;
+    /* #endif */
+
+    @include m(dist0) {
+      font-size: var(--lk-font-size-xl);
+      color: var(--lk-text-primary);
+      transform: scale(1);
+    }
+
+    @include m(dist1) {
+      font-size: var(--lk-font-size-lg);
+      color: var(--lk-text-regular);
+      transform: scale(0.96);
+    }
+
+    @include m(dist2) {
+      font-size: var(--lk-font-size-md);
+      color: var(--lk-text-secondary);
+      transform: scale(0.92);
+    }
+
+    @include m(dist3) {
+      font-size: var(--lk-font-size-sm);
+      color: var(--lk-text-placeholder);
+      transform: scale(0.88);
+    }
+  }
+}

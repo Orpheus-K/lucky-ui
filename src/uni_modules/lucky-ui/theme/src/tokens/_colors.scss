@@ -1,0 +1,125 @@
+// 设计令牌: 色彩 (Colors)
+// 命名约定规范 - $color-[类别]-[属性]-[变体]
+
+@use 'sass:color';
+@use 'sass:math';
+
+// 用户配置区域 - 只需修改这一个值即可更换整套品牌色系
+$color-brand-base: #6965db !default; // 品牌主色 (可由用户覆盖)
+
+// 色阶生成函数
+
+/// 生成色阶
+/// @param {Color} $base-color - 基础色 (作为 500/600 级别的主色)
+/// @param {Number} $level - 色阶级别 (100-1000)
+/// @return {Color} - 对应级别的颜色
+@function generate-color-shade($base-color, $level) {
+  $white: #ffffff;
+  $black: #000000;
+
+  @if $level < 100 or $level > 1000 {
+    @error "色阶级别必须在 100-1000 之间";
+  }
+
+  // 以 600 为基准色
+  @if $level == 600 {
+    @return $base-color;
+  }
+
+  // 100-500: 与白色混合，越小越浅
+  @if $level < 600 {
+    $mix-ratio: math.div(600 - $level, 500) * 85%; // 100 级别混合 85% 白色
+    @return color.mix($white, $base-color, $mix-ratio);
+  }
+
+  // 700-1000: 与黑色混合，越大越深
+  @if $level > 600 {
+    $mix-ratio: math.div($level - 600, 400) * 70%; // 1000 级别混合 70% 黑色
+    @return color.mix($black, $base-color, $mix-ratio);
+  }
+
+  @return $base-color;
+}
+
+// 品牌色色阶 (自动生成)
+$color-brand-100: generate-color-shade($color-brand-base, 100);
+$color-brand-200: generate-color-shade($color-brand-base, 200);
+$color-brand-300: generate-color-shade($color-brand-base, 300);
+$color-brand-400: generate-color-shade($color-brand-base, 400);
+$color-brand-500: generate-color-shade($color-brand-base, 500);
+$color-brand-600: generate-color-shade($color-brand-base, 600); // 基础主色
+$color-brand-700: generate-color-shade($color-brand-base, 700);
+$color-brand-800: generate-color-shade($color-brand-base, 800); // 深主色
+$color-brand-900: generate-color-shade($color-brand-base, 900);
+$color-brand-1000: generate-color-shade($color-brand-base, 1000); // 暗夜色
+
+// 中性色 (灰色色阶)
+$color-gray-100: #f5f6f7;
+$color-gray-200: #e8eaed;
+$color-gray-300: #dfe1e5;
+$color-gray-400: #c1c7d0;
+$color-gray-500: #a5adba; // 主要边框色
+$color-gray-600: #8993a4; // 占位符、禁用文字
+$color-gray-700: #6b778c; // 次要文字
+$color-gray-800: #42526e; // 主要文字
+$color-gray-900: #172b4d; // 标题级文字
+
+// 基础色
+$color-white: #ffffff;
+$color-black: #000000;
+
+// 语义化颜色令牌
+// 解释：组件应该消费这些颜色变量，它们提供业务含义和设计意图
+
+// 品牌色 & 交互态
+$color-brand-primary: $color-brand-600;
+$color-brand-primary-light: $color-brand-100;
+$color-brand-primary-hover: $color-brand-700;
+$color-brand-primary-active: $color-brand-800;
+
+// 中性文字颜色（与品牌色解耦，支持亮色/暗色主题）
+// 亮色主题下的中性文字颜色
+$color-text-primary-light: #090909; // 主要文字，如标题、正文（默认改为 #090909）
+$color-text-regular-light: #090909; // 常规内容文字（默认与主要文字一致）
+$color-text-secondary-light: #909399; // 次要文字，如元数据、说明（保留较浅色以保持层次）
+$color-text-placeholder-light: #a8abb2; // 占位符文字
+$color-text-inverse-light: #ffffff; // 反色文字（用于深色背景）
+
+// 暗色主题下的中性文字颜色
+$color-text-primary-dark: #e1e1e1; // 主要文字
+$color-text-regular-dark: #b0b0b0; // 常规内容文字
+$color-text-secondary-dark: #808080; // 次要文字
+$color-text-placeholder-dark: #606266; // 占位符文字
+$color-text-inverse-dark: #000000; // 反色文字（用于浅色背景）
+
+// 文字辅助色
+$color-text-disabled: $color-gray-500; // 禁用状态文字
+$color-text-link: $color-brand-primary; // 链接文字
+
+// 中性背景颜色（与品牌色解耦，支持亮色/暗色主题）
+// 亮色主题下的中性背景颜色
+$color-bg-page-light: #f7f7f7; // 应用页面背景（定制为 #f7f7f7）
+$color-bg-container-light: #ffffff; // 卡片、弹窗等容器背景（卡片保持白色）
+$color-fill-1-light: #f7f7f7; // 搜索框、输入框、通用标签背景（默认使用 #f7f7f7）
+$color-fill-2-light: #e6e8eb; // 悬停状态或更深的填充背景（保留原值以保持层次）
+
+// 表单控件填充颜色（Apple 风格 - 统一的输入类控件背景）
+// 亮色主题下的控件填充颜色
+$color-bg-input-light: #f7f7f7; // iOS 标准输入框/搜索框背景（改为 #f7f7f7）
+
+// 暗色主题下的控件填充颜色
+$color-bg-input-dark: #1c1c1e; // iOS 暗色模式输入框背景
+
+// 暗色主题下的中性背景颜色
+$color-bg-page-dark: #000000; // 应用页面背景
+$color-bg-container-dark: #1a1a1a; // 卡片、弹窗等容器背景
+$color-fill-1-dark: #2c2c2c; // 搜索框、输入框、通用标签背景
+$color-fill-2-dark: #3d3d3d; // 悬停状态或更深的填充背景
+
+// 背景辅助色
+$color-bg-container-active: $color-gray-200; // 容器按压态背景
+$color-bg-mask: color.change($color-black, $alpha: 0.7); // 遮罩层背景
+
+// 边框 / 分割线颜色
+$color-border-primary: $color-gray-400; // 主要边框/分割线
+$color-border-secondary: $color-gray-300; // 次要、更弱的边框

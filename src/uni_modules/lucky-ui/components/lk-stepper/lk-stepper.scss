@@ -1,0 +1,105 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(stepper) {
+  --stepper-height: var(--lk-rpx-56);
+  --stepper-btn-size: var(--lk-rpx-56);
+  --stepper-input-width: var(--lk-rpx-64);
+  --stepper-bg: var(--lk-stepper-bg);
+  --stepper-active-bg: var(--lk-bg-active);
+  --stepper-color: var(--lk-text-primary);
+  --stepper-radius: var(--lk-rpx-8);
+  --stepper-gap: var(--lk-rpx-4);
+
+  display: inline-flex;
+  align-items: center;
+
+  .lk-stepper__btn + .lk-stepper__input,
+  .lk-stepper__input + .lk-stepper__btn {
+    margin-left: var(--stepper-gap);
+  }
+
+  @include m(sm) {
+    --stepper-height: var(--lk-rpx-44);
+    --stepper-btn-size: var(--lk-rpx-44);
+    --stepper-input-width: var(--lk-rpx-56);
+  }
+
+  @include m(lg) {
+    --stepper-height: var(--lk-rpx-68);
+    --stepper-btn-size: var(--lk-rpx-68);
+    --stepper-input-width: var(--lk-rpx-80);
+  }
+
+  @include e(btn) {
+    position: relative;
+    box-sizing: border-box;
+    width: var(--stepper-btn-size);
+    height: var(--stepper-height);
+    background-color: var(--stepper-bg);
+    border-radius: var(--stepper-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.1s;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      background-color: currentColor;
+      color: var(--stepper-color);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: var(--lk-rpx-2);
+    }
+
+    &::before {
+      width: 50%;
+      height: var(--lk-rpx-4);
+    }
+
+    &.lk-stepper__plus::after {
+      width: var(--lk-rpx-4);
+      height: 50%;
+    }
+
+    &:active:not(.is-disabled) {
+      background-color: var(--stepper-active-bg);
+    }
+
+    &.is-disabled {
+      color: var(--lk-text-disabled);
+      background-color: var(--lk-bg-disabled);
+      cursor: not-allowed;
+    }
+  }
+
+  @include e(input) {
+    box-sizing: border-box;
+    width: var(--stepper-input-width);
+    height: var(--stepper-height);
+    margin: 0;
+    padding: 0;
+    color: var(--stepper-color);
+    font-size: var(--lk-rpx-28);
+    text-align: center;
+    vertical-align: middle;
+    background-color: var(--stepper-bg);
+    border: 0;
+    border-width: 0;
+    border-radius: var(--stepper-radius);
+    -webkit-appearance: none;
+
+    &.is-disabled {
+      color: var(--lk-text-disabled);
+      background-color: var(--lk-bg-disabled);
+    }
+  }
+
+  @include when(disabled) {
+    @include e(btn) {
+    }
+  }
+}

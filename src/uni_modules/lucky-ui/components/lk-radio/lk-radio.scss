@@ -1,0 +1,153 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(radio) {
+  display: inline-flex;
+  align-items: center;
+  margin-right: var(--lk-spacing-md);
+  font-size: var(--lk-font-size-md);
+  line-height: 1.2;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  @include m(sm) {
+    font-size: var(--lk-font-size-sm);
+    .lk-radio__icon {
+      width: var(--lk-rpx-36);
+      height: var(--lk-rpx-36);
+    }
+  }
+
+  @include m(md) {
+    font-size: var(--lk-font-size-md);
+    .lk-radio__icon {
+      width: var(--lk-rpx-44);
+      height: var(--lk-rpx-44);
+    }
+  }
+
+  @include m(lg) {
+    font-size: var(--lk-font-size-lg);
+    .lk-radio__icon {
+      width: var(--lk-rpx-52);
+      height: var(--lk-rpx-52);
+    }
+  }
+
+  @include e(icon-wrap) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @include e(icon) {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: var(--lk-rpx-2) solid var(--lk-color-border);
+    background-color: var(--lk-bg-container);
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+    box-sizing: border-box;
+    flex-shrink: 0;
+
+    @include m(circle) {
+      border-radius: 50%;
+    }
+
+    @include m(square) {
+      border-radius: var(--lk-rpx-6);
+    }
+  }
+
+  @include e(dot) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.6);
+    transition:
+      opacity 0.18s ease,
+      transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    &::after {
+      content: '';
+      width: 50%;
+      height: 50%;
+      // 主色块上的内点：用 --lk-radio-check-color（暗色下 text-inverse 为黑，不适用）
+      background-color: var(--lk-radio-check-color);
+      border-radius: 50%;
+    }
+  }
+
+  @include e(check) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.6);
+    transition:
+      opacity 0.18s ease,
+      transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  @include e(label) {
+    padding-left: var(--lk-spacing-xs);
+    color: var(--lk-text-primary);
+  }
+
+  @include m(checked) {
+    .lk-radio__icon {
+      border-color: var(--lk-color-primary);
+      background-color: var(--lk-color-primary);
+    }
+  }
+
+  &.lk-radio--checked.lk-radio--icon-dot {
+    .lk-radio__dot {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  &.lk-radio--checked.lk-radio--icon-check {
+    .lk-radio__check {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @include m(disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@include b(radio-group) {
+  display: flex;
+  flex-wrap: wrap;
+
+  @include m(row) {
+    flex-direction: row;
+  }
+
+  @include m(column) {
+    flex-direction: column;
+    .lk-radio {
+      margin-right: 0;
+      margin-bottom: var(--lk-spacing-sm);
+    }
+  }
+}

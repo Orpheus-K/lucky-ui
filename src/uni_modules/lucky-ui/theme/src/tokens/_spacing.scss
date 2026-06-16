@@ -1,0 +1,16 @@
+// 设计令牌: 间距 (Spacing)
+
+$spacing-base-unit: 4rpx;
+
+$spacing-xxs: $spacing-base-unit * 1; // 4rpx
+$spacing-xs: $spacing-base-unit * 2; // 8rpx
+$spacing-sm: $spacing-base-unit * 3; // 12rpx
+$spacing-md: $spacing-base-unit * 4; // 16rpx
+$spacing-lg: $spacing-base-unit * 5; // 20rpx
+$spacing-xl: $spacing-base-unit * 6; // 24rpx
+$spacing-xxl: $spacing-base-unit * 8; // 32rpx
+$spacing-xxxl: $spacing-base-unit * 12; // 48rpx
+
+$spacing-padding-h-sm: $spacing-sm; // 12rpx
+$spacing-padding-h-md: $spacing-md; // 16rpx
+$spacing-padding-h-lg: $spacing-xl; // 24rpx

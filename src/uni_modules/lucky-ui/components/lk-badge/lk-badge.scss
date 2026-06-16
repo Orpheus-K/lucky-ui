@@ -1,0 +1,47 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(badge-wrapper) {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+  vertical-align: middle;
+}
+
+@include b(badge) {
+  // 使用危险色作为默认徽标颜色，符合常规设计规范
+  --_bg: var(--lk-color-danger);
+  --_color: var(--lk-color-white);
+  --_fs: var(--lk-font-size-xs);
+  --_h: var(--lk-rpx-36);
+  --_dot-size: var(--lk-rpx-16);
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--_bg);
+  color: var(--_color);
+  font-size: var(--_fs);
+  min-width: var(--_h);
+  height: var(--_h);
+  padding: 0 var(--lk-spacing-xs);
+  border-radius: var(--lk-radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: var(--lk-shadow-sm);
+  transform: translate(50%, -50%);
+  z-index: 10;
+  overflow: visible;
+
+  > text {
+    color: var(--lk-color-white);
+  }
+
+  @include when(dot) {
+    width: var(--_dot-size);
+    height: var(--_dot-size);
+    min-width: var(--_dot-size);
+    padding: 0;
+  }
+}

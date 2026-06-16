@@ -1,0 +1,125 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(collapse) {
+  --lk-collapse-gap: var(--lk-spacing-sm);
+  --lk-collapse-bg: var(--lk-bg-container);
+  --lk-collapse-bg-soft: var(--lk-fill-tertiary);
+  --lk-collapse-border-color: var(--lk-color-border-light);
+  --lk-collapse-radius: var(--lk-radius-lg);
+  --lk-collapse-header-py: var(--lk-spacing-lg);
+  --lk-collapse-header-px: var(--lk-spacing-xl);
+  --lk-collapse-title-size: var(--lk-font-size-lg);
+  --lk-collapse-body-px: var(--lk-spacing-xl);
+  --lk-collapse-body-pb: var(--lk-spacing-xl);
+  --lk-collapse-body-size: var(--lk-font-size-sm);
+
+  display: flex;
+  flex-direction: column;
+
+  @include m(group) {
+    overflow: hidden;
+    border-radius: var(--lk-collapse-radius);
+    background: var(--lk-collapse-bg);
+
+    @include when(bordered) {
+      border: var(--lk-rpx-1) solid var(--lk-collapse-border-color);
+    }
+  }
+
+  @include m(card) {
+    row-gap: var(--lk-collapse-gap);
+  }
+
+  @include m(ghost) {
+    row-gap: var(--lk-collapse-gap);
+  }
+}
+
+@include b(collapse-item) {
+  background: var(--lk-collapse-bg);
+  border-radius: var(--lk-collapse-radius);
+  overflow: hidden;
+
+  .lk-collapse--card.is-bordered & {
+    border: var(--lk-rpx-1) solid var(--lk-collapse-border-color);
+  }
+
+  .lk-collapse--group & {
+    border-radius: 0;
+    box-shadow: 0 var(--lk-rpx-1) 0 var(--lk-collapse-border-color);
+  }
+
+  .lk-collapse--ghost & {
+    background: transparent;
+    border-radius: var(--lk-collapse-radius);
+  }
+
+  .lk-collapse--ghost.is-bordered & {
+    border: var(--lk-rpx-1) solid var(--lk-collapse-border-color);
+  }
+
+  @include e(header) {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--lk-collapse-header-py) var(--lk-collapse-header-px);
+    font-size: var(--lk-collapse-title-size);
+    font-weight: 500;
+    transition: background var(--lk-transition-fast);
+
+    .lk-ripple__content {
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .lk-collapse-item__arrow {
+      margin-left: var(--lk-spacing-sm);
+    }
+  }
+
+  .lk-collapse--ghost &__header {
+    background: var(--lk-collapse-bg-soft);
+  }
+
+  @include e(title) {
+    flex: 1;
+    color: var(--lk-text-primary);
+  }
+
+  @include e(arrow) {
+    transition: transform var(--lk-transition-fast);
+    color: var(--lk-text-secondary);
+    flex: none;
+
+    @include when(open) {
+      transform: rotate(180deg);
+    }
+  }
+
+  @include e(body) {
+    padding: 0 var(--lk-collapse-body-px) var(--lk-collapse-body-pb);
+    font-size: var(--lk-collapse-body-size);
+    line-height: 1.6;
+    color: var(--lk-text-secondary);
+    animation: lk-collapse-expand var(--lk-collapse-anim-duration) var(--lk-collapse-anim-timing);
+  }
+
+  @include when(disabled) {
+    opacity: 0.5;
+  }
+}
+
+@keyframes lk-collapse-expand {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--lk-rpx-12) * -1));
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: var(--lk-rpx-2000);
+  }
+}

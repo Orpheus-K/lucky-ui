@@ -1,0 +1,10 @@
+{
+  "version": "1.0",
+  "rules": [
+    "[all components] 必须遵循双项目联动原则：lucky-ui 的改动必须同步评估并更新 lucky-ui-test 示例项目。",
+    "[scss styles] 严禁使用普通 CSS 类名，必须通过 BEM mixins (@include b, e, m, when) 组织样式。",
+    "[colors] 严禁硬编码颜色值（#hex, rgb），必须使用主题系统提供的 CSS 变量 Token。",
+    "[uniapp compatibility] 严禁使用 DOM/BOM API（如 document, window），跨端差异逻辑必须使用 #ifdef 条件编译。",
+    "[props definition] Props 必须使用 LkProp 工厂方法定义，并统一放在组件目录的 props.ts 中。"
+  ]
+}

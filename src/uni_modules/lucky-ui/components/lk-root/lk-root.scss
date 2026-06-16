@@ -1,0 +1,33 @@
+.lk-root {
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  color: var(--lk-text-primary);
+  font-family: var(--lk-font-family);
+  -webkit-font-smoothing: antialiased;
+
+  &--full-height {
+    min-height: 100vh;
+  }
+
+  &--background-page {
+    background: var(--lk-bg-page);
+  }
+
+  &--background-container {
+    background: var(--lk-bg-container);
+  }
+
+  &--background-transparent {
+    background: transparent;
+  }
+
+  &--safe-area {
+    --lk-safe-area-top: var(--lk-root-safe-area-top);
+    --lk-safe-area-right: var(--lk-root-safe-area-right);
+    --lk-safe-area-bottom: var(--lk-root-safe-area-bottom);
+    --lk-safe-area-left: var(--lk-root-safe-area-left);
+  }
+}

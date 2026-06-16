@@ -1,0 +1,38 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+.DS_Store
+dist
+*.local
+
+# Editor directories and files
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Testing
+test-results/
+tests/visual/screenshot.spec.ts-snapshots/
+
+# Build and Cache
+.vitepress/cache/
+docs/.vitepress/cache/
+docs/.vitepress/.temp/
+src/uni_modules/lucky-ui/scripts/svg-assets.report.json
+preview-info.json
+
+src/uni_modules/wot-design-uni
+
+# Peekit
+.peekit/
+peekit_temp/

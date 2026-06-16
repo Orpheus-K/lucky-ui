@@ -1,0 +1,147 @@
+name: uni-compat
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - develop
+      - 'release/**'
+      - 'hotfix/**'
+
+jobs:
+  pr-policy:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch flow
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+
+          echo "Validating PR branch flow: ${HEAD_REF} -> ${BASE_REF}"
+
+          if [[ "${BASE_REF}" == "main" ]]; then
+            if [[ ! "${HEAD_REF}" =~ ^(release|hotfix)/v[0-9]+\.[0-9]+\.[0-9]+(-rc\.[0-9]+)?$ ]]; then
+              echo "::error::Only release/vX.Y.Z, release/vX.Y.Z-rc.N, or hotfix/vX.Y.Z branches may target main."
+              exit 1
+            fi
+            exit 0
+          fi
+
+          if [[ "${BASE_REF}" == "develop" ]]; then
+            if [[ "${HEAD_REF}" =~ ^(feature|fix)/[a-z0-9][a-z0-9-]*-[a-z0-9][a-z0-9-]*$ ]]; then
+              exit 0
+            fi
+
+            if [[ "${HEAD_REF}" =~ ^(docs|chore|refactor)/[a-z0-9][a-z0-9-]*$ ]]; then
+              exit 0
+            fi
+
+            if [[ "${HEAD_REF}" =~ ^(release|hotfix)/v[0-9]+\.[0-9]+\.[0-9]+(-rc\.[0-9]+)?$ || "${HEAD_REF}" == "main" ]]; then
+              exit 0
+            fi
+
+            echo "::error::PRs into develop must come from feature/*, fix/*, docs/*, chore/*, refactor/*, release/*, hotfix/*, or main."
+            exit 1
+          fi
+
+          echo "::error::PR base branch must be main or develop."
+          exit 1
+
+  compat-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Compatibility Check
+        run: pnpm run compat-check
+
+      - name: ESLint
+        run: pnpm run lint:eslint
+
+      - name: Stylelint
+        run: pnpm run lint:stylelint
+
+      - name: Type Check
+        run: pnpm run type-check
+
+      - name: Build H5
+        run: pnpm run build:h5
+
+      - name: Build MP Weixin
+        run: pnpm run build:mp-weixin
+
+      - name: Export Showcase Report
+        run: pnpm run report:showcase
+
+      - name: Upload Showcase Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: showcase-cases-report
+          path: artifacts/showcase-cases-report.json
+
+  release-readiness:
+    if: github.event_name == 'pull_request' && github.base_ref == 'main' && (startsWith(github.head_ref, 'release/') || startsWith(github.head_ref, 'hotfix/'))
+    needs:
+      - pr-policy
+      - compat-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate release branch matches package version
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+
+          BRANCH_VERSION="${HEAD_REF#release/v}"
+          BRANCH_VERSION="${BRANCH_VERSION#hotfix/v}"
+          PACKAGE_VERSION="$(node -p "require('./src/uni_modules/lucky-ui/package.json').version")"
+
+          echo "Branch version: ${BRANCH_VERSION}"
+          echo "Package version: ${PACKAGE_VERSION}"
+
+          if [[ "${BRANCH_VERSION}" != "${PACKAGE_VERSION}" ]]; then
+            echo "::error::Release branch version must match src/uni_modules/lucky-ui/package.json."
+            exit 1
+          fi
+
+      - name: Build Docs
+        run: pnpm run docs:build
+
+      - name: Check SVG Assets
+        run: pnpm run assets:svg:check

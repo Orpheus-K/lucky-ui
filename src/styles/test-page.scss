@@ -1,0 +1,275 @@
+// ===================================
+// 测试页面专用样式变量
+// 用于 src/pages/ 下的预览界面
+// ===================================
+
+// 1. 映射 SCSS 变量以便在页面中使用 (必须在前面定义才能供后续或外部引用)
+$test-primary: var(--test-primary);
+$test-primary-soft: var(--test-primary-soft);
+$test-success: var(--test-success);
+$test-warning: var(--test-warning);
+$test-danger: var(--test-danger);
+$test-info: var(--test-info);
+
+$test-gray-50: var(--test-gray-50);
+$test-gray-100: var(--test-gray-100);
+$test-gray-200: var(--test-gray-200);
+$test-gray-300: var(--test-gray-300);
+$test-gray-400: var(--test-gray-400);
+$test-gray-500: var(--test-gray-500);
+$test-gray-600: var(--test-gray-600);
+$test-gray-700: var(--test-gray-700);
+$test-gray-800: var(--test-gray-800);
+$test-gray-900: var(--test-gray-900);
+
+$test-bg-page: var(--test-bg-page);
+$test-bg-card: var(--test-bg-card);
+$test-bg-hover: var(--test-bg-hover);
+$test-bg-active: var(--test-bg-active);
+
+$test-text-primary: var(--test-text-primary);
+$test-text-secondary: var(--test-text-secondary);
+$test-text-tertiary: var(--test-text-tertiary);
+$test-text-inverse: var(--test-text-inverse);
+
+$test-border-color: var(--test-border-color);
+$test-border-radius: var(--test-border-radius);
+
+$test-shadow-sm: var(--test-shadow-sm);
+$test-shadow-md: var(--test-shadow-md);
+$test-shadow-lg: var(--test-shadow-lg);
+
+$test-gradient-primary: var(--test-gradient-primary);
+$test-gradient-success: var(--test-gradient-success);
+$test-gradient-warning: var(--test-gradient-warning);
+
+$test-theme-card-bg: var(--test-theme-card-bg);
+$test-theme-card-border: var(--test-theme-card-border);
+$test-preset-active-shadow: var(--test-preset-active-shadow);
+
+// 2. 亮色主题变量
+:root,
+page,
+.lk-theme-light {
+  --test-primary: var(--lk-brand-600);
+  --test-primary-soft: var(--lk-color-primary-soft);
+  --test-primary-rgb: var(--lk-brand-rgb);
+  --test-success: #52c41a;
+  --test-warning: #faad14;
+  --test-danger: #ff4d4f;
+  --test-info: #1890ff;
+
+  --test-gray-50: #f9fafb;
+  --test-gray-100: #f3f4f6;
+  --test-gray-200: #e5e7eb;
+  --test-gray-300: #d1d5db;
+  --test-gray-400: #9ca3af;
+  --test-gray-500: #6b7280;
+  --test-gray-600: #4b5563;
+  --test-gray-700: #374151;
+  --test-gray-800: #1f2937;
+  --test-gray-900: #111827;
+
+  --test-bg-page: #f4f5f9;
+  --test-bg-card: #ffffff;
+  --test-bg-hover: rgba(0, 0, 0, 0.04);
+  --test-bg-active: rgba(0, 0, 0, 0.08);
+
+  --test-text-primary: #1f2937;
+  --test-text-secondary: #6b7280;
+  --test-text-tertiary: #9ca3af;
+  --test-text-inverse: #ffffff;
+
+  --test-border-color: rgba(31, 41, 55, 0.06);
+
+  --test-shadow-sm: 0 18rpx 46rpx rgba(17, 24, 39, 0.04);
+  --test-shadow-md: 0 22rpx 58rpx rgba(17, 24, 39, 0.06);
+  --test-shadow-lg: 0 30rpx 80rpx rgba(17, 24, 39, 0.08);
+
+  --test-gradient-primary: linear-gradient(
+    135deg,
+    var(--lk-brand-400) 0%,
+    var(--lk-brand-600) 100%
+  );
+  --test-gradient-success: linear-gradient(135deg, var(--test-success) 0%, #95de64 100%);
+  --test-gradient-warning: linear-gradient(135deg, var(--test-warning) 0%, #ffd666 100%);
+  --test-theme-card-bg: #ffffff;
+  --test-theme-card-border: #e5e7eb;
+  --test-preset-active-shadow: 0 0 0 3px var(--lk-brand-200);
+}
+
+// 3. 暗色主题变量
+.lk-theme-dark {
+  --test-primary: var(--lk-brand-500);
+  --test-primary-soft: var(--lk-color-primary-soft);
+  --test-primary-rgb: var(--lk-brand-rgb);
+  --test-success: #73d13d;
+  --test-warning: #ffc53d;
+  --test-danger: #ff7875;
+  --test-info: #40a9ff;
+
+  --test-gray-50: #0b1220;
+  --test-gray-100: #111827;
+  --test-gray-200: #1f2937;
+  --test-gray-300: #334155;
+  --test-gray-400: #475569;
+  --test-gray-500: #64748b;
+  --test-gray-600: #94a3b8;
+  --test-gray-700: #cbd5e1;
+  --test-gray-800: #e2e8f0;
+  --test-gray-900: #f8fafc;
+
+  --test-bg-page: #0f1014;
+  --test-bg-card: #1b1c20;
+  --test-bg-hover: rgba(255, 255, 255, 0.06);
+  --test-bg-active: rgba(255, 255, 255, 0.12);
+
+  --test-text-primary: #f8fafc;
+  --test-text-secondary: #cbd5e1;
+  --test-text-tertiary: #94a3b8;
+  --test-text-inverse: #ffffff;
+
+  --test-border-color: rgba(255, 255, 255, 0.06);
+
+  --test-shadow-sm: 0 16rpx 42rpx rgba(0, 0, 0, 0.22);
+  --test-shadow-md: 0 24rpx 64rpx rgba(0, 0, 0, 0.3);
+  --test-shadow-lg: 0 34rpx 88rpx rgba(0, 0, 0, 0.38);
+
+  --test-gradient-primary: linear-gradient(
+    135deg,
+    var(--lk-brand-600) 0%,
+    var(--lk-brand-800) 100%
+  );
+  --test-gradient-success: linear-gradient(135deg, var(--test-success) 0%, #237804 100%);
+  --test-gradient-warning: linear-gradient(135deg, var(--test-warning) 0%, #ad6800 100%);
+  --test-theme-card-bg: #0f172a;
+  --test-theme-card-border: #1f2937;
+  --test-preset-active-shadow: 0 0 0 3px var(--lk-brand-800);
+}
+
+/* #ifdef MP-WEIXIN */
+@media (prefers-color-scheme: dark) {
+  page {
+    --test-primary: var(--lk-brand-500);
+    --test-primary-soft: var(--lk-color-primary-soft);
+    --test-primary-rgb: var(--lk-brand-rgb);
+    --test-success: #73d13d;
+    --test-warning: #ffc53d;
+    --test-danger: #ff7875;
+    --test-info: #40a9ff;
+
+    --test-gray-50: #0b1220;
+    --test-gray-100: #111827;
+    --test-gray-200: #1f2937;
+    --test-gray-300: #334155;
+    --test-gray-400: #475569;
+    --test-gray-500: #64748b;
+    --test-gray-600: #94a3b8;
+    --test-gray-700: #cbd5e1;
+    --test-gray-800: #e2e8f0;
+    --test-gray-900: #f8fafc;
+
+    --test-bg-page: #0f1014;
+    --test-bg-card: #1b1c20;
+    --test-bg-hover: rgba(255, 255, 255, 0.06);
+    --test-bg-active: rgba(255, 255, 255, 0.12);
+
+    --test-text-primary: #f8fafc;
+    --test-text-secondary: #cbd5e1;
+    --test-text-tertiary: #94a3b8;
+    --test-text-inverse: #ffffff;
+
+    --test-border-color: rgba(255, 255, 255, 0.06);
+    --test-shadow-sm: 0 16rpx 42rpx rgba(0, 0, 0, 0.22);
+    --test-shadow-md: 0 24rpx 64rpx rgba(0, 0, 0, 0.3);
+    --test-shadow-lg: 0 34rpx 88rpx rgba(0, 0, 0, 0.38);
+
+    --test-gradient-primary: linear-gradient(
+      135deg,
+      var(--lk-brand-600) 0%,
+      var(--lk-brand-800) 100%
+    );
+    --test-gradient-success: linear-gradient(135deg, var(--test-success) 0%, #237804 100%);
+    --test-gradient-warning: linear-gradient(135deg, var(--test-warning) 0%, #ad6800 100%);
+    --test-theme-card-bg: #0f172a;
+    --test-theme-card-border: #1f2937;
+    --test-preset-active-shadow: 0 0 0 3px var(--lk-brand-800);
+  }
+}
+/* #endif */
+
+// 4. 尺寸与间距（主题无关）
+page {
+  background-color: $test-bg-page;
+  color: $test-text-primary;
+}
+
+/* 瞬间切换，屏蔽一切过渡导致的 WebView 线程阻塞 */
+/* #ifndef MP-WEIXIN */
+.lk-theme-switching,
+.lk-theme-switching *,
+.lk-theme-switching *::before,
+.lk-theme-switching *::after {
+  transition: none !important;
+  animation: none !important;
+}
+/* #endif */
+
+/* #ifdef MP-WEIXIN */
+/* 微信小程序不支持 * 选择器，手动罗列常用基础组件以实现类似效果。
+   注意：应避免使用 [class*="lk-"] 等属性选择器，它们在复杂页面上非常缓慢。 */
+.lk-theme-switching,
+.lk-theme-switching view,
+.lk-theme-switching text,
+.lk-theme-switching image,
+.lk-theme-switching scroll-view,
+.lk-theme-switching button,
+.lk-theme-switching input,
+.lk-theme-switching textarea,
+.lk-theme-switching label,
+.lk-theme-switching navigator,
+.lk-theme-switching swiper,
+.lk-theme-switching swiper-item {
+  transition: none !important;
+  animation: none !important;
+}
+/* #endif */
+
+:root {
+  --test-border-radius: 12rpx;
+  --test-spacing-xs: 8rpx;
+  --test-spacing-sm: 16rpx;
+  --test-spacing-md: 24rpx;
+  --test-spacing-lg: 32rpx;
+  --test-spacing-xl: 48rpx;
+}
+
+@mixin stack-space($size) {
+  > :not(:first-child) {
+    margin-top: $size;
+  }
+}
+
+@mixin inline-space($size) {
+  > :not(:first-child) {
+    margin-left: $size;
+  }
+}
+
+@mixin wrap-space($x, $y: $x) {
+  > :not(.preview-spacing-placeholder) {
+    margin: calc(#{$y} / 2) calc(#{$x} / 2);
+  }
+}
+
+.test-stack-sm {
+  @include stack-space(var(--test-spacing-sm));
+}
+
+.test-stack-md {
+  @include stack-space(var(--test-spacing-md));
+}
+
+.test-stack-lg {
+  @include stack-space(var(--test-spacing-lg));
+}

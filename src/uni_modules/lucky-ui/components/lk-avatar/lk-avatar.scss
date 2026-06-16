@@ -1,0 +1,41 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(avatar) {
+  --_color: var(--lk-text-secondary);
+  --_fs: var(--lk-control-font-size-md);
+
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--lk-rpx-80);
+  height: var(--lk-rpx-80);
+  background: var(--lk-fill-2);
+  color: var(--_color);
+  font-size: var(--_fs);
+  border-radius: var(--lk-radius-md);
+
+  @include m(circle) {
+    border-radius: 50%;
+  }
+
+  @include m(square) {
+    border-radius: var(--lk-radius-xs);
+  }
+
+  @include m(rounded) {
+    border-radius: var(--lk-radius-lg);
+  }
+
+  @include e(img) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  @include when(fallback) {
+    font-weight: 600;
+    letter-spacing: var(--lk-rpx-1);
+  }
+}

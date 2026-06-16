@@ -1,0 +1,83 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(card) {
+  --_bg: var(--lk-bg-container);
+  --_radius: var(--lk-radius-lg);
+  --_title-fs: var(--lk-rpx-34);
+  --_subtitle-fs: var(--lk-font-size-sm);
+  --_body-fs: var(--lk-control-font-size-md);
+  --_footer-fs: var(--lk-font-size-sm);
+  --_overflow: hidden;
+  // 使用主题变量自动适配亮暗模式
+  --_shadow: var(--lk-shadow-sm);
+
+  background: var(--_bg);
+  border-radius: var(--_radius);
+  box-shadow: var(--_shadow);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: var(--_overflow);
+  transition:
+    box-shadow var(--lk-transition-fast),
+    transform var(--lk-transition-fast);
+
+  @include when(border) {
+    border: var(--lk-rpx-2) solid var(--lk-color-border-light);
+  }
+
+  @include e(cover) {
+    width: 100%;
+    :deep(image),
+    :deep(img) {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  @include e(header) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    & > view:not(:first-child) {
+      margin-left: var(--lk-spacing-lg);
+    }
+  }
+
+  @include e(title) {
+    flex: 1;
+    display: flex;
+    align-items: baseline;
+  }
+
+  @include e(title-text) {
+    font-size: var(--_title-fs);
+    font-weight: 600;
+    color: var(--lk-text-primary);
+    line-height: 1.4;
+  }
+
+  @include e(subtitle) {
+    margin-left: var(--lk-spacing-md);
+    font-size: var(--_subtitle-fs);
+    color: var(--lk-text-secondary);
+    font-weight: normal;
+  }
+
+  @include e(extra) {
+    font-size: var(--lk-control-font-size-sm);
+    color: var(--lk-text-secondary);
+  }
+
+  @include e(body) {
+    font-size: var(--_body-fs);
+    line-height: 1.6;
+    color: var(--lk-text-primary);
+  }
+
+  @include e(footer) {
+    font-size: var(--_footer-fs);
+    color: var(--lk-text-secondary);
+  }
+}

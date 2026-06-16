@@ -1,0 +1,239 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(tab) {
+  /* 基础 CSS 变量 */
+  --lk-tab-bg: transparent;
+  --lk-tab-border-color: var(--lk-border-secondary);
+  --lk-tab-text-color: var(--lk-text-secondary);
+  --lk-tab-text-active-color: var(--lk-text-primary);
+  --lk-tab-slider-bg: var(--lk-color-primary);
+  --lk-tab-letter-spacing: 0.06em;
+  --lk-tab-underline-width: 100%;
+  --lk-tab-underline-height: 3rpx;
+  --lk-tab-duration: 280ms;
+  --lk-tab-easing: cubic-bezier(0.25, 1, 0.5, 1);
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: var(--lk-tab-bg);
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  @include m(border) {
+    border-bottom: 1rpx solid var(--lk-tab-border-color);
+  }
+
+  /* 左右固定侧边插槽 */
+  @include e(left-slot) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0 var(--lk-spacing-md);
+    box-sizing: border-box;
+  }
+
+  @include e(right-slot) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0 var(--lk-spacing-md);
+    box-sizing: border-box;
+  }
+
+  /* 滚动视图模式 */
+  @include e(scroll) {
+    flex: 1;
+    width: 0;
+    min-width: 0;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  /* 标签外层包裹容器 */
+  @include e(nav) {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    height: 100%;
+    min-height: var(--lk-rpx-80);
+    box-sizing: border-box;
+  }
+
+  /* 对齐方式 */
+  @include m(left) {
+    .lk-tab__nav {
+      justify-content: flex-start;
+    }
+  }
+  @include m(center) {
+    .lk-tab__nav {
+      justify-content: center;
+    }
+  }
+  @include m(right) {
+    .lk-tab__nav {
+      justify-content: flex-end;
+    }
+  }
+
+  /* 尺寸规格 */
+  @include m(sm) {
+    font-size: var(--lk-rpx-22);
+    .lk-tab__item {
+      padding: var(--lk-spacing-xs) var(--lk-spacing-md);
+      min-height: var(--lk-rpx-72);
+    }
+    .lk-tab__subtitle {
+      font-size: var(--lk-rpx-14);
+    }
+    .lk-tab__left-slot,
+    .lk-tab__right-slot {
+      min-height: var(--lk-rpx-72);
+    }
+  }
+
+  @include m(md) {
+    font-size: var(--lk-rpx-26);
+    .lk-tab__item {
+      padding: var(--lk-spacing-sm) var(--lk-spacing-lg);
+      min-height: var(--lk-rpx-88);
+    }
+    .lk-tab__subtitle {
+      font-size: var(--lk-rpx-16);
+    }
+    .lk-tab__left-slot,
+    .lk-tab__right-slot {
+      min-height: var(--lk-rpx-88);
+    }
+  }
+
+  @include m(lg) {
+    font-size: var(--lk-rpx-30);
+    .lk-tab__item {
+      padding: var(--lk-spacing-md) var(--lk-spacing-xl);
+      min-height: var(--lk-rpx-104);
+    }
+    .lk-tab__subtitle {
+      font-size: var(--lk-rpx-18);
+    }
+    .lk-tab__left-slot,
+    .lk-tab__right-slot {
+      min-height: var(--lk-rpx-104);
+    }
+  }
+
+  /* 单个 Tab 项 */
+  @include e(item) {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+    color: var(--lk-tab-text-color);
+    font-weight: 400;
+    transition:
+      color var(--lk-tab-duration) ease,
+      font-weight 150ms ease,
+      opacity 150ms ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+    cursor: pointer;
+
+    /* 等宽块级模式 */
+    @include m(block) {
+      flex: 1;
+    }
+
+    @include when(active) {
+      color: var(--lk-tab-text-active-color);
+      font-weight: 600;
+    }
+
+    @include when(disabled) {
+      color: var(--lk-text-disabled);
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    &:active:not(.is-active):not(.is-disabled) {
+      opacity: 0.7;
+    }
+  }
+
+  /* 文本标签 */
+  @include e(label) {
+    display: inline-block;
+    line-height: 1.2;
+    letter-spacing: var(--lk-tab-letter-spacing);
+    transition: transform var(--lk-tab-duration) var(--lk-tab-easing);
+
+    @include m(uppercase) {
+      text-transform: uppercase;
+    }
+
+    /* 预留粗体文字宽度以防止切换 font-weight 时抖动 */
+    &::after {
+      display: block;
+      content: attr(data-text);
+      font-weight: 600;
+      height: 0;
+      overflow: hidden;
+      visibility: hidden;
+      letter-spacing: var(--lk-tab-letter-spacing);
+    }
+  }
+
+  /* 副标题 / 上标 */
+  @include e(subtitle) {
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    opacity: 0.65;
+    margin-top: 4rpx;
+    line-height: 1;
+    text-transform: uppercase;
+    transition: color var(--lk-tab-duration) ease;
+  }
+
+  /* 下划线下方的滑块容器 */
+  @include e(slider) {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    height: var(--lk-tab-underline-height);
+    pointer-events: none;
+    will-change: width, transform;
+  }
+
+  /* 具体的下划线画线 */
+  @include e(line) {
+    width: var(--lk-tab-underline-width);
+    height: 100%;
+    margin: 0 auto;
+    background: var(--lk-tab-slider-bg);
+    border-radius: var(--lk-radius-full);
+  }
+
+  /* 徽章 Badge 定位 */
+  @include e(badge-wrap) {
+    position: absolute;
+    top: var(--lk-rpx-12);
+    right: 0;
+    transform: translate(50%, -50%);
+    z-index: 3;
+  }
+}

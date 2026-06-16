@@ -1,0 +1,197 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(popup) {
+  position: fixed;
+  max-width: 100%;
+  max-height: 100%;
+
+  &.is-round {
+    .lk-popup__panel {
+      overflow: hidden;
+    }
+  }
+
+  @include m(center) {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  @include m(bottom) {
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    @include e(panel) {
+      max-height: 90vh;
+    }
+
+    @include when(round) {
+      @include e(panel) {
+        border-radius: var(--lk-popup-radius) var(--lk-popup-radius) 0 0;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    }
+
+    @include when(draggable) {
+      @include e(panel) {
+        max-height: none;
+        overflow: hidden;
+        border-radius: var(--lk-popup-radius) var(--lk-popup-radius) 0 0 !important;
+      }
+
+      @include e(content) {
+        flex: 1;
+        min-height: 0;
+      }
+
+      @include e(safe) {
+        flex-shrink: 0;
+        background: var(--lk-popup-surface-bg);
+      }
+    }
+  }
+
+  @include m(top) {
+    left: 0;
+    right: 0;
+    top: 0;
+
+    @include when(round) {
+      @include e(panel) {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+      }
+    }
+  }
+
+  @include m(left) {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 70%;
+
+    @include e(panel) {
+      height: 100%;
+    }
+
+    @include when(round) {
+      @include e(panel) {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+  }
+
+  @include m(right) {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 70%;
+
+    @include e(panel) {
+      height: 100%;
+    }
+
+    @include when(round) {
+      @include e(panel) {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    }
+  }
+
+  @include e(panel) {
+    --lk-popup-surface-bg: var(--lk-bg-container);
+
+    background: var(--lk-popup-surface-bg);
+    color: var(--lk-text-primary);
+    box-shadow: var(--lk-shadow-base);
+    /* subtle border for clearer separation */
+    border: var(--lk-rpx-1) solid var(--lk-color-border-light);
+    border-bottom: 0;
+    max-width: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0;
+    overflow: hidden;
+
+    :global(.lk-popup.is-round) & {
+      border-radius: var(--lk-popup-radius);
+    }
+  }
+
+  @include e(drag-handle) {
+    width: 100%;
+    height: var(--lk-rpx-48);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    touch-action: none;
+    flex-shrink: 0;
+  }
+
+  @include e(drag-bar) {
+    width: var(--lk-rpx-72);
+    height: var(--lk-rpx-8);
+    background: var(--lk-color-border);
+    border-radius: var(--lk-rpx-4);
+  }
+
+  @include e(header) {
+    position: relative;
+    padding: var(--lk-rpx-32) var(--lk-rpx-48);
+    flex-shrink: 0;
+    background: var(--lk-popup-surface-bg);
+  }
+
+  @include e(title) {
+    font-size: var(--lk-rpx-32);
+    font-weight: 600;
+    color: var(--lk-text-primary);
+    text-align: center;
+  }
+
+  @include e(close) {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--lk-rpx-64);
+    height: var(--lk-rpx-64);
+    cursor: pointer;
+    color: var(--lk-text-secondary);
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--lk-text-primary);
+    }
+
+    @include m(top-right) {
+      right: var(--lk-rpx-16);
+    }
+
+    @include m(top-left) {
+      left: var(--lk-rpx-16);
+    }
+  }
+
+  @include e(content) {
+    flex: 1;
+    overflow: hidden;
+    background: var(--lk-popup-surface-bg);
+
+    /* #ifdef H5 */
+    overflow: auto;
+    /* #endif */
+  }
+
+  @include e(safe) {
+    height: env(safe-area-inset-bottom);
+  }
+}

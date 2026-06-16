@@ -1,0 +1,5 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(sticky) {
+  width: 100%;
+}

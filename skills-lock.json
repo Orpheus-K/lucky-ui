@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "skills": {
+    "lucky-ui-component": {
+      "source": "local",
+      "sourceType": "local"
+    },
+    "lucky-ui-theme": {
+      "source": "local",
+      "sourceType": "local"
+    },
+    "lucky-ui-docs": {
+      "source": "local",
+      "sourceType": "local"
+    },
+    "lucky-ui-icon": {
+      "source": "local",
+      "sourceType": "local"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+// 混入: 响应式 (Responsive)
+@use '../tokens/breakpoints' as theme;
+
+@mixin respond-to($breakpoint, $direction: min) {
+  $value: map-get(
+    (
+      'sm': theme.$breakpoint-sm,
+      'md': theme.$breakpoint-md,
+      'lg': theme.$breakpoint-lg,
+      'xl': theme.$breakpoint-xl,
+    ),
+    $breakpoint
+  );
+
+  @if $value {
+    @media (#{$direction}-width: $value) {
+      @content;
+    }
+  }
+}

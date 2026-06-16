@@ -1,0 +1,42 @@
+// 主题切换时的过渡效果
+// 仅在 H5 和支持的平台上启用，小程序端因性能问题建议保持极简或禁用全局过渡
+
+.lk-theme-transition {
+  // 仅针对颜色、背景色和边框色进行过渡
+  transition:
+    background-color var(--lk-transition-base),
+    color var(--lk-transition-base),
+    border-color var(--lk-transition-base),
+    box-shadow var(--lk-transition-base) !important;
+}
+
+// 针对小程序端的特殊优化：
+// 在切换瞬间禁用所有复杂的过渡，等切换完成后再恢复
+/* #ifdef H5 */
+.lk-theme-switching,
+.lk-theme-switching *,
+.lk-theme-switching *::before,
+.lk-theme-switching *::after {
+  transition: none !important;
+  animation: none !important;
+}
+/* #endif */
+
+/* #ifndef H5 */
+/* 微信小程序/App 等非 H5 环境不支持 * 选择器，手动罗列基础标签 */
+.lk-theme-switching,
+.lk-theme-switching view,
+.lk-theme-switching text,
+.lk-theme-switching image,
+.lk-theme-switching scroll-view,
+.lk-theme-switching button,
+.lk-theme-switching input,
+.lk-theme-switching textarea,
+.lk-theme-switching label,
+.lk-theme-switching navigator,
+.lk-theme-switching swiper,
+.lk-theme-switching swiper-item {
+  transition: none !important;
+  animation: none !important;
+}
+/* #endif */

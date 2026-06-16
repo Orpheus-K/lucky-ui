@@ -1,0 +1,8 @@
+// 设计令牌: 阴影 (Shadow)
+// 使用 box-shadow 创建富有层次感的视觉效果。
+// 使用接近黑色的中性色投射阴影，可以在不同背景色下表现一致。
+
+$shadow-sm: 0 4rpx 8rpx rgb(0 0 0 / 6%); // 轻微阴影，用于轻微抬升的元素
+$shadow-base: 0 8rpx 24rpx rgb(0 0 0 / 10%); // 标准阴影，用于卡片、弹出层等
+$shadow-lg: 0 16rpx 48rpx rgb(0 0 0 / 15%); // 显著阴影，用于模态框等需要强调的元素
+$shadow-inner: inset 0 4rpx 8rpx rgb(0 0 0 / 5%); // 内阴影，可用于元素的按压状态

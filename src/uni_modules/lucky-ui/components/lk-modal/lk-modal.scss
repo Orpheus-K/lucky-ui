@@ -1,0 +1,144 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(modal) {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 90%;
+  /* 外层仅负责定位与居中，不参与动画 transform，避免冲突 */
+
+  @include e(panel) {
+    background: var(--lk-bg-elevated);
+    color: var(--lk-text-primary);
+    border-radius: var(--lk-radius-lg);
+    box-shadow: var(--lk-shadow-lg);
+    /* 去掉外层细边框，内部无边框设计 */
+    border: none;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  @include e(header) {
+    padding: var(--lk-spacing-lg) var(--lk-spacing-lg) var(--lk-spacing-md);
+    font-size: var(--lk-rpx-32);
+    font-weight: 600;
+    position: relative;
+    /* 去掉分割线 */
+    border-bottom: none;
+
+    @include when(title-center) {
+      text-align: center;
+    }
+  }
+
+  @include e(title) {
+    display: inline-block;
+  }
+
+  @include e(close) {
+    position: absolute;
+    right: var(--lk-spacing-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--lk-text-secondary);
+    padding: var(--lk-spacing-xxs);
+    border-radius: var(--lk-radius-full);
+    cursor: pointer;
+
+    /* 更合适的触控区域和居中 */
+    width: var(--lk-rpx-44);
+    height: var(--lk-rpx-44);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &:active {
+      background: var(--lk-bg-active);
+    }
+  }
+
+  @include e(body) {
+    padding: var(--lk-spacing-lg) var(--lk-spacing-lg);
+    font-size: var(--lk-rpx-28);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  @include e(footer) {
+    padding: var(--lk-spacing-md) var(--lk-spacing-lg) var(--lk-spacing-lg);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* 去掉分割线 */
+    border-top: none;
+
+    @include when(footer-text) {
+      padding: 0;
+      border-top: var(--lk-rpx-2) solid var(--lk-color-border-light);
+
+      .lk-modal__text-btn {
+        flex: 1;
+        height: var(--lk-rpx-100);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--lk-rpx-32);
+        color: var(--lk-text-primary);
+        position: relative;
+        transition: background-color 0.2s ease;
+
+        &:active {
+          background-color: var(--lk-bg-active);
+        }
+
+        @include m(confirm) {
+          color: var(--lk-color-primary);
+          font-weight: 600;
+        }
+
+        @include m(cancel) {
+          color: var(--lk-text-secondary);
+          &::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: var(--lk-rpx-2);
+            background-color: var(--lk-color-border-light);
+            transform: scaleX(0.5);
+          }
+        }
+      }
+    }
+
+    /* 两个按钮左右占比并圆角样式 */
+    & > .lk-modal__footer-btn {
+      flex: 1;
+      min-width: 0;
+      display: flex; /* ensure consistent vertical centering */
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      border-radius: var(--lk-radius-lg);
+
+      &:not(:first-child) {
+        margin-left: var(--lk-spacing-md);
+      }
+    }
+
+    @include e(footer-btn) {
+      @include m(cancel) {
+        /* 默认显示为填充背景（Apple 风格，与 Body 区分） */
+        background: var(--lk-fill-2);
+
+        &:active:not(.is-disabled):not(.is-loading) {
+          /* 点击时背景再微微变深 */
+          background: var(--lk-fill-3);
+        }
+      }
+    }
+  }
+}

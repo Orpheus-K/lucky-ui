@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      var coverSupport =
+        'CSS' in window &&
+        typeof CSS.supports === 'function' &&
+        (CSS.supports('top: env(a)') || CSS.supports('top: constant(a)'));
+      document.write(
+        '<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0' +
+          (coverSupport ? ', viewport-fit=cover' : '') +
+          '" />'
+      );
+    </script>
+    <script>
+      (function () {
+        try {
+          var root = document.documentElement;
+          var savedTheme = localStorage.getItem('lk-theme');
+          var theme =
+            savedTheme === 'dark' || savedTheme === 'light'
+              ? savedTheme
+              : window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+          var color = localStorage.getItem('lk-brand-color');
+
+          root.classList.add('lk-theme-booting', 'lk-theme-' + theme);
+          root.setAttribute('data-theme', theme);
+          root.style.colorScheme = theme;
+
+          var match = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color || '');
+          if (!match) return;
+
+          var r = parseInt(match[1], 16);
+          var g = parseInt(match[2], 16);
+          var b = parseInt(match[3], 16);
+          var levels = [100, 200, 300, 400, 500, 600, 700, 800, 900];
+          root.style.setProperty('--lk-brand-rgb', r + ', ' + g + ', ' + b);
+
+          levels.forEach(function (level) {
+            if (level === 600) {
+              root.style.setProperty('--lk-brand-' + level, color);
+              return;
+            }
+
+            var ratio = level < 600 ? ((600 - level) / 500) * 0.85 : ((level - 600) / 300) * 0.6;
+            var next =
+              level < 600
+                ? 'rgb(' +
+                  Math.round(r + (255 - r) * ratio) +
+                  ', ' +
+                  Math.round(g + (255 - g) * ratio) +
+                  ', ' +
+                  Math.round(b + (255 - b) * ratio) +
+                  ')'
+                : 'rgb(' +
+                  Math.round(r * (1 - ratio)) +
+                  ', ' +
+                  Math.round(g * (1 - ratio)) +
+                  ', ' +
+                  Math.round(b * (1 - ratio)) +
+                  ')';
+            root.style.setProperty('--lk-brand-' + level, next);
+          });
+        } catch (e) {}
+      })();
+    </script>
+    <title></title>
+    <!-- 最早时机隐藏原生 tabbar，防止闪烁 -->
+    <style>
+      uni-tabbar,
+      .uni-tabbar,
+      .weui-tabbar,
+      .wx-tabbar {
+        display: none !important;
+        height: 0 !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+    </style>
+    <!--preload-links-->
+    <!--app-context-->
+  </head>
+  <body>
+    <div id="app"><!--app-html--></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

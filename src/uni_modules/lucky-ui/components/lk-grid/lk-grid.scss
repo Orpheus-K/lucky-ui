@@ -1,0 +1,33 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(grid) {
+  display: grid;
+  width: auto; // 重要：让负 margin 正常工作
+  grid-auto-rows: 1fr;
+
+  &-container {
+    width: 100%;
+    overflow: visible;
+
+    &.is-clipped {
+      overflow: hidden;
+    }
+  }
+
+  @include e(item) {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--lk-spacing-sm);
+    transition: background var(--lk-transition-fast);
+    overflow: visible;
+  }
+
+  @include e(item-text) {
+    font-size: var(--lk-font-size-sm);
+    color: var(--lk-text-primary);
+    line-height: 1.5;
+  }
+}

@@ -1,0 +1,15 @@
+@use '../tokens' as theme;
+
+page {
+  font-family: theme.$font-family-base;
+  font-size: theme.$font-size-base;
+  line-height: theme.$line-height-base;
+  color: var(--lk-text-primary);
+
+  background-color: var(--lk-bg-page);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  scroll-behavior: smooth;
+}

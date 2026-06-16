@@ -1,0 +1,551 @@
+@use './tokens/colors' as colors;
+@use './tokens/typography' as typo;
+@use './tokens/spacing' as spacing;
+
+:root,
+page {
+  --lk-font-family: #{typo.$font-family-base};
+  --lk-font-family-code: #{typo.$font-family-code};
+
+  --lk-font-size-xs: #{typo.$font-size-xs};
+  --lk-font-size-sm: #{typo.$font-size-sm};
+  --lk-font-size-base: #{typo.$font-size-base};
+  --lk-font-size-md: #{typo.$font-size-base};
+  --lk-font-size-lg: #{typo.$font-size-lg};
+  --lk-font-size-xl: #{typo.$font-size-xl};
+  --lk-font-size-xxl: #{typo.$font-size-xxl};
+
+  --lk-font-weight-light: #{typo.$font-weight-light};
+  --lk-font-weight-regular: #{typo.$font-weight-regular};
+  --lk-font-weight-medium: #{typo.$font-weight-medium};
+  --lk-font-weight-semibold: 600;
+  --lk-font-weight-bold: #{typo.$font-weight-bold};
+
+  --lk-line-height-base: #{typo.$line-height-base};
+  --lk-line-height-tight: #{typo.$line-height-tight};
+  --lk-line-height-loose: #{typo.$line-height-loose};
+
+  --lk-spacing-xxs: 4rpx;
+  --lk-spacing-xs: 8rpx;
+  --lk-spacing-sm: 12rpx;
+  --lk-spacing-md: 16rpx;
+  --lk-spacing-lg: 24rpx;
+  --lk-spacing-xl: 32rpx;
+  --lk-spacing-xxl: 48rpx;
+
+  --lk-rpx-0: 0rpx;
+  --lk-rpx-1: 1rpx;
+  --lk-rpx-2: 2rpx;
+  --lk-rpx-3: 3rpx;
+  --lk-rpx-4: 4rpx;
+  --lk-rpx-6: 6rpx;
+  --lk-rpx-8: 8rpx;
+  --lk-rpx-10: 10rpx;
+  --lk-rpx-12: 12rpx;
+  --lk-rpx-14: 14rpx;
+  --lk-rpx-16: 16rpx;
+  --lk-rpx-18: 18rpx;
+  --lk-rpx-20: 20rpx;
+  --lk-rpx-22: 22rpx;
+  --lk-rpx-23: 23rpx;
+  --lk-rpx-24: 24rpx;
+  --lk-rpx-26: 26rpx;
+  --lk-rpx-28: 28rpx;
+  --lk-rpx-30: 30rpx;
+  --lk-rpx-32: 32rpx;
+  --lk-rpx-34: 34rpx;
+  --lk-rpx-36: 36rpx;
+  --lk-rpx-38: 38rpx;
+  --lk-rpx-40: 40rpx;
+  --lk-rpx-44: 44rpx;
+  --lk-rpx-48: 48rpx;
+  --lk-rpx-50: 50rpx;
+  --lk-rpx-52: 52rpx;
+  --lk-rpx-56: 56rpx;
+  --lk-rpx-60: 60rpx;
+  --lk-rpx-64: 64rpx;
+  --lk-rpx-68: 68rpx;
+  --lk-rpx-72: 72rpx;
+  --lk-rpx-80: 80rpx;
+  --lk-rpx-84: 84rpx;
+  --lk-rpx-88: 88rpx;
+  --lk-rpx-96: 96rpx;
+  --lk-rpx-100: 100rpx;
+  --lk-rpx-104: 104rpx;
+  --lk-rpx-108: 108rpx;
+  --lk-rpx-112: 112rpx;
+  --lk-rpx-128: 128rpx;
+  --lk-rpx-140: 140rpx;
+  --lk-rpx-144: 144rpx;
+  --lk-rpx-160: 160rpx;
+  --lk-rpx-180: 180rpx;
+  --lk-rpx-200: 200rpx;
+  --lk-rpx-220: 220rpx;
+  --lk-rpx-240: 240rpx;
+  --lk-rpx-260: 260rpx;
+  --lk-rpx-320: 320rpx;
+  --lk-rpx-480: 480rpx;
+  --lk-rpx-600: 600rpx;
+  --lk-rpx-800: 800rpx;
+  --lk-rpx-2000: 2000rpx;
+  --lk-rpx-9999: 9999rpx;
+
+  --lk-radius-none: 0;
+  --lk-radius-xs: 4rpx;
+  --lk-radius-sm: 8rpx;
+  --lk-radius-md: 16rpx;
+  --lk-radius-lg: 24rpx;
+  --lk-radius-xl: 32rpx;
+  --lk-radius-full: 9999px;
+  --lk-border-radius-base: var(--lk-radius-md);
+
+  --lk-control-height-xs: 48rpx;
+  --lk-control-height-sm: 64rpx;
+  --lk-control-height-md: 80rpx;
+  --lk-control-height-lg: 96rpx;
+
+  --lk-control-font-size-sm: var(--lk-font-size-sm);
+  --lk-control-font-size-md: var(--lk-font-size-md);
+  --lk-control-font-size-lg: var(--lk-font-size-lg);
+
+  --lk-control-padding-x-xs: 12rpx;
+  --lk-control-padding-x-sm: 16rpx;
+  --lk-control-padding-x-md: 24rpx;
+  --lk-control-padding-x-lg: 32rpx;
+
+  --lk-transition-fast: 0.15s ease;
+  --lk-transition-base: 0.25s ease;
+  --lk-transition-slow: 0.35s ease;
+  --lk-transition-duration: 0.3s;
+  --lk-transition-easing: ease-out;
+
+  /* 导航层 */
+  --lk-z-index-sticky: 100;
+  --lk-z-index-navbar: 200;
+  --lk-z-index-tabbar: 300;
+  --lk-z-index-fab: 400;
+
+  /* 弹出层（不带遮罩） */
+  --lk-z-index-dropdown: 500;
+  --lk-z-index-tooltip: 600;
+  --lk-z-index-popover: 700;
+
+  /* 遮罩层 */
+  --lk-z-index-overlay: 900;
+
+  /* 模态层（带遮罩） */
+  --lk-z-index-popup: 1000;
+  --lk-z-index-modal: 1500;
+
+  /* 消息层 */
+  --lk-z-index-toast: 2000;
+  --lk-z-index-notify: 2100;
+  --lk-z-index-loading: 2200;
+
+  --lk-color-white: #ffffff;
+  --lk-color-black: #000000;
+
+  --lk-brand-100: #{colors.$color-brand-100};
+  --lk-brand-200: #{colors.$color-brand-200};
+  --lk-brand-300: #{colors.$color-brand-300};
+  --lk-brand-400: #{colors.$color-brand-400};
+  --lk-brand-500: #{colors.$color-brand-500};
+  --lk-brand-600: #{colors.$color-brand-600};
+  --lk-brand-700: #{colors.$color-brand-700};
+  --lk-brand-800: #{colors.$color-brand-800};
+  --lk-brand-900: #{colors.$color-brand-900};
+  --lk-brand-rgb: 105, 101, 219;
+}
+
+:root,
+page,
+.lk-theme-light {
+  --lk-color-primary: var(--lk-brand-600);
+  --lk-color-primary-hover: var(--lk-brand-700);
+  --lk-color-primary-active: var(--lk-brand-800);
+  --lk-color-primary-soft: var(--lk-brand-100);
+
+  --lk-color-success: #52c41a;
+  --lk-color-success-soft: #f6ffed;
+  --lk-color-warning: #faad14;
+  --lk-color-warning-soft: #fffbe6;
+  --lk-color-danger: #ff4d4f;
+  --lk-color-danger-soft: #fff2f0;
+  --lk-color-info: #1890ff;
+  --lk-color-info-soft: #e6f7ff;
+
+  /* 主要文字颜色变量 */
+  --lk-text-primary: #{colors.$color-text-primary-light};
+  --lk-text-regular: #{colors.$color-text-regular-light};
+  --lk-text-secondary: #{colors.$color-text-secondary-light};
+  --lk-text-tertiary: #{colors.$color-gray-600};
+  --lk-text-placeholder: #{colors.$color-text-placeholder-light};
+  --lk-text-disabled: #{colors.$color-text-disabled};
+  --lk-text-inverse: #{colors.$color-text-inverse-light};
+
+  /* 主要背景颜色变量 */
+  --lk-bg-page: #{colors.$color-bg-page-light};
+  --lk-bg-container: #{colors.$color-bg-container-light};
+  --lk-fill-1: #{colors.$color-fill-1-light};
+  --lk-fill-2: #{colors.$color-fill-2-light};
+
+  /* 页面级布局背景（用于组件预览/演示界面，亮色默认使用 page 背景 #f7f7f7） */
+  --lk-bg-layout: var(--lk-bg-page);
+
+  /* 提升层背景：在亮色主题下使用比容器略深的填充色以增强卡片与页面的对比 */
+  --lk-bg-elevated: var(--lk-fill-1);
+  --lk-bg-hover: var(--lk-fill-1);
+  // 使用新的中性点击叠加色，而不是填充色
+  --lk-bg-disabled: var(--lk-fill-1);
+
+  /* 主要填充颜色变量 */
+  --lk-fill-quaternary: #f7f7f7; /* 调整为 #f7f7f7，匹配亮色默认控件背景 */
+  --lk-fill-tertiary: #f7f7f7; /* 调整为 #f7f7f7，使滑块/标签等默认背景一致 */
+  --lk-fill-secondary: var(--lk-fill-1);
+  --lk-fill-primary: var(--lk-fill-2);
+
+  /* 用于 Input、Stepper、Picker 选中底、Slider 轨道、NoticeBar 等公共组件弱背景 */
+  --lk-bg-input: var(--lk-fill-1);
+
+  --lk-color-border: #{colors.$color-border-primary};
+  --lk-color-border-light: #{colors.$color-border-secondary};
+
+  --lk-shadow-sm: 0 4rpx 8rpx rgba(0, 0, 0, 0.06);
+  --lk-shadow-base: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+  --lk-shadow-lg: 0 16rpx 48rpx rgba(0, 0, 0, 0.15);
+  --lk-overlay-bg: rgba(0, 0, 0, 0.55);
+
+  /* 点击叠加色（使用透明度，适用于任何背景） */
+  --lk-bg-active: rgba(0, 0, 0, 0.08);
+  --lk-color-ripple: rgba(0, 0, 0, 0.12);
+  --lk-color-highlight: rgba(0, 0, 0, 0.04);
+
+  --lk-skeleton-start: #f0f2f5;
+  --lk-skeleton-end: #e1e4e8;
+  --lk-loading-spinner: #c8c9cc;
+
+  --lk-icon-color: var(--lk-text-primary);
+
+  // 使用统一的公共弱背景/轨道色
+  --lk-input-bg: var(--lk-bg-input);
+  --lk-input-border: var(--lk-color-border);
+  --lk-input-border-hover: var(--lk-brand-600);
+  --lk-input-border-focus: var(--lk-brand-600);
+  --lk-input-shadow-focus: 0 0 0 4rpx var(--lk-brand-100);
+  --lk-input-border-radius: var(--lk-radius-lg);
+  --lk-input-border-error: var(--lk-color-danger);
+  --lk-input-shadow-error: 0 0 0 4rpx var(--lk-color-danger-soft);
+
+  --lk-form-item-gap: var(--lk-spacing-xl);
+  --lk-form-error-color: var(--lk-color-danger);
+  --lk-form-label-color: var(--lk-text-primary);
+  --lk-form-label-required-color: var(--lk-color-danger);
+
+  --lk-switch-size-sm: 40rpx;
+  --lk-switch-size-md: 52rpx;
+  --lk-switch-size-lg: 64rpx;
+  --lk-switch-color-on: var(--lk-color-primary);
+  --lk-switch-color-off: var(--lk-fill-1);
+  --lk-switch-knob-color: var(--lk-color-white);
+
+  --lk-slider-track-color: var(--lk-fill-1);
+  --lk-slider-fill-color: var(--lk-color-primary);
+  --lk-slider-thumb-color: var(--lk-color-white);
+  --lk-slider-thumb-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
+
+  --lk-rate-color-fill: var(--lk-color-warning);
+  --lk-rate-color-void: var(--lk-fill-1);
+  --lk-rate-icon-size: 48rpx;
+  --lk-rate-gap: 8rpx;
+
+  --lk-stepper-bg: var(--lk-fill-1);
+
+  --lk-keyboard-bg: var(--lk-bg-elevated);
+  --lk-keyboard-key-bg: var(--lk-bg-container);
+  --lk-keyboard-key-bg-active: var(--lk-fill-1);
+  --lk-keyboard-key-text: var(--lk-text-primary);
+  --lk-keyboard-key-shadow: var(--lk-shadow-sm);
+  --lk-keyboard-key-border: var(--lk-color-border-light);
+  --lk-keyboard-special-bg: var(--lk-fill-2);
+  --lk-keyboard-special-text: var(--lk-text-secondary);
+  --lk-keyboard-overlay-bg: rgba(0, 0, 0, 0.3);
+  --lk-keyboard-header-border: var(--lk-color-border-light);
+  --lk-keyboard-indicator-bg: var(--lk-color-border);
+
+  --lk-preload-debugger-bg: rgba(0, 0, 0, 0.9);
+  --lk-preload-debugger-text: var(--lk-color-white);
+  --lk-preload-debugger-text-muted: rgba(255, 255, 255, 0.6);
+  --lk-preload-debugger-text-faint: rgba(255, 255, 255, 0.4);
+  --lk-preload-debugger-border: rgba(255, 255, 255, 0.1);
+  --lk-preload-debugger-item-bg: rgba(255, 255, 255, 0.1);
+  --lk-preload-debugger-btn-bg: rgba(255, 255, 255, 0.15);
+  --lk-preload-debugger-btn-bg-active: rgba(255, 255, 255, 0.25);
+  --lk-preload-debugger-log-bg: rgba(0, 0, 0, 0.3);
+  --lk-preload-debugger-log-border: rgba(255, 255, 255, 0.05);
+
+  --lk-checkbox-border-color: var(--lk-color-border);
+  --lk-checkbox-checked-color: var(--lk-color-primary);
+  --lk-checkbox-check-color: var(--lk-color-white);
+
+  --lk-radio-border-color: var(--lk-color-border);
+  --lk-radio-checked-color: var(--lk-color-primary);
+  --lk-radio-check-color: var(--lk-color-white);
+}
+
+.lk-theme-dark {
+  --lk-color-primary: var(--lk-brand-500);
+  --lk-color-primary-hover: var(--lk-brand-400);
+  --lk-color-primary-active: var(--lk-brand-300);
+  --lk-color-primary-soft: rgba(var(--lk-brand-rgb), 0.15);
+
+  --lk-color-success: #73d13d;
+  --lk-color-success-soft: rgba(82, 196, 26, 0.15);
+  --lk-color-warning: #ffc53d;
+  --lk-color-warning-soft: rgba(250, 173, 20, 0.15);
+  --lk-color-danger: #ff7875;
+  --lk-color-danger-soft: rgba(255, 77, 79, 0.15);
+  --lk-color-info: #40a9ff;
+  --lk-color-info-soft: rgba(24, 144, 255, 0.15);
+
+  /* 主要文字颜色变量 */
+  --lk-text-primary: #{colors.$color-text-primary-dark};
+  --lk-text-regular: #{colors.$color-text-regular-dark};
+  --lk-text-secondary: #{colors.$color-text-secondary-dark};
+  --lk-text-tertiary: rgba(255, 255, 255, 0.45);
+  --lk-text-placeholder: #{colors.$color-text-placeholder-dark};
+  --lk-text-disabled: rgba(255, 255, 255, 0.25);
+  --lk-text-inverse: #{colors.$color-text-inverse-dark};
+
+  /* 主要背景颜色变量 */
+  --lk-bg-page: #{colors.$color-bg-page-dark};
+  --lk-bg-container: #{colors.$color-bg-container-dark};
+  --lk-fill-1: #{colors.$color-fill-1-dark};
+  --lk-fill-2: #{colors.$color-fill-2-dark};
+
+  --lk-bg-layout: var(--lk-bg-page);
+  --lk-bg-elevated: #262626;
+  --lk-bg-hover: var(--lk-fill-1);
+  // 使用新的中性点击叠加色，而不是填充色
+  --lk-bg-disabled: rgba(255, 255, 255, 0.08);
+
+  /* 主要填充颜色变量 */
+  --lk-fill-quaternary: rgba(255, 255, 255, 0.04);
+  --lk-fill-tertiary: rgba(255, 255, 255, 0.08);
+  --lk-fill-secondary: var(--lk-fill-1);
+  --lk-fill-primary: var(--lk-fill-2);
+
+  /* 用于 Input、Stepper、Picker 选中底、Slider 轨道、NoticeBar 等公共组件弱背景 */
+  --lk-bg-input: var(--lk-fill-1);
+
+  --lk-color-border: rgba(255, 255, 255, 0.2);
+  --lk-color-border-light: rgba(255, 255, 255, 0.1);
+
+  --lk-shadow-sm: 0 4rpx 8rpx rgba(0, 0, 0, 0.3);
+  --lk-shadow-base: 0 8rpx 24rpx rgba(0, 0, 0, 0.4);
+  --lk-shadow-lg: 0 16rpx 48rpx rgba(0, 0, 0, 0.5);
+  --lk-overlay-bg: rgba(0, 0, 0, 0.6);
+
+  /* 点击叠加色（使用透明度，适用于任何背景） */
+  --lk-bg-active: rgba(255, 255, 255, 0.12);
+  --lk-color-ripple: rgba(255, 255, 255, 0.2);
+  --lk-color-highlight: rgba(255, 255, 255, 0.08);
+
+  --lk-skeleton-start: #2c2c2c;
+  --lk-skeleton-end: #3d3d3d;
+  --lk-loading-spinner: #5d5d5d;
+
+  /* 图标默认跟随文字颜色，自动适配暗黑模式 */
+  --lk-icon-color: var(--lk-text-primary);
+
+  // 使用统一的公共弱背景/轨道色
+  --lk-input-bg: var(--lk-bg-input);
+  --lk-input-border: var(--lk-color-border);
+  --lk-input-border-hover: var(--lk-brand-500);
+  --lk-input-border-focus: var(--lk-brand-500);
+  --lk-input-shadow-focus: 0 0 0 4rpx rgba(105, 101, 219, 0.25);
+  --lk-input-border-radius: var(--lk-radius-lg);
+  --lk-input-border-error: var(--lk-color-danger);
+  --lk-input-shadow-error: 0 0 0 4rpx var(--lk-color-danger-soft);
+
+  --lk-form-item-gap: var(--lk-spacing-xl);
+  --lk-form-error-color: var(--lk-color-danger);
+  --lk-form-label-color: var(--lk-text-primary);
+  --lk-form-label-required-color: var(--lk-color-danger);
+
+  --lk-switch-size-sm: 40rpx;
+  --lk-switch-size-md: 52rpx;
+  --lk-switch-size-lg: 64rpx;
+  --lk-switch-color-on: var(--lk-color-primary);
+  --lk-switch-color-off: var(--lk-fill-1);
+  --lk-switch-knob-color: var(--lk-color-white);
+
+  --lk-slider-track-color: var(--lk-fill-1);
+  --lk-slider-fill-color: var(--lk-color-primary);
+  --lk-slider-thumb-color: var(--lk-color-white);
+  --lk-slider-thumb-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
+
+  --lk-rate-color-fill: var(--lk-color-warning);
+  --lk-rate-color-void: var(--lk-fill-1);
+  --lk-rate-icon-size: 48rpx;
+  --lk-rate-gap: 8rpx;
+
+  --lk-stepper-bg: var(--lk-fill-1);
+
+  --lk-keyboard-bg: var(--lk-bg-container);
+  --lk-keyboard-key-bg: var(--lk-fill-1);
+  --lk-keyboard-key-bg-active: var(--lk-fill-2);
+  --lk-keyboard-key-text: var(--lk-text-primary);
+  --lk-keyboard-key-shadow: var(--lk-shadow-sm);
+  --lk-keyboard-key-border: var(--lk-color-border-light);
+  --lk-keyboard-special-bg: var(--lk-fill-2);
+  --lk-keyboard-special-text: var(--lk-text-secondary);
+  --lk-keyboard-overlay-bg: rgba(0, 0, 0, 0.45);
+  --lk-keyboard-header-border: var(--lk-color-border-light);
+  --lk-keyboard-indicator-bg: var(--lk-color-border);
+
+  --lk-preload-debugger-bg: rgba(0, 0, 0, 0.9);
+  --lk-preload-debugger-text: var(--lk-color-white);
+  --lk-preload-debugger-text-muted: rgba(255, 255, 255, 0.7);
+  --lk-preload-debugger-text-faint: rgba(255, 255, 255, 0.45);
+  --lk-preload-debugger-border: rgba(255, 255, 255, 0.16);
+  --lk-preload-debugger-item-bg: rgba(255, 255, 255, 0.12);
+  --lk-preload-debugger-btn-bg: rgba(255, 255, 255, 0.2);
+  --lk-preload-debugger-btn-bg-active: rgba(255, 255, 255, 0.3);
+  --lk-preload-debugger-log-bg: rgba(0, 0, 0, 0.4);
+  --lk-preload-debugger-log-border: rgba(255, 255, 255, 0.08);
+
+  --lk-checkbox-border-color: var(--lk-color-border);
+  --lk-checkbox-checked-color: var(--lk-color-primary);
+  --lk-checkbox-check-color: var(--lk-color-white);
+
+  --lk-radio-border-color: var(--lk-color-border);
+  --lk-radio-checked-color: var(--lk-color-primary);
+  --lk-radio-check-color: var(--lk-color-white);
+}
+
+/* #ifdef MP-WEIXIN */
+@media (prefers-color-scheme: dark) {
+  page {
+    --lk-color-primary: var(--lk-brand-500);
+    --lk-color-primary-hover: var(--lk-brand-400);
+    --lk-color-primary-active: var(--lk-brand-300);
+    --lk-color-primary-soft: rgba(var(--lk-brand-rgb), 0.15);
+
+    --lk-text-primary: #{colors.$color-text-primary-dark};
+    --lk-text-regular: #{colors.$color-text-regular-dark};
+    --lk-text-secondary: #{colors.$color-text-secondary-dark};
+    --lk-text-tertiary: rgba(255, 255, 255, 0.45);
+    --lk-text-placeholder: #{colors.$color-text-placeholder-dark};
+    --lk-text-disabled: rgba(255, 255, 255, 0.25);
+    --lk-text-inverse: #{colors.$color-text-inverse-dark};
+
+    --lk-bg-page: #{colors.$color-bg-page-dark};
+    --lk-bg-container: #{colors.$color-bg-container-dark};
+    --lk-fill-1: #{colors.$color-fill-1-dark};
+    --lk-fill-2: #{colors.$color-fill-2-dark};
+    --lk-bg-layout: var(--lk-bg-page);
+    --lk-bg-elevated: #262626;
+    --lk-bg-hover: var(--lk-fill-1);
+    --lk-bg-disabled: rgba(255, 255, 255, 0.08);
+    --lk-fill-quaternary: rgba(255, 255, 255, 0.04);
+    --lk-fill-tertiary: rgba(255, 255, 255, 0.08);
+    --lk-fill-secondary: var(--lk-fill-1);
+    --lk-fill-primary: var(--lk-fill-2);
+    --lk-bg-input: var(--lk-fill-1);
+
+    --lk-color-border: rgba(255, 255, 255, 0.2);
+    --lk-color-border-light: rgba(255, 255, 255, 0.1);
+    --lk-shadow-sm: 0 4rpx 8rpx rgba(0, 0, 0, 0.3);
+    --lk-shadow-base: 0 8rpx 24rpx rgba(0, 0, 0, 0.4);
+    --lk-shadow-lg: 0 16rpx 48rpx rgba(0, 0, 0, 0.5);
+    --lk-overlay-bg: rgba(0, 0, 0, 0.6);
+    --lk-bg-active: rgba(255, 255, 255, 0.12);
+    --lk-color-ripple: rgba(255, 255, 255, 0.2);
+    --lk-color-highlight: rgba(255, 255, 255, 0.08);
+    --lk-icon-color: var(--lk-text-primary);
+  }
+}
+/* #endif */
+
+/* 组件扩展变量 */
+:root,
+page,
+.lk-theme-light,
+.lk-theme-dark {
+  --lk-border-secondary: var(--lk-color-border-light);
+  --lk-fill-3: var(--lk-color-border);
+  --lk-color-danger-bg-soft: var(--lk-color-danger-soft);
+
+  --lk-ripple-x: 50%;
+  --lk-ripple-y: 50%;
+  --lk-ripple-size: 10rpx;
+  --lk-root-safe-area-top: 0px;
+  --lk-root-safe-area-right: 0px;
+  --lk-root-safe-area-bottom: 0px;
+  --lk-root-safe-area-left: 0px;
+
+  --lk-card-radius: var(--lk-radius-sm);
+  --lk-card-scale: 0.9;
+  --lk-card-shadow: var(--lk-shadow-base);
+  --lk-indicator-space: var(--lk-rpx-0);
+
+  --lk-popup-radius: var(--lk-radius-lg);
+  --lk-tooltip-offset: var(--lk-spacing-xs);
+
+  --lk-navbar-content-padding-left: var(--lk-rpx-0);
+  --lk-navbar-content-padding-right: var(--lk-spacing-md);
+  --lk-navbar-action-min-width: var(--lk-rpx-128);
+
+  --lk-tabbar-height: var(--lk-rpx-112);
+  --lk-tabbar-item-height: var(--lk-control-height-md);
+  --lk-tabbar-safe-area-bottom: env(safe-area-inset-bottom);
+  --lk-tabbar-bg: var(--lk-bg-container);
+  --lk-tabbar-active-color: var(--lk-color-primary);
+  --lk-tabbar-inactive-color: var(--lk-text-secondary);
+  --lk-tabbar-container-safe-area-bottom: env(safe-area-inset-bottom);
+
+  --lk-anchor-bg-sidebar: var(--lk-fill-tertiary);
+  --lk-anchor-bg-sidebar-pressed: var(--lk-fill-secondary);
+  --lk-anchor-bg-active: var(--lk-bg-container);
+  --lk-anchor-text-color: var(--lk-text-secondary);
+  --lk-anchor-active-color: var(--lk-color-primary);
+
+  --lk-collapse-anim-duration: 0.3s;
+  --lk-collapse-anim-timing: cubic-bezier(0.4, 0, 0.2, 1);
+  --lk-choice-gap: var(--lk-spacing-sm);
+  --lk-hs-gap: var(--lk-spacing-md);
+  --lk-space-row-gap: var(--lk-spacing-md);
+  --lk-space-col-gap: var(--lk-spacing-md);
+  --lk-skel-duration: 2.4s;
+  --lk-skel-ease: ease-in-out;
+  --lk-ti-index: 0;
+  --lk-ti-total: 1;
+  --lk-verify-code-gap: var(--lk-rpx-12);
+
+  --lk-demo-block-bg: var(--lk-bg-container);
+  --lk-demo-block-padding: var(--lk-rpx-36);
+  --lk-demo-block-shadow: var(--lk-shadow-sm);
+  --lk-demo-block-border-width: var(--lk-rpx-2);
+  --lk-demo-block-border: var(--lk-color-border-light);
+  --lk-demo-block-self-gap: 0;
+}
+
+/* 图表变量 */
+:root,
+page,
+.lk-theme-light,
+.lk-theme-dark {
+  --lk-chart-primary: var(--lk-color-primary);
+  --lk-chart-primary-soft: var(--lk-color-primary-soft);
+  --lk-chart-track: var(--lk-color-border-light);
+  --lk-chart-grid: var(--lk-color-border-light);
+  --lk-chart-label: var(--lk-text-secondary);
+  --lk-chart-center-title-color: var(--lk-text-secondary);
+  --lk-chart-center-value-color: var(--lk-text-primary);
+  --lk-chart-card-bg: var(--lk-bg-container);
+  --lk-chart-card-border: var(--lk-color-border-light);
+  --lk-chart-card-shadow: var(--lk-shadow-sm);
+  --lk-chart-tooltip-bg: var(--lk-color-black);
+  --lk-chart-tooltip-color: var(--lk-color-white);
+  --lk-chart-tooltip-arrow-x: 50%;
+}

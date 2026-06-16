@@ -1,0 +1,193 @@
+﻿@use '../../theme/src/mixins' as *;
+
+@include b(carousel) {
+  position: relative;
+  width: 100%;
+  display: block;
+
+  @include e(swiper) {
+    width: 100%;
+    height: 100%;
+    /* 修复小程序中 swiper 某些情况下高度计算问题 */
+    display: block;
+
+    :deep(swiper-item) {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  }
+
+  @include e(item-wrap) {
+    width: 100%;
+    height: 100%;
+    display: block;
+    transition:
+      transform 0.3s cubic-bezier(0.25, 0.8, 0.5, 1),
+      opacity 0.3s ease;
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    @include when(auto-height) {
+      height: auto;
+      align-items: stretch;
+    }
+
+    @include when(card) {
+      border-radius: var(--lk-card-radius);
+      overflow: hidden;
+      backface-visibility: hidden;
+      transform-origin: center center;
+      /* 小程序中消除图片边缘溢出 */
+      transform: translateZ(0);
+
+      @include when(inactive) {
+        transform: scale(var(--lk-card-scale)) translateZ(0);
+        opacity: 0.8;
+      }
+
+      @include when(active) {
+        transform: scale(1) translateZ(0);
+        opacity: 1;
+        box-shadow: var(--lk-card-shadow);
+        z-index: 1;
+      }
+    }
+  }
+
+  @include e(indicators) {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+    pointer-events: none;
+
+    & > view:not(:first-child) {
+      margin-left: var(--lk-spacing-sm);
+    }
+
+    view {
+      pointer-events: auto;
+    }
+
+    @include when(vertical) {
+      flex-direction: column;
+
+      & > view:not(:first-child) {
+        margin-left: 0;
+        margin-top: var(--lk-spacing-sm);
+      }
+    }
+
+    /* 底部居中 */
+    @include m(pos-bottom) {
+      left: 50%;
+      bottom: var(--lk-spacing-lg);
+      transform: translateX(-50%);
+    }
+    /* 顶部居中 */
+    @include m(pos-top) {
+      left: 50%;
+      top: var(--lk-spacing-lg);
+      transform: translateX(-50%);
+    }
+    /* 左侧垂直居中 */
+    @include m(pos-left) {
+      left: var(--lk-spacing-lg);
+      top: 50%;
+      transform: translateY(-50%);
+      flex-direction: column;
+    }
+    /* 右侧垂直居中 */
+    @include m(pos-right) {
+      right: var(--lk-spacing-lg);
+      top: 50%;
+      transform: translateY(-50%);
+      flex-direction: column;
+    }
+
+    /* 左下角 */
+    @include m(pos-bottom-left) {
+      left: var(--lk-spacing-lg);
+      bottom: var(--lk-spacing-lg);
+    }
+    /* 右下角 */
+    @include m(pos-bottom-right) {
+      right: var(--lk-spacing-lg);
+      bottom: var(--lk-spacing-lg);
+    }
+    /* 左上角 */
+    @include m(pos-top-left) {
+      left: var(--lk-spacing-lg);
+      top: var(--lk-spacing-lg);
+    }
+    /* 右上角 */
+    @include m(pos-top-right) {
+      right: var(--lk-spacing-lg);
+      top: var(--lk-spacing-lg);
+    }
+
+    @include when(outside) {
+      position: relative;
+      transform: none;
+      left: auto;
+      right: auto;
+      top: auto;
+      bottom: auto;
+      margin-top: var(--lk-spacing-md);
+      justify-content: center;
+
+      @include when(vertical) {
+        margin: 0 0 0 var(--lk-spacing-md);
+        height: 100%;
+        justify-content: center;
+      }
+    }
+
+    @include e(indicator-number) {
+      padding: var(--lk-spacing-xxs) var(--lk-spacing-sm);
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      color: var(--lk-color-white);
+      border-radius: var(--lk-radius-full);
+      font-size: var(--lk-font-size-xs);
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+  }
+
+  @include e(indicator) {
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    // 默认颜色与亮暗主题反相：亮主题偏深、暗主题偏浅
+    background-color: var(--lk-text-primary);
+    opacity: 0.4;
+
+    @include when(dot) {
+      width: var(--lk-rpx-14);
+      height: var(--lk-rpx-14);
+      border-radius: 50%;
+    }
+
+    @include when(bar) {
+      width: var(--lk-rpx-26);
+      height: var(--lk-rpx-8);
+      border-radius: var(--lk-rpx-100);
+    }
+
+    @include when(active) {
+      opacity: 1;
+      background-color: var(--lk-text-primary);
+
+      @include when(dot) {
+        transform: scale(1.2);
+      }
+
+      @include when(bar) {
+        width: var(--lk-rpx-44);
+        height: var(--lk-rpx-8);
+        background-color: var(--lk-text-primary);
+      }
+    }
+  }
+}

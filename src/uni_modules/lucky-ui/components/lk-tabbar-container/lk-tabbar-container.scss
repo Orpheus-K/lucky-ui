@@ -1,0 +1,8 @@
+.lk-tabbar-container {
+  --lk-tabbar-container-height: var(--lk-rpx-112);
+  --lk-tabbar-container-icon-size: var(--lk-rpx-40);
+  --lk-tabbar-container-item-gap: var(--lk-rpx-6);
+  --lk-tabbar-container-active-inset-y: var(--lk-rpx-14);
+  --lk-tabbar-container-active-icon-translate-y: calc(var(--lk-rpx-1) * -1);
+  --lk-tabbar-container-label-line-height: 1.25;
+}

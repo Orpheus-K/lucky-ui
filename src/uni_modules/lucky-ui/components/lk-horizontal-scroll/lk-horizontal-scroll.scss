@@ -1,0 +1,50 @@
+.lk-horizontal-scroll {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  white-space: nowrap;
+  background: transparent;
+  border: 0;
+  box-sizing: border-box;
+
+  & ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    color: transparent;
+    display: none;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    width: max-content;
+    min-width: 100%;
+    margin: 0;
+    border: 0;
+    box-sizing: border-box;
+
+    // lk-choice 默认会换行，导致 scroll-x 失效
+    ::v-deep .lk-choice-container {
+      width: auto;
+      flex-shrink: 0;
+      overflow: visible;
+    }
+
+    ::v-deep .lk-choice {
+      flex-wrap: nowrap;
+      width: max-content;
+    }
+
+    ::v-deep .lk-choice__item {
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    & > ::v-deep view:not(:first-child),
+    & > ::v-deep text:not(:first-child) {
+      margin-left: var(--lk-hs-gap);
+    }
+  }
+}

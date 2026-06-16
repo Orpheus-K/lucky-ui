@@ -1,0 +1,49 @@
+@use '../../theme/src/mixins/bem' as *;
+
+.lk-space-container {
+  width: 100%;
+  overflow: visible;
+}
+
+@include b(space) {
+  display: inline-flex;
+  row-gap: var(--lk-space-row-gap);
+  column-gap: var(--lk-space-col-gap);
+
+  @include m(fill) {
+    display: flex;
+    width: auto; // 配合容器的 100% 和负 margin
+  }
+
+  @include m(horizontal) {
+    flex-direction: row;
+  }
+
+  @include m(vertical) {
+    flex-direction: column;
+  }
+
+  @include m(align-start) {
+    align-items: flex-start;
+  }
+
+  @include m(align-center) {
+    align-items: center;
+  }
+
+  @include m(align-end) {
+    align-items: flex-end;
+  }
+
+  @include m(align-baseline) {
+    align-items: baseline;
+  }
+
+  @include m(align-stretch) {
+    align-items: stretch;
+  }
+
+  @include m(wrap) {
+    flex-wrap: wrap;
+  }
+}

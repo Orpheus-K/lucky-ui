@@ -1,0 +1,29 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(form-group) {
+  display: flex;
+  flex-direction: column;
+
+  @include e(title) {
+    padding: var(--lk-spacing-lg) var(--lk-spacing-md) var(--lk-spacing-sm);
+    font-size: var(--lk-font-size-base);
+    color: var(--lk-text-secondary);
+    font-weight: 500;
+  }
+
+  @include e(content) {
+    background: var(--lk-bg-container);
+    display: flex;
+    flex-direction: column;
+  }
+
+  @include m(card) {
+    margin: var(--lk-spacing-sm) var(--lk-spacing-md);
+    border-radius: var(--lk-radius-lg);
+    overflow: hidden;
+
+    .lk-form-group__content {
+      border-radius: var(--lk-radius-lg);
+    }
+  }
+}

@@ -1,0 +1,75 @@
+page,
+view,
+text,
+image,
+button,
+input,
+textarea,
+form,
+label,
+navigator,
+swiper,
+swiper-item {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+view,
+text {
+  color: var(--lk-text-primary);
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+image {
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+page,
+view,
+text,
+image,
+button,
+input,
+textarea,
+navigator,
+swiper,
+swiper-item,
+scroll-view,
+form,
+label {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button::after {
+  display: none;
+}
+
+uni-button[disabled],
+button[disabled] {
+  &[type='default'],
+  &:not([type]) {
+    background-color: transparent !important;
+    color: inherit;
+    &::after {
+      border: none;
+    }
+  }
+}
+
+navigator {
+  text-decoration: none;
+  color: inherit;
+}

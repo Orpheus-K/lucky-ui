@@ -1,0 +1,40 @@
+---
+description: UniApp 组件库开发与跨平台兼容强约束
+alwaysApply: true
+---
+
+# UniApp 组件库开发专家规则
+
+## 核心约束
+
+- 你是 UniApp 组件库开发专家，生成组件代码时必须遵守 `platform-rules.md` 的全部规则。
+- 涉及平台差异时，必须使用条件编译（如 `#ifdef H5`、`#ifdef MP-WEIXIN`）隔离实现。
+- 输出中必须显式标注 `⚠️可能存在平台差异` 的代码位置与原因。
+- 禁止使用小程序不支持的 CSS 选择器（如复杂后代链、部分高级伪类等）。
+
+## 输出约束
+
+- 必须使用 `<script setup lang="ts">` + Composition API。
+- 禁止 `any`，必要时使用 `unknown` 并进行类型收窄。
+- 仅输出代码与中文注释，不输出测试说明、文档说明或额外解释。
+
+## 执行与验证约束
+
+- 每次改动后必须按项目测试流程逐步验证，不可跳步。
+- 默认验证顺序：
+  - `pnpm run compat-check`
+  - 定向 `eslint` / `vue-tsc`
+  - `build:h5` 或 `build:mp-weixin`（按改动范围选择）
+  - `test:visual` / `test:mp`（按改动范围执行）
+- 若当前改动在项目内无现成测试方式，先补充规则与测试入口，再提交代码。
+
+## 参考示例
+
+```ts
+// ⚠️可能存在平台差异：事件模型在小程序与 H5 存在差异
+// #ifdef MP-WEIXIN
+const getPayload = (event: unknown) => {
+  // 小程序分支处理
+};
+// #endif
+```

@@ -1,0 +1,134 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(cell) {
+  --_bg: var(--lk-bg-container);
+  --_fs: var(--lk-font-size-md);
+  --_title-fs: var(--lk-font-size-md);
+  --_label-fs: var(--lk-font-size-sm);
+  --_value-fs: var(--lk-font-size-sm);
+  --_py: var(--lk-spacing-lg);
+  --_px: var(--lk-control-padding-x-md);
+  --_gap: var(--lk-spacing-md);
+
+  display: flex;
+  align-items: center;
+  padding: var(--_py) var(--_px);
+  background: var(--_bg);
+  font-size: var(--_fs);
+  position: relative;
+
+  @include when(center) {
+    align-items: center;
+  }
+
+  @include when(clickable) {
+    transition: background-color 0.2s ease;
+    // 当存在波纹效果 (.lk-ripple) 时，不应用传统的背景色激活反馈
+    &:active:not(.lk-ripple) {
+      background-color: var(--lk-bg-active);
+    }
+  }
+
+  @include when(disabled) {
+    opacity: 0.5;
+  }
+
+  @include e(left) {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+  }
+
+  @include e(icon) {
+    color: var(--lk-color-primary);
+  }
+
+  @include e(titles) {
+    display: flex;
+    flex-direction: column;
+
+    @include m(with-icon) {
+      margin-left: var(--_gap);
+    }
+
+    & > view:not(:first-child) {
+      margin-top: var(--lk-spacing-xxs);
+    }
+  }
+
+  @include e(title) {
+    font-weight: 500;
+    font-size: var(--_title-fs);
+    color: var(--lk-text-primary);
+  }
+
+  @include e(label) {
+    font-size: var(--_label-fs);
+    color: var(--lk-text-regular);
+  }
+
+  @include e(right) {
+    display: flex;
+    align-items: center;
+    font-size: var(--_value-fs);
+    color: var(--lk-text-regular);
+    position: relative;
+    z-index: 1;
+
+    & > view:not(:first-child),
+    & > text:not(:first-child) {
+      margin-left: var(--lk-spacing-xs);
+    }
+  }
+
+  @include e(value) {
+    color: var(--lk-text-regular);
+  }
+
+  @include e(arrow) {
+    color: var(--lk-text-secondary);
+    margin-left: var(--lk-spacing-xs);
+  }
+}
+
+@include b(cell-group) {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
+  @include e(title) {
+    padding: var(--lk-spacing-md) var(--lk-spacing-xs) var(--lk-spacing-xs) var(--lk-spacing-sm);
+    font-size: var(--lk-font-size-sm);
+    color: var(--lk-text-secondary);
+  }
+
+  @include e(body) {
+    background: var(--lk-bg-container);
+    border-radius: 0;
+    overflow: hidden;
+  }
+
+  @include when(inset) {
+    padding: 0 var(--lk-spacing-lg);
+
+    .lk-cell-group__body {
+      border-radius: var(--lk-radius-lg);
+    }
+  }
+
+  @include when(card) {
+    margin: var(--lk-spacing-xs) 0;
+
+    .lk-cell-group__body {
+      border-radius: var(--lk-radius-lg);
+    }
+  }
+
+  @include when(border) {
+    .lk-cell + .lk-cell {
+      border-top: var(--lk-rpx-2) solid var(--lk-color-border-light);
+    }
+  }
+}

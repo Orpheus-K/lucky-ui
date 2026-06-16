@@ -1,0 +1,109 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(switch) {
+  --switch-height: var(--lk-rpx-52);
+  --switch-gap: var(--lk-rpx-4);
+  --switch-duration: 0.25s;
+
+  --switch-active-color: var(--lk-switch-color-on);
+  --switch-inactive-color: var(--lk-switch-color-off);
+  --switch-knob-color: var(--lk-switch-knob-color);
+
+  --switch-width: calc(var(--switch-height) * 1.8);
+  --switch-knob-size: calc(var(--switch-height) - var(--switch-gap) * 2);
+  --switch-translate: calc(var(--switch-width) - var(--switch-knob-size) - var(--switch-gap) * 2);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: var(--switch-width);
+  height: var(--switch-height);
+  padding: var(--switch-gap);
+  border-radius: var(--switch-height);
+  background: var(--switch-inactive-color);
+  box-sizing: border-box;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background var(--switch-duration) ease;
+
+  @include m(sm) {
+    --switch-height: var(--lk-rpx-40);
+  }
+  @include m(lg) {
+    --switch-height: var(--lk-rpx-64);
+  }
+
+  @include e(knob) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--switch-knob-size);
+    height: var(--switch-knob-size);
+    background: var(--switch-knob-color);
+    border-radius: 50%;
+    box-shadow: var(--lk-shadow-sm);
+    transition:
+      transform var(--switch-duration) ease,
+      width var(--switch-duration) ease;
+  }
+
+  @include e(spinner) {
+    width: 50%;
+    height: 50%;
+    border: var(--lk-rpx-3) solid var(--lk-color-border-light);
+    border-top-color: var(--switch-active-color);
+    border-radius: 50%;
+    animation: lk-switch-spin 0.8s linear infinite;
+  }
+
+  @include when(checked) {
+    background: var(--switch-active-color);
+
+    .lk-switch__knob {
+      transform: translateX(var(--switch-translate));
+    }
+
+    .lk-switch__spinner {
+      border-top-color: var(--switch-inactive-color);
+    }
+  }
+
+  @include when(disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @include when(loading) {
+    cursor: wait;
+    opacity: 0.8;
+  }
+
+  @include e(prompt) {
+    font-size: calc(var(--switch-knob-size) * 0.4);
+    line-height: 1;
+    color: var(--switch-active-color);
+    font-weight: 600;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  &.is-checked .lk-switch__prompt {
+    color: var(--switch-active-color);
+  }
+
+  &:active:not(.is-disabled):not(.is-loading) {
+    .lk-switch__knob {
+      width: calc(var(--switch-knob-size) + var(--lk-rpx-8));
+    }
+
+    &.is-checked .lk-switch__knob {
+      transform: translateX(calc(var(--switch-translate) - var(--lk-rpx-8)));
+    }
+  }
+}
+
+@keyframes lk-switch-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

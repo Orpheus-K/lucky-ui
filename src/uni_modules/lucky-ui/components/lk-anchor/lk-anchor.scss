@@ -1,0 +1,130 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(anchor) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  // 侧边栏整体背景：浅灰，与右侧内容形成层次对比
+  background-color: var(--lk-anchor-bg-sidebar);
+
+  @include e(scroll) {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+@include b(anchor-link) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: var(--lk-rpx-96);
+  padding: var(--lk-spacing-lg) var(--lk-spacing-sm);
+  background-color: var(--lk-anchor-bg-sidebar);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // 点击按压反馈（非激活状态）
+  &:active {
+    background-color: var(--lk-anchor-bg-sidebar-pressed);
+  }
+
+  // ── 菜单文字 ──
+  @include e(title) {
+    font-size: var(--lk-font-size-sm);
+    color: var(--lk-anchor-text-color);
+    line-height: 1.5;
+    text-align: center;
+    word-break: break-all;
+    transition:
+      color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+      font-weight 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 2;
+    max-width: 100%;
+  }
+
+  // ── 左侧彩色指示条 ──
+  @include e(indicator) {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: var(--lk-rpx-6);
+    height: 0;
+    border-radius: 0 var(--lk-radius-xs) var(--lk-radius-xs) 0;
+    background-color: var(--lk-anchor-active-color);
+    transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 3;
+
+    &--visible {
+      height: var(--lk-rpx-36);
+    }
+  }
+
+  // ── 上下「切角」伪元素（始终存在，非激活时透明） ──
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    width: var(--lk-rpx-16);
+    height: var(--lk-rpx-16);
+    border-radius: 0 0 var(--lk-radius-md) 0;
+    background-color: transparent;
+    box-shadow: var(--lk-rpx-4) var(--lk-rpx-4) 0 var(--lk-rpx-4) var(--lk-anchor-bg-active);
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: var(--lk-rpx-16);
+    height: var(--lk-rpx-16);
+    border-radius: 0 var(--lk-radius-md) 0 0;
+    background-color: transparent;
+    box-shadow: var(--lk-rpx-4) calc(var(--lk-rpx-4) * -1) 0 var(--lk-rpx-4)
+      var(--lk-anchor-bg-active);
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  @include m(active) {
+    // 关键：激活项背景与右侧内容容器背景色一致，形成融合视觉
+    background-color: var(--lk-anchor-bg-active);
+
+    // 按压时保持激活背景，不产生额外反馈
+    &:active {
+      background-color: var(--lk-anchor-bg-active);
+    }
+
+    // 激活时显示切角伪元素
+    &::before,
+    &::after {
+      opacity: 1;
+    }
+
+    @include e(title) {
+      font-weight: 700;
+      color: var(--lk-anchor-active-color);
+    }
+
+    // indicator height is now driven by --visible modifier on the element itself
+  }
+
+  @include m(disabled) {
+    opacity: 0.38;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}

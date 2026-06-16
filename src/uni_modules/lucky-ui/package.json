@@ -1,0 +1,58 @@
+{
+  "name": "@lucky-ui/uni",
+  "version": "0.1.0-rc.0",
+  "description": "Lucky UI components for UniApp, Vue 3, H5, App, and mini programs.",
+  "type": "module",
+  "main": "./index.ts",
+  "module": "./index.ts",
+  "types": "./components.d.ts",
+  "exports": {
+    ".": {
+      "types": "./components.d.ts",
+      "import": "./index.ts"
+    },
+    "./components": {
+      "types": "./components.d.ts",
+      "import": "./components/index.ts"
+    },
+    "./theme": {
+      "import": "./theme/index.ts"
+    },
+    "./theme/style": "./theme/src/index.scss",
+    "./composables": {
+      "import": "./composables/index.ts"
+    },
+    "./locale": {
+      "import": "./locale/index.ts"
+    },
+    "./utils": {
+      "import": "./utils/index.ts"
+    }
+  },
+  "files": [
+    "assets",
+    "components",
+    "composables",
+    "core",
+    "locale",
+    "theme",
+    "utils",
+    "components.d.ts",
+    "index.ts",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "uni-app",
+    "vue3",
+    "components",
+    "mini-program",
+    "mobile-ui"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@dcloudio/uni-app": ">=3.0.0",
+    "vue": ">=3.4.0"
+  }
+}

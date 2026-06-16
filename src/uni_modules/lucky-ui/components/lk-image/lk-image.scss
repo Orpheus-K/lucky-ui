@@ -1,0 +1,66 @@
+﻿@use '../../theme/src/mixins' as *;
+
+@include b(image) {
+  --lk-image-skeleton-base: var(--lk-skeleton-start);
+  --lk-image-skeleton-highlight: var(--lk-skeleton-end);
+
+  position: relative;
+  overflow: hidden;
+  background: var(--lk-fill-1);
+
+  @include e(inner) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  @include e(placeholder) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--lk-text-secondary);
+    font-size: var(--lk-font-size-xs);
+    background: var(--lk-fill-1);
+
+    @include m(loading) {
+      background-image: linear-gradient(
+        120deg,
+        var(--lk-image-skeleton-base) 25%,
+        var(--lk-image-skeleton-highlight) 37%,
+        var(--lk-image-skeleton-base) 63%
+      );
+      background-size: 300% 100%;
+      animation: lk-skeleton-move 1.8s ease-in-out infinite;
+    }
+
+    & > view:not(:first-child),
+    & > text:not(:first-child) {
+      margin-top: var(--lk-spacing-sm);
+    }
+  }
+
+  // 失败状态样式
+  @include e(error) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--lk-text-placeholder);
+
+    & > view:not(:first-child),
+    & > text:not(:first-child) {
+      margin-top: var(--lk-spacing-xs);
+    }
+  }
+
+  @include e(text) {
+    font-size: var(--lk-font-size-xs);
+    color: var(--lk-text-placeholder);
+  }
+}

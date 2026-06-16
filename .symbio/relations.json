@@ -1,0 +1,1350 @@
+{
+  "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar-item.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/lk-tabbar-container.vue": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-curtain/lk-curtain.vue": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.scss": 0.99,
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-navbar/lk-navbar.vue": {
+    "src/uni_modules/lucky-ui/components/lk-navbar/navbar.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-navbar/navbar.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-radio/lk-radio.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-checkbox/lk-checkbox.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-switch/lk-switch.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-keyboard/lk-keyboard.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-badge/lk-badge.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-upload/lk-upload.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-timeline/lk-timeline.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-loading/lk-loading.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-bar/chart-bar.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-chart-bar/lk-chart-bar.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-bar/chart-bar.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-navbar/lk-navbar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabs/lk-tabs.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-countdown/lk-countdown.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-carousel/lk-carousel.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/lk-tabbar-container.vue": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.vue": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-button/lk-button.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-loading/lk-loading.vue": {
+    "src/uni_modules/lucky-ui/components/lk-loading/loading.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-loading/loading.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-badge/badge.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-badge/lk-badge.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-badge/badge.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-checkbox/checkbox.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-checkbox/lk-checkbox-group.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-checkbox/lk-checkbox.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-checkbox/checkbox.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-radio/radio.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-radio/radio.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-anchor/anchor.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-anchor/lk-anchor-link.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-anchor/lk-anchor.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-checkbox/lk-checkbox.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-radio/lk-radio.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-switch/lk-switch.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-virtual-list/virtual-list.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-virtual-list/lk-virtual-list.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-badge/lk-badge.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-upload/lk-upload.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-timeline/lk-timeline.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-keyboard/lk-keyboard.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-loading/lk-loading.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-button/lk-button.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-card/lk-card.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-icon/icon.utils.ts": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.vue": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 1.98
+  },
+  "src/uni_modules/lucky-ui/components/lk-textarea/textarea.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-textarea/textarea.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-switch/switch.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-switch/lk-switch.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-switch/switch.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-modal/modal.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-modal/lk-modal.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-button/button.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-button/lk-button.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-button/button.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-image/image.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-image/lk-image.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-input/input.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-input/lk-input.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-input/input.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-navbar/lk-navbar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabs/lk-tabs.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-countdown/lk-countdown.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-carousel/lk-carousel.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/lk-tabbar-container.vue": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.vue": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-button/lk-button.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabs/lk-tabs.vue": {
+    "src/uni_modules/lucky-ui/components/lk-tabs/tabs.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabs/tabs.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-badge/lk-badge.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-upload/lk-upload.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-timeline/lk-timeline.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-keyboard/lk-keyboard.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-loading/lk-loading.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/lk-tabbar-container.vue": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.vue": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-button/lk-button.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-stat-card/lk-chart-stat-card.vue": {
+    "src/uni_modules/lucky-ui/components/lk-chart-stat-card/chart-stat-card.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-stat-card/chart-stat-card.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-bar/chart-bar.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-chart-bar/lk-chart-bar.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-bar/chart-bar.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-cell/lk-cell.vue": {
+    "src/uni_modules/lucky-ui/components/lk-cell/cell.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-cell/cell.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-switch/switch.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-switch/lk-switch.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-switch/switch.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tooltip/tooltip.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-tooltip/lk-tooltip.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tooltip/tooltip.utils.ts": 0.5
+  },
+  "src/App.vue": {
+    "src/env.d.ts": 0.5,
+    "src/main.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-calendar-picker/calendar-picker.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-calendar-picker/calendar-picker.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-card/lk-card.vue": {
+    "src/uni_modules/lucky-ui/components/lk-card/card.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-card/card.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-anchor/anchor.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-anchor/lk-anchor-link.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-anchor/lk-anchor.vue": 0.5
+  },
+  "docs/.vitepress/theme/Layout.vue": {
+    "docs/.vitepress/theme/index.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-action-sheet/action-sheet.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-action-sheet/lk-action-sheet.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-action-sheet/action-sheet.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-timeline/timeline-item.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-timeline/lk-timeline-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-timeline/lk-timeline.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-timeline/timeline.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-toast/lk-toast-item.vue": {
+    "src/uni_modules/lucky-ui/components/lk-toast/toast-manager.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/toast.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/toast.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-calendar-picker/lk-calendar-picker.vue": {
+    "src/uni_modules/lucky-ui/components/lk-calendar-picker/calendar-picker.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-carousel/carousel.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-carousel/lk-carousel-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-carousel/lk-carousel.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-input/input.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-input/input.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabbar-container/lk-tabbar-container.vue": {
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/tabbar-container.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/tabbar-container.utils.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar.utils.ts": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-curtain/lk-curtain.vue": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.scss": 5.9399999999999995,
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 6.93,
+    "src/uni_modules/lucky-ui/components/lk-grid/lk-grid.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 4.95,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.vue": 4.95,
+    "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-button/lk-button.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-navbar/lk-navbar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabs/lk-tabs.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-countdown/lk-countdown.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-carousel/lk-carousel.scss": 0.99
+  },
+  "tests/miniprogram/run-miniprogram-tests.js": {
+    "tests/miniprogram/button.spec.js": 0.5,
+    "tests/miniprogram/timeline.spec.js": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabs/lk-tab-pane.vue": {
+    "src/uni_modules/lucky-ui/components/lk-tabs/tabs.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabs/tabs.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-image/lk-image.vue": {
+    "src/uni_modules/lucky-ui/components/lk-image/image.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-image/image.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabbar/context.ts": {
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar-item.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-countdown/lk-countdown.vue": {
+    "src/uni_modules/lucky-ui/components/lk-countdown/countdown.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-countdown/countdown.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-line/chart-line.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-chart-line/lk-chart-line.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-line/chart-line.utils.ts": 0.5
+  },
+  "scripts/fix-doc-preview-and-missing.py": {
+    "scripts/export-showcase-report.js": 0.5,
+    "scripts/scan-doc-preview-issues.py": 0.5,
+    "scripts/upgrade-placeholder-docs.py": 0.5
+  },
+  "tests/miniprogram/timeline.spec.js": {
+    "tests/miniprogram/run-miniprogram-tests.js": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-radar-lite/chart-radar-lite.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-chart-radar-lite/lk-chart-radar-lite.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-radar-lite/chart-radar-lite.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-carousel/lk-carousel.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-navbar/lk-navbar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabs/lk-tabs.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-countdown/lk-countdown.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-slider/slider.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-slider/slider.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-watermark/watermark.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-watermark/lk-watermark.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-watermark/watermark.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-choice/choice.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-choice/choice.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-choice/lk-choice.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/scripts/iconset.mobile.config.js": {
+    "src/uni_modules/lucky-ui/scripts/build-icons.svgtofont.js": 0.5,
+    "src/uni_modules/lucky-ui/scripts/prepare-mobile-icons.js": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.vue": {
+    "src/uni_modules/lucky-ui/components/lk-slider/slider.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-slider/slider.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-sticky/lk-sticky.vue": {
+    "src/uni_modules/lucky-ui/components/lk-sticky/sticky.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-sticky/sticky.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-virtual-list/virtual-list.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-virtual-list/lk-virtual-list.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-preload-debugger/preload-debugger.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-preload-debugger/lk-preload-debugger.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-preload-debugger/preload-debugger.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-carousel/lk-carousel-item.vue": {
+    "src/uni_modules/lucky-ui/components/lk-carousel/carousel.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-carousel/carousel.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-icon/icon.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.vue": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 1.98,
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-button/lk-button.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-card/lk-card.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-sticky/sticky.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-sticky/lk-sticky.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-form/lk-form.vue": {
+    "src/uni_modules/lucky-ui/components/lk-form/context.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-form/form.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-form/form.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-curtain/curtain.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-curtain/lk-curtain.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-curtain/curtain.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-stepper/stepper.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-stepper/lk-stepper.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-stepper/stepper.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-grid/grid.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-grid/grid.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/scripts/fantasticon.config.js": {
+    "src/uni_modules/lucky-ui/scripts/build-icons.svgtofont.js": 0.5,
+    "src/uni_modules/lucky-ui/scripts/prepare-mobile-icons.js": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-fab/fab.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-fab/fab.utils.ts": 0.5
+  },
+  "src/pages/app-main/tabs/components/cart-content.vue": {
+    "src/pages/app-main/tabs/components/home-content.vue": 0.99,
+    "src/pages/app-main/tabs/components/detail-content.vue": 0.99,
+    "src/pages/app-main/index.vue": 0.99,
+    "src/pages.json": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-pull-refresh/pull-refresh.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-pull-refresh/lk-pull-refresh.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-pull-refresh/pull-refresh.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.vue": {
+    "src/uni_modules/lucky-ui/components/lk-progress/progress.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-progress/progress.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-loading/lk-loading.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-badge/lk-badge.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-upload/lk-upload.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-timeline/lk-timeline.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-keyboard/lk-keyboard.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-ring/chart-ring.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-chart-ring/lk-chart-ring.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-ring/chart-ring.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 8.91,
+    "src/uni_modules/lucky-ui/components/lk-button/lk-button.scss": 4.95,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-card/lk-card.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-icon/icon.utils.ts": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.vue": 5.9399999999999995,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 5.9399999999999995,
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/lk-tabbar-container.vue": 5.9399999999999995,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar.utils.ts": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-curtain/lk-curtain.vue": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-grid/lk-grid.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.scss": 2.9699999999999998
+  },
+  "src/uni_modules/lucky-ui/components/lk-avatar/lk-avatar.vue": {
+    "src/uni_modules/lucky-ui/components/lk-avatar/avatar.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-grid/lk-grid.vue": {
+    "src/uni_modules/lucky-ui/components/lk-grid/grid.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-collapse/collapse.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-collapse/lk-collapse-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-collapse/lk-collapse.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-collapse/collapse.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-notice-bar/lk-notice-bar.vue": {
+    "src/uni_modules/lucky-ui/components/lk-notice-bar/notice-bar.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-notice-bar/notice-bar.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-collapse/lk-collapse-item.vue": {
+    "src/uni_modules/lucky-ui/components/lk-collapse/collapse.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-collapse/collapse.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-rate/rate.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-rate/lk-rate.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-preload-debugger/lk-preload-debugger.vue": {
+    "src/uni_modules/lucky-ui/components/lk-preload-debugger/preload-debugger.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-button/button.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-button/button.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.vue": {
+    "src/uni_modules/lucky-ui/components/lk-tabbar/context.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar-item.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-anchor/lk-anchor.vue": {
+    "src/uni_modules/lucky-ui/components/lk-anchor/anchor.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-anchor/anchor.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-form/lk-form-item.vue": {
+    "src/uni_modules/lucky-ui/components/lk-form/context.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-form/form.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-form/form.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabs/lk-tabs.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-navbar/lk-navbar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-countdown/lk-countdown.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-carousel/lk-carousel.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-icon/icon.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-icon/lk-icon.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-badge/badge.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-badge/badge.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-keyboard/keyboard.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-keyboard/keyboard.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-keyboard/lk-keyboard.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-line/chart-line.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-chart-line/lk-chart-line.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-line/chart-line.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-select-list/select-list.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-select-list/lk-select-list.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-select-list/select-list.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-cell/cell.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-cell/lk-cell-group.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-cell/lk-cell.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.vue": {
+    "src/uni_modules/lucky-ui/components/lk-segmented/segmented.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-segmented/segmented.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-modal/lk-modal.vue": {
+    "src/uni_modules/lucky-ui/components/lk-modal/modal.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-modal/modal.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-area/lk-chart-area.vue": {
+    "src/uni_modules/lucky-ui/components/lk-chart-area/chart-area.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-area/chart-area.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tag/tag.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tag/tag.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-collapse/lk-collapse.vue": {
+    "src/uni_modules/lucky-ui/components/lk-collapse/collapse.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-collapse/collapse.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabbar-container/tabbar-container.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/lk-tabbar-container.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/tabbar-container.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-dropdown/lk-dropdown.vue": {
+    "src/uni_modules/lucky-ui/components/lk-dropdown/dropdown.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-dropdown/dropdown.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-select-list/lk-select-list.vue": {
+    "src/uni_modules/lucky-ui/components/lk-select-list/select-list.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-select-list/select-list.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-notice-bar/notice-bar.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-notice-bar/lk-notice-bar.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-notice-bar/notice-bar.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 7.92,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-navbar/lk-navbar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabs/lk-tabs.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-countdown/lk-countdown.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-carousel/lk-carousel.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-icon/icon.utils.ts": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.vue": 7.92,
+    "src/uni_modules/lucky-ui/components/lk-button/lk-button.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.scss": 5.9399999999999995,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-card/lk-card.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/lk-tabbar-container.vue": 4.95,
+    "src/uni_modules/lucky-ui/components/lk-grid/lk-grid.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.scss": 2.9699999999999998
+  },
+  "src/uni_modules/lucky-ui/components/lk-image/image.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-image/lk-image.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-empty/empty.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-empty/empty-illustrations.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-empty/lk-empty.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-empty/empty.utils.ts": 0.5
+  },
+  "src/pages.json": {
+    "src/pages/app-main/tabs/components/home-content.vue": 0.99,
+    "src/pages/app-main/tabs/components/cart-content.vue": 0.99,
+    "src/pages/app-main/tabs/components/detail-content.vue": 0.99,
+    "src/pages/app-main/index.vue": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-divider/divider.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-divider/lk-divider.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-divider/divider.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-empty/empty.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-empty/lk-empty.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-empty/empty.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-fab/fab.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-fab/fab.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-stat-card/chart-stat-card.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-chart-stat-card/lk-chart-stat-card.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-stat-card/chart-stat-card.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-timeline/lk-timeline.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-badge/lk-badge.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-upload/lk-upload.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-keyboard/lk-keyboard.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-loading/lk-loading.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-navbar/navbar.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-navbar/lk-navbar.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-navbar/navbar.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-modal/modal.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-modal/lk-modal.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-action-sheet/lk-action-sheet.vue": {
+    "src/uni_modules/lucky-ui/components/lk-action-sheet/action-sheet.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-action-sheet/action-sheet.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-overlay/lk-overlay.vue": {
+    "src/uni_modules/lucky-ui/components/lk-overlay/overlay.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-overlay/overlay.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-picker/picker.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-picker/picker.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/scripts/iconset.mobile.lock.json": {
+    "src/uni_modules/lucky-ui/scripts/build-icons.svgtofont.js": 0.5,
+    "src/uni_modules/lucky-ui/scripts/prepare-mobile-icons.js": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-carousel/carousel.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-carousel/lk-carousel-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-carousel/lk-carousel.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-number-roller/lk-number-roller.vue": {
+    "src/uni_modules/lucky-ui/components/lk-number-roller/number-roller.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-number-roller/number-roller.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-countdown/countdown.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-countdown/lk-countdown.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-countdown/countdown.utils.ts": 0.5
+  },
+  "src/pages/app-main/tabs/components/home-content.vue": {
+    "src/uni_modules/lucky-ui/components/lk-input/lk-input.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-button/lk-button.scss": 1.98,
+    "src/pages/app-main/tabs/components/cart-content.vue": 0.99,
+    "src/pages/app-main/tabs/components/detail-content.vue": 0.99,
+    "src/pages/app-main/index.vue": 0.99,
+    "src/pages.json": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-toast/lk-toast.scss": 1.0,
+    "src/uni_modules/lucky-ui/components/lk-toast/lk-toast.vue": 1.0,
+    "src/uni_modules/lucky-ui/components/lk-toast/toast.props.ts": 1.0,
+    "src/uni_modules/lucky-ui/components/lk-toast/toast.utils.ts": 1.0
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-radar-lite/lk-chart-radar-lite.vue": {
+    "src/uni_modules/lucky-ui/components/lk-chart-radar-lite/chart-radar-lite.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-radar-lite/chart-radar-lite.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-horizontal-scroll/lk-horizontal-scroll.vue": {
+    "src/uni_modules/lucky-ui/components/lk-horizontal-scroll/horizontal-scroll.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-horizontal-scroll/horizontal-scroll.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar-item.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-tabbar/context.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-curtain/curtain.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-curtain/lk-curtain.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-curtain/curtain.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-empty/lk-empty.vue": {
+    "src/uni_modules/lucky-ui/components/lk-empty/empty.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-empty/empty.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-number-roller/number-roller.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-number-roller/lk-number-roller.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-number-roller/number-roller.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-cell/lk-cell-group.vue": {
+    "src/uni_modules/lucky-ui/components/lk-cell/cell.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-cell/cell.utils.ts": 0.5
+  },
+  "src/main.ts": {
+    "src/App.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-switch/lk-switch.vue": {
+    "src/uni_modules/lucky-ui/components/lk-switch/switch.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-switch/switch.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-slider/slider.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-slider/slider.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabs/tabs.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-tabs/lk-tab-pane.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabs/lk-tabs.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabs/tabs.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-keyboard/keyboard.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-keyboard/lk-keyboard.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-keyboard/keyboard.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-sticky/sticky.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-sticky/lk-sticky.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-notice-bar/notice-bar.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-notice-bar/lk-notice-bar.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-notice-bar/notice-bar.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-sparkline/chart-sparkline.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-chart-sparkline/lk-chart-sparkline.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-toast/toast-manager.ts": {
+    "src/uni_modules/lucky-ui/components/lk-toast/lk-toast-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/lk-toast-manager.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/lk-toast.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/toast.props.ts": 0.495,
+    "src/uni_modules/lucky-ui/components/lk-toast/toast.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-stepper/lk-stepper.vue": {
+    "src/uni_modules/lucky-ui/components/lk-stepper/stepper.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-stepper/stepper.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-horizontal-scroll/horizontal-scroll.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-horizontal-scroll/lk-horizontal-scroll.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-timeline/timeline.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-timeline/timeline-item.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-timeline/timeline.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-timeline/lk-timeline-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-timeline/lk-timeline.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar-item.vue": {
+    "src/uni_modules/lucky-ui/components/lk-tabbar/context.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar-item.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-avatar/avatar.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-avatar/lk-avatar.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-avatar/avatar.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-segmented/segmented.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-segmented/segmented.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-upload/lk-upload.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-badge/lk-badge.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-timeline/lk-timeline.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-keyboard/lk-keyboard.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-loading/lk-loading.scss": 0.99
+  },
+  "scripts/scan-doc-preview-issues.py": {
+    "scripts/fix-doc-preview-and-missing.py": 0.5,
+    "scripts/upgrade-placeholder-docs.py": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-waterfall/lk-waterfall.vue": {
+    "src/uni_modules/lucky-ui/components/lk-waterfall/waterfall.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-waterfall/waterfall.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-dropdown/dropdown.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-dropdown/lk-dropdown-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-dropdown/lk-dropdown.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-stepper/stepper.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-stepper/lk-stepper.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-stepper/stepper.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-segmented/segmented.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-segmented/segmented.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-navbar/navbar.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-navbar/lk-navbar.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-navbar/navbar.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-checkbox/checkbox.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-checkbox/checkbox.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-select-list/select-list.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-select-list/lk-select-list.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-select-list/select-list.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.vue": {
+    "src/uni_modules/lucky-ui/components/lk-fab/fab.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-fab/fab.utils.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-icon/icon.utils.ts": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 7.92,
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 6.93,
+    "src/uni_modules/lucky-ui/components/lk-button/lk-button.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.scss": 5.9399999999999995,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-card/lk-card.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/lk-tabbar-container.vue": 4.95,
+    "src/uni_modules/lucky-ui/components/lk-grid/lk-grid.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.scss": 2.9699999999999998
+  },
+  "src/uni_modules/lucky-ui/components/lk-navbar/lk-navbar.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabs/lk-tabs.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-countdown/lk-countdown.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-carousel/lk-carousel.scss": 0.99
+  },
+  "src/pages/app-main/tabs/components/detail-content.vue": {
+    "src/pages/app-main/tabs/components/home-content.vue": 0.99,
+    "src/pages/app-main/tabs/components/cart-content.vue": 0.99,
+    "src/pages/app-main/index.vue": 0.99,
+    "src/pages.json": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-switch/lk-switch.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-radio/lk-radio.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-checkbox/lk-checkbox.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-meta-row/meta-row.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-meta-row/lk-meta-row.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-toast/toast.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-toast/toast-manager.ts": 0.495,
+    "src/uni_modules/lucky-ui/components/lk-toast/lk-toast-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/lk-toast-manager.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/lk-toast.vue": 2.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/toast.utils.ts": 2.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/lk-toast.scss": 2.0,
+    "src/pages/app-main/tabs/components/home-content.vue": 1.0
+  },
+  "src/uni_modules/lucky-ui/theme/src/component-vars.scss": {
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 4.95,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 7.92,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-navbar/lk-navbar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabs/lk-tabs.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-countdown/lk-countdown.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-carousel/lk-carousel.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-badge/lk-badge.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-upload/lk-upload.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-timeline/lk-timeline.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-keyboard/lk-keyboard.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-loading/lk-loading.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-button/lk-button.scss": 4.95,
+    "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.scss": 8.91,
+    "src/uni_modules/lucky-ui/components/lk-card/lk-card.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-icon/icon.utils.ts": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.vue": 6.93,
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/lk-tabbar-container.vue": 6.93,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar.utils.ts": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-curtain/lk-curtain.vue": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-grid/lk-grid.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-radio/lk-radio.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-checkbox/lk-checkbox.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-switch/lk-switch.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-input/lk-input.scss": {
+    "src/uni_modules/lucky-ui/components/lk-button/lk-button.scss": 0.99,
+    "src/pages/app-main/tabs/components/home-content.vue": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-tabbar/context.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-rate/lk-rate.vue": {
+    "src/uni_modules/lucky-ui/components/lk-rate/rate.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-sparkline/lk-chart-sparkline.vue": {
+    "src/uni_modules/lucky-ui/components/lk-chart-sparkline/chart-sparkline.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-sparkline/chart-sparkline.utils.ts": 0.5
+  },
+  "scripts/upgrade-placeholder-docs.py": {
+    "scripts/export-showcase-report.js": 0.5,
+    "scripts/fix-doc-preview-and-missing.py": 0.5,
+    "scripts/scan-doc-preview-issues.py": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-ring/chart-ring.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-chart-ring/lk-chart-ring.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-ring/chart-ring.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-input/lk-input.vue": {
+    "src/uni_modules/lucky-ui/components/lk-input/input.props.ts": 0.5
+  },
+  "src/pages/app-main/index.vue": {
+    "src/pages/app-main/tabs/components/home-content.vue": 0.99,
+    "src/pages/app-main/tabs/components/cart-content.vue": 0.99,
+    "src/pages/app-main/tabs/components/detail-content.vue": 0.99,
+    "src/pages.json": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-overlay/overlay.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-overlay/lk-overlay.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-textarea/lk-textarea.vue": {
+    "src/uni_modules/lucky-ui/components/lk-textarea/textarea.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-pull-refresh/lk-pull-refresh.vue": {
+    "src/uni_modules/lucky-ui/components/lk-pull-refresh/pull-refresh.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-pull-refresh/pull-refresh.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-choice/choice.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-choice/lk-choice.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-choice/choice.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-overlay/overlay.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-overlay/lk-overlay.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-toast/toast.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-toast/toast-manager.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/lk-toast-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/lk-toast-manager.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/lk-toast.vue": 2.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/toast.props.ts": 2.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/lk-toast.scss": 2.0,
+    "src/pages/app-main/tabs/components/home-content.vue": 1.0
+  },
+  "src/uni_modules/lucky-ui/components/lk-icon/lk-icon.vue": {
+    "src/uni_modules/lucky-ui/components/lk-icon/icon.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-dropdown/lk-dropdown-item.vue": {
+    "src/uni_modules/lucky-ui/components/lk-dropdown/dropdown.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-dropdown/dropdown.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-skeleton/skeleton.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-skeleton/lk-skeleton.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-picker/lk-picker.vue": {
+    "src/uni_modules/lucky-ui/components/lk-picker/picker.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-virtual-list/lk-virtual-list.vue": {
+    "src/uni_modules/lucky-ui/components/lk-virtual-list/virtual-list.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-virtual-list/virtual-list.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-divider/lk-divider.vue": {
+    "src/uni_modules/lucky-ui/components/lk-divider/divider.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-space/space.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-space/space.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.vue": {
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/chart-pie.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/chart-pie.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-badge/lk-badge.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-upload/lk-upload.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-timeline/lk-timeline.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-keyboard/lk-keyboard.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-loading/lk-loading.scss": 0.99
+  },
+  "tests/miniprogram/button.spec.js": {
+    "tests/miniprogram/run-miniprogram-tests.js": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-anchor/lk-anchor-link.vue": {
+    "src/uni_modules/lucky-ui/components/lk-anchor/anchor.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-anchor/anchor.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-cell/cell.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-cell/lk-cell-group.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-cell/lk-cell.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/scripts/gen-font-base64.js": {
+    "src/uni_modules/lucky-ui/scripts/build-icons.svgtofont.js": 0.5,
+    "src/uni_modules/lucky-ui/scripts/prepare-mobile-icons.js": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-card/card.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-card/lk-card.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-loading/loading.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-loading/loading.props.ts": 0.495,
+    "src/uni_modules/lucky-ui/components/lk-loading/lk-loading.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-pie/chart-pie.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/chart-pie.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-watermark/lk-watermark.vue": {
+    "src/uni_modules/lucky-ui/components/lk-watermark/watermark.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-watermark/watermark.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-preload-debugger/preload-debugger.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-preload-debugger/preload-debugger.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-loading/loading.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-loading/lk-loading.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-loading/loading.utils.ts": 0.495
+  },
+  "src/uni_modules/lucky-ui/components/lk-pull-refresh/pull-refresh.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-pull-refresh/lk-pull-refresh.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-pull-refresh/pull-refresh.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-grid/grid.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-grid/lk-grid.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-grid/grid.utils.ts": 0.5
+  },
+  "scripts/export-showcase-report.js": {
+    "scripts/fix-doc-preview-and-missing.py": 0.5,
+    "scripts/upgrade-placeholder-docs.py": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-empty/empty-illustrations.ts": {
+    "src/uni_modules/lucky-ui/components/lk-empty/empty.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-pie/chart-pie.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/chart-pie.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-bar/lk-chart-bar.vue": {
+    "src/uni_modules/lucky-ui/components/lk-chart-bar/chart-bar.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-bar/chart-bar.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-verify-code/verify-code.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-verify-code/lk-verify-code.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-verify-code/verify-code.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-button/lk-button.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 4.95,
+    "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.scss": 4.95,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-card/lk-card.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-icon/icon.utils.ts": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.vue": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 3.96,
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/lk-tabbar-container.vue": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-input/lk-input.scss": 0.99,
+    "src/pages/app-main/tabs/components/home-content.vue": 1.98
+  },
+  "src/uni_modules/lucky-ui/components/lk-toast/lk-toast-manager.vue": {
+    "src/uni_modules/lucky-ui/components/lk-toast/toast-manager.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/toast.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/toast.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-waterfall/waterfall.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-waterfall/lk-waterfall.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-waterfall/waterfall.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-space/lk-space.vue": {
+    "src/uni_modules/lucky-ui/components/lk-space/space.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/scripts/prepare-mobile-icons.js": {
+    "src/uni_modules/lucky-ui/scripts/build-icons.svgtofont.js": 0.5,
+    "src/uni_modules/lucky-ui/scripts/fantasticon.config.js": 0.5,
+    "src/uni_modules/lucky-ui/scripts/gen-font-base64.js": 0.5,
+    "src/uni_modules/lucky-ui/scripts/iconset.mobile.config.js": 0.5,
+    "src/uni_modules/lucky-ui/scripts/iconset.mobile.lock.json": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-toast/lk-toast.scss": {
+    "src/uni_modules/lucky-ui/components/lk-toast/lk-toast.vue": 2.0,
+    "src/uni_modules/lucky-ui/components/lk-toast/toast.props.ts": 2.0,
+    "src/uni_modules/lucky-ui/components/lk-toast/toast.utils.ts": 2.0,
+    "src/pages/app-main/tabs/components/home-content.vue": 1.0
+  },
+  "src/uni_modules/lucky-ui/components/lk-toast/lk-toast.vue": {
+    "src/uni_modules/lucky-ui/components/lk-toast/toast-manager.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/toast.props.ts": 2.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/toast.utils.ts": 2.5,
+    "src/uni_modules/lucky-ui/components/lk-toast/lk-toast.scss": 2.0,
+    "src/pages/app-main/tabs/components/home-content.vue": 1.0
+  },
+  "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.vue": {
+    "src/uni_modules/lucky-ui/components/lk-calendar/calendar.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-radio/lk-radio-group.vue": {
+    "src/uni_modules/lucky-ui/components/lk-radio/radio.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-backtop/lk-backtop.vue": {
+    "src/uni_modules/lucky-ui/components/lk-backtop/backtop.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-backtop/backtop.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-ring/lk-chart-ring.vue": {
+    "src/uni_modules/lucky-ui/components/lk-chart-ring/chart-ring.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-ring/chart-ring.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-timeline/lk-timeline.vue": {
+    "src/uni_modules/lucky-ui/components/lk-timeline/timeline-item.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-timeline/timeline.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-timeline/timeline.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-checkbox/lk-checkbox-group.vue": {
+    "src/uni_modules/lucky-ui/components/lk-checkbox/checkbox.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 4.95,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-navbar/lk-navbar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabs/lk-tabs.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-countdown/lk-countdown.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-carousel/lk-carousel.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-button/lk-button.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.scss": 2.9699999999999998,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-card/lk-card.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-icon/icon.utils.ts": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.vue": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-radio/lk-radio.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-checkbox/lk-checkbox.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-switch/lk-switch.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/lk-tabbar-container.vue": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-chart-pie/lk-chart-pie.scss": 0.99
+  },
+  "src/env.d.ts": {
+    "src/App.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.vue": {
+    "src/uni_modules/lucky-ui/components/lk-tag/tag.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tag/tag.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-backtop/backtop.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-backtop/lk-backtop.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-backtop/backtop.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-carousel/lk-carousel.vue": {
+    "src/uni_modules/lucky-ui/components/lk-carousel/carousel.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-carousel/carousel.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-calendar-picker/calendar-picker.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-calendar-picker/lk-calendar-picker.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-calendar-picker/calendar-picker.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-radio/radio.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-radio/lk-radio-group.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-radio/lk-radio.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-radio/radio.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tag/tag.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tag/tag.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-badge/lk-badge.vue": {
+    "src/uni_modules/lucky-ui/components/lk-badge/badge.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-grid/lk-grid.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/lk-tabbar-container.vue": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-curtain/lk-curtain.vue": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.vue": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-horizontal-scroll/horizontal-scroll.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-horizontal-scroll/lk-horizontal-scroll.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-button/lk-button.vue": {
+    "src/uni_modules/lucky-ui/components/lk-button/button.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-form/context.ts": {
+    "src/uni_modules/lucky-ui/components/lk-form/lk-form-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-form/lk-form.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-curtain/lk-curtain.vue": {
+    "src/uni_modules/lucky-ui/components/lk-curtain/curtain.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-curtain/curtain.utils.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/lk-tabbar-container.vue": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/tabbar.utils.ts": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.scss": 1.98,
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-grid/lk-grid.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-progress/progress.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-upload/upload.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-upload/lk-upload.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-upload/upload.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-radio/lk-radio.vue": {
+    "src/uni_modules/lucky-ui/components/lk-radio/radio.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-area/chart-area.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-chart-area/lk-chart-area.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-form/form.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-form/lk-form-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-form/lk-form.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabs/tabs.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-tabs/lk-tab-pane.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabs/lk-tabs.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabs/tabs.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-card/lk-card.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-button/lk-button.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-tabbar/lk-tabbar.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 1.98,
+    "src/uni_modules/lucky-ui/components/lk-icon/icon.utils.ts": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.vue": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 0.99
+  },
+  "src/uni_modules/lucky-ui/components/lk-keyboard/lk-keyboard.vue": {
+    "src/uni_modules/lucky-ui/components/lk-keyboard/keyboard.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-keyboard/keyboard.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-form/form.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-form/lk-form-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-form/lk-form.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tooltip/lk-tooltip.vue": {
+    "src/uni_modules/lucky-ui/components/lk-tooltip/tooltip.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-verify-code/lk-verify-code.vue": {
+    "src/uni_modules/lucky-ui/components/lk-verify-code/verify-code.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-line/lk-chart-line.vue": {
+    "src/uni_modules/lucky-ui/components/lk-chart-line/chart-line.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-line/chart-line.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-upload/lk-upload.vue": {
+    "src/uni_modules/lucky-ui/components/lk-upload/upload.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tooltip/tooltip.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-tooltip/tooltip.props.ts": 0.5
+  },
+  "docs/.vitepress/theme/index.ts": {
+    "docs/.vitepress/theme/Layout.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-skeleton/lk-skeleton.vue": {
+    "src/uni_modules/lucky-ui/components/lk-skeleton/skeleton.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-skeleton/skeleton.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-textarea/textarea.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-textarea/lk-textarea.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-textarea/textarea.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-backtop/backtop.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-backtop/lk-backtop.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-backtop/backtop.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-countdown/countdown.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-countdown/lk-countdown.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-countdown/countdown.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-watermark/watermark.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-watermark/lk-watermark.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-watermark/watermark.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-number-roller/number-roller.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-number-roller/lk-number-roller.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-number-roller/number-roller.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-meta-row/lk-meta-row.vue": {
+    "src/uni_modules/lucky-ui/components/lk-meta-row/meta-row.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-timeline/timeline.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-timeline/lk-timeline-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-timeline/lk-timeline.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-timeline/timeline.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-dropdown/dropdown.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-dropdown/lk-dropdown-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-dropdown/lk-dropdown.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-calendar/calendar.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-calendar/lk-calendar.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-upload/upload.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-upload/upload.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-popup/popup.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-popup/lk-popup.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/scripts/build-icons.svgtofont.js": {
+    "src/uni_modules/lucky-ui/scripts/fantasticon.config.js": 0.5,
+    "src/uni_modules/lucky-ui/scripts/gen-font-base64.js": 0.5,
+    "src/uni_modules/lucky-ui/scripts/iconset.mobile.config.js": 0.5,
+    "src/uni_modules/lucky-ui/scripts/iconset.mobile.lock.json": 0.5,
+    "src/uni_modules/lucky-ui/scripts/prepare-mobile-icons.js": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-radar-lite/chart-radar-lite.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-chart-radar-lite/lk-chart-radar-lite.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-radar-lite/chart-radar-lite.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-collapse/collapse.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-collapse/lk-collapse-item.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-collapse/lk-collapse.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-collapse/collapse.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-skeleton/skeleton.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-skeleton/lk-skeleton.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-area/chart-area.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-chart-area/lk-chart-area.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-checkbox/lk-checkbox.vue": {
+    "src/uni_modules/lucky-ui/components/lk-checkbox/checkbox.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-tabbar-container/tabbar-container.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/lk-tabbar-container.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-tabbar-container/tabbar-container.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-avatar/avatar.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-avatar/avatar.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-sparkline/chart-sparkline.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-chart-sparkline/lk-chart-sparkline.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-choice/lk-choice.vue": {
+    "src/uni_modules/lucky-ui/components/lk-choice/choice.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-choice/choice.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-waterfall/waterfall.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-waterfall/lk-waterfall.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-waterfall/waterfall.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-progress/progress.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-chart-stat-card/chart-stat-card.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-chart-stat-card/lk-chart-stat-card.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-chart-stat-card/chart-stat-card.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-timeline/lk-timeline-item.vue": {
+    "src/uni_modules/lucky-ui/components/lk-timeline/timeline-item.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-timeline/timeline.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-timeline/timeline.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-divider/divider.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-divider/divider.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-space/space.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-space/lk-space.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-space/space.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-popup/lk-popup.vue": {
+    "src/uni_modules/lucky-ui/components/lk-popup/popup.props.ts": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-popup/popup.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-popup/popup.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-popup/lk-popup.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-verify-code/verify-code.utils.ts": {
+    "src/uni_modules/lucky-ui/components/lk-verify-code/verify-code.props.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-picker/picker.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-picker/lk-picker.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-picker/picker.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-card/card.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-card/lk-card.vue": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-action-sheet/action-sheet.props.ts": {
+    "src/uni_modules/lucky-ui/components/lk-action-sheet/lk-action-sheet.vue": 0.5,
+    "src/uni_modules/lucky-ui/components/lk-action-sheet/action-sheet.utils.ts": 0.5
+  },
+  "src/uni_modules/lucky-ui/components/lk-countdown/lk-countdown.scss": {
+    "src/uni_modules/lucky-ui/theme/src/component-vars.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-slider/lk-slider.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-fab/lk-fab.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tag/lk-tag.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-progress/lk-progress.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-navbar/lk-navbar.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-tabs/lk-tabs.scss": 0.99,
+    "src/uni_modules/lucky-ui/components/lk-carousel/lk-carousel.scss": 0.99
+  }
+}

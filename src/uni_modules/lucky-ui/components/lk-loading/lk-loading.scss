@@ -1,0 +1,243 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(loading) {
+  display: inline-flex;
+  align-items: center;
+  color: var(--lk-text-secondary);
+  --_color: var(--lk-loading-spinner);
+  --_track-color: var(--lk-color-border-light);
+
+  // 通用间距逻辑：如果后面有文本，则给动画容器加间距
+  & > view:first-child {
+    margin-right: var(--lk-spacing-xs);
+  }
+
+  // 如果没有文本，清除间距（例如只有图标时）
+  &:empty,
+  & > view:last-child:first-child {
+    margin-right: 0;
+  }
+
+  @include e(text) {
+    font-size: var(--lk-rpx-24);
+    // 移除 margin-left，由前面的元素控制 margin-right
+  }
+
+  @include e(spinner) {
+    border: var(--lk-rpx-6) solid var(--_track-color);
+    border-top-color: var(--_color);
+    border-radius: 50%;
+    animation: lk-spin 0.8s linear infinite;
+    display: inline-block;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
+  @include e(circular) {
+    position: relative;
+    border-radius: 50%;
+    border: var(--lk-rpx-4) solid var(--_track-color);
+    box-sizing: border-box;
+    flex-shrink: 0;
+
+    @include e(circular-dot) {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      animation: lk-spin 1s linear infinite;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: calc(var(--lk-rpx-4) * -1);
+        left: 50%;
+        width: var(--lk-rpx-8);
+        height: var(--lk-rpx-8);
+        background: var(--_color);
+        border-radius: 50%;
+        transform: translateX(-50%);
+        box-shadow: 0 0 var(--lk-rpx-8) var(--_color);
+      }
+    }
+  }
+
+  @include e(dots) {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    .dot {
+      width: var(--lk-rpx-16);
+      height: var(--lk-rpx-16);
+      border-radius: 50%;
+      background: var(--_color);
+      animation: lk-dots 0.9s ease-in-out infinite;
+
+      &:not(:first-child) {
+        margin-left: var(--lk-rpx-10);
+      }
+
+      &:nth-child(2) {
+        animation-delay: 0.15s;
+      }
+
+      &:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+    }
+  }
+
+  @include e(bar) {
+    position: relative;
+    height: var(--lk-rpx-12);
+    background: var(--lk-fill-tertiary);
+    border-radius: var(--lk-rpx-12);
+    overflow: hidden;
+    width: var(--lk-rpx-160);
+    flex-shrink: 0;
+
+    .bar-indicator {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 40%;
+      background: var(--_color);
+      animation: lk-bar 1.2s ease-in-out infinite;
+      border-radius: inherit;
+    }
+  }
+
+  @include e(bounce) {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    .bounce-ball {
+      width: var(--lk-rpx-20);
+      height: var(--lk-rpx-20);
+      border-radius: 50%;
+      background: var(--_color);
+      animation: lk-bounce 1.2s ease-in-out infinite;
+
+      &:not(:first-child) {
+        margin-left: var(--lk-spacing-xxs);
+      }
+
+      &:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+
+      &:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+    }
+  }
+
+  @include e(wave) {
+    display: inline-flex;
+    align-items: flex-end;
+    flex-shrink: 0;
+
+    .wave-bar {
+      width: var(--lk-rpx-12);
+      height: 100%;
+      background: var(--_color);
+      border-radius: var(--lk-rpx-6);
+      animation: lk-wave 1.2s ease-in-out infinite;
+
+      &:not(:first-child) {
+        margin-left: var(--lk-rpx-6);
+      }
+
+      &:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+
+      &:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+
+      &:nth-child(4) {
+        animation-delay: 0.3s;
+      }
+
+      &:nth-child(5) {
+        animation-delay: 0.4s;
+      }
+    }
+  }
+
+  @include e(ring) {
+    border: var(--lk-rpx-4) solid var(--_track-color);
+    border-top-color: var(--_color);
+    border-radius: 50%;
+    animation: lk-spin 0.8s linear infinite;
+    display: inline-block;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
+  @include e(ellipsis) {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    .ellipsis-dot {
+      width: var(--lk-rpx-12);
+      height: var(--lk-rpx-12);
+      border-radius: 50%;
+      background: var(--_color);
+      animation: lk-ellipsis 1.4s ease-in-out infinite;
+
+      &:not(:first-child) {
+        margin-left: var(--lk-spacing-xxs);
+      }
+
+      &:nth-child(2) {
+        animation-delay: 0.16s;
+      }
+
+      &:nth-child(3) {
+        animation-delay: 0.32s;
+      }
+    }
+  }
+
+  @include e(text-shine) {
+    flex-shrink: 0;
+    .loading-text {
+      font-size: var(--lk-rpx-32);
+      font-weight: 600;
+      background: linear-gradient(
+        120deg,
+        var(--lk-color-primary-active) 20%,
+        var(--lk-color-primary-hover) 30%,
+        var(--lk-color-white) 40%,
+        var(--lk-color-primary-hover) 50%,
+        var(--lk-color-primary-active) 60%
+      );
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      white-space: nowrap;
+      background-size: 200% auto;
+      animation: lk-shine 3s linear infinite;
+    }
+  }
+
+  @include when(vertical) {
+    flex-direction: column;
+
+    & > view:first-child {
+      margin-right: 0;
+      margin-bottom: var(--lk-spacing-xxs);
+    }
+
+    @include e(text) {
+      margin-left: 0;
+    }
+  }
+}

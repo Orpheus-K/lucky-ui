@@ -1,0 +1,39 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(virtual-list) {
+  width: 100%;
+  position: relative;
+  contain: content;
+  // 隐藏滚动条
+  scrollbar-width: none; // Firefox
+
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none; // WebKit
+  }
+
+  @include e(inner) {
+    display: flex;
+    flex-direction: column;
+    contain: content;
+    backface-visibility: hidden;
+  }
+
+  @include e(container) {
+    display: flex;
+    flex-direction: column;
+    contain: content;
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    will-change: transform;
+  }
+
+  @include e(phantom) {
+    position: relative;
+    width: 100%;
+  }
+}

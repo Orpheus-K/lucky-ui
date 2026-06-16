@@ -1,0 +1,10 @@
+// 设计令牌: 动态效果 (Motion)
+
+$motion-duration-sm: 0.15s; // 用于微小、快速的过渡（如颜色变化）
+$motion-duration-base: 0.3s; // 默认过渡时长，用于多数组件（如滑动、渐变）
+$motion-duration-lg: 0.5s; // 用于更长、更复杂的动画
+
+$motion-easing-base: cubic-bezier(0.645, 0.045, 0.355, 1); // 类 EaseInOutCubic
+$motion-easing-ease-out: ease-out; // 离开动画的缓动
+$motion-easing-ease-in: ease-in; // 进入动画的缓动
+$motion-easing-linear: linear; // 线性缓动

@@ -1,0 +1,25 @@
+---
+description: Lucky UI 主题变量与颜色使用规范
+alwaysApply: true
+---
+
+# Theme Token Discipline
+
+## 目标
+
+- 避免硬编码颜色导致亮暗主题不一致。
+- 优先使用组件专用 token，确保语义清晰和可维护。
+
+## 规则
+
+- 禁止在组件与 demo 样式中新增硬编码颜色（`#hex`、`rgb/rgba`），除非用户明确要求固定色。
+- 优先使用 `--lk-switch-*`、`--lk-slider-*` 这类组件专用变量，不要直接混用通用变量替代组件变量。
+- 页面/容器背景优先使用 `--lk-color-bg-page` 或 `--lk-color-bg-container`，文本优先使用 `--lk-text-*` / `--lk-color-text-*`。
+- 若需要“主色浅底”效果，优先使用 `--lk-color-primary-bg-soft`（或兼容回退到 `--lk-color-primary-soft`）。
+- 改动颜色相关样式后，必须在回复中说明“亮/暗主题下预期变化”。
+
+## 快速自检
+
+- 是否新增了硬编码颜色？
+- 是否误把组件专用 token 改成了通用 token？
+- 暗色主题下对比度是否清晰（尤其是开关、滑块、按钮等状态组件）？

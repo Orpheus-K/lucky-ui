@@ -1,0 +1,69 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(watermark) {
+  --lk-watermark-color: var(--lk-text-regular);
+  --lk-watermark-card-bg: var(--lk-fill-tertiary);
+  --lk-watermark-card-border: var(--lk-color-border-light);
+
+  position: relative;
+  min-height: inherit;
+  color: var(--lk-watermark-color);
+  overflow: hidden;
+
+  @include when(full-page) {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+  }
+
+  @include e(layer) {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    pointer-events: none;
+    user-select: none;
+    overflow: hidden;
+    color: currentcolor;
+  }
+
+  @include e(item) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    color: currentcolor;
+    line-height: 1.35;
+    white-space: nowrap;
+  }
+
+  @include e(text) {
+    color: currentcolor;
+  }
+
+  @include m(block) {
+    .lk-watermark__item {
+      padding: var(--lk-spacing-sm);
+      border-radius: var(--lk-radius-lg);
+      background: var(--lk-watermark-card-bg);
+    }
+  }
+
+  @include m(outline) {
+    .lk-watermark__item {
+      padding: var(--lk-spacing-sm);
+      border: var(--lk-rpx-1) solid var(--lk-watermark-card-border);
+      border-radius: var(--lk-radius-lg);
+    }
+  }
+}

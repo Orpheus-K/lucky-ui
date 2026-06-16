@@ -1,0 +1,9 @@
+// 设计令牌: 圆角 (Border Radius)
+
+$border-radius-none: 0; // 无圆角
+$border-radius-xs: 4rpx; // 超小圆角
+$border-radius-sm: 8rpx; // 小圆角，用于按钮、输入框等
+$border-radius-base: 16rpx; // 基础圆角，用于卡片
+$border-radius-lg: 24rpx; // 大圆角
+$border-radius-circle: 50%; // 圆形
+$border-radius-max: 999px; // 用于创建胶囊形状

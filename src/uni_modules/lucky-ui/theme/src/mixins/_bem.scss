@@ -1,0 +1,77 @@
+@use 'sass:selector';
+@use 'sass:string';
+@use 'sass:meta';
+
+$namespace: 'lk' !default;
+$element-separator: '__' !default;
+$modifier-separator: '--' !default;
+$state-prefix: 'is-' !default;
+
+$B: null;
+
+// Block
+@mixin b($block) {
+  $B: $namespace + '-' + $block !global;
+  .#{$B} {
+    @content;
+  }
+}
+
+// Element
+@mixin e($element) {
+  $selector: &;
+  $currentSelector: '';
+
+  @each $unit in $element {
+    $currentSelector: #{$currentSelector + '.' + $B + $element-separator + $unit + ','};
+  }
+
+  // 判断父级是否有 modifier，如果有，则生成嵌套选择器以提高优先级
+  @if hit($selector, $modifier-separator) {
+    @at-root {
+      #{$selector} {
+        #{$currentSelector} {
+          @content;
+        }
+      }
+    }
+  } @else {
+    @at-root {
+      #{$currentSelector} {
+        @content;
+      }
+    }
+  }
+}
+
+// Modifier
+@mixin m($modifier) {
+  $selector: &;
+  $currentSelector: '';
+  @each $unit in $modifier {
+    $currentSelector: #{$currentSelector + $selector + $modifier-separator + $unit + ','};
+  }
+
+  @at-root {
+    #{$currentSelector} {
+      @content;
+    }
+  }
+}
+
+// State (如 is-disabled)
+@mixin when($state, $condition: true) {
+  @if $condition {
+    @at-root {
+      &.#{$state-prefix + $state} {
+        @content;
+      }
+    }
+  }
+}
+
+// 辅助函数：检查是否包含字符串
+@function hit($selector, $keyword) {
+  $selector-string: meta.inspect($selector);
+  @return string.index($selector-string, $keyword);
+}

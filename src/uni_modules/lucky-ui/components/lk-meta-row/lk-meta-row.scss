@@ -1,0 +1,72 @@
+@use '../../theme/src/mixins' as *;
+
+@include b(meta-row) {
+  --lk-meta-row-gap: var(--lk-spacing-md);
+  --lk-meta-row-main-gap: var(--lk-spacing-xxs);
+
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+
+  @include m(start) {
+    align-items: flex-start;
+  }
+
+  @include m(center) {
+    align-items: center;
+  }
+
+  @include m(end) {
+    align-items: flex-end;
+  }
+
+  @include e(start) {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-right: var(--lk-meta-row-gap);
+  }
+
+  @include e(main) {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  @include e(main-top) {
+    min-width: 0;
+    color: var(--lk-text-primary);
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  @include e(main-bottom) {
+    min-width: 0;
+    color: var(--lk-text-regular);
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .lk-meta-row__main-top + .lk-meta-row__main-bottom {
+    margin-top: var(--lk-meta-row-main-gap);
+  }
+
+  @include e(end) {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-left: var(--lk-meta-row-gap);
+    color: var(--lk-text-primary);
+    text-align: right;
+  }
+}

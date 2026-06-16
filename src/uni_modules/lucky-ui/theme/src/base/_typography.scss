@@ -1,0 +1,58 @@
+@use '../tokens' as theme;
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family: theme.$font-family-base;
+  font-weight: theme.$font-weight-bold;
+  line-height: theme.$line-height-tight;
+  color: var(--lk-text-primary);
+  margin-top: theme.$spacing-xl;
+  margin-bottom: theme.$spacing-md;
+}
+
+.h1 {
+  font-size: theme.$font-size-xxl;
+}
+.h2 {
+  font-size: theme.$font-size-xl;
+}
+.h3 {
+  font-size: theme.$font-size-lg;
+}
+.h4 {
+  font-size: theme.$font-size-base;
+}
+.h5 {
+  font-size: theme.$font-size-base;
+}
+.h6 {
+  font-size: theme.$font-size-base;
+}
+
+.p {
+  margin-bottom: theme.$spacing-md;
+}
+
+.a,
+navigator {
+  color: theme.$color-text-link;
+
+  transition: color theme.$motion-duration-sm;
+
+  &:hover {
+    color: theme.$color-brand-primary-hover;
+    text-decoration: underline;
+  }
+}
+
+.strong {
+  font-weight: theme.$font-weight-bold;
+}
+
+.small {
+  font-size: theme.$font-size-sm;
+}

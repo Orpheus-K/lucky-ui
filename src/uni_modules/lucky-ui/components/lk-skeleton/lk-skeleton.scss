@@ -1,0 +1,64 @@
+@use '../../theme/src/mixins/bem' as *;
+
+@mixin skeleton-shimmer {
+  overflow: hidden;
+  background-color: var(--lk-skel-base);
+  background-image: linear-gradient(
+    120deg,
+    var(--lk-skel-base) 25%,
+    var(--lk-skel-highlight) 37%,
+    var(--lk-skel-base) 63%
+  );
+  background-size: 300% 100%;
+  background-position: 200% 0;
+
+  @include when(anim) {
+    animation: lk-skeleton-shimmer var(--lk-skel-duration) var(--lk-skel-ease) infinite;
+  }
+}
+
+@include b(skeleton) {
+  /* Skeleton 主题变量：使用纯灰色，无色调 */
+  --lk-skel-base: var(--lk-skeleton-start);
+  --lk-skel-highlight: var(--lk-skeleton-end);
+
+  display: flex;
+  align-items: flex-start;
+
+  @include e(avatar) {
+    margin-right: var(--lk-spacing-sm);
+    flex-shrink: 0;
+    @include skeleton-shimmer;
+  }
+
+  @include e(content) {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    & > view:not(:first-child) {
+      margin-top: var(--lk-spacing-xs);
+    }
+  }
+
+  @include e(title) {
+    border-radius: var(--lk-radius-md);
+    @include skeleton-shimmer;
+  }
+
+  @include e(row) {
+    height: var(--lk-rpx-28);
+    border-radius: var(--lk-radius-md);
+    @include skeleton-shimmer;
+  }
+}
+
+@keyframes lk-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}

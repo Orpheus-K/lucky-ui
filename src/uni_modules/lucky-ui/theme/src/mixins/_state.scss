@@ -1,0 +1,21 @@
+// 混入: 状态 (State)
+
+// 解释：为元素添加一个视觉上的禁用效果
+@mixin disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+// 解释：通过伪元素扩大元素的实际可点击区域，提升移动端用户体验
+// @param {Number} $size - 扩展的尺寸，默认为 10px
+@mixin touch-area-expand($size: 10px) {
+  &::before {
+    content: '';
+    position: absolute;
+    top: -$size;
+    right: -$size;
+    bottom: -$size;
+    left: -$size;
+  }
+}
