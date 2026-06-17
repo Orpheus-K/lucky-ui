@@ -54,7 +54,6 @@ export default defineConfig({
             { text: '安装与引入', link: '/guide/install' },
             { text: '主题定制', link: '/guide/theme' },
             { text: 'SVG 资产转换', link: '/guide/svg-assets' },
-            { text: '分支管理规范', link: '/guide/branching' },
             { text: '国际化', link: '/guide/i18n' },
           ],
         },

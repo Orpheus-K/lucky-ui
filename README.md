@@ -5,11 +5,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Orpheus-K/lucky-ui">Orpheus-K/lucky-ui</a>
+  <a href="https://lucky-ui.cn/">在线文档</a>
   ·
-  <a href="https://github.com/Orpheus-K/lucky-ui">快速上手</a>
+  <a href="https://lucky-ui.cn/guide/install.html">快速上手</a>
   ·
-  <a href="https://github.com/Orpheus-K/lucky-ui">组件总览</a>
+  <a href="https://lucky-ui.cn/components/">组件总览</a>
   ·
   <a href="https://github.com/Orpheus-K/lucky-ui">GitHub</a>
 </p>
@@ -192,7 +192,7 @@ The default plugin registers only public `Lk*` components. Demo and debugging ut
 | 反馈与浮层 | Modal、Popup、Toast、ActionSheet、Overlay、Tooltip、Dropdown、NoticeBar                                                |
 | 高级能力   | Fab、Curtain、HorizontalScroll、Request、Preload (实验性)、PreloadDebugger (实验性)                                    |
 
-完整 API 与示例见 [组件总览](https://github.com/Orpheus-K/lucky-ui)。
+完整 API 与示例见 [组件总览](https://lucky-ui.cn/components/)。
 
 ## 目录结构
 
@@ -233,10 +233,11 @@ The default plugin registers only public `Lk*` components. Demo and debugging ut
 
 ## 文档
 
-- 在线文档：[Orpheus-K/lucky-ui](https://github.com/Orpheus-K/lucky-ui)
-- 快速上手：[Orpheus-K/lucky-ui](https://github.com/Orpheus-K/lucky-ui)
-- 组件总览：[Orpheus-K/lucky-ui](https://github.com/Orpheus-K/lucky-ui)
-- 主题定制：[Orpheus-K/lucky-ui](https://github.com/Orpheus-K/lucky-ui)
+- 在线文档：[lucky-ui.cn](https://lucky-ui.cn/)
+- 快速上手：[安装与引入](https://lucky-ui.cn/guide/install.html)
+- 组件总览：[组件总览](https://lucky-ui.cn/components/)
+- 主题定制：[主题定制](https://lucky-ui.cn/guide/theme.html)
+- GitHub：[Orpheus-K/lucky-ui](https://github.com/Orpheus-K/lucky-ui)
 
 ## 兼容性
 

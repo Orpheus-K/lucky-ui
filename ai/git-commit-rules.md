@@ -1,6 +1,12 @@
 # Git Commit Message 规范
 
-基于 Angular Commit Convention，适用于人工编写与 AI 辅助生成。
+基于 Angular Commit Convention，适用于 Lucky UI 后续所有日常开发、修复、文档、工程维护和发布准备提交。该规范不是单次发布专用规则，人工编写与 AI 辅助生成都必须遵守。
+
+## 适用范围
+
+- 面向长期开发流程，不随某一次版本发布结束而失效。
+- 单次发布相关提交也使用同一套规范，例如版本号、CHANGELOG、发布文档或 CI 调整。
+- 每个 commit 只描述本次提交实际包含的变更，不把后续计划或发布目标写进提交信息。
 
 ## 格式
 
@@ -10,7 +16,9 @@
 
 - `scope` 可选，使用 kebab-case（如 `lk-button`、`utils`）
 - 冒号 `:` 后必须跟一个半角空格
-- `subject` 使用中文，不加句号，首字母不大写
+- `subject` 使用简短中文，不加句号，首字母不大写
+- `subject` 只写核心动作和对象，避免长句、背景说明和发布计划
+- `subject` 中出现英文单词、数字、变量名时，前后都要留一个半角空格
 
 ## 类型
 
@@ -27,6 +35,8 @@
 | `ci` | CI 配置变更 |
 | `chore` | 其他杂项 |
 | `revert` | 回退提交 |
+
+`style` 只表示代码格式调整，例如缩进、空格、换行、分号、格式化；修改 CSS、SCSS、主题变量或视觉样式时不要使用 `style`，应按实际影响使用 `fix`、`feat`、`refactor` 或 `chore`。
 
 ## 中英文混排空格（盘古之白）
 
@@ -63,6 +73,9 @@ docs: 更新 README 使用说明
 
 ```
 根据 git diff 生成提交信息。格式：<type>(<scope>): <subject>。
-scope 用 kebab-case，subject 用中文，中英文间加空格，末尾不加句号。
+scope 用 kebab-case，subject 用简短中文，符合 Angular Commit Convention，末尾不加句号。
+subject 中的英文单词、数字、变量名前后都要留一个半角空格。
+style 只用于代码格式，不用于 CSS、SCSS、主题变量或视觉样式修改。
+只描述当前 diff 中已经发生的改动，不写发布计划、后续计划或无关背景。
 只输出一行提交信息，不要解释。
 ```
