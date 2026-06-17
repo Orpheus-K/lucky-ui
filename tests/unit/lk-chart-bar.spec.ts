@@ -184,17 +184,17 @@ describe('lk-chart-bar layout and tooltip rules', () => {
 
     expect(state).toEqual({
       visible: true,
-      x: 106,
+      x: 100,
       y: 80,
       width: 88,
-      arrowX: 44,
+      arrowX: 50,
       text: 'Q1: 12',
     });
     expect(resolveChartBarTooltipStyle(state)).toEqual({
-      left: '106px',
+      left: '100px',
       top: '80px',
       width: '88px',
-      '--lk-chart-tooltip-arrow-x': '44px',
+      '--lk-chart-tooltip-arrow-x': '50px',
     });
     expect(areChartBarTooltipStatesEqual(state, { ...state })).toBe(true);
     expect(areChartBarTooltipStatesEqual(state, CHART_BAR_EMPTY_TOOLTIP)).toBe(false);
