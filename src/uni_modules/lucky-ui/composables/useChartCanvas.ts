@@ -12,12 +12,14 @@ import { normalizeAnimationRepeat } from '../core/src/chart';
 type Canvas2DLike = CanvasRenderingContext2D & {
   setTransform?: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
   scale?: (x: number, y: number) => void;
+  draw?: (reserve?: boolean, callback?: () => void) => void;
 };
 
 type CanvasNodeLike = {
   width: number;
   height: number;
   getContext?: (type: '2d') => MaybeCanvas2DContext | null;
+  __legacyCanvas?: boolean;
 };
 
 type RectLike = {
@@ -29,6 +31,7 @@ type RectLike = {
 
 type UniChartApi = typeof uni & {
   upx2px?: (rpx: number) => number;
+  createCanvasContext?: (canvasId: string, componentInstance?: unknown) => unknown;
   getSystemInfoSync?: () => {
     pixelRatio?: number;
     uniPlatform?: string;
@@ -44,6 +47,137 @@ const rAF = (cb: () => void): number =>
   hasRAF ? raf!(cb) : (setTimeout(cb, 16) as unknown as number);
 const cAF = (id: number): void =>
   hasRAF ? caf!(id) : clearTimeout(id as unknown as ReturnType<typeof setTimeout>);
+
+type LegacyCanvasContextLike = {
+  [key: string]: unknown;
+  draw?: (reserve?: boolean, callback?: () => void) => void;
+  measureText?: (text: string) => { width: number };
+  createLinearGradient?: (
+    x0: number,
+    y0: number,
+    x1: number,
+    y1: number
+  ) => LegacyCanvasGradientLike;
+  createCircularGradient?: (x: number, y: number, r: number) => LegacyCanvasGradientLike;
+  createRadialGradient?: (
+    x0: number,
+    y0: number,
+    r0: number,
+    x1: number,
+    y1: number,
+    r1: number
+  ) => LegacyCanvasGradientLike;
+  setFillStyle?: (value: unknown) => void;
+  setStrokeStyle?: (value: unknown) => void;
+  setLineWidth?: (value: unknown) => void;
+  setLineCap?: (value: unknown) => void;
+  setLineJoin?: (value: unknown) => void;
+  setTextAlign?: (value: unknown) => void;
+  setTextBaseline?: (value: unknown) => void;
+  setGlobalAlpha?: (value: unknown) => void;
+  setFontSize?: (value: number) => void;
+};
+
+type LegacyCanvasGradientLike = {
+  addColorStop: (offset: number, color: string) => void;
+  __fallbackColor?: string;
+};
+
+const LEGACY_CANVAS_SETTERS: Record<string, keyof LegacyCanvasContextLike> = {
+  fillStyle: 'setFillStyle',
+  strokeStyle: 'setStrokeStyle',
+  lineWidth: 'setLineWidth',
+  lineCap: 'setLineCap',
+  lineJoin: 'setLineJoin',
+  textAlign: 'setTextAlign',
+  textBaseline: 'setTextBaseline',
+  globalAlpha: 'setGlobalAlpha',
+};
+
+function parseCanvasFontSize(font: unknown) {
+  if (typeof font !== 'string') return null;
+  const match = font.match(/(\d+(?:\.\d+)?)px/);
+  return match ? Number(match[1]) : null;
+}
+
+function estimateTextWidth(text: string) {
+  return String(text).length * 7;
+}
+
+function createFallbackCanvasGradient(): LegacyCanvasGradientLike {
+  return {
+    __fallbackColor: 'transparent',
+    addColorStop(_offset: number, color: string) {
+      if (this.__fallbackColor === 'transparent') {
+        this.__fallbackColor = color;
+      }
+    },
+  };
+}
+
+function isFallbackCanvasGradient(value: unknown): value is LegacyCanvasGradientLike {
+  return (
+    !!value &&
+    typeof value === 'object' &&
+    '__fallbackColor' in value &&
+    typeof (value as LegacyCanvasGradientLike).__fallbackColor === 'string'
+  );
+}
+
+function createLegacyCanvasAdapter(raw: LegacyCanvasContextLike): MaybeCanvas2DContext {
+  const state: Record<string, unknown> = {};
+
+  return new Proxy(raw, {
+    get(target, key, receiver) {
+      if (key === 'measureText' && typeof target.measureText !== 'function') {
+        return (text: string) => ({ width: estimateTextWidth(text) });
+      }
+      if (key === 'arcTo' && typeof target.arcTo !== 'function') {
+        return (_x1: number, _y1: number, x2: number, y2: number) => {
+          const lineTo = target.lineTo;
+          if (typeof lineTo === 'function') lineTo.call(target, x2, y2);
+        };
+      }
+      if (key === 'createRadialGradient' && typeof target.createRadialGradient !== 'function') {
+        return (x0: number, y0: number, r0: number, x1: number, y1: number, r1: number) => {
+          if (typeof target.createCircularGradient === 'function') {
+            return target.createCircularGradient(x1, y1, Math.max(r0, r1));
+          }
+          if (typeof target.createLinearGradient === 'function') {
+            return target.createLinearGradient(x0, y0, x1 + r1, y1);
+          }
+          return createFallbackCanvasGradient();
+        };
+      }
+      if (key in state) return state[String(key)];
+
+      const value = Reflect.get(target, key, receiver);
+      return typeof value === 'function' ? value.bind(target) : value;
+    },
+    set(target, key, value, receiver) {
+      const prop = String(key);
+      const nextValue = isFallbackCanvasGradient(value) ? value.__fallbackColor : value;
+      state[prop] = nextValue;
+
+      if (prop === 'font') {
+        const fontSize = parseCanvasFontSize(nextValue);
+        if (fontSize != null && typeof target.setFontSize === 'function') {
+          target.setFontSize(fontSize);
+        }
+        return true;
+      }
+
+      const setterName = LEGACY_CANVAS_SETTERS[prop];
+      const setter = setterName ? target[setterName] : null;
+      if (typeof setter === 'function') {
+        setter.call(target, nextValue);
+        return true;
+      }
+
+      return Reflect.set(target, key, nextValue, receiver);
+    },
+  }) as MaybeCanvas2DContext;
+}
 
 export interface ChartSize {
   width: number;
@@ -188,6 +322,18 @@ export function useChartCanvas<TExtra = unknown>(options: UseChartCanvasOptions)
     });
   }
 
+  function createLegacyCanvasNode(width = 0, height = 0): CanvasNodeLike {
+    return {
+      width,
+      height,
+      __legacyCanvas: true,
+    };
+  }
+
+  function isLegacyCanvasNode(node: CanvasNodeLike | HTMLCanvasElement): node is CanvasNodeLike {
+    return '__legacyCanvas' in node && node.__legacyCanvas === true;
+  }
+
   function measure(): Promise<ChartSize> {
     const autoSize = options.autoSize !== false;
     if (!autoSize) return Promise.resolve(size.value);
@@ -215,13 +361,13 @@ export function useChartCanvas<TExtra = unknown>(options: UseChartCanvasOptions)
       const result = scopedResult ?? (await queryCanvasField(false));
 
       const node = (result as { node?: CanvasNodeLike | null } | null)?.node || null;
-      canvasNode.value = node;
-
-      const context = node?.getContext ? node.getContext('2d') : null;
-      ctx.value = context;
+      if (node?.getContext) {
+        canvasNode.value = node;
+        ctx.value = node.getContext('2d');
+      }
 
       // H5 fallback：某些环境 fields({node:true}) 拿不到 node
-      // #ifdef H5
+      // #ifdef H5 || APP-PLUS
       if (!ctx.value) {
         try {
           if (typeof document !== 'undefined') {
@@ -236,6 +382,19 @@ export function useChartCanvas<TExtra = unknown>(options: UseChartCanvasOptions)
         }
       }
       // #endif
+
+      if (!ctx.value) {
+        const uniApi = getUniChartApi();
+        const legacyContext =
+          typeof uniApi?.createCanvasContext === 'function'
+            ? uniApi.createCanvasContext(options.canvasId, instance)
+            : null;
+
+        if (legacyContext) {
+          canvasNode.value = createLegacyCanvasNode();
+          ctx.value = createLegacyCanvasAdapter(legacyContext as LegacyCanvasContextLike);
+        }
+      }
     })();
   }
 
@@ -249,8 +408,13 @@ export function useChartCanvas<TExtra = unknown>(options: UseChartCanvasOptions)
     dpr.value = ratio;
 
     // 设定物理像素大小，避免模糊
-    node.width = Math.max(1, Math.floor(targetSize.width * ratio));
-    node.height = Math.max(1, Math.floor(targetSize.height * ratio));
+    if (isLegacyCanvasNode(node)) {
+      node.width = Math.max(1, Math.floor(targetSize.width));
+      node.height = Math.max(1, Math.floor(targetSize.height));
+    } else {
+      node.width = Math.max(1, Math.floor(targetSize.width * ratio));
+      node.height = Math.max(1, Math.floor(targetSize.height * ratio));
+    }
 
     // 归一化坐标系到 CSS 像素
     if (typeof context.setTransform === 'function') {
@@ -308,6 +472,7 @@ export function useChartCanvas<TExtra = unknown>(options: UseChartCanvasOptions)
       progress,
       extra
     );
+    ctx.value.draw?.();
   }
 
   function scheduleRender(progress = 1, extra?: TExtra) {
