@@ -6,8 +6,8 @@ const props = defineProps<{
   title?: string
 }>()
 
-// H5 开发服务器地址，可通过 env 变量自定义
-const BASE_URL = 'http://localhost:5173'
+// H5 preview site base URL.
+const BASE_URL = 'https://preview.lucky-ui.cn'
 
 const frameUrl = computed(() => {
   if (!props.src) return `${BASE_URL}/#/pages_sub/component-detail/index`
