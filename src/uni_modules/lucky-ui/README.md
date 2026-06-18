@@ -4,7 +4,39 @@ Lucky UI is a UniApp component library for Vue 3 applications across H5, App, an
 
 ## Install
 
-Copy this directory into a UniApp project:
+Install from npm:
+
+```bash
+npm install uni-lucky-ui
+```
+
+Register the plugin when global `lk-*` components are needed:
+
+```ts
+import { createSSRApp } from 'vue';
+import App from './App.vue';
+import LuckyUI from 'uni-lucky-ui';
+
+export function createApp() {
+  const app = createSSRApp(App);
+  app.use(LuckyUI);
+  return { app };
+}
+```
+
+Import the theme once:
+
+```scss
+@use 'uni-lucky-ui/theme/src/index.scss';
+```
+
+Components can also be imported directly:
+
+```ts
+import LkButton from 'uni-lucky-ui/components/lk-button/lk-button.vue';
+```
+
+For `uni_modules` usage, copy this directory into a UniApp project:
 
 ```text
 src/uni_modules/lucky-ui
@@ -38,5 +70,5 @@ import LkButton from '@/uni_modules/lucky-ui/components/lk-button/lk-button.vue'
 
 ## Release Status
 
-This package is prepared as `1.0.0`. Public components are installable through the default plugin export. Internal demo and debugging components are intentionally excluded from plugin registration.
+This package is prepared as `uni-lucky-ui@1.0.0`. Public components are installable through the default plugin export as `lk-*` components. Internal demo and debugging components are intentionally excluded from plugin registration.
 

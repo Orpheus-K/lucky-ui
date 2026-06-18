@@ -1,6 +1,40 @@
 # 安装与引入
 
-## 方式一：uni_modules 本地安装（推荐）
+## 方式一：npm 安装（推荐）
+
+```bash
+npm install uni-lucky-ui
+```
+
+然后在 `main.ts` 注册公开的 `Lk*` 全局组件。注册后模板中仍然使用 `lk-*` 标签，例如 `<lk-button>`：
+
+```ts
+// src/main.ts
+import { createSSRApp } from 'vue'
+import App from './App.vue'
+import LuckyUI from 'uni-lucky-ui'
+
+export function createApp() {
+  const app = createSSRApp(App)
+  app.use(LuckyUI)
+  return { app }
+}
+```
+
+同时在 `App.vue` 或全局 scss 文件中引入主题样式：
+
+```scss
+// src/uni.scss
+@use 'uni-lucky-ui/theme/src/index.scss';
+```
+
+按需导入时使用 npm 包路径：
+
+```ts
+import LkButton from 'uni-lucky-ui/components/lk-button/lk-button.vue'
+```
+
+## 方式二：uni_modules 本地安装
 
 将 `lucky-ui` 目录复制至你的 Uni-app 项目的 `src/uni_modules/` 中，
 然后在 `main.ts` 注册公开的 `Lk*` 全局组件：
@@ -27,7 +61,7 @@ export function createApp() {
 
 `DemoBlock`、`lk-preload-debugger` 等演示/调试能力不会通过默认插件注册；业务项目如确实需要，应按需显式导入。
 
-## 方式二：按需引入（减少体积）
+## 方式三：uni_modules 按需引入（减少体积）
 
 不注册全局插件，直接在页面/组件内按需导入：
 

@@ -1,6 +1,6 @@
 {
   "id": "lucky-ui",
-  "name": "@lucky-ui/uni",
+  "name": "uni-lucky-ui",
   "displayName": "Lucky UI",
   "version": "1.0.0",
   "description": "Lucky UI components for UniApp, Vue 3, H5, App, and mini programs.",
@@ -84,7 +84,7 @@
       "data": "插件不采集任何数据",
       "permissions": "无"
     },
-    "npmurl": "https://www.npmjs.com/package/@lucky-ui/uni",
+    "npmurl": "https://www.npmjs.com/package/uni-lucky-ui",
     "darkmode": "√",
     "i18n": "√",
     "widescreen": "-"

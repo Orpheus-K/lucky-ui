@@ -24,7 +24,7 @@ title: Tabbar 容器
 
 ```ts
 import type { TabConfig } from '@/uni_modules/lucky-ui';
-// npm 包路径示例：from 'lucky-ui'
+// npm 包路径示例：from 'uni-lucky-ui'
 ```
 
 ## 平台说明

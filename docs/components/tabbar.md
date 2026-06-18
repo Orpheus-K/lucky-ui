@@ -60,7 +60,7 @@ const active = ref('home');
 -->
 ```
 
-如果你在自己的项目里使用 `lucky-ui` 包，则导入路径可能为 `lucky-ui/components/lk-tabbar/lk-tabbar.vue` 和 `lucky-ui/components/lk-tabbar/lk-tabbar-item.vue`。
+如果你在自己的项目里使用 npm 包，则导入路径可能为 `uni-lucky-ui/components/lk-tabbar/lk-tabbar.vue` 和 `uni-lucky-ui/components/lk-tabbar/lk-tabbar-item.vue`。
 
 ## 基础用法 - Fixed 模式
 

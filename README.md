@@ -144,7 +144,28 @@ pnpm run docs:dev
 
 ### 在 Uni-app 项目中接入
 
-将 `src/uni_modules/lucky-ui` 放入业务项目的 `src/uni_modules/` 目录，然后注册插件：
+推荐通过 npm 安装：
+
+```bash
+npm install uni-lucky-ui
+```
+
+然后注册插件。注册后模板标签仍然使用 `lk-*` 前缀：
+
+```ts
+// src/main.ts
+import { createSSRApp } from 'vue';
+import App from './App.vue';
+import LuckyUI from 'uni-lucky-ui';
+
+export function createApp() {
+  const app = createSSRApp(App);
+  app.use(LuckyUI);
+  return { app };
+}
+```
+
+也可以将 `src/uni_modules/lucky-ui` 放入业务项目的 `src/uni_modules/` 目录，然后从本地目录注册插件：
 
 ```ts
 // src/main.ts
@@ -161,7 +182,14 @@ export function createApp() {
 
 The default plugin registers only public `Lk*` components. Demo and debugging utilities should be imported explicitly when needed.
 
-引入主题样式：
+引入主题样式。npm 安装时使用包路径：
+
+```scss
+// src/uni.scss
+@use 'uni-lucky-ui/theme/src/index.scss';
+```
+
+如果使用 `src/uni_modules/lucky-ui` 本地目录，则使用本地路径：
 
 ```scss
 // src/uni.scss
