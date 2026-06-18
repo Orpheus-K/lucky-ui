@@ -1,6 +1,8 @@
 {
+  "id": "lucky-ui",
   "name": "@lucky-ui/uni",
-  "version": "0.1.0-rc.0",
+  "displayName": "Lucky UI",
+  "version": "1.0.0",
   "description": "Lucky UI components for UniApp, Vue 3, H5, App, and mini programs.",
   "type": "module",
   "main": "./index.ts",
@@ -50,7 +52,102 @@
     "mini-program",
     "mobile-ui"
   ],
+  "repository": "https://github.com/Orpheus-K/lucky-ui",
+  "homepage": "https://github.com/Orpheus-K/lucky-ui#readme",
+  "bugs": {
+    "url": "https://github.com/Orpheus-K/lucky-ui/issues"
+  },
   "license": "MIT",
+  "engines": {
+    "HBuilderX": "^3.1.0",
+    "uni-app": ">=3.0.0"
+  },
+  "dcloudext": {
+    "category": [
+      "前端组件",
+      "通用组件"
+    ],
+    "type": "component-vue",
+    "sale": {
+      "regular": {
+        "price": "0.00"
+      },
+      "sourcecode": {
+        "price": "0.00"
+      }
+    },
+    "contact": {
+      "qq": ""
+    },
+    "declaration": {
+      "ads": "无",
+      "data": "插件不采集任何数据",
+      "permissions": "无"
+    },
+    "npmurl": "https://www.npmjs.com/package/@lucky-ui/uni",
+    "darkmode": "√",
+    "i18n": "√",
+    "widescreen": "-"
+  },
+  "uni_modules": {
+    "dependencies": [],
+    "encrypt": [],
+    "platforms": {
+      "cloud": {
+        "tcb": "x",
+        "aliyun": "x",
+        "alipay": "x"
+      },
+      "client": {
+        "uni-app": {
+          "vue": {
+            "vue2": "x",
+            "vue3": "√"
+          },
+          "web": {
+            "safari": "√",
+            "chrome": "√"
+          },
+          "app": {
+            "vue": "√",
+            "nvue": "x",
+            "android": "√",
+            "ios": "√",
+            "harmony": "-"
+          },
+          "mp": {
+            "weixin": "√",
+            "alipay": "√",
+            "toutiao": "√",
+            "baidu": "√",
+            "kuaishou": "√",
+            "jd": "√",
+            "harmony": "-",
+            "qq": "√",
+            "lark": "√"
+          },
+          "quickapp": {
+            "huawei": "-",
+            "union": "-"
+          }
+        },
+        "uni-app-x": {
+          "web": {
+            "safari": "x",
+            "chrome": "x"
+          },
+          "app": {
+            "android": "x",
+            "ios": "x",
+            "harmony": "x"
+          },
+          "mp": {
+            "weixin": "x"
+          }
+        }
+      }
+    }
+  },
   "peerDependencies": {
     "@dcloudio/uni-app": ">=3.0.0",
     "vue": ">=3.4.0"
