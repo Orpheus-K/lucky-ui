@@ -3,7 +3,7 @@ import * as components from './components';
 
 const INTERNAL_COMPONENTS = new Set(['DemoBlock']);
 
-export const version = '0.1.0-rc.0';
+export const version = '1.0.0';
 
 export function install(app: App): void {
   Object.entries(components).forEach(([name, component]) => {

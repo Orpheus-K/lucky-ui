@@ -38,5 +38,5 @@ import LkButton from '@/uni_modules/lucky-ui/components/lk-button/lk-button.vue'
 
 ## Release Status
 
-This package is prepared as `0.1.0-rc.0`. Public components are installable through the default plugin export. Internal demo and debugging components are intentionally excluded from plugin registration.
+This package is prepared as `1.0.0`. Public components are installable through the default plugin export. Internal demo and debugging components are intentionally excluded from plugin registration.
 
