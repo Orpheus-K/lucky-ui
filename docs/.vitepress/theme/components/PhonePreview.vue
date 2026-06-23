@@ -128,17 +128,44 @@ watch(frameUrl, (newUrl) => {
 <style scoped>
 .phone-preview-panel {
   position: fixed;
-  right: 24px;
-  top: calc(var(--vp-nav-height) + 16px);
-  width: 300px;
+  right: 28px;
+  top: calc(var(--vp-nav-height) + 12px);
+  width: 376px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   z-index: 10;
 }
 
-/* 在小屏幕上隐藏预览面板 */
-@media (max-width: 1380px) {
+/* 分段缩放预览面板：窄桌面保留预览，再窄时隐藏以保证正文可读 */
+@media (max-width: 1599px) and (min-width: 1381px) {
+  .phone-preview-panel {
+    right: 20px;
+    top: calc(var(--vp-nav-height) + 8px);
+    width: 336px;
+    gap: 6px;
+  }
+}
+
+@media (max-height: 820px) and (min-width: 1381px) {
+  .phone-preview-panel {
+    right: 20px;
+    top: calc(var(--vp-nav-height) + 8px);
+    width: 336px;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 1380px) and (min-width: 1181px) {
+  .phone-preview-panel {
+    right: 12px;
+    top: calc(var(--vp-nav-height) + 8px);
+    width: 304px;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 1180px) {
   .phone-preview-panel {
     display: none;
   }
@@ -190,8 +217,8 @@ watch(frameUrl, (newUrl) => {
 }
 
 .phone-shell {
-  width: 248px;
-  height: 520px;
+  width: 320px;
+  height: 672px;
   background: var(--vp-c-bg-soft);
   border: 2px solid var(--vp-c-border);
   border-radius: 36px;
@@ -203,6 +230,30 @@ watch(frameUrl, (newUrl) => {
     0 8px 32px rgba(0, 0, 0, 0.12),
     0 2px 8px rgba(0, 0, 0, 0.08);
   position: relative;
+}
+
+@media (max-height: 820px) and (min-width: 1381px) {
+  .phone-shell {
+    width: 288px;
+    height: 604px;
+    border-radius: 32px;
+  }
+}
+
+@media (max-width: 1599px) and (min-width: 1381px) {
+  .phone-shell {
+    width: 288px;
+    height: 604px;
+    border-radius: 32px;
+  }
+}
+
+@media (max-width: 1380px) and (min-width: 1181px) {
+  .phone-shell {
+    width: 260px;
+    height: 548px;
+    border-radius: 30px;
+  }
 }
 
 .phone-shell::before {
