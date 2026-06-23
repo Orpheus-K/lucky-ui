@@ -21,15 +21,23 @@
       "import": "./theme/index.ts"
     },
     "./theme/style": "./theme/src/index.scss",
+    "./theme/*": "./theme/*",
     "./composables": {
       "import": "./composables/index.ts"
     },
+    "./composables/*": "./composables/*",
+    "./components/*": "./components/*",
+    "./core/*": "./core/*",
     "./locale": {
       "import": "./locale/index.ts"
     },
+    "./locale/*": "./locale/*",
     "./utils": {
       "import": "./utils/index.ts"
-    }
+    },
+    "./utils/*": "./utils/*",
+    "./assets/*": "./assets/*",
+    "./package.json": "./package.json"
   },
   "files": [
     "assets",
