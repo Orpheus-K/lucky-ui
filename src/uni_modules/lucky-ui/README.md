@@ -4,10 +4,14 @@ Lucky UI is a UniApp component library for Vue 3 applications across H5, App, an
 
 ## Install
 
-Install from npm:
+Install from the npm registry. The package name is `uni-lucky-ui`; `lucky-ui` is only the `uni_modules` directory name.
 
 ```bash
+pnpm add uni-lucky-ui
+# or
 npm install uni-lucky-ui
+# or
+yarn add uni-lucky-ui
 ```
 
 Register the plugin when global `lk-*` components are needed:
