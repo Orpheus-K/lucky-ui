@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import LkButton from '@/uni_modules/lucky-ui/components/lk-button/lk-button.vue';
 import LkActionSheet from '@/uni_modules/lucky-ui/components/lk-action-sheet/lk-action-sheet.vue';
 import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.vue';
+import type { Action } from '@/uni_modules/lucky-ui/components/lk-action-sheet/action-sheet.props';
 
 const visible1 = ref(false);
 const visible2 = ref(false);
@@ -37,9 +38,9 @@ const showActionSheet4 = () => {
   visible4.value = true;
 };
 
-const handleSelect = (action: any) => {
+const handleSelect = (payload: { action: Action }) => {
   uni.showToast({
-    title: `选择了: ${action.name}`,
+    title: `选择了: ${payload.action.name}`,
     icon: 'none',
   });
 };
