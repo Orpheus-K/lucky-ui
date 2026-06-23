@@ -212,17 +212,18 @@ usePreviewQuery(['component', 'name'], value => {
   --lk-demo-block-border: var(--test-border-color);
   --lk-demo-block-self-gap: 32rpx;
   background: transparent;
-
-  /* #ifdef MP */
-  margin-top: -32rpx;
-  /* #endif */
-
   &.is-full-screen {
     margin-top: 0;
     margin-bottom: 0;
     min-height: 100vh;
   }
 }
+
+/* #ifdef MP */
+.demo-area {
+  margin-top: -32rpx;
+}
+/* #endif */
 
 // 开发中提示（测试页面样式）
 .developing-tip {
