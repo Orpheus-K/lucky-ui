@@ -68,13 +68,10 @@
   "license": "MIT",
   "engines": {
     "HBuilderX": "^3.1.0",
-    "uni-app": ">=3.0.0"
+    "uni-app": "^4.36",
+    "uni-app-x": ""
   },
   "dcloudext": {
-    "category": [
-      "前端组件",
-      "通用组件"
-    ],
     "type": "component-vue",
     "sale": {
       "regular": {
@@ -95,7 +92,7 @@
     "npmurl": "https://www.npmjs.com/package/uni-lucky-ui",
     "darkmode": "√",
     "i18n": "√",
-    "widescreen": "-"
+    "widescreen": "x"
   },
   "uni_modules": {
     "dependencies": [],
@@ -110,7 +107,10 @@
         "uni-app": {
           "vue": {
             "vue2": "x",
-            "vue3": "√"
+            "vue3": {
+              "extVersion": "1.0.0",
+              "minVersion": ""
+            }
           },
           "web": {
             "safari": "√",
@@ -132,7 +132,8 @@
             "jd": "√",
             "harmony": "-",
             "qq": "√",
-            "lark": "√"
+            "lark": "√",
+            "xhs": "-"
           },
           "quickapp": {
             "huawei": "-",
