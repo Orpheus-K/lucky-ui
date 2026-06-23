@@ -144,7 +144,7 @@ pnpm run docs:dev
 
 ### 在 Uni-app 项目中接入
 
-推荐通过包管理器安装。npm registry 包名是 `uni-lucky-ui`：
+推荐通过包管理器安装。npm registry 包名是 `uni-lucky-ui`；`lucky-ui` 已被其他 npm 包占用，在本项目中只作为 `uni_modules` 本地目录名使用：
 
 ```bash
 pnpm add uni-lucky-ui
