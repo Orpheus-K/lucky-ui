@@ -1,22 +1,20 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { H5_PREVIEW_BASE_URL } from '../constants/preview'
 
 const props = defineProps<{
   src: string      // e.g. "button"  — component name, or full path like "/pages/component-detail/index?component=button"
   title?: string
 }>()
 
-// H5 preview site base URL.
-const BASE_URL = 'https://preview.lucky-ui.cn'
-
 const frameUrl = computed(() => {
-  if (!props.src) return `${BASE_URL}/#/pages_sub/component-detail/index`
+  if (!props.src) return `${H5_PREVIEW_BASE_URL}/#/pages_sub/component-detail/index`
   // 若 src 不含斜杠，视为组件名，拼接 component-detail 路由
   if (!props.src.includes('/')) {
-    return `${BASE_URL}/#/pages_sub/component-detail/index?component=${encodeURIComponent(props.src)}`
+    return `${H5_PREVIEW_BASE_URL}/#/pages_sub/component-detail/index?component=${encodeURIComponent(props.src)}`
   }
   // 否则视为完整路径
-  return `${BASE_URL}/#${props.src}`
+  return `${H5_PREVIEW_BASE_URL}/#${props.src}`
 })
 
 const loaded = ref(false)
