@@ -55,7 +55,7 @@ async function runSvgAssets(rawOptions = {}) {
   const writes = [];
   const changes = [];
   let assets = [];
-  let findings = [];
+  const findings = [];
 
   if (options.stage !== 'build') {
     const collected = await collectSvgAssets(config, { targetFilter });

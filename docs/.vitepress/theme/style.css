@@ -31,14 +31,32 @@
 
 /* ── 有手机预览时，压缩主内容宽度让出右侧空间 ── */
 html.has-phone-preview .VPDoc {
-  padding-right: 340px;
+  padding-right: 430px;
 }
 
 html.has-phone-preview .VPDoc .aside {
   display: none;
 }
 
+@media (max-width: 1599px) and (min-width: 1381px) {
+  html.has-phone-preview .VPDoc {
+    padding-right: 384px;
+  }
+}
+
 @media (max-width: 1380px) {
+  html.has-phone-preview .VPDoc {
+    padding-right: 324px;
+  }
+}
+
+@media (max-height: 820px) and (min-width: 1381px) {
+  html.has-phone-preview .VPDoc {
+    padding-right: 384px;
+  }
+}
+
+@media (max-width: 1180px) {
   html.has-phone-preview .VPDoc {
     padding-right: 0;
   }
