@@ -19,8 +19,13 @@ export interface SegmentRect {
   width: number;
 }
 
+export interface SegmentWrapRect {
+  left: number;
+  scrollLeft?: number;
+}
+
 export interface ResolveSegmentedSliderOptions {
-  wrap: Pick<SegmentRect, 'left'>;
+  wrap: SegmentWrapRect;
   items: SegmentRect[];
   options: SegmentedOption[];
   activeValue: SegmentedValue;
@@ -66,7 +71,8 @@ export function resolveSegmentedSliderStyle(
     return { opacity: '0' };
   }
 
-  const offset = activeItem.left - options.wrap.left;
+  const scrollLeft = options.wrap.scrollLeft ?? 0;
+  const offset = activeItem.left - options.wrap.left + scrollLeft;
   return {
     width: `${activeItem.width}px`,
     transform: `translateX(${offset}px)`,

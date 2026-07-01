@@ -6,6 +6,8 @@ import {
   resolveSegmentedRootStyle,
   resolveSegmentedSelection,
   resolveSegmentedSliderStyle,
+  type SegmentRect,
+  type SegmentWrapRect,
 } from './segmented.utils';
 
 defineOptions({ name: 'LkSegmented' });
@@ -44,50 +46,105 @@ function select(opt: SegmentedOption, event?: unknown) {
   }
   if (result.reselected) {
     emit('reselect', { value: opt.value, option: opt, event });
+    scheduleSliderUpdate();
     return;
   }
   active.value = result.value;
   emit('update:modelValue', result.value);
   emit('select', { value: result.value, option: opt, oldValue: result.oldValue });
   emit('change', result.value, opt, result.oldValue);
-  setTimeout(updateSlider, 50);
+  scheduleSliderUpdate();
 }
 
 watch(
   () => props.modelValue,
   v => {
     active.value = v;
-    updateSlider();
+    scheduleSliderUpdate();
   }
 );
 watch(
-  [() => props.options, () => props.size, () => props.block, () => props.inset, () => props.gutter],
-  () => nextTick(updateSlider),
+  [
+    () => props.options,
+    () => props.size,
+    () => props.block,
+    () => props.inset,
+    () => props.gutter,
+    () => props.animated,
+    () => props.duration,
+    () => props.easing,
+    () => props.radius,
+    () => props.height,
+    () => props.customStyle,
+  ],
+  scheduleSliderUpdate,
   { deep: true }
 );
 
+function scheduleSliderUpdate() {
+  nextTick(updateSlider);
+}
+
+function applySliderMetrics(wrap: SegmentWrapRect, items: SegmentRect[]) {
+  sliderStyle.value = resolveSegmentedSliderStyle({
+    wrap,
+    items,
+    options: props.options,
+    activeValue: active.value,
+    animated: props.animated,
+    duration: props.duration,
+    easing: props.easing,
+  });
+}
+
+function getRootElement(): HTMLElement | null {
+  if (typeof HTMLElement === 'undefined') return null;
+  const raw = rootRef.value ? (rootRef.value.$el || rootRef.value) : null;
+  return raw instanceof HTMLElement ? raw : null;
+}
+
+function updateH5Slider() {
+  const root = getRootElement();
+  if (!root) return false;
+
+  const items = Array.from(root.children)
+    .filter(
+      (el): el is HTMLElement =>
+        el instanceof HTMLElement && el.classList.contains('lk-segmented__item')
+    )
+    .map(item => ({
+      left: item.offsetLeft,
+      width: item.offsetWidth,
+    }));
+
+  if (!items.length) return false;
+
+  applySliderMetrics({ left: 0 }, items);
+  return true;
+}
+
 function updateSlider() {
-  const q = uni.createSelectorQuery().in(inst);
-  q.select('.lk-segmented').boundingClientRect();
+  if (updateH5Slider()) return;
+  if (!inst?.proxy) return;
+
+  const q = uni.createSelectorQuery().in(inst.proxy);
+  q.select('.lk-segmented').fields({
+    rect: true,
+    size: true,
+    scrollOffset: true,
+  }, () => {});
   q.selectAll('.lk-segmented__item').boundingClientRect();
   q.exec(res => {
     const wrap = res?.[0];
     const items = res?.[1];
-    if (!wrap || !items?.length) return;
+    if (!wrap || typeof wrap.left !== 'number' || !items?.length) return;
 
-    sliderStyle.value = resolveSegmentedSliderStyle({
-      wrap,
-      items,
-      options: props.options,
-      activeValue: active.value,
-      animated: props.animated,
-      duration: props.duration,
-      easing: props.easing,
-    });
+    applySliderMetrics(wrap, items);
   });
 }
 
 onMounted(() => {
+  scheduleSliderUpdate();
   setTimeout(updateSlider, 50);
   // #ifdef H5
   if (typeof ResizeObserver !== 'undefined') {
