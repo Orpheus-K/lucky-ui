@@ -71,6 +71,29 @@ const options = [
 />
 ```
 
+## 横向滚动选项
+
+当选项总宽度超过容器时，组件会在自身内部横向滚动，并保持滑块与当前选项对齐。
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const active = ref('week')
+const options = [
+  { label: '今日热榜', value: 'today' },
+  { label: '本周精选内容', value: 'week' },
+  { label: '设计趋势观察', value: 'design' },
+  { label: '工程效率', value: 'engineering' },
+  { label: '跨端兼容', value: 'compat' },
+]
+</script>
+
+<template>
+  <lk-segmented v-model="active" :options="options" />
+</template>
+```
+
 ## 自定义高度
 
 ```vue
@@ -178,5 +201,5 @@ import SegmentedDemo from '@/components/demos/segmented-demo.vue'
 ## 使用建议
 
 ::: tip
-`lk-segmented` 适合少量平级选项切换。如果选项很多、需要横向滚动或二级导航，建议改用自定义导航或 `lk-horizontal-scroll` 承载选项。
+`lk-segmented` 适合少量平级选项切换。选项略超出容器时可直接使用内置横向滚动；如果选项很多、存在二级导航或需要复杂卡片内容，建议改用自定义导航或 `lk-horizontal-scroll` 承载选项。
 :::

@@ -12,6 +12,7 @@ const v5 = ref('a');
 const v6 = ref('daily');
 const v7 = ref('nearby');
 const v8 = ref('daily');
+const scrollVal = ref('week');
 
 const hVal = ref('weekly');
 const slotVal = ref('1');
@@ -41,6 +42,13 @@ const disabledOptions = [
   { label: '启用 A', value: 'a' },
   { label: '禁用 B', value: 'b', disabled: true },
   { label: '启用 C', value: 'c' },
+];
+const scrollOptions = [
+  { label: '今日热榜', value: 'today' },
+  { label: '本周精选内容', value: 'week' },
+  { label: '设计趋势观察', value: 'design' },
+  { label: '工程效率', value: 'engineering' },
+  { label: '跨端兼容', value: 'compat' },
 ];
 </script>
 
@@ -101,6 +109,11 @@ const disabledOptions = [
         inset="6rpx"
         radius="999px"
       />
+    </demo-block>
+
+    <demo-block title="横向滚动选项">
+      <view class="sub-title">选项超过容器宽度时，滑块会跟随滚动后的点击位置</view>
+      <lk-segmented v-model="scrollVal" :options="scrollOptions" />
     </demo-block>
 
     <!-- 主题变量覆写 --------------------------------------------------->
