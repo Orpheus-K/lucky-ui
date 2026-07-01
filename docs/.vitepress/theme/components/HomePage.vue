@@ -59,13 +59,13 @@ const features = [
   },
 ]
 
-const codeSnippet = `import { LkButton, LkToast } from 'uni-lucky-ui'
+const codeSnippet = `import { LkButton, LkToast } from 'lucky-ui'
 
 // 全局引入
-import LuckyUI from 'uni-lucky-ui'
+import LuckyUI from 'lucky-ui'
 app.use(LuckyUI)`
 
-const installCmd = 'pnpm add uni-lucky-ui'
+const installCmd = 'pnpm add lucky-ui'
 </script>
 
 <template>
@@ -270,7 +270,7 @@ const installCmd = 'pnpm add uni-lucky-ui'
             <div class="lk-step__num">01</div>
             <div class="lk-step__body">
               <div class="lk-step__title">安装</div>
-              <div class="lk-step__code"><span class="lk-step__prompt">$</span> pnpm add uni-lucky-ui</div>
+              <div class="lk-step__code"><span class="lk-step__prompt">$</span> pnpm add lucky-ui</div>
             </div>
           </div>
           <div class="lk-step">
@@ -278,7 +278,7 @@ const installCmd = 'pnpm add uni-lucky-ui'
             <div class="lk-step__body">
               <div class="lk-step__title">注册</div>
               <div class="lk-step__code">
-                <span class="lk-step__import">import</span> LuckyUI <span class="lk-step__import">from</span> <span class="lk-step__str">'uni-lucky-ui'</span><br>
+                <span class="lk-step__import">import</span> LuckyUI <span class="lk-step__import">from</span> <span class="lk-step__str">'lucky-ui'</span><br>
                 app.<span class="lk-step__fn">use</span>(LuckyUI)
               </div>
             </div>

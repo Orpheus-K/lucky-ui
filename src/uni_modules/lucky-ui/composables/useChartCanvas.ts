@@ -176,7 +176,7 @@ function createLegacyCanvasAdapter(raw: LegacyCanvasContextLike): MaybeCanvas2DC
 
       return Reflect.set(target, key, nextValue, receiver);
     },
-  }) as unknown as MaybeCanvas2DContext;
+  }) as MaybeCanvas2DContext;
 }
 
 export interface ChartSize {
@@ -392,7 +392,7 @@ export function useChartCanvas<TExtra = unknown>(options: UseChartCanvasOptions)
 
         if (legacyContext) {
           canvasNode.value = createLegacyCanvasNode();
-          ctx.value = createLegacyCanvasAdapter(legacyContext as unknown as LegacyCanvasContextLike);
+          ctx.value = createLegacyCanvasAdapter(legacyContext as LegacyCanvasContextLike);
         }
       }
     })();

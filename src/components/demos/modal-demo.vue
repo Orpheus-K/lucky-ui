@@ -2,10 +2,7 @@
 import { computed, ref } from 'vue';
 import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.vue';
 import LkSpace from '@/uni_modules/lucky-ui/components/lk-space/lk-space.vue';
-import type {
-  TransitionConfig,
-  TransitionName,
-} from '@/uni_modules/lucky-ui/composables/useTransition';
+import type { TransitionConfig } from '@/uni_modules/lucky-ui/composables/useTransition';
 import type { SegmentedOption } from '@/uni_modules/lucky-ui/components/lk-segmented/segmented.props';
 
 const visible1 = ref(false);
@@ -23,21 +20,16 @@ const visibleFooterText = ref(false);
 const visibleSingleBtn = ref(false);
 
 // 动态参数
-const dynamicType = ref<TransitionName>('zoom-in');
+const dynamicType = ref<TransitionConfig['name']>('zoom-in');
 const dynamicDuration = ref(400);
 const dynamicEasing = ref('ease-out');
 const modalEasing = computed(() => dynamicEasing.value as TransitionConfig['easing']);
-const animationOptions: SegmentedOption[] = [
-  { label: 'zoom-in', value: 'zoom-in' },
-  { label: 'slide-up', value: 'slide-up' },
-  { label: 'fade-up', value: 'fade-up' },
-  { label: 'bounce-in', value: 'bounce-in' },
-];
 const easingOptions: SegmentedOption[] = [
   { label: 'ease', value: 'ease' },
   { label: 'ease-out', value: 'ease-out' },
   { label: 'ease-in', value: 'ease-in' },
   { label: 'ease-in-out', value: 'ease-in-out' },
+  { label: 'ease-out-back', value: 'ease-out-back' },
 ];
 
 const handleConfirm = () => {
@@ -136,19 +128,16 @@ const handleConfirm = () => {
               >当前动画: {{ dynamicType }} 时长: {{ dynamicDuration }}ms 缓动:
               {{ dynamicEasing }}</text
             >
-            <lk-segmented
-              v-model="dynamicType"
-              :options="animationOptions"
-              size="sm"
-              class="dynamic-option-segmented"
-            />
+            <lk-space wrap :gap="12">
+              <lk-button size="sm" @click="dynamicType = 'zoom-in'">zoom-in</lk-button>
+              <lk-button size="sm" @click="dynamicType = 'slide-up'">slide-up</lk-button>
+              <lk-button size="sm" @click="dynamicType = 'fade-up'">fade-up</lk-button>
+              <lk-button size="sm" @click="dynamicType = 'bounce-in'">bounce-in</lk-button>
+            </lk-space>
             <lk-slider v-model="dynamicDuration" :min="100" :max="1000" :step="100" />
-            <lk-segmented
-              v-model="dynamicEasing"
-              :options="easingOptions"
-              size="sm"
-              class="dynamic-easing-segmented"
-            />
+            <scroll-view scroll-x class="segmented-scroll">
+              <lk-segmented v-model="dynamicEasing" :options="easingOptions" />
+            </scroll-view>
           </view>
         </lk-modal>
       </lk-space>
@@ -204,9 +193,9 @@ const handleConfirm = () => {
   }
 }
 
-.dynamic-option-segmented,
-.dynamic-easing-segmented {
+.segmented-scroll {
   width: 100%;
+  white-space: nowrap;
 }
 
 .dynamic-modal-content {

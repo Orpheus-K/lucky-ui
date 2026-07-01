@@ -1,7 +1,5 @@
 import type { PropType, ExtractPropTypes } from 'vue';
 
-type LkFunction = (...args: never[]) => unknown;
-
 export const baseProps = {
   /**
    * 组件唯一id (表单联动、动画锚点、测试定位..)
@@ -105,7 +103,7 @@ type LkPropHelper = {
   /**
    * 函数类型
    */
-  func: <T extends LkFunction = LkFunction>() => {
+  func: <T extends Function = (...args: never[]) => unknown>() => {
     type: PropType<T>;
     default: null;
   };
@@ -186,7 +184,7 @@ export const LkProp: LkPropHelper = {
    * 函数类型
    * @returns
    */
-  func: <T extends LkFunction = LkFunction>() => ({
+  func: <T extends Function = (...args: never[]) => unknown>() => ({
     type: Function as PropType<T>,
     default: null,
   }),

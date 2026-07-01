@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 import LkSlider from '@/uni_modules/lucky-ui/components/lk-slider/lk-slider.vue';
 import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.vue';
-import type { SliderValue } from '@/uni_modules/lucky-ui/components/lk-slider/slider.props';
 
 const v1 = ref(30);
 const vStep = ref(20);
@@ -13,7 +12,7 @@ const v3 = ref(45);
 const vValue = ref(50);
 const vDrag = ref(30);
 
-const onDragRelease = (val: SliderValue) => {
+const onDragRelease = (val: any) => {
   uni.showToast({
     title: `拖拽松开: ${val}`,
     icon: 'none',

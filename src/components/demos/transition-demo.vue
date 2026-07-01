@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue';
+import { ref, computed, reactive, watch } from 'vue';
 import type { CSSProperties } from 'vue';
 import LkButton from '@/uni_modules/lucky-ui/components/lk-button/lk-button.vue';
 import LkIcon from '@/uni_modules/lucky-ui/components/lk-icon/lk-icon.vue';
@@ -23,6 +23,7 @@ const activeAnimations = ref<AnimationType[]>([]);
 const showAll = ref(false);
 
 // 为每个动画创建 transition
+const animationTransitions = reactive<Record<string, any>>({});
 const animationDisplayStates = reactive<Record<string, boolean>>({});
 const animationClasses = reactive<Record<string, string>>({});
 const animationStyles = reactive<Record<string, CSSProperties>>({});
@@ -42,6 +43,8 @@ ANIMATION_CATEGORIES.forEach(category => {
         return easing.value;
       },
     });
+
+    animationTransitions[animation] = transition;
 
     watch(
       () => transition.display.value,
@@ -91,6 +94,7 @@ const toggleAll = () => {
 
 // 预设配置
 const activePreset = ref<string>('');
+const presetTransitions = reactive<Record<string, any>>({});
 const presetDisplayStates = reactive<Record<string, boolean>>({});
 const presetClasses = reactive<Record<string, string>>({});
 const presetStyles = reactive<Record<string, CSSProperties>>({});
@@ -104,6 +108,8 @@ Object.keys(ANIMATION_PRESETS).forEach(key => {
     delay: preset.delay,
     easing: preset.easing,
   });
+
+  presetTransitions[key] = transition;
 
   watch(
     () => transition.display.value,
@@ -159,6 +165,7 @@ const listItems = [
 ];
 
 // 列表项动画
+const listItemTransitions = reactive<Record<number, any>>({});
 const listItemDisplayStates = reactive<Record<number, boolean>>({});
 const listItemClasses = reactive<Record<number, string>>({});
 const listItemStyles = reactive<Record<number, CSSProperties>>({});
@@ -170,6 +177,8 @@ listItems.forEach((item, index) => {
     delay: index * 50,
     easing: 'ease-out',
   });
+
+  listItemTransitions[item.id] = transition;
 
   watch(
     () => transition.display.value,
@@ -215,6 +224,30 @@ const toggleCard = () => {
   showCard.value = !showCard.value;
 };
 
+// 代码示例
+const basicUsageCode = `import { useTransition } from '@/uni_modules/lucky-ui/composables/useTransition';
+
+const visible = ref(false);
+const { classes, styles, display } = useTransition(
+  () => visible.value,
+  { name: 'fade-up', duration: 300, easing: 'ease-out' }
+);
+
+// 模板中使用
+<view v-if="display" :class="classes" :style="styles">
+  内容
+</view>`;
+
+const callbackUsageCode = `const { classes, styles, display } = useTransition(
+  () => visible.value,
+  { name: 'zoom-in', duration: 300 },
+  {
+    onBeforeEnter: () => console.log('准备进入'),
+    onAfterEnter: () => console.log('进入完成'),
+    onBeforeLeave: () => console.log('准备离开'),
+    onAfterLeave: () => console.log('离开完成'),
+  }
+);`;
 </script>
 
 <template>

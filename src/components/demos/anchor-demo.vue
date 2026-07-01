@@ -214,11 +214,11 @@ onMounted(() => {
                 <view class="goods-item__stepper">
                   <lk-stepper
                     :model-value="getCount(`${cat.id}-${gi}`)"
+                    @update:model-value="val => updateCount(`${cat.id}-${gi}`, val)"
                     :min="0"
                     :max="99"
                     size="sm"
                     integer
-                    @update:model-value="val => updateCount(`${cat.id}-${gi}`, val)"
                   />
                 </view>
               </view>
