@@ -122,3 +122,10 @@
   }
 }
 
+/* 当被 scroll-view 包裹时，取消最大宽度限制以允许横向滚动 */
+uni-scroll-view,
+scroll-view {
+  .lk-segmented {
+    max-width: none;
+  }
+}

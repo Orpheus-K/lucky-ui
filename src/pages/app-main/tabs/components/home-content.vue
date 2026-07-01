@@ -208,6 +208,7 @@ import LkInput from '@/uni_modules/lucky-ui/components/lk-input/lk-input.vue';
 import LkImage from '@/uni_modules/lucky-ui/components/lk-image/lk-image.vue';
 import LkLoading from '@/uni_modules/lucky-ui/components/lk-loading/lk-loading.vue';
 import LkHorizontalScroll from '@/uni_modules/lucky-ui/components/lk-horizontal-scroll/lk-horizontal-scroll.vue';
+import { toastStore } from '@/uni_modules/lucky-ui/components/lk-toast/toast-manager';
 
 const props = withDefaults(
   defineProps<{

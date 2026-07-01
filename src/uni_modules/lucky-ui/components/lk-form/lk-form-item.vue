@@ -17,6 +17,7 @@ import {
   type FormContext,
   type FormRule,
   type FormItemContext,
+  type ValidateError,
 } from './context';
 import { useLocale } from '../../composables/useLocale';
 import {

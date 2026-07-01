@@ -1,4 +1,4 @@
-import type { ExtractPropTypes } from 'vue';
+import type { ExtractPropTypes, PropType } from 'vue';
 import { baseProps, LkProp } from '../common/props';
 
 export const formGroupProps = {

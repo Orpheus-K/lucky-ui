@@ -1,15 +1,9 @@
 # 安装与引入
 
-## 方式一：包管理器安装（推荐）
-
-npm registry 包名是 `uni-lucky-ui`。`lucky-ui` 已被其他 npm 包占用，在本项目中只用于 `uni_modules` 本地目录名，不要把 npm 包名写成 `lucky-ui`。
+## 方式一：npm 安装（推荐）
 
 ```bash
-pnpm add uni-lucky-ui
-# 或
 npm install uni-lucky-ui
-# 或
-yarn add uni-lucky-ui
 ```
 
 然后在 `main.ts` 注册公开的 `Lk*` 全局组件。注册后模板中仍然使用 `lk-*` 标签，例如 `<lk-button>`：

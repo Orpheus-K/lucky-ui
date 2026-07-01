@@ -2,8 +2,10 @@
 import { ref, computed, onMounted } from 'vue';
 import { useThemeStore } from '@/stores/theme';
 import LkIcon from '@/uni_modules/lucky-ui/components/lk-icon/lk-icon.vue';
+import LkStepper from '@/uni_modules/lucky-ui/components/lk-stepper/lk-stepper.vue';
 import LkPopup from '@/uni_modules/lucky-ui/components/lk-popup/lk-popup.vue';
 import LkCell from '@/uni_modules/lucky-ui/components/lk-cell/lk-cell.vue';
+import LkButton from '@/uni_modules/lucky-ui/components/lk-button/lk-button.vue';
 import LkCard from '@/uni_modules/lucky-ui/components/lk-card/lk-card.vue';
 import LkImage from '@/uni_modules/lucky-ui/components/lk-image/lk-image.vue';
 import LkCellGroup from '@/uni_modules/lucky-ui/components/lk-cell/lk-cell-group.vue';

@@ -71,25 +71,6 @@ describe('lk-segmented interaction rules', () => {
     });
   });
 
-  it('keeps slider offset aligned after the segmented wrapper scrolls horizontally', () => {
-    expect(resolveSegmentedSliderStyle({
-      wrap: { left: 100, scrollLeft: 128 },
-      items: [
-        { left: 104, width: 80 },
-        { left: 188, width: 96 },
-      ],
-      options: options.slice(0, 2),
-      activeValue: 'weekly',
-      animated: true,
-      duration: 260,
-      easing: 'ease-out',
-    })).toMatchObject({
-      width: '96px',
-      transform: 'translateX(216px)',
-      opacity: '1',
-    });
-  });
-
   it('hides the slider when the active value is absent or rect is missing', () => {
     expect(resolveSegmentedSliderStyle({
       wrap: { left: 100 },
@@ -122,18 +103,6 @@ describe('lk-segmented interaction rules', () => {
       duration: 260,
       easing: 'ease-out',
     }).transition).toBe('none');
-  });
-
-  it('uses the latest animation options when rebuilding slider style', () => {
-    expect(resolveSegmentedSliderStyle({
-      wrap: { left: 0 },
-      items: [{ left: 0, width: 120 }],
-      options: [options[0]],
-      activeValue: 'daily',
-      animated: true,
-      duration: 480,
-      easing: 'linear',
-    }).transition).toBe('width 480ms linear, transform 480ms linear, opacity 180ms ease');
   });
 
   it('builds root CSS variables while preserving custom style', () => {

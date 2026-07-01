@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { H5_PREVIEW_BASE_URL } from '../constants/preview'
 
 const props = defineProps<{
   src: string      // e.g. "button"  — component name, or full path like "/pages/component-detail/index?component=button"
   title?: string
 }>()
 
+// H5 preview site base URL.
+const BASE_URL = 'https://preview.lucky-ui.cn'
+
 const frameUrl = computed(() => {
-  if (!props.src) return `${H5_PREVIEW_BASE_URL}/#/pages_sub/component-detail/index`
+  if (!props.src) return `${BASE_URL}/#/pages_sub/component-detail/index`
   // 若 src 不含斜杠，视为组件名，拼接 component-detail 路由
   if (!props.src.includes('/')) {
-    return `${H5_PREVIEW_BASE_URL}/#/pages_sub/component-detail/index?component=${encodeURIComponent(props.src)}`
+    return `${BASE_URL}/#/pages_sub/component-detail/index?component=${encodeURIComponent(props.src)}`
   }
   // 否则视为完整路径
-  return `${H5_PREVIEW_BASE_URL}/#${props.src}`
+  return `${BASE_URL}/#${props.src}`
 })
 
 const loaded = ref(false)
@@ -126,44 +128,17 @@ watch(frameUrl, (newUrl) => {
 <style scoped>
 .phone-preview-panel {
   position: fixed;
-  right: 28px;
-  top: calc(var(--vp-nav-height) + 12px);
-  width: 376px;
+  right: 24px;
+  top: calc(var(--vp-nav-height) + 16px);
+  width: 300px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   z-index: 10;
 }
 
-/* 分段缩放预览面板：窄桌面保留预览，再窄时隐藏以保证正文可读 */
-@media (max-width: 1599px) and (min-width: 1381px) {
-  .phone-preview-panel {
-    right: 20px;
-    top: calc(var(--vp-nav-height) + 8px);
-    width: 336px;
-    gap: 6px;
-  }
-}
-
-@media (max-height: 820px) and (min-width: 1381px) {
-  .phone-preview-panel {
-    right: 20px;
-    top: calc(var(--vp-nav-height) + 8px);
-    width: 336px;
-    gap: 6px;
-  }
-}
-
-@media (max-width: 1380px) and (min-width: 1181px) {
-  .phone-preview-panel {
-    right: 12px;
-    top: calc(var(--vp-nav-height) + 8px);
-    width: 304px;
-    gap: 6px;
-  }
-}
-
-@media (max-width: 1180px) {
+/* 在小屏幕上隐藏预览面板 */
+@media (max-width: 1380px) {
   .phone-preview-panel {
     display: none;
   }
@@ -215,8 +190,8 @@ watch(frameUrl, (newUrl) => {
 }
 
 .phone-shell {
-  width: 320px;
-  height: 672px;
+  width: 248px;
+  height: 520px;
   background: var(--vp-c-bg-soft);
   border: 2px solid var(--vp-c-border);
   border-radius: 36px;
@@ -228,30 +203,6 @@ watch(frameUrl, (newUrl) => {
     0 8px 32px rgba(0, 0, 0, 0.12),
     0 2px 8px rgba(0, 0, 0, 0.08);
   position: relative;
-}
-
-@media (max-height: 820px) and (min-width: 1381px) {
-  .phone-shell {
-    width: 288px;
-    height: 604px;
-    border-radius: 32px;
-  }
-}
-
-@media (max-width: 1599px) and (min-width: 1381px) {
-  .phone-shell {
-    width: 288px;
-    height: 604px;
-    border-radius: 32px;
-  }
-}
-
-@media (max-width: 1380px) and (min-width: 1181px) {
-  .phone-shell {
-    width: 260px;
-    height: 548px;
-    border-radius: 30px;
-  }
 }
 
 .phone-shell::before {
