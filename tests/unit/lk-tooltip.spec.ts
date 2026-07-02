@@ -172,11 +172,23 @@ describe('lk-tooltip trigger and placement rules', () => {
       duration: 180,
       delay: 0,
       easing: 'ease-out',
-    })).toEqual({
-      name: 'fade-right',
+    })).toMatchObject({
+      name: 'fade',
       duration: 180,
       delay: 0,
       easing: 'ease-out',
+      enterFrom: {
+        opacity: 0,
+        transform: 'translate3d(var(--lk-rpx-8), 0, 0)',
+      },
+      enterTo: {
+        opacity: 1,
+        transform: 'translate3d(0, 0, 0)',
+      },
+      leaveTo: {
+        opacity: 0,
+        transform: 'translate3d(var(--lk-rpx-8), 0, 0)',
+      },
     });
   });
 });

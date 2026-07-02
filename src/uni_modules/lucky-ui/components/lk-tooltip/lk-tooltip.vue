@@ -278,18 +278,20 @@ watch(
     <view
       v-if="display"
       :id="popId"
-      class="lk-tooltip__pop lk-elevated"
+      class="lk-tooltip__pop"
       :class="placementClass"
-      :style="{ ...popStyle, ...tipStyles }"
+      :style="popStyle"
       @mouseenter="onContentEnter"
       @mouseleave="onContentLeave"
     >
-      <view class="lk-tooltip__content" :class="tipClasses">
-        <slot name="content">
-          <text>{{ content }}</text>
-        </slot>
+      <view class="lk-tooltip__body lk-elevated" :class="tipClasses" :style="tipStyles">
+        <view class="lk-tooltip__content">
+          <slot name="content">
+            <text>{{ content }}</text>
+          </slot>
+        </view>
+        <view class="lk-tooltip__arrow" />
       </view>
-      <view class="lk-tooltip__arrow" />
     </view>
   </view>
 </template>

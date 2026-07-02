@@ -108,15 +108,38 @@ export function resolveTooltipPopStyle(options: {
   return style;
 }
 
-const defaultTransitionByPlacement: Record<
-  TooltipPlacement,
-  NonNullable<TransitionConfig['name']>
-> = {
-  top: 'fade-down',
-  bottom: 'fade-up',
-  left: 'fade-right',
-  right: 'fade-left',
+const defaultMotionByPlacement: Record<TooltipPlacement, string> = {
+  top: 'translate3d(0, calc(var(--lk-rpx-8) * -1), 0)',
+  bottom: 'translate3d(0, var(--lk-rpx-8), 0)',
+  left: 'translate3d(var(--lk-rpx-8), 0, 0)',
+  right: 'translate3d(calc(var(--lk-rpx-8) * -1), 0, 0)',
 };
+const tooltipRestTransform = 'translate3d(0, 0, 0)';
+
+function resolveTooltipDefaultMotion(placement: TooltipPlacement): Pick<
+  TransitionConfig,
+  'enterFrom' | 'enterTo' | 'leaveFrom' | 'leaveTo'
+> {
+  const hiddenTransform = defaultMotionByPlacement[placement];
+  return {
+    enterFrom: {
+      opacity: 0,
+      transform: hiddenTransform,
+    },
+    enterTo: {
+      opacity: 1,
+      transform: tooltipRestTransform,
+    },
+    leaveFrom: {
+      opacity: 1,
+      transform: tooltipRestTransform,
+    },
+    leaveTo: {
+      opacity: 0,
+      transform: hiddenTransform,
+    },
+  };
+}
 
 export function resolveTooltipTransitionConfig(options: {
   animationType: TransitionConfig['name'] | undefined;
@@ -139,16 +162,17 @@ export function resolveTooltipTransitionConfig(options: {
     const preset = ANIMATION_PRESETS[options.animation];
     return {
       name: preset.animation,
-      duration: options.duration ?? preset.duration ?? 180,
+      duration: options.duration ?? preset.duration ?? 220,
       delay: options.delay ?? preset.delay ?? 0,
-      easing: options.easing ?? preset.easing ?? 'ease-out',
+      easing: options.easing ?? preset.easing ?? 'ease-out-cubic',
     };
   }
 
   return {
-    name: defaultTransitionByPlacement[options.placement] || 'fade',
+    name: 'fade',
     duration: options.duration,
     delay: options.delay,
     easing: options.easing,
+    ...resolveTooltipDefaultMotion(options.placement),
   };
 }
