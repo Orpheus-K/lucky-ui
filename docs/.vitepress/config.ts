@@ -201,6 +201,7 @@ export default defineConfig({
           text: '工具与能力',
           collapsed: true,
           items: [
+            { text: 'Animation 动画', link: '/components/animation' },
             { text: 'Hooks 与工具', link: '/components/hooks-utils' },
             { text: 'Network Request 网络请求', link: '/components/request' },
             { text: 'Preload 预加载系统 (实验性)', link: '/components/preload' },

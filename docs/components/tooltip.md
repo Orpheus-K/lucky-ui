@@ -66,6 +66,10 @@ const open = ref(false)
 </template>
 ```
 
+## 动画配置
+
+`animation` 用于选择动画预设；`animationType` 用于直接指定内置动画类型，完整列表见 [Animation 动画](./animation)。
+
 ## 推荐示例
 
 ### 1) 直接复用项目 Demo（推荐）
@@ -109,7 +113,7 @@ import TooltipDemo from '@/components/demos/tooltip-demo.vue'
 | showDelay | 显示延时（ms） | `number` | `80` |
 | hideDelay | 隐藏延时（ms） | `number` | `80` |
 | animation | 动画预设名称 | `keyof ANIMATION_PRESETS` | `undefined` |
-| animationType | 动画类型 | `TransitionConfig['name']` | `undefined` |
+| animationType | 内置动画类型，支持全部 `TransitionName` | [`TransitionConfig['name']`](./animation#内置动画类型) | `undefined` |
 | duration | 动画持续时间 | `number` | `220` |
 | delay | 动画延迟 | `number` | `0` |
 | easing | 缓动函数 | `TransitionConfig['easing']` | `ease-out-cubic` |

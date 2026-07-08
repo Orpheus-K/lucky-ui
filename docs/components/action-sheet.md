@@ -90,6 +90,8 @@ function handleSelect() {
 
 ## 动画配置
 
+`animation` 用于选择动画预设；`animationType` 用于直接指定内置动画类型，完整列表见 [Animation 动画](./animation)。
+
 ```vue
 <lk-action-sheet
   v-model="visible"
@@ -145,7 +147,7 @@ import ActionSheetDemo from '@/components/demos/action-sheet-demo.vue'
 | closeOnClickAction | 点击选项后是否自动关闭 | `boolean` | `true` |
 | safeArea | 是否适配底部安全区 | `boolean` | `true` |
 | animation | 动画预设名称 | `keyof ANIMATION_PRESETS` | `undefined` |
-| animationType | 自定义动画类型 | `TransitionConfig['name']` | `undefined` |
+| animationType | 内置动画类型，支持全部 `TransitionName` | [`TransitionConfig['name']`](./animation#内置动画类型) | `undefined` |
 | duration | 动画时长 | `number` | `undefined` |
 | delay | 动画延迟 | `number` | `undefined` |
 | easing | 动画缓动函数 | `TransitionConfig['easing']` | `undefined` |

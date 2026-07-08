@@ -72,6 +72,8 @@
       trendFlat: 'Stable',
     },
     transition: {
+      dropdownTitle: 'Dropdown',
+      dropdownDescription: 'Menu expansion from the trigger edge',
       fadeTitle: 'Fade',
       fadeDescription: 'Fade effects built with opacity and motion',
       slideTitle: 'Slide',

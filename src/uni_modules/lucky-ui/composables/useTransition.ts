@@ -20,6 +20,7 @@ const cAF = (id: number): void =>
 export type MaybeNumber = number | Ref<number> | (() => number);
 export type MaybeString = string | Ref<string> | (() => string);
 export type TransitionName =
+  | 'dropdown'
   | 'fade'
   | 'fade-up'
   | 'fade-down'
@@ -518,6 +519,16 @@ function transitionText(key: string): string {
  * 动画分类列表
  */
 export const ANIMATION_CATEGORIES: AnimationCategory[] = [
+  {
+    category: 'dropdown',
+    get title() {
+      return transitionText('dropdownTitle');
+    },
+    get description() {
+      return transitionText('dropdownDescription');
+    },
+    animations: ['dropdown'],
+  },
   {
     category: 'fade',
     get title() {
