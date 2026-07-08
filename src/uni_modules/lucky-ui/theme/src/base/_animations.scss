@@ -13,6 +13,24 @@
     opacity: 1;
   }
 
+  &.lk-transition-dropdown {
+    transform-origin: var(--lk-transition-origin, top left);
+
+    &:not(.lk-transition-active) {
+      opacity: 0;
+      transform: translate(
+          var(--lk-dropdown-transition-x, 0rpx),
+          var(--lk-dropdown-transition-y, -8rpx)
+        )
+        scale(0.98, 0.96);
+    }
+
+    &.lk-transition-active {
+      opacity: 1;
+      transform: translate(0rpx, 0rpx) scale(1);
+    }
+  }
+
   &.lk-transition-fade {
     &:not(.lk-transition-active) {
       opacity: 0;

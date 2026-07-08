@@ -105,6 +105,8 @@ const pos = ref<'top' | 'bottom' | 'left' | 'right' | ''>('');
 
 ## 动画配置
 
+`animation` 用于选择动画预设；`animationType` 用于直接指定内置动画类型，完整列表见 [Animation 动画](./animation)。
+
 ```vue
 <lk-popup v-model="show" animation="scale">
   <view style="padding:32rpx">预设动画</view>
@@ -172,7 +174,7 @@ const pos = ref<'top' | 'bottom' | 'left' | 'right' | ''>('');
 | height                | 弹层高度；draggable bottom 模式下由 `snapPoints` 接管可见高度 | `string \| number`                         | `''`         |
 | width                 | 弹层宽度                                                   | `string \| number`                         | `''`         |
 | animation             | 动画预设名称                                               | `keyof ANIMATION_PRESETS`                  | `undefined`  |
-| animationType         | 动画类型                                                   | `TransitionConfig['name']`                 | `undefined`  |
+| animationType         | 内置动画类型，支持全部 `TransitionName`                     | [`TransitionConfig['name']`](./animation#内置动画类型) | `undefined`  |
 | duration              | 动画持续时间                                               | `number`                                   | `undefined`  |
 | delay                 | 动画延迟                                                   | `number`                                   | `undefined`  |
 | easing                | 动画缓动函数                                               | `TransitionConfig['easing']`               | `undefined`  |

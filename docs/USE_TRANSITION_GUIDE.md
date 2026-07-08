@@ -2,6 +2,8 @@
 
 一个灵活、高性能的动画解决方案，采用 Composable 设计，避免了额外的 DOM 层级。
 
+> 完整的内置动画类型、动画预设与缓动函数请查看：[Animation 动画](/components/animation)。
+
 ## 为什么不用组件？
 
 ### 组件方式的问题
@@ -154,6 +156,13 @@ function useTransition(
 - `cancel`: 取消当前动画（清理计时器与监听）
 
 ## 动画类型
+
+完整列表与组件 `animationType` 使用规则见：[Animation 动画](/components/animation)。
+
+### Dropdown - 下拉展开
+```typescript
+'dropdown'
+```
 
 ### Fade - 淡入淡出
 ```typescript

@@ -72,6 +72,8 @@
       trendFlat: '稳定',
     },
     transition: {
+      dropdownTitle: 'Dropdown 下拉展开',
+      dropdownDescription: '从触发器边缘自然展开的菜单动画',
       fadeTitle: 'Fade 淡入淡出',
       fadeDescription: '通过透明度和位移组合实现的淡入淡出效果',
       slideTitle: 'Slide 滑动',

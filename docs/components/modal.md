@@ -110,6 +110,8 @@ const form = ref({ name: '', phone: '' })
 
 ## 动画类型
 
+`animation` 用于选择动画预设；`animationType` 用于直接指定内置动画类型，完整列表见 [Animation 动画](./animation)。
+
 ```vue
 <template>
   <view class="demo-row">
@@ -119,8 +121,8 @@ const form = ref({ name: '', phone: '' })
   </view>
 
   <lk-modal v-model="show1" animation="scale" title="缩放动画">内容</lk-modal>
-  <lk-modal v-model="show2" animation="slide-up" title="滑入动画">内容</lk-modal>
-  <lk-modal v-model="show3" animation="fade" title="渐显动画">内容</lk-modal>
+  <lk-modal v-model="show2" animation-type="slide-up" title="滑入动画">内容</lk-modal>
+  <lk-modal v-model="show3" animation-type="fade" title="渐显动画">内容</lk-modal>
 </template>
 ```
 
@@ -142,8 +144,8 @@ const form = ref({ name: '', phone: '' })
 | showFooter | 是否显示底部区域 | `boolean` | `true` |
 | confirmText | 默认确认按钮文字 | `string` | `确定` |
 | cancelText | 默认取消按钮文字 | `string` | `取消` |
-| animation | 动画预设 | `scale \| slide-up \| fade \| slide-down` | `scale` |
-| animationType | 自定义动画类型 | `TransitionConfig['name']` | `undefined` |
+| animation | 动画预设名称 | `keyof ANIMATION_PRESETS` | `scale` |
+| animationType | 内置动画类型，支持全部 `TransitionName` | [`TransitionConfig['name']`](./animation#内置动画类型) | `undefined` |
 | duration | 动画持续时间 | `number` | `undefined` |
 | delay | 动画延迟 | `number` | `undefined` |
 | easing | 动画缓动函数 | `TransitionConfig['easing']` | `undefined` |

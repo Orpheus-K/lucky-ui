@@ -123,6 +123,7 @@ Lucky UI 按功能分为以下几类。
 
 | 文档 | 说明 |
 |------|------|
+| [Animation 动画](./animation) | 内置动画类型、动画预设、缓动函数与 `animationType` 使用规则 |
 | [Hooks 与工具](./hooks-utils) | Composables 与核心 utils 快速索引与实战示例 |
 | [Network Request 网络请求](./request) | 请求封装、拦截器、重试、取消、上传下载完整指南 |
 | [Preload 预加载系统 <Badge type="warning" text="实验性" />](./preload) | 页面、图片与自定义任务预加载能力 |
