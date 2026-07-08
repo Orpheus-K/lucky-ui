@@ -1,12 +1,30 @@
 @use '../../theme/src/mixins' as *;
 
 @include b(dropdown) {
+  --lk-dropdown-menu-bg: var(--lk-bg-container);
+  --lk-dropdown-menu-border: var(--lk-color-border-light);
+  --lk-dropdown-menu-shadow:
+    0 var(--lk-rpx-20) var(--lk-rpx-48) rgba(15, 23, 42, 0.14),
+    0 var(--lk-rpx-4) var(--lk-rpx-12) rgba(15, 23, 42, 0.08);
+  --lk-dropdown-menu-radius: var(--lk-radius-lg);
+  --lk-dropdown-menu-padding: var(--lk-spacing-xs);
+
   display: inline-block;
   position: relative;
 
+  @at-root .lk-theme-dark & {
+    --lk-dropdown-menu-bg: var(--lk-bg-elevated);
+    --lk-dropdown-menu-shadow:
+      0 var(--lk-rpx-20) var(--lk-rpx-56) rgba(0, 0, 0, 0.46),
+      0 var(--lk-rpx-4) var(--lk-rpx-12) rgba(0, 0, 0, 0.32);
+  }
+
   @include e(mask) {
     position: fixed;
-    inset: 0;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
     background: transparent;
   }
 
@@ -19,14 +37,30 @@
 
   @include e(menu) {
     position: absolute;
-    min-width: var(--lk-rpx-220);
-    background: var(--lk-bg-elevated);
-    border: var(--lk-rpx-2) solid var(--lk-color-border-light);
-    border-radius: var(--lk-radius-lg);
-    box-shadow: var(--lk-shadow-base);
-    padding: var(--lk-spacing-xs) 0;
+    box-sizing: border-box;
+    width: var(--lk-dropdown-menu-width, auto);
+    min-width: var(--lk-dropdown-menu-min-width, var(--lk-rpx-320));
+    max-width: var(--lk-dropdown-menu-max-width, calc(100vw - var(--lk-rpx-64)));
+    overflow: hidden;
+    background: var(--lk-dropdown-menu-bg, var(--lk-bg-container));
+    border: var(--lk-rpx-2) solid var(--lk-dropdown-menu-border, var(--lk-color-border-light));
+    border-radius: var(--lk-dropdown-menu-radius, var(--lk-radius-lg));
+    box-shadow: var(
+      --lk-dropdown-menu-shadow,
+      0 var(--lk-rpx-20) var(--lk-rpx-48) rgba(15, 23, 42, 0.14)
+    );
+    padding: var(--lk-dropdown-menu-padding, var(--lk-spacing-xs));
     z-index: 2400;
     pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @include e(menu-top) {
+    display: block;
+  }
+
+  @include e(menu-bottom) {
+    display: block;
   }
 
   @include m(placement-bottom) {
@@ -60,31 +94,78 @@
       margin-left: var(--lk-spacing-xs);
     }
   }
+
+  @include m(align-end) {
+    &.lk-dropdown--placement-bottom,
+    &.lk-dropdown--placement-top {
+      .lk-dropdown__menu {
+        right: 0;
+        left: auto;
+      }
+    }
+
+    &.lk-dropdown--placement-left,
+    &.lk-dropdown--placement-right {
+      .lk-dropdown__menu {
+        top: auto;
+        bottom: 0;
+      }
+    }
+  }
+}
+
+@include b(dropdown-divider) {
+  height: var(--lk-rpx-2);
+  margin: var(--lk-spacing-xs) 0;
+  background: var(--lk-color-border-light);
+
+  @include when(inset) {
+    margin-left: calc(var(--lk-rpx-36) + var(--lk-spacing-md));
+  }
+}
+
+.lk-theme-dark .lk-dropdown__menu {
+  --lk-dropdown-menu-bg: var(--lk-bg-elevated);
+  --lk-dropdown-menu-shadow:
+    0 var(--lk-rpx-20) var(--lk-rpx-56) rgba(0, 0, 0, 0.46),
+    0 var(--lk-rpx-4) var(--lk-rpx-12) rgba(0, 0, 0, 0.32);
 }
 
 @include b(dropdown-item) {
-  --_py: var(--lk-spacing-md);
-  --_px: var(--lk-spacing-xl);
+  --_py: var(--lk-rpx-18);
+  --_px: var(--lk-rpx-24);
   --_fs: var(--lk-font-size-md);
-  --_gap: var(--lk-spacing-sm);
+  --_gap: var(--lk-spacing-md);
+  --_radius: var(--lk-radius-md);
+  --_color: var(--lk-text-primary);
 
   display: flex;
   align-items: center;
+  box-sizing: border-box;
+  min-height: var(--lk-rpx-80);
+  margin: var(--lk-rpx-2) 0;
   padding: var(--_py) var(--_px);
   font-size: var(--_fs);
-  color: var(--lk-text-primary);
+  font-weight: var(--lk-font-weight-medium);
+  line-height: 1.35;
+  color: var(--_color);
+  border-radius: var(--_radius);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
   transition:
-    background var(--lk-transition-fast),
+    background-color var(--lk-transition-fast),
+    box-shadow var(--lk-transition-fast),
     color var(--lk-transition-fast);
 
-  & > view:not(:first-child),
-  & > lk-icon:not(:first-child) {
+  .lk-dropdown-item__icon + .lk-dropdown-item__label {
     margin-left: var(--_gap);
   }
 
-  // 针对 lk-icon 在不同端可能渲染为不同标签的情况
-  :deep(.lk-icon) + .lk-dropdown-item__label {
-    margin-left: var(--_gap);
+  &:hover:not(.is-disabled) {
+    --_color: var(--lk-text-primary);
+
+    background: var(--lk-color-highlight);
   }
 
   &:active:not(.is-disabled) {
@@ -92,21 +173,35 @@
   }
 
   @include when(active) {
-    color: var(--lk-color-primary);
-    font-weight: 600;
-    background: var(--lk-bg-hover);
+    --_color: var(--lk-color-primary);
+
+    font-weight: var(--lk-font-weight-semibold);
+    background: rgba(var(--lk-brand-rgb), 0.1);
+    box-shadow: inset 0 0 0 var(--lk-rpx-1) rgba(var(--lk-brand-rgb), 0.1);
   }
 
   @include when(disabled) {
-    opacity: 0.5;
-    pointer-events: none;
+    --_color: var(--lk-text-disabled);
+
+    opacity: 0.58;
+    cursor: not-allowed;
   }
 
   @include e(icon) {
-    color: var(--lk-color-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    min-width: var(--lk-rpx-36);
+    color: var(--_color);
+    transition: color var(--lk-transition-fast);
   }
 
   @include e(label) {
     flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    color: inherit;
+    text-overflow: ellipsis;
   }
 }
