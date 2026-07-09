@@ -37,7 +37,9 @@ if (-not $cli -and $IsMacOS) {
   $cli = $macCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
 }
 if (-not $cli) { throw 'WeChat DevTools CLI not found. Set WECHAT_DEVTOOLS_CLI to the DevTools CLI path.' }
-& $cli auto --project D:/project/ui/dist/dev/mp-weixin --auto-port 9420 --trust-project
+$projectRoot = (Resolve-Path .).Path
+$mpProject = Join-Path $projectRoot 'dist/dev/mp-weixin'
+& $cli auto --project $mpProject --auto-port 9420 --trust-project
 ```
 
 3. Connect with `miniprogram-automator` and inspect runtime state:
@@ -51,7 +53,10 @@ if (-not $cli) { throw 'WeChat DevTools CLI not found. Set WECHAT_DEVTOOLS_CLI t
 6. Run automatic phone preview after a successful fix:
 
 ```powershell
-& $cli auto-preview --project D:/project/ui/dist/dev/mp-weixin --info-output D:/project/ui/preview-info.json
+$projectRoot = (Resolve-Path .).Path
+$mpProject = Join-Path $projectRoot 'dist/dev/mp-weixin'
+$previewInfo = Join-Path $projectRoot 'preview-info.json'
+& $cli auto-preview --project $mpProject --info-output $previewInfo
 ```
 
 ## Connection Failure
@@ -63,9 +68,8 @@ If it still cannot connect, tell the developer to open WeChat DevTools security 
 ## Useful Probe Template
 
 ```powershell
-$env:MP_AUTOMATOR='C:\Users\EDY\AppData\Local\Temp\mp-automator\node_modules\miniprogram-automator'
 @'
-const automator = require(process.env.MP_AUTOMATOR);
+const automator = require(process.env.MP_AUTOMATOR || 'miniprogram-automator');
 const timeout = (label, promise, ms = 30000) => Promise.race([
   promise,
   new Promise((_, reject) => setTimeout(() => reject(new Error(label + ' timeout')), ms)),
