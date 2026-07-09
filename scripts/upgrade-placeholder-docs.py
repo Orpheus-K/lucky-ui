@@ -1,7 +1,7 @@
 import os
 import re
 
-ROOT = r'f:\\luckyone\\ui'
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 DOCS = os.path.join(ROOT, 'docs', 'components')
 PLACEHOLDER = '详细 API 请参考组件源码'
 

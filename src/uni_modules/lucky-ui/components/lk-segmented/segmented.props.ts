@@ -1,4 +1,3 @@
-/* F:\luckyone\ui\src\uni_modules\lucky-ui\components\lk-segmented\segmented.props.ts */
 import type { ExtractPropTypes, PropType } from 'vue';
 import { baseProps, LkProp } from '../common/props';
 

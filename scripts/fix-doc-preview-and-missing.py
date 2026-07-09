@@ -1,7 +1,7 @@
 import os
 import re
 
-ROOT = r'f:\\luckyone\\ui'
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 DOCS_COMPONENTS = os.path.join(ROOT, 'docs', 'components')
 DETAIL_PAGE = os.path.join(ROOT, 'src', 'pages', 'component-detail', 'index.vue')
 

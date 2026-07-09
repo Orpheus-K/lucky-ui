@@ -1,7 +1,8 @@
 """写入所有组件文档的辅助脚本"""
 import os
 
-BASE = r'f:\luckyone\ui\docs\components'
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+BASE = os.path.join(ROOT, 'docs', 'components')
 
 def w(rel, content):
     p = os.path.join(BASE, rel)
