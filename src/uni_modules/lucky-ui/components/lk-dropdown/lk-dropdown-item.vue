@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, computed } from 'vue';
 import type { Ref, StyleValue } from 'vue';
-import { baseProps } from '../common/props';
+import { baseProps, LkProp } from '../common/props';
 import {
   dropdownItemEmits,
   type DropdownSelectPayload,
@@ -12,6 +12,7 @@ import {
   createDropdownItemPayload,
   resolveDropdownItemActive,
   resolveDropdownItemClass,
+  resolveDropdownItemStyle,
 } from './dropdown.utils';
 
 defineOptions({ name: 'LkDropdownItem' });
@@ -21,10 +22,13 @@ const props = defineProps({
   name: { type: [String, Number], required: true },
   disabled: { type: Boolean, default: false },
   icon: { type: String, default: '' },
+  iconSize: LkProp.stringNumber(34),
+  width: LkProp.stringNumber(''),
 });
 const emit = defineEmits(dropdownItemEmits);
 interface DropdownContext {
   active: Ref<DropdownValue>;
+  selectable: Readonly<Ref<boolean>>;
   selectItem: (name: DropdownValue, payload: DropdownSelectPayload) => void;
 }
 
@@ -33,6 +37,7 @@ const active = computed(() =>
   resolveDropdownItemActive({
     activeValue: dropdown?.active.value,
     name: props.name,
+    selectable: dropdown?.selectable.value,
   })
 );
 const itemClass = computed(() =>
@@ -42,7 +47,12 @@ const itemClass = computed(() =>
     customClass: props.customClass,
   })
 );
-const itemStyle = computed<StyleValue>(() => props.customStyle as StyleValue);
+const itemStyle = computed<StyleValue>(() =>
+  resolveDropdownItemStyle({
+    customStyle: props.customStyle as StyleValue,
+    width: props.width,
+  })
+);
 
 function click(event: unknown) {
   const payload = createDropdownItemPayload({
@@ -59,10 +69,9 @@ function click(event: unknown) {
 </script>
 
 <template>
-  <view class="lk-dropdown-item" :class="itemClass" :style="itemStyle" @tap="click">
-    <lk-icon v-if="icon" :name="icon" size="34" class="lk-dropdown-item__icon" />
+  <view :id="id" class="lk-dropdown-item" :class="itemClass" :style="itemStyle" @tap="click">
+    <lk-icon v-if="icon" :name="icon" :size="iconSize" class="lk-dropdown-item__icon" />
     <text class="lk-dropdown-item__label"><slot /></text>
-    <lk-icon v-if="active" name="check" size="28" />
   </view>
 </template>
 

@@ -5,7 +5,8 @@
 """
 import os, re
 
-BASE = r'f:\luckyone\ui\docs\components'
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+BASE = os.path.join(ROOT, 'docs', 'components')
 
 # ─── 重写 button.md ───────────────────────────────────────────────────────
 BUTTON_MD = """\

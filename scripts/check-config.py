@@ -1,6 +1,6 @@
 import json, os, re
 
-root = r'f:\luckyone\ui'
+root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 tsconfig_path = os.path.join(root, 'tsconfig.json')
 
 if os.path.exists(tsconfig_path):

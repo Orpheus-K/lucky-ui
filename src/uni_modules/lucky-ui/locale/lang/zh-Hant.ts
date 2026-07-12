@@ -52,6 +52,8 @@ export default {
     countdown: { day: '天', hour: '時', minute: '分', second: '秒', millisecond: '毫秒' },
     chartStatCard: { trendUp: '上升', trendDown: '下降', trendFlat: '穩定' },
     transition: {
+      dropdownTitle: 'Dropdown 下拉展開',
+      dropdownDescription: '從觸發器邊緣自然展開的選單動畫',
       fadeTitle: 'Fade 淡入淡出',
       fadeDescription: '透過透明度與位移組合實現的淡入淡出效果',
       slideTitle: 'Slide 滑動',

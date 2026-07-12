@@ -100,7 +100,7 @@ export const tooltipProps = {
   },
 
   /** 动画持续时间 */
-  duration: LkProp.number(180),
+  duration: LkProp.number(220),
 
   /** 动画延迟 */
   delay: LkProp.number(0),
@@ -108,7 +108,7 @@ export const tooltipProps = {
   /** 动画缓动函数 */
   easing: {
     type: String as PropType<TransitionConfig['easing']>,
-    default: 'ease-out',
+    default: 'ease-out-cubic',
   },
 } as const;
 

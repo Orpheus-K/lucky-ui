@@ -17,6 +17,7 @@ title: Hooks 与工具
 ### useTransition
 
 - 作用：统一管理组件进入/离开动画状态，减少手写 class 与状态切换。
+- 动画类型、预设和缓动函数请查看：[Animation 动画](./animation)。
 
 ```ts
 import { useTransition } from '@/uni_modules/lucky-ui/composables';

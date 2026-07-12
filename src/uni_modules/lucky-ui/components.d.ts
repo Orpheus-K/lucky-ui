@@ -47,6 +47,7 @@ declare module '@vue/runtime-core' {
     LkTooltip: (typeof import('./components/lk-tooltip/lk-tooltip.vue'))['default'];
     LkDropdown: (typeof import('./components/lk-dropdown/lk-dropdown.vue'))['default'];
     LkDropdownItem: (typeof import('./components/lk-dropdown/lk-dropdown-item.vue'))['default'];
+    LkDropdownDivider: (typeof import('./components/lk-dropdown/lk-dropdown-divider.vue'))['default'];
     LkNoticeBar: (typeof import('./components/lk-notice-bar/lk-notice-bar.vue'))['default'];
     LkTimeline: (typeof import('./components/lk-timeline/lk-timeline.vue'))['default'];
     LkTimelineItem: (typeof import('./components/lk-timeline/lk-timeline-item.vue'))['default'];

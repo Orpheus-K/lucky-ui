@@ -3,104 +3,130 @@ import { ref } from 'vue';
 import LkButton from '@/uni_modules/lucky-ui/components/lk-button/lk-button.vue';
 import LkIcon from '@/uni_modules/lucky-ui/components/lk-icon/lk-icon.vue';
 import LkDropdown from '@/uni_modules/lucky-ui/components/lk-dropdown/lk-dropdown.vue';
+import LkDropdownDivider from '@/uni_modules/lucky-ui/components/lk-dropdown/lk-dropdown-divider.vue';
 import LkDropdownItem from '@/uni_modules/lucky-ui/components/lk-dropdown/lk-dropdown-item.vue';
+import type {
+  DropdownMenuAlign,
+  DropdownPlacement,
+} from '@/uni_modules/lucky-ui/components/lk-dropdown/dropdown.props';
 import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.vue';
 
-const sortValue = ref('latest');
-const statusValue = ref('all');
-const densityValue = ref('comfortable');
+const cornerValue = ref('top-left-view');
+const quickActions = ['arrow-right', 'star', 'download', 'info-circle', 'arrow-clockwise'] as const;
 
-const toast = (value: string) => {
-  uni.showToast({
-    title: value,
-    icon: 'none',
-  });
+type DropdownCornerDemo = {
+  key: string;
+  label: string;
+  className: string;
+  placement: DropdownPlacement;
+  menuAlign: DropdownMenuAlign;
 };
+
+const cornerDemos: DropdownCornerDemo[] = [
+  {
+    key: 'top-left',
+    label: '左上',
+    className: 'corner-trigger corner-trigger--top-left',
+    placement: 'bottom',
+    menuAlign: 'start',
+  },
+  {
+    key: 'top-right',
+    label: '右上',
+    className: 'corner-trigger corner-trigger--top-right',
+    placement: 'bottom',
+    menuAlign: 'end',
+  },
+  {
+    key: 'bottom-left',
+    label: '左下',
+    className: 'corner-trigger corner-trigger--bottom-left',
+    placement: 'top',
+    menuAlign: 'start',
+  },
+  {
+    key: 'bottom-right',
+    label: '右下',
+    className: 'corner-trigger corner-trigger--bottom-right',
+    placement: 'top',
+    menuAlign: 'end',
+  },
+];
 </script>
 
 <template>
   <view class="component-demo dropdown-demo">
-    <demo-block title="操作菜单">
-      <lk-dropdown>
-        <lk-button type="primary">
-          更多操作
-          <lk-icon class="dropdown-demo__chevron" name="chevron-down" />
-        </lk-button>
-        <template #menu>
-          <lk-dropdown-item name="edit" icon="pencil-square" @click="toast('编辑')">
-            编辑
-          </lk-dropdown-item>
-          <lk-dropdown-item name="copy" icon="files" @click="toast('复制')">
-            复制
-          </lk-dropdown-item>
-          <lk-dropdown-item name="delete" icon="trash" @click="toast('删除')">
-            删除
-          </lk-dropdown-item>
-        </template>
-      </lk-dropdown>
-    </demo-block>
-
-    <demo-block title="筛选排序">
-      <view class="filter-row">
-        <lk-dropdown v-model="sortValue">
-          <lk-button variant="outline">
-            排序
-            <lk-icon class="dropdown-demo__chevron" name="chevron-down" />
-          </lk-button>
-          <template #menu>
-            <lk-dropdown-item name="latest">最新创建</lk-dropdown-item>
-            <lk-dropdown-item name="priority">优先级最高</lk-dropdown-item>
-            <lk-dropdown-item name="progress">进度最快</lk-dropdown-item>
-          </template>
-        </lk-dropdown>
-
-        <lk-dropdown v-model="statusValue">
-          <lk-button variant="outline">
-            状态
-            <lk-icon class="dropdown-demo__chevron" name="chevron-down" />
-          </lk-button>
-          <template #menu>
-            <lk-dropdown-item name="all">全部状态</lk-dropdown-item>
-            <lk-dropdown-item name="active">进行中</lk-dropdown-item>
-            <lk-dropdown-item name="done">已完成</lk-dropdown-item>
-          </template>
-        </lk-dropdown>
+    <demo-block title="四角触发">
+      <view class="corner-stage">
+        <view
+          v-for="item in cornerDemos"
+          :key="item.key"
+          :class="item.className"
+        >
+          <lk-dropdown
+            :placement="item.placement"
+            :menu-align="item.menuAlign"
+            :selectable="false"
+            menu-fit-content
+            @select="cornerValue = String($event.name)"
+          >
+            <lk-button variant="outline">
+              {{ item.label }}
+            </lk-button>
+            <template #menu-top>
+              <view class="dropdown-quick-actions">
+                <view
+                  v-for="name in quickActions"
+                  :key="name"
+                  class="dropdown-quick-actions__item"
+                >
+                  <lk-icon :name="name" size="34" />
+                </view>
+              </view>
+              <lk-dropdown-divider />
+            </template>
+            <template #menu>
+              <lk-dropdown-item
+                :name="`${item.key}-view`"
+                icon="plus-square"
+                :icon-size="40"
+              >
+                打开新的标签页
+              </lk-dropdown-item>
+              <lk-dropdown-item
+                :name="`${item.key}-edit`"
+                icon="grid"
+                :icon-size="40"
+                width="330"
+              >
+                向新分组添加标签页
+              </lk-dropdown-item>
+              <lk-dropdown-divider />
+              <lk-dropdown-item
+                :name="`${item.key}-remove`"
+                icon="clock-history"
+                :icon-size="40"
+              >
+                历史记录
+              </lk-dropdown-item>
+              <lk-dropdown-item :name="`${item.key}-download`" icon="download" :icon-size="40">
+                下载内容
+              </lk-dropdown-item>
+              <lk-dropdown-divider />
+              <lk-dropdown-item :name="`${item.key}-settings`" icon="gear" :icon-size="40">
+                设置
+              </lk-dropdown-item>
+            </template>
+            <template #menu-bottom>
+              <lk-dropdown-divider />
+              <lk-dropdown-item :name="`${item.key}-help`" icon="question-circle" :icon-size="40">
+                帮助和反馈
+              </lk-dropdown-item>
+            </template>
+          </lk-dropdown>
+        </view>
       </view>
-      <text class="demo-result">当前：{{ sortValue }} / {{ statusValue }}</text>
-    </demo-block>
-
-    <demo-block title="禁用与保留展开">
-      <lk-dropdown v-model="densityValue" :close-on-select="false">
-        <lk-button>
-          列表密度
-          <lk-icon class="dropdown-demo__chevron" name="chevron-down" />
-        </lk-button>
-        <template #menu>
-          <lk-dropdown-item name="compact">紧凑</lk-dropdown-item>
-          <lk-dropdown-item name="comfortable">舒适</lk-dropdown-item>
-          <lk-dropdown-item name="spacious" disabled>宽松（未开放）</lk-dropdown-item>
-        </template>
-      </lk-dropdown>
-    </demo-block>
-
-    <demo-block title="位置与动画">
-      <view class="placement-row">
-        <lk-dropdown placement="top" animation-type="fade-down" :duration="220">
-          <lk-button variant="outline">向上</lk-button>
-          <template #menu>
-            <lk-dropdown-item name="top-1">顶部菜单</lk-dropdown-item>
-            <lk-dropdown-item name="top-2">次级操作</lk-dropdown-item>
-          </template>
-        </lk-dropdown>
-
-        <lk-dropdown placement="right" animation-type="fade-left" :duration="220">
-          <lk-button variant="outline">向右</lk-button>
-          <template #menu>
-            <lk-dropdown-item name="right-1">右侧菜单</lk-dropdown-item>
-            <lk-dropdown-item name="right-2">详情入口</lk-dropdown-item>
-          </template>
-        </lk-dropdown>
-      </view>
+      <text class="demo-result">当前：{{ cornerValue }}</text>
     </demo-block>
   </view>
 </template>
@@ -114,19 +140,55 @@ const toast = (value: string) => {
   }
 }
 
-.filter-row,
-.placement-row {
-  display: flex;
-  align-items: center;
-  > :not(:first-child) {
-    margin-left: 20rpx;
-  }
-  flex-wrap: wrap;
+.corner-stage {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 520rpx;
+  width: 100%;
+  border: 2rpx dashed var(--lk-color-border);
+  border-radius: var(--lk-radius-md);
 }
 
-.placement-row {
-  min-height: 220rpx;
+.corner-trigger {
+  position: absolute;
+}
+
+.corner-trigger--top-left {
+  top: 20rpx;
+  left: 20rpx;
+}
+
+.corner-trigger--top-right {
+  top: 20rpx;
+  right: 20rpx;
+}
+
+.corner-trigger--bottom-left {
+  bottom: 20rpx;
+  left: 20rpx;
+}
+
+.corner-trigger--bottom-right {
+  right: 20rpx;
+  bottom: 20rpx;
+}
+
+.dropdown-quick-actions {
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 8rpx 4rpx;
+}
+
+.dropdown-quick-actions__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64rpx;
+  height: 64rpx;
+  color: var(--lk-text-secondary);
+  background: var(--lk-fill-1);
+  border-radius: var(--lk-radius-full);
 }
 
 .demo-result {
@@ -134,18 +196,5 @@ const toast = (value: string) => {
   margin-top: 18rpx;
   color: var(--lk-text-secondary);
   font-size: 24rpx;
-}
-
-.dropdown-demo :deep(.lk-dropdown__menu) {
-  min-width: 260rpx;
-}
-
-.dropdown-demo__chevron {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1em;
-  height: 1em;
-  line-height: 1;
 }
 </style>

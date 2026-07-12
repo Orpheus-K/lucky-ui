@@ -23,6 +23,6 @@ Fallback: if MCP tools are unavailable, state that SymbioPulse was unavailable, 
 - 辅助开发规则：AI在辅助开发时，除非用户主动在对话中提及或明确要求，否则不需要执行项目运行（run）、测试（test）、构建（build）或 lint 检查等相关命令。
 
 # Git Commit Message Rules
-- When writing, suggesting, or generating Git commit messages, AI agents and developers MUST follow the specification defined in [git-commit-rules.md](file:///F:/A-ui/ui/ai/git-commit-rules.md).
-- 在编写、建议或生成 Git 提交记录时，AI 助手和开发人员必须遵循 [git-commit-rules.md](file:///F:/A-ui/ui/ai/git-commit-rules.md) 中定义的规范（如中英文间必须加空格、使用小写 scope 等）。
+- When writing, suggesting, or generating Git commit messages, AI agents and developers MUST follow the project's Git commit message conventions.
+- 在编写、建议或生成 Git 提交记录时，AI 助手和开发人员必须遵循本项目的 Git 提交记录规范（如中英文间必须加空格、使用小写 scope 等）。
 

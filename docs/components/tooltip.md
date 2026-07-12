@@ -30,8 +30,8 @@ phone: tooltip
   <lk-button>自定义内容</lk-button>
   <template #content>
     <view style="display:flex;align-items:center;gap:12rpx">
-      <view style="width:20rpx;height:20rpx;border-radius:50%;background:#16a34a" />
-      <text>支持复杂内容</text>
+      <view style="flex:0 0 20rpx;width:20rpx;height:20rpx;border-radius:50%;background:#16a34a" />
+      <text style="min-width:0;white-space:normal">支持复杂内容</text>
     </view>
   </template>
 </lk-tooltip>
@@ -65,6 +65,10 @@ const open = ref(false)
   </lk-tooltip>
 </template>
 ```
+
+## 动画配置
+
+`animation` 用于选择动画预设；`animationType` 用于直接指定内置动画类型，完整列表见 [Animation 动画](./animation)。
 
 ## 推荐示例
 
@@ -109,10 +113,10 @@ import TooltipDemo from '@/components/demos/tooltip-demo.vue'
 | showDelay | 显示延时（ms） | `number` | `80` |
 | hideDelay | 隐藏延时（ms） | `number` | `80` |
 | animation | 动画预设名称 | `keyof ANIMATION_PRESETS` | `undefined` |
-| animationType | 动画类型 | `TransitionConfig['name']` | `undefined` |
-| duration | 动画持续时间 | `number` | `180` |
+| animationType | 内置动画类型，支持全部 `TransitionName` | [`TransitionConfig['name']`](./animation#内置动画类型) | `undefined` |
+| duration | 动画持续时间 | `number` | `220` |
 | delay | 动画延迟 | `number` | `0` |
-| easing | 缓动函数 | `TransitionConfig['easing']` | `ease-out` |
+| easing | 缓动函数 | `TransitionConfig['easing']` | `ease-out-cubic` |
 | id | 根节点 id | `string` | `''` |
 | customClass | 根节点自定义类名 | `string \| object \| array` | — |
 | customStyle | 根节点自定义样式 | `string \| object` | — |

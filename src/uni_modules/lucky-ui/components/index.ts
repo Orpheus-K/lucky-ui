@@ -87,6 +87,7 @@ export { default as LkTooltip } from './lk-tooltip/lk-tooltip.vue';
 export * from './lk-tooltip/tooltip.props';
 export { default as LkDropdown } from './lk-dropdown/lk-dropdown.vue';
 export { default as LkDropdownItem } from './lk-dropdown/lk-dropdown-item.vue';
+export { default as LkDropdownDivider } from './lk-dropdown/lk-dropdown-divider.vue';
 export * from './lk-dropdown/dropdown.props';
 export { default as LkNoticeBar } from './lk-notice-bar/lk-notice-bar.vue';
 export * from './lk-notice-bar/notice-bar.props';

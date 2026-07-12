@@ -27,8 +27,8 @@ const manualOpen = ref(false);
           <lk-button>自定义内容（点击打开）</lk-button>
           <template #content>
             <view class="tooltip-custom-content">
-              <view style="width: 20rpx; height: 20rpx; border-radius: 50%; background: #16a34a" />
-              <text>一段可自定义的内容，包含图形和文字</text>
+              <view class="tooltip-custom-content__indicator" />
+              <text class="tooltip-custom-content__text">一段可自定义的内容，包含图形和文字</text>
             </view>
           </template>
         </lk-tooltip>
@@ -120,10 +120,28 @@ const manualOpen = ref(false);
 
 .tooltip-custom-content {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  max-width: 280rpx;
+  white-space: normal;
 
   > :not(:first-child) {
     margin-left: 12rpx;
   }
+}
+
+.tooltip-custom-content__indicator {
+  flex: 0 0 20rpx;
+  width: 20rpx;
+  height: 20rpx;
+  margin-top: 6rpx;
+  border-radius: 50%;
+  background: #16a34a;
+}
+
+.tooltip-custom-content__text {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.5;
+  white-space: normal;
 }
 </style>

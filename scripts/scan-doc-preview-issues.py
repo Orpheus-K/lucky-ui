@@ -1,6 +1,6 @@
 import os, re
 
-root = r'f:\\luckyone\\ui'
+root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 config_path = os.path.join(root, 'docs', '.vitepress', 'config.ts')
 config = open(config_path, encoding='utf-8').read()
 links = re.findall(r"link:\s*'(/components/[^']+)'", config)

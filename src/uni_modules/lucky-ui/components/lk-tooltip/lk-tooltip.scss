@@ -15,14 +15,6 @@
   @include e(pop) {
     position: absolute;
     z-index: 2000;
-    padding: var(--lk-spacing-xs) var(--lk-spacing-sm);
-    background: var(--lk-bg-elevated);
-    border: 1px solid var(--lk-color-border-light);
-    border-radius: var(--lk-radius-md);
-    box-shadow: var(--lk-shadow-sm);
-    font-size: var(--lk-font-size-sm);
-    color: var(--lk-text-primary);
-    white-space: nowrap;
     pointer-events: auto;
 
     /* 默认 top */
@@ -54,6 +46,20 @@
     }
   }
 
+  @include e(body) {
+    position: relative;
+    box-sizing: border-box;
+    padding: var(--lk-spacing-xs) var(--lk-spacing-sm);
+    background: var(--lk-bg-elevated);
+    border: 1px solid var(--lk-color-border-light);
+    border-radius: var(--lk-radius-md);
+    box-shadow: var(--lk-shadow-sm);
+    font-size: var(--lk-font-size-sm);
+    color: var(--lk-text-primary);
+    white-space: nowrap;
+    will-change: opacity, transform;
+  }
+
   @include e(content) {
     display: block;
   }
@@ -66,95 +72,111 @@
   }
 
   @include e(pop) {
-    @include when(top) {
-      @include e(arrow) {
-        left: 50%;
-        bottom: calc(var(--lk-rpx-8) * -1);
-        transform: translateX(-50%);
-        border-width: var(--lk-rpx-8) var(--lk-rpx-8) 0 var(--lk-rpx-8);
-        border-color: var(--lk-color-border-light) transparent transparent transparent;
-      }
+    &.is-top {
+      > .lk-tooltip__body {
+        transform-origin: center bottom;
 
-      &::after {
-        content: '';
-        position: absolute;
-        left: 50%;
-        bottom: calc(var(--lk-rpx-6) * -1);
-        transform: translateX(-50%);
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: var(--lk-rpx-6) var(--lk-rpx-6) 0 var(--lk-rpx-6);
-        border-color: var(--lk-bg-elevated) transparent transparent transparent;
-      }
-    }
+        > .lk-tooltip__arrow {
+          left: 50%;
+          bottom: calc(var(--lk-rpx-8) * -1);
+          transform: translateX(-50%);
+          border-width: var(--lk-rpx-8) var(--lk-rpx-8) 0 var(--lk-rpx-8);
+          border-color: var(--lk-color-border-light) transparent transparent transparent;
+        }
 
-    @include when(bottom) {
-      @include e(arrow) {
-        left: 50%;
-        top: calc(var(--lk-rpx-8) * -1);
-        transform: translateX(-50%);
-        border-width: 0 var(--lk-rpx-8) var(--lk-rpx-8) var(--lk-rpx-8);
-        border-color: transparent transparent var(--lk-color-border-light) transparent;
-      }
-
-      &::after {
-        content: '';
-        position: absolute;
-        left: 50%;
-        top: calc(var(--lk-rpx-6) * -1);
-        transform: translateX(-50%);
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 0 var(--lk-rpx-6) var(--lk-rpx-6) var(--lk-rpx-6);
-        border-color: transparent transparent var(--lk-bg-elevated) transparent;
+        &::after {
+          content: '';
+          position: absolute;
+          left: 50%;
+          bottom: calc(var(--lk-rpx-6) * -1);
+          transform: translateX(-50%);
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: var(--lk-rpx-6) var(--lk-rpx-6) 0 var(--lk-rpx-6);
+          border-color: var(--lk-bg-elevated) transparent transparent transparent;
+        }
       }
     }
 
-    @include when(left) {
-      @include e(arrow) {
-        top: 50%;
-        right: calc(var(--lk-rpx-8) * -1);
-        transform: translateY(-50%);
-        border-width: var(--lk-rpx-8) 0 var(--lk-rpx-8) var(--lk-rpx-8);
-        border-color: transparent transparent transparent var(--lk-color-border-light);
-      }
+    &.is-bottom {
+      > .lk-tooltip__body {
+        transform-origin: center top;
 
-      &::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        right: calc(var(--lk-rpx-6) * -1);
-        transform: translateY(-50%);
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: var(--lk-rpx-6) 0 var(--lk-rpx-6) var(--lk-rpx-6);
-        border-color: transparent transparent transparent var(--lk-bg-elevated);
+        > .lk-tooltip__arrow {
+          left: 50%;
+          top: calc(var(--lk-rpx-8) * -1);
+          transform: translateX(-50%);
+          border-width: 0 var(--lk-rpx-8) var(--lk-rpx-8) var(--lk-rpx-8);
+          border-color: transparent transparent var(--lk-color-border-light) transparent;
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          left: 50%;
+          top: calc(var(--lk-rpx-6) * -1);
+          transform: translateX(-50%);
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 0 var(--lk-rpx-6) var(--lk-rpx-6) var(--lk-rpx-6);
+          border-color: transparent transparent var(--lk-bg-elevated) transparent;
+        }
       }
     }
 
-    @include when(right) {
-      @include e(arrow) {
-        top: 50%;
-        left: calc(var(--lk-rpx-8) * -1);
-        transform: translateY(-50%);
-        border-width: var(--lk-rpx-8) var(--lk-rpx-8) var(--lk-rpx-8) 0;
-        border-color: transparent var(--lk-color-border-light) transparent transparent;
-      }
+    &.is-left {
+      > .lk-tooltip__body {
+        transform-origin: right center;
 
-      &::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: calc(var(--lk-rpx-6) * -1);
-        transform: translateY(-50%);
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: var(--lk-rpx-6) var(--lk-rpx-6) var(--lk-rpx-6) 0;
-        border-color: transparent var(--lk-bg-elevated) transparent transparent;
+        > .lk-tooltip__arrow {
+          top: 50%;
+          right: calc(var(--lk-rpx-8) * -1);
+          transform: translateY(-50%);
+          border-width: var(--lk-rpx-8) 0 var(--lk-rpx-8) var(--lk-rpx-8);
+          border-color: transparent transparent transparent var(--lk-color-border-light);
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          right: calc(var(--lk-rpx-6) * -1);
+          transform: translateY(-50%);
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: var(--lk-rpx-6) 0 var(--lk-rpx-6) var(--lk-rpx-6);
+          border-color: transparent transparent transparent var(--lk-bg-elevated);
+        }
+      }
+    }
+
+    &.is-right {
+      > .lk-tooltip__body {
+        transform-origin: left center;
+
+        > .lk-tooltip__arrow {
+          top: 50%;
+          left: calc(var(--lk-rpx-8) * -1);
+          transform: translateY(-50%);
+          border-width: var(--lk-rpx-8) var(--lk-rpx-8) var(--lk-rpx-8) 0;
+          border-color: transparent var(--lk-color-border-light) transparent transparent;
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: calc(var(--lk-rpx-6) * -1);
+          transform: translateY(-50%);
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: var(--lk-rpx-6) var(--lk-rpx-6) var(--lk-rpx-6) 0;
+          border-color: transparent var(--lk-bg-elevated) transparent transparent;
+        }
       }
     }
   }

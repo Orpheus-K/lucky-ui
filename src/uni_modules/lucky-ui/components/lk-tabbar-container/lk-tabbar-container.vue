@@ -230,8 +230,8 @@ watch(
 
             <!-- #ifdef H5 || APP-PLUS -->
             <component
-              v-if="shouldRenderComponent(tab.id)"
               :is="getTabInstance(tab.id)!.component"
+              v-if="shouldRenderComponent(tab.id)"
               :tab-id="tab.id"
               :is-active="tab.id === activeId"
             />
@@ -267,8 +267,8 @@ watch(
 
             <!-- #ifdef H5 || APP-PLUS -->
             <component
-              v-if="shouldRenderComponent(tab.id)"
               :is="getTabInstance(tab.id)!.component"
+              v-if="shouldRenderComponent(tab.id)"
               :tab-id="tab.id"
               :is-active="tab.id === activeId"
             />

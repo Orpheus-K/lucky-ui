@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { H5_PREVIEW_BASE_URL } from '../constants/preview'
 
 /**
  * PropsPlayground — 文档调试模式组件
@@ -26,8 +27,6 @@ const props = defineProps<{
   tagPrefix?: string
 }>()
 
-const BASE_URL = 'http://localhost:5173'
-
 // ── 状态管理 ──
 const currentValues = ref<Record<string, unknown>>({})
 const slotText = ref(props.slotContent ?? '')
@@ -48,7 +47,7 @@ initValues()
 
 // iframe URL
 const frameUrl = computed(() => {
-  return `${BASE_URL}/#/pages_sub/playground/index?component=${encodeURIComponent(props.component)}`
+  return `${H5_PREVIEW_BASE_URL}/#/pages_sub/playground/index?component=${encodeURIComponent(props.component)}`
 })
 
 // ── 生成代码 ──

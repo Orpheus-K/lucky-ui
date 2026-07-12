@@ -13,7 +13,6 @@ const value4 = ref('1');
 const value5 = ref('1');
 const value5_1 = ref('1');
 const value6 = ref('1');
-const value6_1 = ref('1');
 const value7 = ref('1');
 const value7_1 = ref('1');
 const value7_2 = ref('1');

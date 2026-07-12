@@ -38,6 +38,22 @@ html.has-phone-preview .VPDoc .aside {
   display: none;
 }
 
+html.has-phone-preview .VPDoc.has-aside .content-container {
+  max-width: 880px;
+}
+
+@media (min-width: 1440px) {
+  html.has-phone-preview .VPContent.has-sidebar.has-sidebar {
+    padding-right: 0;
+  }
+}
+
+@media (min-width: 1800px) {
+  html.has-phone-preview .VPDoc.has-aside .content-container {
+    max-width: 920px;
+  }
+}
+
 @media (max-width: 1380px) {
   html.has-phone-preview .VPDoc {
     padding-right: 0;

@@ -52,6 +52,8 @@ export default {
     countdown: { day: '일', hour: '시', minute: '분', second: '초', millisecond: 'ms' },
     chartStatCard: { trendUp: '상승', trendDown: '하락', trendFlat: '유지' },
     transition: {
+      dropdownTitle: '드롭다운',
+      dropdownDescription: '트리거 가장자리에서 자연스럽게 펼쳐지는 메뉴 애니메이션',
       fadeTitle: '페이드',
       fadeDescription: '투명도와 이동으로 구성된 페이드 효과',
       slideTitle: '슬라이드',

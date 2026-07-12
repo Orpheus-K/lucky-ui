@@ -273,7 +273,7 @@ const onSubmit = async () => {
       content: JSON.stringify(formData, null, 2),
       showCancel: false,
     });
-  } catch (err) {
+  } catch {
     uni.showToast({ title: '请完善标红的错误项', icon: 'none' });
   }
 };
@@ -311,7 +311,7 @@ const onLaunchTimeConfirm = async (value: unknown) => {
       :custom-validator="isZodEngine ? zodValidator : undefined"
       :label-align="labelAlign"
       label-width="190rpx"
-      scrollToError
+      scroll-to-error
       asterisk-position="right"
       border
     >
@@ -327,9 +327,9 @@ const onLaunchTimeConfirm = async (value: unknown) => {
         <lk-form-item label="Zod 引擎">
           <lk-switch
             v-model="isZodEngine"
-            inlinePrompt
-            activeText="Zod"
-            inactiveText="标准"
+            inline-prompt
+            active-text="Zod"
+            inactive-text="标准"
             active-color="#111111"
           />
           <text class="switch-tip">{{
@@ -487,12 +487,12 @@ const onLaunchTimeConfirm = async (value: unknown) => {
         <lk-form-item label="创意陈述" prop="pitch" required vertical>
           <view class="textarea-field">
             <lk-textarea
-              class="textarea-field__control"
               v-model="formData.pitch"
+              class="textarea-field__control"
               prop="pitch"
               placeholder="描述创意设计背景、技术突破及项目解决的现实痛点（10-200字之间）..."
               :maxlength="200"
-              showCount
+              show-count
               custom-style="width: 100%; border: 2rpx solid var(--lk-color-border-light); padding: var(--lk-spacing-sm); margin-top: var(--lk-spacing-xs); background-color: var(--lk-fill-1);"
             />
           </view>

@@ -1,6 +1,9 @@
 """覆盖写入组件分类总览页"""
 import os
 
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+INDEX_PATH = os.path.join(ROOT, 'docs', 'components', 'index.md')
+
 INDEX_CONTENT = """\
 # 组件总览
 
@@ -106,6 +109,6 @@ Lucky UI 共收录 **65+** 个组件，按功能分为以下几类。
 | [Preload 预加载调试](./preload) | 开发阶段预加载状态面板 |
 """
 
-with open(r'f:\luckyone\ui\docs\components\index.md', 'w', encoding='utf-8') as f:
+with open(INDEX_PATH, 'w', encoding='utf-8') as f:
     f.write(INDEX_CONTENT)
 print('index.md written!')

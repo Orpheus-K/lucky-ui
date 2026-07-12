@@ -52,6 +52,8 @@ export default {
     countdown: { day: 'd', hour: 'h', minute: 'min', second: 's', millisecond: 'ms' },
     chartStatCard: { trendUp: 'Sube', trendDown: 'Baja', trendFlat: 'Estable' },
     transition: {
+      dropdownTitle: 'Dropdown',
+      dropdownDescription: 'Expansión de menú desde el borde del disparador',
       fadeTitle: 'Fundido',
       fadeDescription: 'Efectos de fundido con opacidad y movimiento',
       slideTitle: 'Deslizar',
