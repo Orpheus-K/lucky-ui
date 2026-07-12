@@ -2,7 +2,7 @@
   "id": "lucky-ui",
   "name": "uni-lucky-ui",
   "displayName": "Lucky UI",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Lucky UI components for UniApp, Vue 3, H5, App, and mini programs.",
   "type": "module",
   "main": "./index.ts",
