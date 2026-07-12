@@ -85,13 +85,13 @@
       "qq": ""
     },
     "declaration": {
-      "ads": "æ— ",
-      "data": "æ’ä»¶ä¸é‡‡é›†ä»»ä½•æ•°æ®",
-      "permissions": "æ— "
+      "ads": "æ—?,
+      "data": "æ’ä»¶ä¸é‡‡é›†ä»»ä½•æ•°æ?,
+      "permissions": "æ—?
     },
     "npmurl": "https://www.npmjs.com/package/uni-lucky-ui",
-    "darkmode": "âˆš",
-    "i18n": "âˆš",
+    "darkmode": "âˆ?,
+    "i18n": "âˆ?,
     "widescreen": "x"
   },
   "uni_modules": {
@@ -108,31 +108,31 @@
           "vue": {
             "vue2": "x",
             "vue3": {
-              "extVersion": "1.0.0",
+              "extVersion": "1.0.1",
               "minVersion": ""
             }
           },
           "web": {
-            "safari": "âˆš",
-            "chrome": "âˆš"
+            "safari": "âˆ?,
+            "chrome": "âˆ?
           },
           "app": {
-            "vue": "âˆš",
+            "vue": "âˆ?,
             "nvue": "x",
-            "android": "âˆš",
-            "ios": "âˆš",
+            "android": "âˆ?,
+            "ios": "âˆ?,
             "harmony": "-"
           },
           "mp": {
-            "weixin": "âˆš",
-            "alipay": "âˆš",
-            "toutiao": "âˆš",
-            "baidu": "âˆš",
-            "kuaishou": "âˆš",
-            "jd": "âˆš",
+            "weixin": "âˆ?,
+            "alipay": "âˆ?,
+            "toutiao": "âˆ?,
+            "baidu": "âˆ?,
+            "kuaishou": "âˆ?,
+            "jd": "âˆ?,
             "harmony": "-",
-            "qq": "âˆš",
-            "lark": "âˆš",
+            "qq": "âˆ?,
+            "lark": "âˆ?,
             "xhs": "-"
           },
           "quickapp": {
