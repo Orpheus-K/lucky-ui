@@ -145,8 +145,8 @@ const project = new ci.Project({
 
 ci.upload({
   project,
-  version: '1.0.0',
-  desc: 'release: 1.0.0',
+  version: '1.0.1',
+  desc: 'release: 1.0.1',
   robot: 1,
 })
 ```
