@@ -108,7 +108,7 @@
           "vue": {
             "vue2": "x",
             "vue3": {
-              "extVersion": "1.0.0",
+              "extVersion": "1.0.1",
               "minVersion": ""
             }
           },
