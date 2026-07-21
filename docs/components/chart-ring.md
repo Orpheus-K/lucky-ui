@@ -77,6 +77,11 @@ interface RingChartSegment {
 | effect | 图表特效等级 | `none / subtle / premium` | `premium` |
 | effectDuration | 图表特效周期，单位 ms | `number` | `2600` |
 
+## 运行时与可访问性
+
+- H5 容器尺寸变化会自动重绘；小程序动态展示后可通过组件实例的 `refresh()` 或 `resize()` 重新测量。
+- Canvas 附带精简的数据摘要供读屏软件读取；重要业务结论建议同时用文本呈现。
+
 ## 使用建议
 
 - 单一完成率用 `value / max`，多类配额用 `segments`。

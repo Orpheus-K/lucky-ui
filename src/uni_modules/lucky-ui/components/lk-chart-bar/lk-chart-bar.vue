@@ -3,6 +3,7 @@ import type { StyleValue } from 'vue';
 import { computed, ref, watch, onUnmounted } from 'vue';
 import { useChartCanvas } from '../../composables/useChartCanvas';
 import type { MaybeCanvas2DContext } from '../../composables/useChartCanvas';
+import { getLiteChartAccessibilitySummary } from '../../core/src/chart';
 import {
   buildBrandPalette,
   resolveBrandBaseColor,
@@ -63,6 +64,7 @@ const rootStyle = computed<StyleValue>(() =>
 const hoverIndex = ref<number>(-1);
 const pulse = ref(0);
 const tooltipState = ref({ ...CHART_BAR_EMPTY_TOOLTIP });
+const ariaLabel = computed(() => getLiteChartAccessibilitySummary('柱状图', props.data || []));
 
 let autoTimer: number | undefined;
 
@@ -79,7 +81,7 @@ function getEffectiveIndex(len: number) {
 
 function triggerPulse() {
   if (!props.highlightPulse) return;
-  chart.animateTo(
+  chart.animateConcurrent(
     280,
     p => {
       pulse.value = Math.sin(p * Math.PI);
@@ -190,6 +192,8 @@ chart.setRenderer((info, progress) => {
     hideTooltip();
     return;
   }
+  const zeroRatio = getChartBarValueRatio(0, valueRange);
+  const zeroY = layout.plotBottom - zeroRatio * layout.innerHeight;
 
   // axis/grid
   ctx.save();
@@ -222,8 +226,8 @@ chart.setRenderer((info, progress) => {
   ctx.strokeStyle = CHART_BAR_AXIS_COLOR;
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(layout.yAxisLeft, layout.plotBottom + 0.5);
-  ctx.lineTo(layout.plotLeft + layout.innerWidth, layout.plotBottom + 0.5);
+  ctx.moveTo(layout.yAxisLeft, zeroY + 0.5);
+  ctx.lineTo(layout.plotLeft + layout.innerWidth, zeroY + 0.5);
   ctx.stroke();
   ctx.restore();
 
@@ -231,10 +235,12 @@ chart.setRenderer((info, progress) => {
   let tooltipRendered = false;
 
   for (let i = 0; i < d.length; i += 1) {
-    const ratio = getChartBarValueRatio(values[i], valueRange) * progress;
-    const h = ratio * layout.innerHeight;
+    const valueRatio = getChartBarValueRatio(values[i], valueRange);
+    const valueY = layout.plotBottom - valueRatio * layout.innerHeight;
+    const animatedValueY = zeroY + (valueY - zeroY) * progress;
+    const h = Math.abs(animatedValueY - zeroY);
     const x = layout.plotLeft + i * layout.step + (layout.step - layout.barWidth) / 2;
-    const y = layout.plotTop + (layout.innerHeight - h);
+    const y = Math.min(zeroY, animatedValueY);
 
     const baseHex = resolveChartBarItemColor(d[i], i, palette);
     const fill = props.gradient ? buildGradient(ctx, x, y, h, baseHex) : baseHex;
@@ -375,6 +381,8 @@ watch(
   }
 );
 
+watch(() => props.height, () => void chart.resize());
+
 function onMove(e: unknown) {
   if (!props.tooltip) return;
   const p = chart.getRelativePoint(e);
@@ -429,12 +437,32 @@ function onEnd() {
   }
 }
 
+function onKeydown(event: unknown) {
+  if (!props.tooltip) return;
+  const ev = event as { key?: string; preventDefault?: () => void };
+  const len = (props.data || []).length;
+  if (ev.key === 'Escape') return onEnd();
+  if (!len || (ev.key !== 'ArrowLeft' && ev.key !== 'ArrowRight')) return;
+  ev.preventDefault?.();
+  const current = clampChartBarIndex(
+    hoverIndex.value < 0 ? props.defaultIndex : hoverIndex.value,
+    len
+  );
+  const next = (current + (ev.key === 'ArrowRight' ? 1 : -1) + len) % len;
+  hoverIndex.value = next;
+  emit('hoverChange', next);
+  triggerPulse();
+  refresh();
+}
+
 onUnmounted(() => {
   if (autoTimer) {
     clearInterval(autoTimer);
     autoTimer = undefined;
   }
 });
+
+defineExpose({ refresh: chart.resize, resize: chart.resize });
 </script>
 
 <template>
@@ -443,14 +471,18 @@ onUnmounted(() => {
     class="lk-chart"
     :class="props.customClass"
     :style="rootStyle"
+    tabindex="0"
+    role="group"
+    :aria-label="ariaLabel"
     @touchstart="onMove"
     @touchmove="onMove"
     @touchend="onEnd"
     @touchcancel="onEnd"
     @mousemove="onMove"
     @mouseleave="onEnd"
+    @keydown="onKeydown"
   >
-    <canvas :id="canvasId" :canvas-id="canvasId" type="2d" class="lk-chart__canvas" />
+    <canvas :id="canvasId" :canvas-id="canvasId" type="2d" class="lk-chart__canvas" aria-hidden="true" />
     <view v-if="tooltipState.visible" class="lk-chart__tooltip" :style="tooltipStyle">
       {{ tooltipState.text }}
     </view>

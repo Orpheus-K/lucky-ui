@@ -90,3 +90,19 @@ export function formatLiteChartTooltipText(point: LiteChartPoint): string {
   const label = String(point.label || '').trim();
   return label ? `${label} ${value}` : value;
 }
+
+/** A concise text alternative for canvas charts on H5 and assistive technology. */
+export function getLiteChartAccessibilitySummary(
+  chartName: string,
+  data: Array<LiteChartPoint>,
+  limit = 6
+): string {
+  const points = data.filter(point => Number.isFinite(point.value));
+  if (!points.length) return `${chartName}，暂无有效数据`;
+  const preview = points
+    .slice(0, Math.max(1, limit))
+    .map(point => formatLiteChartTooltipText(point))
+    .join('；');
+  const more = points.length > limit ? '；其余数据已省略' : '';
+  return `${chartName}，共 ${points.length} 项：${preview}${more}`;
+}

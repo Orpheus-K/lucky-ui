@@ -4,6 +4,7 @@ import { computed, onUnmounted, ref, watch } from 'vue';
 import { useChartCanvas, type MaybeCanvas2DContext } from '../../composables/useChartCanvas';
 import {
   formatLiteChartTooltipText,
+  getLiteChartAccessibilitySummary,
   getLiteChartPositions,
   getNearestPointIndex,
   LiteChartEffect,
@@ -44,6 +45,7 @@ const canvasId = computed(() => `${wrapperId.value}__canvas`);
 const hoverIndex = ref(-1);
 const effectPhase = ref(0);
 const tooltipState = ref(CHART_SPARKLINE_EMPTY_TOOLTIP);
+const ariaLabel = computed(() => getLiteChartAccessibilitySummary('迷你趋势图', props.data || []));
 
 const heightStyle = computed(() => resolveChartSparklineHeightStyle(props.height));
 
@@ -248,6 +250,22 @@ function clearHover() {
   chart.scheduleRender(1);
 }
 
+function onKeydown(event: unknown) {
+  if (!props.tooltip) return;
+  const ev = event as { key?: string; preventDefault?: () => void };
+  const len = (props.data || []).length;
+  if (ev.key === 'Escape') return clearHover();
+  if (!len || (ev.key !== 'ArrowLeft' && ev.key !== 'ArrowRight')) return;
+  ev.preventDefault?.();
+  const current = hoverIndex.value < 0 ? 0 : hoverIndex.value;
+  const next = (current + (ev.key === 'ArrowRight' ? 1 : -1) + len) % len;
+  if (next !== hoverIndex.value) {
+    hoverIndex.value = next;
+    emit('hoverChange', next);
+  }
+  chart.scheduleRender(1);
+}
+
 function syncEffectLoop() {
   chart.stopLoop();
   if (props.effect === LiteChartEffect.None) {
@@ -293,9 +311,13 @@ watch(
   { immediate: true }
 );
 
+watch(() => props.height, () => void chart.resize());
+
 onUnmounted(() => {
   chart.stopLoop();
 });
+
+defineExpose({ refresh: chart.resize, resize: chart.resize });
 </script>
 
 <template>
@@ -303,11 +325,18 @@ onUnmounted(() => {
     :id="wrapperId"
     :class="classes"
     :style="rootStyle"
+    tabindex="0"
+    role="group"
+    :aria-label="ariaLabel"
     @touchstart="updateHover"
     @touchmove="updateHover"
     @touchend="clearHover"
+    @touchcancel="clearHover"
+    @mousemove="updateHover"
+    @mouseleave="clearHover"
+    @keydown="onKeydown"
   >
-    <canvas :id="canvasId" class="lk-chart-sparkline__canvas" type="2d" :canvas-id="canvasId" />
+    <canvas :id="canvasId" class="lk-chart-sparkline__canvas" type="2d" :canvas-id="canvasId" aria-hidden="true" />
     <view v-if="tooltipState.visible" class="lk-chart-sparkline__tooltip" :style="tooltipStyle">
       {{ tooltipState.text }}
     </view>

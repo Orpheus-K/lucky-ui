@@ -83,6 +83,11 @@ interface RadarLiteItem {
 | effect | 入场后呼吸动效等级 | `none / subtle / premium` | `premium` |
 | effectDuration | 呼吸动效周期，单位 ms | `number` | `3200` |
 
+## 运行时与可访问性
+
+- H5 容器尺寸变化会自动重绘；小程序动态展示后可通过组件实例的 `refresh()` 或 `resize()` 重新测量。
+- Canvas 附带精简的数据摘要供读屏软件读取；重要业务结论建议同时用文本呈现。
+
 ## 使用建议
 
 - 维度数量建议控制在 4-8 个，过多会造成标签拥挤；少于 3 个维度时会降级为单轴/双轴 profile。

@@ -235,11 +235,19 @@ export function useChartCanvas<TExtra = unknown>(options: UseChartCanvasOptions)
 
   let rafId: number | undefined;
   let animRafId: number | undefined;
+  let concurrentAnimRafId: number | undefined;
   let loopRafId: number | undefined;
   let retryTimer: ReturnType<typeof setTimeout> | null = null;
   let loopStartTime = 0;
   let lastLoopTime = 0;
   let animationSerial = 0;
+  let concurrentAnimationSerial = 0;
+  let resizeObserver: ResizeObserver | null = null;
+  let resizeTimer: ReturnType<typeof setTimeout> | null = null;
+  let documentVisibilityHandler: (() => void) | null = null;
+  let loopDuration = 0;
+  let loopFrame: ((frame: ChartLoopFrame) => void) | null = null;
+  let loopPaused = false;
 
   function getUniChartApi(): UniChartApi | null {
     return typeof uni === 'undefined' ? null : (uni as UniChartApi);
@@ -434,6 +442,13 @@ export function useChartCanvas<TExtra = unknown>(options: UseChartCanvasOptions)
     }
   }
 
+  function clearResizeTimer() {
+    if (resizeTimer) {
+      clearTimeout(resizeTimer);
+      resizeTimer = null;
+    }
+  }
+
   async function ensureMeasuredVisible(attempts = 10) {
     // 典型场景：组件挂载在 v-show 隐藏的 tab 内，初次测量得到 0x0
     // 短时间重试，等可见后自动 resize + render。
@@ -483,6 +498,24 @@ export function useChartCanvas<TExtra = unknown>(options: UseChartCanvasOptions)
     });
   }
 
+  async function resize() {
+    const measured = await measure();
+    if (measured.width <= 0 || measured.height <= 0) return measured;
+    const sizeChanged =
+      measured.width !== size.value.width || measured.height !== size.value.height;
+    if (sizeChanged) resizeCanvas(measured);
+    if (ready.value) scheduleRender(1);
+    return measured;
+  }
+
+  function scheduleResize() {
+    clearResizeTimer();
+    resizeTimer = setTimeout(() => {
+      resizeTimer = null;
+      void resize();
+    }, 16);
+  }
+
   function animateTo(durationMs: number, onFrame: (p: number) => void, onDone?: () => void) {
     if (animRafId) {
       cAF(animRafId);
@@ -507,6 +540,38 @@ export function useChartCanvas<TExtra = unknown>(options: UseChartCanvasOptions)
     };
 
     animRafId = rAF(tick);
+  }
+
+  /**
+   * A secondary animation channel for transient feedback such as hover pulses.
+   * It intentionally does not cancel the primary entrance/transition animation.
+   */
+  function animateConcurrent(
+    durationMs: number,
+    onFrame: (p: number) => void,
+    onDone?: () => void
+  ) {
+    if (concurrentAnimRafId) {
+      cAF(concurrentAnimRafId);
+      concurrentAnimRafId = undefined;
+    }
+
+    const serial = ++concurrentAnimationSerial;
+    const start = Date.now();
+    const tick = () => {
+      if (serial !== concurrentAnimationSerial) return;
+      const t = (Date.now() - start) / Math.max(1, durationMs);
+      const p = t >= 1 ? 1 : t;
+      onFrame(1 - Math.pow(1 - p, 3));
+      if (p >= 1) {
+        concurrentAnimRafId = undefined;
+        onDone?.();
+      } else {
+        concurrentAnimRafId = rAF(tick);
+      }
+    };
+
+    concurrentAnimRafId = rAF(tick);
   }
 
   function animateToRepeated(
@@ -557,13 +622,18 @@ export function useChartCanvas<TExtra = unknown>(options: UseChartCanvasOptions)
     }
     loopStartTime = 0;
     lastLoopTime = 0;
+    loopDuration = 0;
+    loopFrame = null;
   }
 
   function startLoop(durationMs: number, onFrame: (frame: ChartLoopFrame) => void) {
     stopLoop();
     const duration = Math.max(240, durationMs);
+    loopDuration = duration;
+    loopFrame = onFrame;
 
     const tick = () => {
+      if (loopPaused || !loopFrame) return;
       const now = Date.now();
       if (!loopStartTime) {
         loopStartTime = now;
@@ -572,7 +642,7 @@ export function useChartCanvas<TExtra = unknown>(options: UseChartCanvasOptions)
       const elapsedMs = now - loopStartTime;
       const deltaMs = now - lastLoopTime;
       lastLoopTime = now;
-      onFrame({
+      loopFrame({
         elapsedMs,
         deltaMs,
         phase: (elapsedMs % duration) / duration,
@@ -581,6 +651,39 @@ export function useChartCanvas<TExtra = unknown>(options: UseChartCanvasOptions)
     };
 
     loopRafId = rAF(tick);
+  }
+
+  function setLoopPaused(paused: boolean) {
+    if (loopPaused === paused) return;
+    loopPaused = paused;
+    if (paused) {
+      if (loopRafId) {
+        cAF(loopRafId);
+        loopRafId = undefined;
+      }
+      return;
+    }
+    if (loopFrame && loopDuration > 0) {
+      const callback = loopFrame;
+      const duration = loopDuration;
+      startLoop(duration, callback);
+    }
+  }
+
+  function setupH5ResizeObserver() {
+    // #ifdef H5
+    if (typeof document === 'undefined') return;
+    const element = document.getElementById(options.wrapperId);
+    if (element && typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(scheduleResize);
+      resizeObserver.observe(element);
+    }
+    if (typeof document.addEventListener === 'function') {
+      documentVisibilityHandler = () => setLoopPaused(document.hidden);
+      document.addEventListener('visibilitychange', documentVisibilityHandler);
+      documentVisibilityHandler();
+    }
+    // #endif
   }
 
   function setRenderer(fn: ChartRenderer<TExtra>) {
@@ -630,13 +733,20 @@ export function useChartCanvas<TExtra = unknown>(options: UseChartCanvasOptions)
 
   onMounted(() => {
     init();
+    nextTick(setupH5ResizeObserver);
   });
 
   onUnmounted(() => {
     if (rafId) cAF(rafId);
     if (animRafId) cAF(animRafId);
+    if (concurrentAnimRafId) cAF(concurrentAnimRafId);
     stopLoop();
     clearRetryTimer();
+    clearResizeTimer();
+    if (resizeObserver) resizeObserver.disconnect();
+    if (documentVisibilityHandler && typeof document !== 'undefined') {
+      document.removeEventListener('visibilitychange', documentVisibilityHandler);
+    }
   });
 
   return {
@@ -648,7 +758,9 @@ export function useChartCanvas<TExtra = unknown>(options: UseChartCanvasOptions)
     setRenderer,
     render,
     scheduleRender,
+    resize,
     animateTo,
+    animateConcurrent,
     animateToRepeated,
     startLoop,
     stopLoop,

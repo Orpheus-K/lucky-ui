@@ -2,7 +2,12 @@
 import type { StyleValue } from 'vue';
 import { computed, onUnmounted, ref, watch } from 'vue';
 import { useChartCanvas } from '../../composables/useChartCanvas';
-import { LiteChartEffect, movingWindow, oscillate } from '../../core/src/chart';
+import {
+  getLiteChartAccessibilitySummary,
+  LiteChartEffect,
+  movingWindow,
+  oscillate,
+} from '../../core/src/chart';
 import {
   buildBrandPalette,
   resolveBrandBaseColor,
@@ -39,6 +44,9 @@ function uid(prefix: string) {
 const wrapperId = computed(() => props.id || uid('lk-chart-ring'));
 const canvasId = computed(() => `${wrapperId.value}__canvas`);
 const effectPhase = ref(0);
+const ariaLabel = computed(() =>
+  getLiteChartAccessibilitySummary('环形图', normalizedSegments.value)
+);
 
 const heightStyle = computed(() => resolveChartRingHeightStyle(props.height));
 
@@ -279,14 +287,18 @@ watch(
   { immediate: true }
 );
 
+watch(() => props.height, () => void chart.resize());
+
 onUnmounted(() => {
   chart.stopLoop();
 });
+
+defineExpose({ refresh: chart.resize, resize: chart.resize });
 </script>
 
 <template>
   <view :id="wrapperId" :class="classes" :style="rootStyle">
-    <canvas :id="canvasId" class="lk-chart-ring__canvas" type="2d" :canvas-id="canvasId" />
+    <canvas :id="canvasId" class="lk-chart-ring__canvas" type="2d" :canvas-id="canvasId" role="img" :aria-label="ariaLabel" />
   </view>
 </template>
 

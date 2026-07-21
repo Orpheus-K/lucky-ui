@@ -83,6 +83,12 @@ interface LiteChartPoint {
 | effect | 图表特效等级 | `none / subtle / premium` | `premium` |
 | effectDuration | 图表特效周期，单位 ms | `number` | `2400` |
 
+## 运行时与可访问性
+
+- H5 容器尺寸变化会自动重绘；小程序动态展示后可通过组件实例的 `refresh()` 或 `resize()` 重新测量。
+- H5 支持鼠标、触摸以及键盘方向键切换高亮点，按 Escape 清除高亮。
+- Canvas 附带精简的数据摘要供读屏软件读取；重要业务结论建议同时用文本呈现。
+
 ## Events
 
 | 事件名 | 说明 | 回调参数 |

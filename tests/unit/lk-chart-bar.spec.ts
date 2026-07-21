@@ -152,6 +152,14 @@ describe('lk-chart-bar layout and tooltip rules', () => {
       max: 930,
       span: 930,
     });
+    expect(resolveChartBarValueRange([-20, 30], false)).toEqual({
+      min: -20,
+      max: 30,
+      span: 50,
+    });
+    const signedRange = resolveChartBarValueRange([-20, 30], true);
+    expect(getChartBarValueRatio(0, signedRange)).toBeGreaterThan(0);
+    expect(getChartBarValueRatio(0, signedRange)).toBeLessThan(1);
     expect(formatChartBarAxisValue(0.256, 0.5)).toBe('0.26');
     expect(formatChartBarAxisValue(10.5, 42)).toBe('11');
   });

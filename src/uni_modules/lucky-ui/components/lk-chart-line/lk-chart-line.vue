@@ -2,6 +2,7 @@
 import type { StyleValue } from 'vue';
 import { computed, ref, watch, onUnmounted } from 'vue';
 import { useChartCanvas } from '../../composables/useChartCanvas';
+import { getLiteChartAccessibilitySummary } from '../../core/src/chart';
 import { buildBrandPalette, resolveBrandBaseColor, rgbaFromHex } from '../../utils/chart-colors';
 import { chartLineProps, chartLineEmits } from './chart-line.props';
 import {
@@ -60,6 +61,7 @@ const autoTo = ref<number | null>(null);
 const autoT = ref(1);
 const pulse = ref(0);
 const tooltipState = ref({ ...CHART_LINE_EMPTY_TOOLTIP });
+const ariaLabel = computed(() => getLiteChartAccessibilitySummary('折线图', props.data || []));
 
 let autoTimer: number | undefined;
 
@@ -73,7 +75,7 @@ function isAutoAnimating() {
 
 function triggerPulse() {
   if (!props.highlightPulse) return;
-  chart.animateTo(
+  chart.animateConcurrent(
     320,
     p => {
       pulse.value = Math.sin(p * Math.PI);
@@ -157,6 +159,7 @@ chart.setRenderer((info, progress) => {
 
   const palette = buildBrandPalette(resolveBrandBaseColor());
   const values = normalizeChartLineValues(d);
+  const normalizedData = d.map((item, index) => ({ ...item, value: values[index] }));
   const range = resolveChartLineValueRange(values, props.yAxisAutoScale);
 
   ctx.save();
@@ -185,7 +188,7 @@ chart.setRenderer((info, progress) => {
   }
 
   const pts = buildChartLineRenderPoints({
-    data: d,
+    data: normalizedData,
     layout,
     min: range.min,
     span: range.span,
@@ -443,6 +446,8 @@ watch(
   }
 );
 
+watch(() => props.height, () => void chart.resize());
+
 function onMove(e: unknown) {
   if (!props.tooltip) return;
   const p = chart.getRelativePoint(e);
@@ -496,12 +501,31 @@ function onEnd() {
   }
 }
 
+function onKeydown(event: unknown) {
+  if (!props.tooltip) return;
+  const ev = event as { key?: string; preventDefault?: () => void };
+  const len = (props.data || []).length;
+  if (ev.key === 'Escape') return onEnd();
+  if (!len || (ev.key !== 'ArrowLeft' && ev.key !== 'ArrowRight')) return;
+  ev.preventDefault?.();
+  const current = clampChartLineIndex(
+    hoverIndex.value < 0 ? props.defaultIndex : hoverIndex.value,
+    len
+  );
+  const next = (current + (ev.key === 'ArrowRight' ? 1 : -1) + len) % len;
+  setHover(next);
+  triggerPulse();
+  refresh();
+}
+
 onUnmounted(() => {
   if (autoTimer) {
     clearInterval(autoTimer);
     autoTimer = undefined;
   }
 });
+
+defineExpose({ refresh: chart.resize, resize: chart.resize });
 </script>
 
 <template>
@@ -510,14 +534,18 @@ onUnmounted(() => {
     class="lk-chart"
     :class="props.customClass"
     :style="rootStyle"
+    tabindex="0"
+    role="group"
+    :aria-label="ariaLabel"
     @touchstart="onMove"
     @touchmove="onMove"
     @touchend="onEnd"
     @touchcancel="onEnd"
     @mousemove="onMove"
     @mouseleave="onEnd"
+    @keydown="onKeydown"
   >
-    <canvas :id="canvasId" :canvas-id="canvasId" type="2d" class="lk-chart__canvas" />
+    <canvas :id="canvasId" :canvas-id="canvasId" type="2d" class="lk-chart__canvas" aria-hidden="true" />
     <view v-if="tooltipState.visible" class="lk-chart__tooltip" :style="tooltipStyle">
       {{ tooltipState.text }}
     </view>

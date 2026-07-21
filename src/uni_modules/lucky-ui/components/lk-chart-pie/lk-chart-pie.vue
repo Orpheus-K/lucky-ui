@@ -2,6 +2,7 @@
 import type { StyleValue } from 'vue';
 import { computed, ref, watch, onUnmounted } from 'vue';
 import { useChartCanvas } from '../../composables/useChartCanvas';
+import { getLiteChartAccessibilitySummary } from '../../core/src/chart';
 import {
   buildBrandPalette,
   getCssVarColor,
@@ -63,6 +64,10 @@ const rootStyle = computed<StyleValue>(() =>
 const hoverIndex = ref(-1);
 const pulse = ref(0);
 const tooltipState = ref({ ...CHART_PIE_EMPTY_TOOLTIP });
+const validSliceCount = computed(() => getValidChartPieSlices(props.data || []).length);
+const ariaLabel = computed(() =>
+  getLiteChartAccessibilitySummary('饼图', getValidChartPieSlices(props.data || []))
+);
 
 let autoTimer: number | undefined;
 
@@ -75,7 +80,7 @@ function resolveCanvasTextColor(varName: string, tokenName: string, fallback: st
 
 function triggerPulse() {
   if (!props.highlightPulse) return;
-  chart.animateTo(
+  chart.animateConcurrent(
     320,
     p => {
       pulse.value = Math.sin(p * Math.PI);
@@ -334,7 +339,7 @@ watch(
       props.autoTooltipInterval,
       props.tooltipAlways,
       props.defaultIndex,
-      (props.data || []).length,
+      validSliceCount.value,
     ] as const,
   () => {
     if (autoTimer) {
@@ -378,6 +383,8 @@ watch(
     if (v) triggerIntro();
   }
 );
+
+watch(() => props.height, () => void chart.resize());
 
 function onMove(e: unknown) {
   if (!props.tooltip) return;
@@ -440,12 +447,32 @@ function onEnd() {
   }
 }
 
+function onKeydown(event: unknown) {
+  if (!props.tooltip) return;
+  const ev = event as { key?: string; preventDefault?: () => void };
+  const len = validSliceCount.value;
+  if (ev.key === 'Escape') return onEnd();
+  if (!len || (ev.key !== 'ArrowLeft' && ev.key !== 'ArrowRight')) return;
+  ev.preventDefault?.();
+  const current = clampChartPieIndex(
+    hoverIndex.value < 0 ? props.defaultIndex : hoverIndex.value,
+    len
+  );
+  const next = (current + (ev.key === 'ArrowRight' ? 1 : -1) + len) % len;
+  hoverIndex.value = next;
+  emit('hoverChange', next);
+  triggerPulse();
+  refresh();
+}
+
 onUnmounted(() => {
   if (autoTimer) {
     clearInterval(autoTimer);
     autoTimer = undefined;
   }
 });
+
+defineExpose({ refresh: chart.resize, resize: chart.resize });
 </script>
 
 <template>
@@ -454,14 +481,18 @@ onUnmounted(() => {
     class="lk-chart"
     :class="props.customClass"
     :style="rootStyle"
+    tabindex="0"
+    role="group"
+    :aria-label="ariaLabel"
     @touchstart="onMove"
     @touchmove="onMove"
     @touchend="onEnd"
     @touchcancel="onEnd"
     @mousemove="onMove"
     @mouseleave="onEnd"
+    @keydown="onKeydown"
   >
-    <canvas :id="canvasId" :canvas-id="canvasId" type="2d" class="lk-chart__canvas" />
+    <canvas :id="canvasId" :canvas-id="canvasId" type="2d" class="lk-chart__canvas" aria-hidden="true" />
     <view v-if="tooltipState.visible" class="lk-chart__tooltip" :style="tooltipStyle">
       {{ tooltipState.text }}
     </view>

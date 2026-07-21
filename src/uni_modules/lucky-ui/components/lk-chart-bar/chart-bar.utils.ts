@@ -137,8 +137,10 @@ export function resolveChartBarValueRange(values: number[], autoScale = true): C
   if (!finiteValues.length) return { min: 0, max: 1, span: 1 };
 
   if (!autoScale) {
-    const max = Math.max(1, ...finiteValues.map(value => Math.max(0, value)));
-    return { min: 0, max, span: max };
+    const min = Math.min(0, ...finiteValues);
+    const max = Math.max(0, ...finiteValues);
+    if (min === max) return { min: 0, max: 1, span: 1 };
+    return { min, max, span: Math.max(1e-6, max - min) };
   }
 
   const rawMin = Math.min(...finiteValues);

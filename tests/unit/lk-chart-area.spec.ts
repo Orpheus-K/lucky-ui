@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   formatCompactNumber,
+  getLiteChartAccessibilitySummary,
   formatLiteChartTooltipText,
   getLiteChartPositions,
   getLiteChartRange,
@@ -50,6 +51,12 @@ describe('lk-chart-area layout and tooltip rules', () => {
     expect(formatCompactNumber(12.34)).toBe('12.3');
     expect(formatCompactNumber(Number.NaN)).toBe('--');
     expect(formatLiteChartTooltipText({ label: 'Mon', value: 12345 })).toBe('Mon 1.2w');
+    expect(getLiteChartAccessibilitySummary('趋势图', [
+      { label: 'Mon', value: 10 },
+      { label: 'Tue', value: Number.NaN },
+      { label: 'Wed', value: 30 },
+    ])).toBe('趋势图，共 2 项：Mon 10；Wed 30');
+    expect(getLiteChartAccessibilitySummary('趋势图', [])).toBe('趋势图，暂无有效数据');
     expect(oscillate(0.5)).toBe(1);
     expect(movingWindow(0.5, 0.5, 0.2)).toBe(1);
     expect(normalizeAnimationRepeat(1)).toBe(1);
