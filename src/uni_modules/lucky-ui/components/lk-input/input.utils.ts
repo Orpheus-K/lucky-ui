@@ -98,6 +98,7 @@ export function resolveInputClass(options: {
   prefixIcon: string;
   trailingBalance: boolean;
   count: string;
+  error: boolean;
   customClass: unknown;
 }) {
   return [
@@ -106,6 +107,7 @@ export function resolveInputClass(options: {
     {
       'is-disabled': options.disabled,
       'is-readonly': options.readonly,
+      'is-error': options.error,
       'is-fake': options.fake,
       'is-borderless': options.borderless,
       'has-value': hasInputValue(options.value),

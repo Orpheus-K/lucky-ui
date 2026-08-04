@@ -46,4 +46,15 @@ describe('compat-check rules', () => {
     ].join('\n'));
     expect(guarded.filter(item => item.level === 'error')).toEqual([]);
   });
+
+  it('rejects :global combined with a Sass parent selector', () => {
+    const unsafe = scanContent(
+      'sample.scss',
+      '.lk-input { :global(.lk-form-item.is-error) & { color: red; } }'
+    );
+    expect(unsafe.map(item => item.id)).toContain('no-global-parent-selector');
+
+    const safe = scanContent('sample.scss', '.lk-input { &.is-error { color: red; } }');
+    expect(safe.map(item => item.id)).not.toContain('no-global-parent-selector');
+  });
 });

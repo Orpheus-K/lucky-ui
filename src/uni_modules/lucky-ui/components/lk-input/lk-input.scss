@@ -199,8 +199,8 @@
     }
   }
 
-  /* 表单错误态（父 .lk-form-item.is-error 加的类） */
-  :global(.lk-form-item.is-error) & {
+  /* 表单项通过上下文同步错误态 */
+  @include when(error) {
     border-color: var(--lk-color-danger);
     box-shadow: 0 0 0 var(--lk-rpx-4) var(--lk-color-danger-soft);
   }

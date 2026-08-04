@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { StyleValue } from 'vue';
 import { ref, watch, computed, inject, useSlots } from 'vue';
-import { formContextKey } from '../lk-form/context';
+import { formContextKey, formItemContextKey } from '../lk-form/context';
 import type { InputEventPayload, InputValue } from './input.props';
 import { inputProps, inputEmits } from './input.props';
 import LkIcon from '../lk-icon/lk-icon.vue';
@@ -25,6 +25,7 @@ const emit = defineEmits(inputEmits);
 const slots = useSlots();
 
 const form = inject(formContextKey, null);
+const formItem = inject(formItemContextKey, null);
 
 const inner = ref<InputValue>(props.modelValue);
 const composing = ref(false);
@@ -41,6 +42,7 @@ const nativePassword = computed(() => nativeState.value.nativePassword);
 
 const style = computed(() => props.customStyle as StyleValue);
 const isFocused = computed(() => props.focus || props.autofocus);
+const hasValidationError = computed(() => formItem?.validateStatus?.value === 'error');
 
 function commit(val: InputValue, change = false) {
   inner.value = val;
@@ -119,6 +121,7 @@ const classes = computed(() => [
     prefixIcon: props.prefixIcon,
     trailingBalance: showTrailingBalance.value,
     count: count.value,
+    error: hasValidationError.value,
     customClass: props.customClass,
   }),
 ]);

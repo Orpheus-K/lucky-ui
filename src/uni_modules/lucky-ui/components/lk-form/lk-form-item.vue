@@ -2,7 +2,9 @@
 import type { StyleValue } from 'vue';
 import {
   inject,
+  provide,
   ref,
+  readonly,
   onMounted,
   onBeforeUnmount,
   computed,
@@ -14,6 +16,7 @@ import { formItemEmits, formItemProps } from './form.props';
 import LkIcon from '../lk-icon/lk-icon.vue';
 import {
   formContextKey,
+  formItemContextKey,
   type FormContext,
   type FormRule,
   type FormItemContext,
@@ -110,6 +113,7 @@ async function doValidate(trigger?: 'blur' | 'change') {
 
 const itemCtx: FormItemContext = {
   prop: props.prop || undefined,
+  validateStatus: readonly(status),
   getBoundingClientRect() {
     return new Promise(resolve => {
       const query = uni.createSelectorQuery();
@@ -141,6 +145,8 @@ const itemCtx: FormItemContext = {
     msg.value = '';
   },
 };
+
+provide(formItemContextKey, itemCtx);
 
 onMounted(() => {
   requiredMark.value = computeReq();

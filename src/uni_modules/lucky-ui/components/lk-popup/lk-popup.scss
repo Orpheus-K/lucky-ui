@@ -8,6 +8,7 @@
   &.is-round {
     .lk-popup__panel {
       overflow: hidden;
+      border-radius: var(--lk-popup-radius);
     }
   }
 
@@ -117,10 +118,6 @@
     flex-direction: column;
     border-radius: 0;
     overflow: hidden;
-
-    :global(.lk-popup.is-round) & {
-      border-radius: var(--lk-popup-radius);
-    }
   }
 
   @include e(drag-handle) {
