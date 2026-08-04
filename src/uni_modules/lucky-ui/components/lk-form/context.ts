@@ -1,4 +1,4 @@
-import type { InjectionKey } from 'vue';
+import type { InjectionKey, Ref } from 'vue';
 
 export interface ValidateError {
   field: string;
@@ -60,6 +60,7 @@ export interface FormContext {
 
 export interface FormItemContext {
   prop?: string | string[];
+  validateStatus?: Readonly<Ref<'idle' | 'validating' | 'success' | 'error'>>;
   getBoundingClientRect?: () => Promise<{ top?: number; height?: number } | null>;
   setValidateStatus: (
     status: 'idle' | 'validating' | 'success' | 'error',

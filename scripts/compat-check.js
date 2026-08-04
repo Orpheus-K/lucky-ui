@@ -25,6 +25,12 @@ const ERROR_RULES = [
     message: '小程序不支持通配符选择器',
   },
   {
+    id: 'no-global-parent-selector',
+    files: ['.vue', '.scss', '.css'],
+    pattern: /:global\([^)]*\)\s*&/,
+    message: ':global(...) 与 Sass 父选择器 & 组合会让 UniApp 编译丢失子选择器',
+  },
+  {
     id: 'no-div',
     files: ['.vue'],
     pattern: /<\s*div(\s|>)/,
