@@ -3,6 +3,7 @@
  * 提供主题切换、品牌色变量与小程序系统 UI 同步。
  */
 import { ref, computed, readonly } from 'vue';
+import { DEFAULT_BRAND_COLOR, generateBrandVars } from './brand-color';
 
 export type Theme = 'light' | 'dark';
 
@@ -11,7 +12,6 @@ export const DEFAULT_THEME: Theme = 'dark';
 
 const THEME_STORAGE_KEY = 'lk-theme';
 const BRAND_COLOR_STORAGE_KEY = 'lk-brand-color';
-const DEFAULT_BRAND_COLOR = '#6965db';
 const SYSTEM_UI_THEME = {
   light: {
     backgroundColor: '#f4f5f9',
@@ -48,53 +48,6 @@ const _theme = ref<Theme>(readStoredTheme());
 const _isSwitching = ref(false);
 const _brandColor = ref<string>(readStoredBrandColor());
 let switchingTimer: ReturnType<typeof setTimeout> | null = null;
-
-/**
- * HEX 转 RGB
- */
-function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
-  const match = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return match
-    ? { r: parseInt(match[1], 16), g: parseInt(match[2], 16), b: parseInt(match[3], 16) }
-    : null;
-}
-
-/**
- * 生成色阶
- */
-function generateShade(baseColor: string, level: number): string {
-  const rgb = hexToRgb(baseColor);
-  if (!rgb) return baseColor;
-
-  const { r, g, b } = rgb;
-  if (level === 600) return baseColor;
-
-  if (level < 600) {
-    const ratio = ((600 - level) / 500) * 0.85;
-    return `rgb(${Math.round(r + (255 - r) * ratio)}, ${Math.round(g + (255 - g) * ratio)}, ${Math.round(b + (255 - b) * ratio)})`;
-  } else {
-    const ratio = ((level - 600) / 300) * 0.6;
-    return `rgb(${Math.round(r * (1 - ratio))}, ${Math.round(g * (1 - ratio))}, ${Math.round(b * (1 - ratio))})`;
-  }
-}
-
-/**
- * 生成品牌色 CSS 变量
- */
-function generateBrandVars(color: string): Record<string, string> {
-  const vars: Record<string, string> = {};
-  const rgb = hexToRgb(color);
-  const levels = [100, 200, 300, 400, 500, 600, 700, 800, 900];
-
-  levels.forEach(level => {
-    vars[`--lk-brand-${level}`] = generateShade(color, level);
-  });
-
-  if (rgb) {
-    vars['--lk-brand-rgb'] = `${rgb.r}, ${rgb.g}, ${rgb.b}`;
-  }
-  return vars;
-}
 
 /**
  * 序列化 CSS 变量为内联样式
