@@ -53,6 +53,13 @@ export function resolveToastRootStyle(zIndex: number): StyleValue {
   return { zIndex: zIndex + 1 };
 }
 
+export function resolveToastManagerStyle(options: {
+  customStyle: StyleValue;
+  zIndex: number;
+}): StyleValue {
+  return [options.customStyle, { zIndex: options.zIndex }];
+}
+
 export function resolveToastManagerItemClass(position: ToastPosition) {
   return [`pos-${position}`];
 }

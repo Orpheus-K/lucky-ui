@@ -40,4 +40,18 @@ describe('component style selectors', () => {
       css.indexOf('.lk-popup--bottom.is-round .lk-popup__panel')
     );
   });
+
+  it('keeps overlay component layers aligned with props and public tokens', () => {
+    const dropdownMenu = selectorBlock(compileStyle('dropdown'), '.lk-dropdown__menu');
+    const tooltipPop = selectorBlock(compileStyle('tooltip'), '.lk-tooltip__pop');
+    const toastCss = compileStyle('toast');
+    const toastRoot = selectorBlock(toastCss, '.lk-toast');
+    const toastManager = selectorBlock(toastCss, '.lk-toast-manager');
+
+    expect(dropdownMenu).not.toContain('z-index:');
+    expect(tooltipPop).not.toContain('z-index:');
+    expect(toastRoot).toContain('z-index: var(--lk-z-index-toast)');
+    expect(toastManager).toContain('z-index: var(--lk-z-index-toast)');
+    expect(toastCss).not.toMatch(/z-index:\s*(?:4000|4500)/);
+  });
 });

@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import { toastManagerProps } from '../../src/uni_modules/lucky-ui/components/lk-toast/toast.props';
 import {
   createToastItem,
   resolveToastManagerItemClass,
+  resolveToastManagerStyle,
   resolveToastManagerTransition,
   resolveToastOverlayClass,
   resolveToastOverlayStyle,
@@ -12,6 +14,19 @@ import {
 } from '../../src/uni_modules/lucky-ui/components/lk-toast/toast.utils';
 
 describe('lk-toast display and manager rules', () => {
+  it('uses the public toast layer for the global manager', () => {
+    const customStyle = { top: '24rpx', zIndex: 3000 };
+
+    expect(toastManagerProps.zIndex.default).toBe(2000);
+    expect(resolveToastManagerStyle({
+      customStyle,
+      zIndex: 2100,
+    })).toEqual([
+      customStyle,
+      { zIndex: 2100 },
+    ]);
+  });
+
   it('resolves controlled toast transition by position', () => {
     expect(resolveToastTransition({
       transition: 'slide-up',

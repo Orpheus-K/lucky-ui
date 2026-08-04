@@ -54,7 +54,7 @@ export const curtainProps = {
   /**
    * 层级 (覆盖 baseProps 默认值)
    */
-  zIndex: LkProp.number(10090),
+  zIndex: LkProp.number(1500),
   /**
    * 是否显示幕帘
    */
