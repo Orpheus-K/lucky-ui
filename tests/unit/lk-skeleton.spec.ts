@@ -70,7 +70,7 @@ describe('lk-skeleton display rules', () => {
       height: '32rpx',
     });
 
-    expect(resolveSkeletonAnimatedClass(true)).toEqual({ 'is-anim': true });
-    expect(resolveSkeletonAnimatedClass(false)).toEqual({ 'is-anim': false });
+    expect(resolveSkeletonAnimatedClass(true)).toBe('is-anim');
+    expect(resolveSkeletonAnimatedClass(false)).toBe('');
   });
 });

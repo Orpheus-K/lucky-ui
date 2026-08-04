@@ -23,9 +23,8 @@ describe('lk-space layout rules', () => {
     expect(resolveSpaceGaps(['10px'])).toEqual({ rowGap: '10px', colGap: '10px' });
   });
 
-  it('builds negative margin style and css variables', () => {
+  it('builds native gap css variables', () => {
     expect(resolveSpaceStyle([8, 20])).toEqual({
-      margin: 'calc(20rpx * -0.5) calc(8rpx * -0.5)',
       '--lk-space-row-gap': '20rpx',
       '--lk-space-col-gap': '8rpx',
     });

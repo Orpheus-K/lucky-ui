@@ -38,10 +38,19 @@ describe('lk-tabbar-container layout and navigation rules', () => {
     })).toBe('加载中');
     expect(resolveTabbarContainerClass({
       mode: 'ripple',
+      fixed: true,
+      safeMode: false,
+      renderMode: 'auto',
       customClass: 'custom',
     })).toEqual([
       'lk-tabbar-container',
       'lk-tabbar-container--ripple',
+      'lk-tabbar-container--render-auto',
+      {
+        'is-fixed-tabbar': true,
+        'is-static-tabbar': false,
+        'is-safe-mode': false,
+      },
       'custom',
     ]);
   });

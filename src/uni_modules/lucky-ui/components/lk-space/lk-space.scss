@@ -12,7 +12,7 @@
 
   @include m(fill) {
     display: flex;
-    width: auto; // 配合容器的 100% 和负 margin
+    width: auto; // 块级 flex 跟随外层容器宽度
   }
 
   @include m(horizontal) {

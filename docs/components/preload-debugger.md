@@ -36,6 +36,10 @@ const isDev = import.meta.env.DEV;
 | visible | 是否显示调试面板 | `boolean` | `false` |
 | position | 面板位置 | `top-left / top-right / bottom-left / bottom-right` | `bottom-right` |
 
+## Events
+
+当前版本未额外暴露自定义事件。
+
 ## 使用规范
 
 - 只在开发环境、测试包或内部白名单开启。
