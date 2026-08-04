@@ -23,6 +23,16 @@ function colorDeclarationsForSelector(css: string, selector: string): string[] {
   return values;
 }
 
+function selectorsInTheme(css: string): string[] {
+  const selectors = new Set<string>();
+
+  postcss.parse(css).walkRules(rule => {
+    rule.selectors.forEach(selector => selectors.add(selector.trim()));
+  });
+
+  return [...selectors];
+}
+
 describe('theme base styles', () => {
   it('defines the default text color on page without overriding descendant inheritance', () => {
     const css = compileThemeCss();
@@ -30,5 +40,13 @@ describe('theme base styles', () => {
     expect(colorDeclarationsForSelector(css, 'page')).toContain('var(--lk-text-primary)');
     expect(colorDeclarationsForSelector(css, 'view')).toEqual([]);
     expect(colorDeclarationsForSelector(css, 'text')).toEqual([]);
+  });
+
+  it('includes cross-platform theme transition rules in the public entry', () => {
+    const selectors = selectorsInTheme(compileThemeCss());
+
+    expect(selectors).toContain('.lk-theme-transition');
+    expect(selectors).toContain('.lk-theme-switching *');
+    expect(selectors).toContain('.lk-theme-switching view');
   });
 });
