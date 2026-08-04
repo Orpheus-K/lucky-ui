@@ -29,7 +29,8 @@ export function generateShade(baseColor: string, level: number): string {
     const ratio = ((600 - level) / 500) * 0.85;
     return `rgb(${Math.round(r + (255 - r) * ratio)}, ${Math.round(g + (255 - g) * ratio)}, ${Math.round(b + (255 - b) * ratio)})`;
   } else {
-    const ratio = ((level - 600) / 300) * 0.6;
+    // 与 tokens/_colors.scss 保持一致：1000 色阶混合 70% 黑色。
+    const ratio = ((level - 600) / 400) * 0.7;
     return `rgb(${Math.round(r * (1 - ratio))}, ${Math.round(g * (1 - ratio))}, ${Math.round(b * (1 - ratio))})`;
   }
 }
