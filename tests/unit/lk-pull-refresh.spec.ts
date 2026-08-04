@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { PullRefreshStatus } from '../../src/uni_modules/lucky-ui/components/lk-pull-refresh/pull-refresh.props';
 import {
@@ -18,6 +20,28 @@ import {
 } from '../../src/uni_modules/lucky-ui/components/lk-pull-refresh/pull-refresh.utils';
 
 describe('lk-pull-refresh state and indicator rules', () => {
+  it('places the custom indicator in the native refresher slot after content', () => {
+    const source = readFileSync(join(
+      process.cwd(),
+      'src/uni_modules/lucky-ui/components/lk-pull-refresh/lk-pull-refresh.vue'
+    ), 'utf8');
+    const scrollStart = source.indexOf('<scroll-view');
+    const scrollEnd = source.indexOf('</scroll-view>', scrollStart);
+    const scrollMarkup = source.slice(scrollStart, scrollEnd);
+
+    expect(scrollStart).toBeGreaterThan(-1);
+    expect(scrollEnd).toBeGreaterThan(scrollStart);
+    expect(scrollMarkup.indexOf('<slot />')).toBeLessThan(
+      scrollMarkup.indexOf('slot="refresher"')
+    );
+    expect(scrollMarkup).toContain(
+      '<view slot="refresher" class="lk-pull-refresh__indicator"'
+    );
+    expect(source.slice(source.indexOf('<template>'), scrollStart)).not.toContain(
+      'lk-pull-refresh__indicator'
+    );
+  });
+
   it('resolves initial status from model value', () => {
     expect(resolvePullRefreshInitialStatus(true)).toBe(PullRefreshStatus.Refreshing);
     expect(resolvePullRefreshInitialStatus(false)).toBe(PullRefreshStatus.Idle);
@@ -98,7 +122,9 @@ describe('lk-pull-refresh state and indicator rules', () => {
     expect(resolvePullRefreshIndicatorStyle({
       visible: true,
       progress: 2,
+      threshold: 80,
     })).toEqual({
+      height: '80px',
       opacity: 1,
       transform: 'translate3d(0, 18rpx, 0)',
     });
