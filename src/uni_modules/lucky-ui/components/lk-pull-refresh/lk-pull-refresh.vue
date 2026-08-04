@@ -85,6 +85,7 @@ const indicatorStyle = computed(() =>
   resolvePullRefreshIndicatorStyle({
     visible: isIndicatorVisible.value,
     progress: progress.value,
+    threshold: props.threshold,
   })
 );
 
@@ -214,45 +215,6 @@ defineExpose({
 
 <template>
   <view :id="props.id" :class="classes" :style="mergedStyle">
-    <view class="lk-pull-refresh__indicator" :style="indicatorStyle">
-      <slot
-        v-if="isIndicatorVisible"
-        name="indicator"
-        :status="status"
-        :pulling-distance="pullingDistance"
-        :refreshing="status === PullRefreshStatus.Refreshing"
-        :progress="progress"
-      >
-        <view class="lk-pull-refresh__indicator-inner">
-          <view class="lk-pull-refresh__main">
-            <slot
-              name="icon"
-              :status="status"
-              :pulling-distance="pullingDistance"
-              :refreshing="status === PullRefreshStatus.Refreshing"
-              :progress="progress"
-            />
-            <slot
-              name="text"
-              :status="status"
-              :pulling-distance="pullingDistance"
-              :refreshing="status === PullRefreshStatus.Refreshing"
-              :progress="progress"
-            >
-              <lk-loading
-                v-if="status !== PullRefreshStatus.Success"
-                variant="text"
-                :text="indicatorText"
-              />
-              <text v-else class="lk-pull-refresh__text">
-                {{ indicatorText }}
-              </text>
-            </slot>
-          </view>
-        </view>
-      </slot>
-    </view>
-
     <scroll-view
       class="lk-pull-refresh__scroll"
       scroll-y
@@ -270,6 +232,47 @@ defineExpose({
       @scrolltolower="onScrollToLower"
     >
       <slot />
+
+      <!-- UniApp scroll-view requires the native slot attribute for custom refresher content. -->
+      <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+      <view slot="refresher" class="lk-pull-refresh__indicator" :style="indicatorStyle">
+        <slot
+          v-if="isIndicatorVisible"
+          name="indicator"
+          :status="status"
+          :pulling-distance="pullingDistance"
+          :refreshing="status === PullRefreshStatus.Refreshing"
+          :progress="progress"
+        >
+          <view class="lk-pull-refresh__indicator-inner">
+            <view class="lk-pull-refresh__main">
+              <slot
+                name="icon"
+                :status="status"
+                :pulling-distance="pullingDistance"
+                :refreshing="status === PullRefreshStatus.Refreshing"
+                :progress="progress"
+              />
+              <slot
+                name="text"
+                :status="status"
+                :pulling-distance="pullingDistance"
+                :refreshing="status === PullRefreshStatus.Refreshing"
+                :progress="progress"
+              >
+                <lk-loading
+                  v-if="status !== PullRefreshStatus.Success"
+                  variant="text"
+                  :text="indicatorText"
+                />
+                <text v-else class="lk-pull-refresh__text">
+                  {{ indicatorText }}
+                </text>
+              </slot>
+            </view>
+          </view>
+        </slot>
+      </view>
     </scroll-view>
   </view>
 </template>

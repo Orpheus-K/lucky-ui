@@ -90,8 +90,13 @@ export function resolvePullRefreshProgress(options: {
   return Math.min(1, options.pullingDistance / Math.max(1, options.threshold));
 }
 
-export function resolvePullRefreshIndicatorStyle(options: { visible: boolean; progress: number }) {
+export function resolvePullRefreshIndicatorStyle(options: {
+  visible: boolean;
+  progress: number;
+  threshold: number;
+}) {
   return {
+    height: `${Math.max(0, options.threshold)}px`,
     opacity: options.visible ? 1 : 0,
     transform: `translate3d(0, ${Math.min(18, options.progress * 18)}rpx, 0)`,
   };

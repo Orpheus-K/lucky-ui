@@ -75,4 +75,13 @@ describe('component style selectors', () => {
     expect(root).toContain('column-gap: var(--lk-space-col-gap)');
     expect(root).not.toContain('margin:');
   });
+
+  it('keeps the pull refresh indicator in native slot flow', () => {
+    const indicator = selectorBlock(compileStyle('pull-refresh'), '.lk-pull-refresh__indicator');
+
+    expect(indicator).toContain('width: 100%');
+    expect(indicator).toContain('align-items: center');
+    expect(indicator).not.toContain('position: absolute');
+    expect(indicator).not.toContain('z-index:');
+  });
 });

@@ -12,16 +12,14 @@
   }
 
   @include e(indicator) {
-    position: absolute;
-    top: var(--lk-rpx-12);
-    left: 0;
-    right: 0;
-    z-index: 2;
+    width: 100%;
     display: flex;
+    align-items: center;
     justify-content: center;
+    box-sizing: border-box;
     pointer-events: none;
     opacity: 0;
-    transform-origin: top center;
+    transform-origin: center;
     transition:
       opacity var(--lk-transition-fast),
       transform var(--lk-transition-fast);
