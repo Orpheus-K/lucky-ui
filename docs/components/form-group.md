@@ -89,6 +89,10 @@ phone: form-group
 | default | 分组内容 | — |
 | title | 自定义标题区域 | — |
 
+### Events
+
+当前版本未额外暴露自定义事件。
+
 ## 注意事项
 
 `lk-form-group` 只负责结构分组和视觉布局，不提供字段注册、校验或错误提示能力。需要表单上下文时，请和 `lk-form`、`lk-form-item` 组合使用。

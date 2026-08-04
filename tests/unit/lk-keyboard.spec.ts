@@ -154,7 +154,12 @@ describe('lk-keyboard input and layout rules', () => {
       customStyle: { backgroundColor: '#fff' },
     })).toEqual([{ zIndex: 100, paddingBottom: '12px' }, { backgroundColor: '#fff' }]);
 
-    expect(resolveKeyboardKeyClass({ text: 'OK', type: 'confirm', flex: 2 })).toEqual([
+    expect(resolveKeyboardKeyClass({
+      text: 'OK',
+      type: 'confirm',
+      flex: 2,
+      className: 'key-confirm',
+    }, 'custom-key')).toEqual([
       'lk-keyboard__key',
       {
         'lk-keyboard__key--delete': false,
@@ -164,8 +169,18 @@ describe('lk-keyboard input and layout rules', () => {
         'lk-keyboard__key--disabled': undefined,
         'lk-keyboard__key--wide': true,
       },
+      'custom-key',
+      'key-confirm',
     ]);
-    expect(resolveKeyboardKeyStyle({ text: 'OK', flex: 2 })).toEqual({ flex: 2 });
-    expect(resolveKeyboardKeyStyle({ text: 'OK', flex: 1 })).toEqual({});
+    expect(resolveKeyboardKeyStyle({
+      text: 'OK',
+      flex: 2,
+      style: { color: '#fff' },
+    }, { fontWeight: 600 })).toEqual([
+      { flex: 2 },
+      { fontWeight: 600 },
+      { color: '#fff' },
+    ]);
+    expect(resolveKeyboardKeyStyle({ text: 'OK', flex: 1 })).toEqual([{}, '', '']);
   });
 });

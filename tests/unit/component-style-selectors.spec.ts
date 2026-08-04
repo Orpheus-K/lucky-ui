@@ -54,4 +54,25 @@ describe('component style selectors', () => {
     expect(toastManager).toContain('z-index: var(--lk-z-index-toast)');
     expect(toastCss).not.toMatch(/z-index:\s*(?:4000|4500)/);
   });
+
+  it('renders picker masks with directional gradients', () => {
+    const css = compileStyle('picker');
+    const topMask = selectorBlock(css, '.lk-picker__mask--top');
+    const bottomMask = selectorBlock(css, '.lk-picker__mask--bottom');
+
+    expect(topMask).toContain(
+      'background: linear-gradient(to bottom, var(--lk-picker-bg) 0%, transparent 100%)'
+    );
+    expect(bottomMask).toContain(
+      'background: linear-gradient(to top, var(--lk-picker-bg) 0%, transparent 100%)'
+    );
+  });
+
+  it('uses native flex gaps for space layout', () => {
+    const root = selectorBlock(compileStyle('space'), '.lk-space');
+
+    expect(root).toContain('row-gap: var(--lk-space-row-gap)');
+    expect(root).toContain('column-gap: var(--lk-space-col-gap)');
+    expect(root).not.toContain('margin:');
+  });
 });

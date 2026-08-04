@@ -11,7 +11,6 @@ import {
   resolvePickerIndexes,
   resolvePickerIndicatorStyle,
   resolvePickerItemLabelClass,
-  resolvePickerMaskStyle,
   resolvePickerViewHeight,
   resolvePickerViewWrapStyle,
   syncPickerInnerValueFromModel,
@@ -149,7 +148,6 @@ describe('lk-picker column and selection rules', () => {
     expect(resolvePickerViewHeight({ itemHeight: 88, visibleCount: 5 })).toBe('440rpx');
     expect(resolvePickerViewWrapStyle(88)).toBe('--lk-picker-item-height: 88rpx;');
     expect(resolvePickerIndicatorStyle(88)).toContain('height: 88rpx');
-    expect(resolvePickerMaskStyle()).toContain('background-image');
     expect(resolvePickerClass({ inline: true, customClass: 'custom' })).toEqual([
       'lk-picker',
       { 'lk-picker--inline': true },

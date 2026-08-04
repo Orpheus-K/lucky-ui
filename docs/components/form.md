@@ -256,6 +256,13 @@ const form = reactive({ name: '' })
 | customClass | 自定义类名 | `string / object / array` | — | `''` |
 | customStyle | 自定义样式 | `string / object` | — | `''` |
 
+### FormItem Events
+
+| 事件名 | 说明 | 回调参数 |
+|--------|------|----------|
+| click | 点击表单项时触发 | `(event: Event)` |
+| tap | UniApp `tap` 兼容事件 | `(event: Event)` |
+
 ### FormItem Slots
 
 | 插槽名 | 说明 |
