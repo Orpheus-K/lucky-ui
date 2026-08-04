@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { curtainProps } from '../../src/uni_modules/lucky-ui/components/lk-curtain/curtain.props';
 import {
   ensureCurtainNegativeOffset,
   isCurtainHttpLink,
@@ -15,6 +16,10 @@ import {
 } from '../../src/uni_modules/lucky-ui/components/lk-curtain/curtain.utils';
 
 describe('lk-curtain layout and link rules', () => {
+  it('uses the public modal layer by default', () => {
+    expect(curtainProps.zIndex.default).toBe(1500);
+  });
+
   it('normalizes width, height and copy text fallback', () => {
     expect(resolveCurtainWidth(600)).toBe('600rpx');
     expect(resolveCurtainHeight('80vh')).toBe('80vh');

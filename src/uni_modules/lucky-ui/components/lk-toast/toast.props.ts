@@ -60,6 +60,15 @@ export const toastProps = {
 
 export type ToastProps = ExtractPropTypes<typeof toastProps>;
 
+export const toastManagerProps = {
+  ...baseProps,
+
+  /** 全局 Toast 宿主层级 */
+  zIndex: LkProp.number(2000),
+} as const;
+
+export type ToastManagerProps = ExtractPropTypes<typeof toastManagerProps>;
+
 export const toastEmits = {
   'update:modelValue': (_val: boolean) => true,
   open: () => true,

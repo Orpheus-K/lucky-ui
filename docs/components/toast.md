@@ -164,6 +164,7 @@ function close() {
 |------|------|------|--------|
 | customClass | 组件可视根节点自定义类名 | `string \| object \| array` | `''` |
 | customStyle | 组件可视根节点自定义样式 | `string \| object` | `''` |
+| zIndex | 全局 Toast 宿主层级 | `number` | `2000` |
 
 ### Events
 

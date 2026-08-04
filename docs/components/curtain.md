@@ -108,7 +108,7 @@ import CurtainDemo from '@/components/demos/curtain-demo.vue'
 
 | 参数 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| zIndex | 层级 | `number` | `10090` |
+| zIndex | 层级 | `number` | `1500` |
 | modelValue | 是否显示，支持 `v-model` | `boolean` | `false` |
 | imageUrl | 幕帘图片地址 | `string` | `''` |
 | imageMode | 图片裁剪模式 | `CurtainImageMode` | `widthFix` |

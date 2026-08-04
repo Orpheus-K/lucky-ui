@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { StyleValue } from 'vue';
-import { baseProps } from '../common/props';
 import { toastStore } from './toast-manager';
+import { toastManagerProps } from './toast.props';
+import { resolveToastManagerStyle } from './toast.utils';
 import LkToastItem from './lk-toast-item.vue';
 
 defineOptions({ name: 'LkToastManager' });
 
-const props = defineProps(baseProps);
+const props = defineProps(toastManagerProps);
 const managerClass = computed(() => ['lk-toast-manager', props.customClass]);
-const managerStyle = computed<StyleValue>(() => props.customStyle as StyleValue);
+const managerStyle = computed<StyleValue>(() => resolveToastManagerStyle({
+  customStyle: props.customStyle as StyleValue,
+  zIndex: props.zIndex,
+}));
 </script>
 
 <template>

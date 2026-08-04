@@ -4,7 +4,7 @@
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 4000;
+  z-index: var(--lk-z-index-toast);
   pointer-events: none;
 
   @include m(center) {
@@ -114,7 +114,7 @@
   right: 0;
   bottom: 0;
   pointer-events: none;
-  z-index: 4500;
+  z-index: var(--lk-z-index-toast);
 }
 
 @include b(toast-mgr) {
