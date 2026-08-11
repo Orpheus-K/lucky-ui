@@ -1,5 +1,11 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { KeyboardType, type KeyboardKey } from '../../src/uni_modules/lucky-ui/components/lk-keyboard/keyboard.props';
+import {
+  keyboardProps,
+  KeyboardType,
+  type KeyboardKey,
+} from '../../src/uni_modules/lucky-ui/components/lk-keyboard/keyboard.props';
 import {
   buildIdCardKeyboardLayout,
   buildNumberKeyboardLayout,
@@ -8,12 +14,8 @@ import {
   canKeyboardInput,
   generateKeyboardNumberKeys,
   getNextKeyboardPlateMode,
-  resolveKeyboardClass,
-  resolveKeyboardKeyClass,
-  resolveKeyboardKeyStyle,
   resolveKeyboardLayout,
   resolveKeyboardPressAction,
-  resolveKeyboardStyle,
 } from '../../src/uni_modules/lucky-ui/components/lk-keyboard/keyboard.utils';
 
 describe('lk-keyboard input and layout rules', () => {
@@ -39,7 +41,15 @@ describe('lk-keyboard input and layout rules', () => {
 
   it('supports deterministic number shuffling for random keyboard mode', () => {
     expect(generateKeyboardNumberKeys({ random: true, randomFn: () => 0 })).toEqual([
-      '2', '3', '4', '5', '6', '7', '8', '9', '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '1',
     ]);
   });
 
@@ -69,21 +79,25 @@ describe('lk-keyboard input and layout rules', () => {
   it('resolves current layout by keyboard type', () => {
     const customKeys: KeyboardKey[][] = [[{ text: 'OK', value: 'ok', type: 'confirm' }]];
 
-    expect(resolveKeyboardLayout({
-      type: KeyboardType.Custom,
-      keys: customKeys,
-      plateMode: 'province',
-      abcText: 'ABC',
-      provinceText: '省份',
-    })).toBe(customKeys);
+    expect(
+      resolveKeyboardLayout({
+        type: KeyboardType.Custom,
+        keys: customKeys,
+        plateMode: 'province',
+        abcText: 'ABC',
+        provinceText: '省份',
+      })
+    ).toBe(customKeys);
 
-    expect(resolveKeyboardLayout({
-      type: KeyboardType.Plate,
-      keys: [],
-      plateMode: 'alphanum',
-      abcText: 'ABC',
-      provinceText: '省份',
-    })[0][0]).toEqual({ text: 'A', value: 'A' });
+    expect(
+      resolveKeyboardLayout({
+        type: KeyboardType.Plate,
+        keys: [],
+        plateMode: 'alphanum',
+        abcText: 'ABC',
+        provinceText: '省份',
+      })[0][0]
+    ).toEqual({ text: 'A', value: 'A' });
   });
 
   it('resolves key press actions without emitting disabled or overflowing input', () => {
@@ -91,96 +105,91 @@ describe('lk-keyboard input and layout rules', () => {
     expect(canKeyboardInput('123', 3)).toBe(false);
     expect(getNextKeyboardPlateMode('province')).toBe('alphanum');
 
-    expect(resolveKeyboardPressAction({
-      key: { text: '1', value: '1', disabled: true },
-      modelValue: '',
-      maxLength: 0,
-      plateMode: 'province',
-    })).toEqual({ kind: 'ignore' });
+    expect(
+      resolveKeyboardPressAction({
+        key: { text: '1', value: '1', disabled: true },
+        modelValue: '',
+        maxLength: 0,
+        plateMode: 'province',
+      })
+    ).toEqual({ kind: 'ignore' });
 
-    expect(resolveKeyboardPressAction({
-      key: { text: '1', value: '1' },
-      modelValue: '12',
-      maxLength: 2,
-      plateMode: 'province',
-    })).toEqual({ kind: 'ignore' });
+    expect(
+      resolveKeyboardPressAction({
+        key: { text: '1', value: '1' },
+        modelValue: '12',
+        maxLength: 2,
+        plateMode: 'province',
+      })
+    ).toEqual({ kind: 'ignore' });
 
-    expect(resolveKeyboardPressAction({
-      key: { text: '1', value: '1' },
-      modelValue: '12',
-      maxLength: 3,
-      plateMode: 'province',
-    })).toEqual({ kind: 'input', input: '1', nextValue: '121' });
+    expect(
+      resolveKeyboardPressAction({
+        key: { text: '1', value: '1' },
+        modelValue: '12',
+        maxLength: 3,
+        plateMode: 'province',
+      })
+    ).toEqual({ kind: 'input', input: '1', nextValue: '121' });
 
-    expect(resolveKeyboardPressAction({
-      key: { text: '', type: 'delete' },
-      modelValue: '123',
-      maxLength: 0,
-      plateMode: 'province',
-    })).toEqual({ kind: 'delete', nextValue: '12' });
+    expect(
+      resolveKeyboardPressAction({
+        key: { text: '', type: 'delete' },
+        modelValue: '123',
+        maxLength: 0,
+        plateMode: 'province',
+      })
+    ).toEqual({ kind: 'delete', nextValue: '12' });
 
-    expect(resolveKeyboardPressAction({
-      key: { text: 'ABC', value: '__switch__', type: 'extra' },
-      modelValue: '',
-      maxLength: 0,
-      plateMode: 'province',
-    })).toEqual({ kind: 'switch', nextPlateMode: 'alphanum' });
+    expect(
+      resolveKeyboardPressAction({
+        key: { text: 'ABC', value: '__switch__', type: 'extra' },
+        modelValue: '',
+        maxLength: 0,
+        plateMode: 'province',
+      })
+    ).toEqual({ kind: 'switch', nextPlateMode: 'alphanum' });
 
-    expect(resolveKeyboardPressAction({
-      key: { text: 'OK', type: 'confirm' },
-      modelValue: '123',
-      maxLength: 0,
-      plateMode: 'province',
-    })).toEqual({ kind: 'confirm' });
+    expect(
+      resolveKeyboardPressAction({
+        key: { text: 'OK', type: 'confirm' },
+        modelValue: '123',
+        maxLength: 0,
+        plateMode: 'province',
+      })
+    ).toEqual({ kind: 'confirm' });
   });
 
-  it('builds root and key styles', () => {
-    expect(resolveKeyboardClass({
-      type: 'number',
-      isVisible: true,
-      blur: false,
-      customClass: 'custom-keyboard',
-    })).toEqual([
-      'lk-keyboard',
-      'lk-keyboard--number',
-      { 'is-visible': true, 'is-blur': false },
-      'custom-keyboard',
-    ]);
+  it('uses Popup for a flat, card-free key surface', () => {
+    const component = readFileSync(
+      join(process.cwd(), 'src/uni_modules/lucky-ui/components/lk-keyboard/lk-keyboard.vue'),
+      'utf8'
+    );
+    const styles = readFileSync(
+      join(process.cwd(), 'src/uni_modules/lucky-ui/components/lk-keyboard/lk-keyboard.scss'),
+      'utf8'
+    );
+    const keyBlockStart = styles.indexOf('@include e(key)');
+    const keyBlockEnd = styles.indexOf('@include e(key-text)', keyBlockStart);
+    const keyBlock = styles.slice(keyBlockStart, keyBlockEnd);
 
-    expect(resolveKeyboardStyle({
-      zIndex: 100,
-      safeAreaInsetBottom: true,
-      safeBottom: 12,
-      customStyle: { backgroundColor: '#fff' },
-    })).toEqual([{ zIndex: 100, paddingBottom: '12px' }, { backgroundColor: '#fff' }]);
+    expect(component).toContain("import LkPopup from '../lk-popup/lk-popup.vue'");
+    expect(component).toContain('<lk-popup');
+    expect(component).toContain('position="bottom"');
+    expect(component).not.toContain('lk-keyboard__overlay');
+    expect(component).not.toContain('getSystemInfoSync');
+    expect(component).toContain("'--lk-popup-surface-bg': 'var(--lk-keyboard-bg)'");
+    expect(keyBlockStart).toBeGreaterThan(-1);
+    expect(keyBlockEnd).toBeGreaterThan(keyBlockStart);
+    expect(keyBlock).not.toContain('background:');
+    expect(keyBlock).not.toContain('border:');
+    expect(keyBlock).not.toContain('box-shadow:');
+    expect(styles).toContain('flex: 0 0 10%');
+  });
 
-    expect(resolveKeyboardKeyClass({
-      text: 'OK',
-      type: 'confirm',
-      flex: 2,
-      className: 'key-confirm',
-    }, 'custom-key')).toEqual([
-      'lk-keyboard__key',
-      {
-        'lk-keyboard__key--delete': false,
-        'lk-keyboard__key--confirm': true,
-        'lk-keyboard__key--extra': false,
-        'lk-keyboard__key--empty': false,
-        'lk-keyboard__key--disabled': undefined,
-        'lk-keyboard__key--wide': true,
-      },
-      'custom-key',
-      'key-confirm',
-    ]);
-    expect(resolveKeyboardKeyStyle({
-      text: 'OK',
-      flex: 2,
-      style: { color: '#fff' },
-    }, { fontWeight: 600 })).toEqual([
-      { flex: 2 },
-      { fontWeight: 600 },
-      { color: '#fff' },
-    ]);
-    expect(resolveKeyboardKeyStyle({ text: 'OK', flex: 1 })).toEqual([{}, '', '']);
+  it('defaults to the minimal Popup presentation', () => {
+    expect(keyboardProps.overlay.default).toBe(true);
+    expect(keyboardProps.showClose.default).toBe(false);
+    expect(keyboardProps.showConfirm.default).toBe(false);
   });
 });

@@ -17,17 +17,18 @@ const keyboardTitle = ref('');
 const keyboardShowDot = ref(false);
 const keyboardRandom = ref(false);
 const keyboardMaxLength = ref(0);
-const keyboardShowClose = ref(true);
+const keyboardShowClose = ref(false);
+const keyboardShowConfirm = ref(false);
 const keyboardKeys = ref<KeyboardKey[][]>([]);
 
 const customKeyboardKeys: KeyboardKey[][] = [
   [
-    { text: 'A', value: 'A', className: 'keyboard-demo-key--accent' },
+    { text: 'A', value: 'A' },
     { text: 'B', value: 'B' },
     { text: 'C', value: 'C' },
   ],
   [
-    { text: 'VIP', value: 'VIP', flex: 2, className: 'keyboard-demo-key--wide' },
+    { text: 'VIP', value: 'VIP', flex: 2 },
     { text: '', type: 'delete' },
   ],
 ];
@@ -38,6 +39,7 @@ interface KeyboardOptions {
   random?: boolean;
   maxLength?: number;
   showClose?: boolean;
+  showConfirm?: boolean;
   keys?: KeyboardKey[][];
 }
 
@@ -47,7 +49,8 @@ function showKeyboard(type: KeyboardType, options: KeyboardOptions = {}) {
   keyboardShowDot.value = options.showDot || false;
   keyboardRandom.value = options.random || false;
   keyboardMaxLength.value = options.maxLength || 0;
-  keyboardShowClose.value = options.showClose !== false;
+  keyboardShowClose.value = options.showClose || false;
+  keyboardShowConfirm.value = options.showConfirm || false;
   keyboardKeys.value = options.keys || [];
   keyboardVisible.value = true;
 }
@@ -110,16 +113,22 @@ function onClose() {
       </lk-space>
     </demo-block>
 
-    <demo-block title="带标题">
-      <view class="desc">可以显示标题栏和操作按钮。</view>
+    <demo-block title="标题与操作">
+      <view class="desc">默认只显示键盘；按需开启标题栏的收起与确认操作。</view>
       <lk-space wrap>
-        <lk-button size="sm" @click="showKeyboard('number', { title: '输入金额' })"
-          >带标题</lk-button
-        >
         <lk-button
           size="sm"
-          @click="showKeyboard('number', { title: '输入密码', showClose: false })"
-          >隐藏关闭</lk-button
+          @click="
+            showKeyboard('number', {
+              title: '输入金额',
+              showClose: true,
+              showConfirm: true,
+            })
+          "
+          >完整标题栏</lk-button
+        >
+        <lk-button size="sm" @click="showKeyboard('number', { title: '输入密码' })"
+          >仅标题</lk-button
         >
       </lk-space>
     </demo-block>
@@ -134,8 +143,8 @@ function onClose() {
       </lk-space>
     </demo-block>
 
-    <demo-block title="Custom structure style">
-      <view class="desc">Use header/body/row/key style entry points for internal structure and className/style on a single key.</view>
+    <demo-block title="自定义布局">
+      <view class="desc">自定义内容仍沿用统一的纯色面板与无键帽视觉。</view>
       <lk-space wrap>
         <lk-button
           size="sm"
@@ -148,7 +157,7 @@ function onClose() {
 
     <view class="tips">
       <lk-icon name="info-circle" size="28" color="var(--lk-color-primary)" />
-      <text>提示：键盘采用苹果风格设计，支持毛玻璃效果和触感反馈。</text>
+      <text>提示：键盘由 Popup 承载，采用纯色面板、反差文字和无卡片按键。</text>
     </view>
 
     <!-- 键盘组件 -->
@@ -161,14 +170,8 @@ function onClose() {
       :random="keyboardRandom"
       :max-length="keyboardMaxLength"
       :show-close="keyboardShowClose"
+      :show-confirm="keyboardShowConfirm"
       :keys="keyboardKeys"
-      overlay
-      overlay-class="keyboard-demo-overlay"
-      header-class="keyboard-demo-header"
-      body-class="keyboard-demo-body"
-      row-class="keyboard-demo-row"
-      key-class="keyboard-demo-key"
-      :key-style="{ '--keyboard-demo-key-radius': 'var(--lk-radius-lg)' }"
       @input="onInput"
       @delete="onDelete"
       @confirm="onConfirm"
@@ -183,7 +186,6 @@ function onClose() {
   > :not(:first-child) {
     margin-top: 32rpx;
   }
-  padding-bottom: 400rpx;
 }
 
 .input-display {
@@ -232,18 +234,5 @@ function onClose() {
   font-size: 24rpx;
   color: var(--lk-text-secondary);
   line-height: 1.6;
-}
-
-:deep(.keyboard-demo-key) {
-  border-radius: var(--keyboard-demo-key-radius, var(--lk-radius-md));
-}
-
-:deep(.keyboard-demo-key--accent) {
-  color: var(--lk-color-primary);
-  background: var(--lk-color-primary-light-9);
-}
-
-:deep(.keyboard-demo-key--wide) {
-  font-weight: 700;
 }
 </style>
