@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+- **Breaking:** Rebuilt `lk-keyboard` as a flat, solid-color panel hosted by `lk-popup`; removed the legacy blur, sound, internal class/style hook props, and per-key class/style fields.
+- Changed the keyboard defaults to a headerless layout with overlay enabled, while retaining explicit title, close, and confirm actions.
+
 ## 1.0.1（2026-07-12）
 - Fixed `lk-segmented` slider measurement when rendered inside modal.
 - Improved `lk-tooltip` popup motion and custom content rendering.

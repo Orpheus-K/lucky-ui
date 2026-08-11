@@ -16,9 +16,6 @@ export const KeyboardType = {
 } as const;
 
 export type KeyboardType = (typeof KeyboardType)[keyof typeof KeyboardType];
-export type KeyboardCustomClass = string | object | Array<string | object>;
-export type KeyboardCustomStyle = string | Record<string, unknown>;
-
 /**
  * 自定义按键配置
  */
@@ -33,10 +30,6 @@ export interface KeyboardKey {
   type?: 'default' | 'delete' | 'confirm' | 'extra' | 'empty';
   /** 是否禁用 */
   disabled?: boolean;
-  /** 单个按键自定义类名 */
-  className?: KeyboardCustomClass;
-  /** 单个按键自定义样式 */
-  style?: KeyboardCustomStyle;
 }
 
 export const keyboardProps = {
@@ -65,7 +58,7 @@ export const keyboardProps = {
   /**
    * 是否显示确认按钮
    */
-  showConfirm: LkProp.boolean(true),
+  showConfirm: LkProp.boolean(false),
 
   /**
    * 是否显示删除按钮
@@ -100,7 +93,7 @@ export const keyboardProps = {
   /**
    * 是否显示遮罩
    */
-  overlay: LkProp.boolean(false),
+  overlay: LkProp.boolean(true),
 
   /**
    * 点击遮罩关闭
@@ -108,14 +101,9 @@ export const keyboardProps = {
   closeOnOverlay: LkProp.boolean(true),
 
   /**
-   * 是否使用毛玻璃效果
-   */
-  blur: LkProp.boolean(true),
-
-  /**
    * 是否显示关闭按钮
    */
-  showClose: LkProp.boolean(true),
+  showClose: LkProp.boolean(false),
 
   /**
    * 层级
@@ -136,65 +124,9 @@ export const keyboardProps = {
   },
 
   /**
-   * 是否启用按键音效
-   */
-  sound: LkProp.boolean(false),
-
-  /**
    * 是否启用触感反馈
    */
   vibrate: LkProp.boolean(true),
-
-  /** 遮罩层自定义类名 */
-  overlayClass: {
-    type: [String, Object, Array] as PropType<KeyboardCustomClass>,
-    default: '',
-  },
-  /** 遮罩层自定义样式 */
-  overlayStyle: {
-    type: [String, Object] as PropType<KeyboardCustomStyle>,
-    default: '',
-  },
-  /** 标题栏自定义类名 */
-  headerClass: {
-    type: [String, Object, Array] as PropType<KeyboardCustomClass>,
-    default: '',
-  },
-  /** 标题栏自定义样式 */
-  headerStyle: {
-    type: [String, Object] as PropType<KeyboardCustomStyle>,
-    default: '',
-  },
-  /** 键盘区域自定义类名 */
-  bodyClass: {
-    type: [String, Object, Array] as PropType<KeyboardCustomClass>,
-    default: '',
-  },
-  /** 键盘区域自定义样式 */
-  bodyStyle: {
-    type: [String, Object] as PropType<KeyboardCustomStyle>,
-    default: '',
-  },
-  /** 按键行自定义类名 */
-  rowClass: {
-    type: [String, Object, Array] as PropType<KeyboardCustomClass>,
-    default: '',
-  },
-  /** 按键行自定义样式 */
-  rowStyle: {
-    type: [String, Object] as PropType<KeyboardCustomStyle>,
-    default: '',
-  },
-  /** 全局按键自定义类名 */
-  keyClass: {
-    type: [String, Object, Array] as PropType<KeyboardCustomClass>,
-    default: '',
-  },
-  /** 全局按键自定义样式 */
-  keyStyle: {
-    type: [String, Object] as PropType<KeyboardCustomStyle>,
-    default: '',
-  },
 } as const;
 
 export const keyboardEmits = {

@@ -461,7 +461,7 @@ export const SHOWCASE_CASES: ShowcaseCase[] = [
     verifyStatus: 'verified',
     riskLevel: 'medium',
     visualEnabled: false,
-    riskNotes: ['fixed 底部浮层、毛玻璃与安全区需按 H5/App/小程序分别复核。'],
+    riskNotes: ['Popup 安全区、十列车牌布局与触感反馈需按 H5/App/小程序分别复核。'],
   },
   {
     slug: 'toast',
