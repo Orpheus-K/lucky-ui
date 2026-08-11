@@ -1,283 +1,107 @@
 ---
 name: lucky-ui-docs
-description: 用于为 lucky-ui 组件库编写、修改或补充 VitePress 文档。包括新组件文档、API 表格、使用示例、Demo 演示页等。
+description: 为 lucky-ui 编写或维护 VitePress 组件文档、API 表格、UniApp Demo、手机预览映射和导航。用于新增组件文档、修正文档与源码不一致、同步 Props、Events、Slots、Methods、CSS 变量、注册 phone 预览或调整 docs/.vitepress；纯业务页面使用 lucky-ui-coding，修改组件实现时同时使用 lucky-ui-component。
 ---
 
-# Lucky-UI 文档系统指南
+# Lucky UI 文档维护
 
-## 文档技术栈
+## 基准
 
-- **框架**：VitePress 1.x
-- **文档目录**：`docs/`
-- **演示页目录**：`src/pages/` (UniApp H5 页面)
-- **开发预览**：`pnpm run docs:dev`（端口 4173）
+- 所有路径都以仓库根目录为基准。
+- 组件正式文档位于 `docs/components/<slug>.md`，不要引用旧的 `docs/components/basic/`。
+- API 的事实来源按顺序核对：
+  1. `src/uni_modules/lucky-ui/components/lk-<slug>/` 中实际存在的 `*.props.ts`，以及它导入的公共 props 和类型。
+  2. `lk-<slug>.vue`、工具、composables 与模板 class 实际形成的行为、emits、slots 和 `defineExpose`。
+  3. 同目录样式、`src/uni_modules/lucky-ui/theme/src/index.scss` 引入的全局样式及 `component-vars.scss`。
+- 只记录源码真实支持的能力。不要从通用模板复制 `change`、`open`、`close`、`toggle`、`primary`、`danger`、插槽或 CSS 变量等占位 API。
+- 文档与源码冲突时，以当前源码为准并修正文档；API 不明确时继续查源码，不猜测。
 
+## 工作流
+
+1. 读取现有组件文档、组件实现和对应样式。
+2. 提取准确的 Props、Events、Slots、Methods 与 CSS 变量。
+3. 使用真实属性和事件编写可复制示例。
+4. 在 `docs/.vitepress/config.ts` 当前分类中只插入需要的导航项。
+5. 只有需要手机预览时才补齐完整预览链路。
+6. 构建文档；若改动 Demo，再运行并检查 H5 手机预览。
+
+## 组件文档
+
+Frontmatter 至少包含：
+
+```yaml
 ---
-
-## 文档目录结构
-
-```
-docs/
-├── .vitepress/
-│   ├── config.ts          # VitePress 配置（导航、侧边栏）
-│   └── theme/             # 自定义主题
-├── components/            # 各组件文档
-│   ├── button.md
-│   ├── tabs.md
-│   └── ...
-├── guide/                 # 指南文档
-│   ├── quickstart.md
-│   ├── theme.md
-│   └── ...
-└── index.md               # 首页
-```
-
+title: 组件名
+description: 一句话说明真实用途
 ---
-
-## 新建组件文档模板
-
-创建 `docs/components/{name}.md`：
-
-```markdown
-# ComponentName 组件名
-
-> 一句话描述组件的用途和适用场景。
-
-## 基础用法
-
-<demo-preview path="../../src/pages/component-name/index" />
-
-\`\`\`vue
-<template>
-  <lk-component-name :prop-a="value">
-    内容
-  </lk-component-name>
-</template>
-\`\`\`
-
-## 变体示例
-
-### 尺寸
-
-<demo-preview path="..." />
-
-\`\`\`vue
-<lk-component-name size="sm">小</lk-component-name>
-<lk-component-name size="md">中</lk-component-name>
-<lk-component-name size="lg">大</lk-component-name>
-\`\`\`
-
-### 状态
-
-\`\`\`vue
-<lk-component-name disabled>禁用</lk-component-name>
-<lk-component-name loading>加载中</lk-component-name>
-\`\`\`
-
-## API
-
-### Props
-
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-|------|------|------|--------|--------|
-| variant | 样式变体 | `string` | `primary / secondary / danger` | `primary` |
-| size | 尺寸 | `string` | `sm / md / lg` | `md` |
-| disabled | 是否禁用 | `boolean` | — | `false` |
-| loading | 是否加载中 | `boolean` | — | `false` |
-| customClass | 自定义类名 | `string / object / array` | — | — |
-| customStyle | 自定义样式 | `string / object` | — | — |
-
-### Emits
-
-| 事件名 | 说明 | 回调参数 |
-|--------|------|----------|
-| click | 点击时触发 | `(event: Event)` |
-| change | 值变化时触发 | `(value: string)` |
-
-### Slots
-
-| 插槽名 | 说明 | 作用域参数 |
-|--------|------|-----------|
-| default | 默认内容 | — |
-| prefix | 前置内容 | — |
-| suffix | 后置内容 | — |
-| title | `#title` 标题 | — |
-
-### Methods（通过 ref 调用）
-
-| 方法名 | 说明 | 参数 |
-|--------|------|------|
-| open() | 打开 | — |
-| close() | 关闭 | — |
-| toggle() | 切换 | — |
-
-## 主题定制
-
-通过 CSS 变量覆盖组件样式：
-
-| CSS 变量 | 说明 | 默认值 |
-|----------|------|--------|
-| `--lk-btn-height` | 按钮高度 | `var(--lk-control-height-md)` |
-| `--lk-btn-radius` | 圆角 | `var(--lk-radius-md)` |
-
-## 注意事项
-
-> [!WARNING]
-> 在小程序中使用时，请注意 xxx 限制。
-
-> [!TIP]
-> 建议在 xxx 场景下使用 yyy 替代方案。
 ```
 
----
+仅当完整预览链路存在且 slug 已核对时，才添加：
 
-## 在 VitePress 配置中注册新组件文档
-
-编辑 `docs/.vitepress/config.ts`：
-
-```typescript
-export default defineConfig({
-  themeConfig: {
-    sidebar: {
-      '/components/': [
-        {
-          text: '基础组件',
-          items: [
-            { text: 'Button 按钮', link: '/components/button' },
-            // 新增：
-            { text: 'MyComponent 组件名', link: '/components/my-component' },
-          ]
-        },
-        {
-          text: '表单组件',
-          items: [/* ... */]
-        },
-      ]
-    }
-  }
-})
+```yaml
+phone: <preview-slug>
 ```
 
----
+正文保持简洁，按实际能力选择以下部分：
 
-## 演示页（Demo Page）规范
+1. 用途与导入方式。
+2. 基础用法和必要场景示例。
+3. `Props`。
+4. `Events`。
+5. `Slots`。
+6. `Methods`。
+7. CSS 变量与跨端注意事项。
 
-演示页位于 `src/pages/{component-name}/index.vue`，是组件在 UniApp 中的实际运行示例。
+规则：
 
-```vue
-<script setup lang="ts">
-import { ref } from 'vue';
-import { DemoBlock } from '@/uni_modules/lucky-ui/components';
+- Props 表沿用该目录现有文档的列结构与类型写法。
+- 继承的 prop 只有在模板、computed、工具或 composable 中产生可观察行为时才作为有效 API；仅被展开声明不代表组件真实支持。
+- 事件标题使用项目惯例 `Events`；只列源码已声明的事件。
+- Methods 只列通过 `defineExpose` 暴露的方法。
+- CSS 变量只列有意允许用户覆盖的定制变量；不要公开 `--_h` 等内部变量，也不要把 ripple 坐标、尺寸等运行时 `--lk-*` 状态误当公共 API。
+- 不存在的章节直接省略，不为版式完整而造 API。
 
-const value = ref('');
-const show = ref(false);
-</script>
+## Demo 与手机预览
 
-<template>
-  <view class="page">
-    <!-- 基础用法 -->
-    <demo-block title="基础用法">
-      <lk-component-name :model-value="value" @change="v => value = v" />
-    </demo-block>
+- Demo 文件：`src/components/demos/<preview-slug>-demo.vue`。
+- 复用 `src/uni_modules/lucky-ui/components/demo-block/demo-block.vue`。
+- `DemoBlock` 的真实展示属性为 `title`、`desc` 和布尔值 `padding`；示例仍需按目标组件源码核对。
+- Demo 根节点沿用项目的 `<view class="component-demo">` 结构。
 
-    <!-- 变体 -->
-    <demo-block title="变体类型">
-      <lk-component-name variant="primary">主要</lk-component-name>
-      <lk-component-name variant="secondary">次要</lk-component-name>
-    </demo-block>
+手机预览必须同时核对以下链路：
 
-    <!-- 禁用状态 -->
-    <demo-block title="禁用状态">
-      <lk-component-name disabled>禁用</lk-component-name>
-    </demo-block>
-  </view>
-</template>
+1. `src/components/preview/preview-catalog.ts` 中有 kebab-case slug 元数据。
+2. `src/components/demos/<preview-slug>-demo.vue` 存在。
+3. `src/components/preview/preview-demo-registry.ts` 注册同一 slug。
+4. `src/components/preview/PreviewDemoRenderer.vue` 导入 Demo 并包含渲染分支。
+5. 文档 frontmatter 的 `phone` 指向可用 slug。
+6. `docs/.vitepress/config.ts` 当前分类中有该文档入口。
 
-<style lang="scss" scoped>
-.page {
-  padding: var(--lk-spacing-md);
-  background: var(--lk-bg-page);
-  min-height: 100vh;
-}
-</style>
-```
+VitePress 端还需核对 `docs/.vitepress/theme/index.ts` 已注册自定义 Layout，以及 `docs/.vitepress/theme/Layout.vue`、`docs/.vitepress/theme/components/PhonePreview.vue` 与 `docs/.vitepress/theme/constants/preview.ts`。默认开发地址应生成 `http://localhost:5188/#/pages_sub/component-detail/index?component=<preview-slug>`；若设置 `VITE_LUCKY_UI_H5_PREVIEW_URL`，以该基址为准。
 
----
+UniApp 端核对 `src/pages.json` 已注册共享页面，并检查 `src/composables/usePreviewQuery.ts` 与 `src/pages_sub/component-detail/index.vue` 能按 slug 渲染。无需为每个组件新增 `pages.json` 页面。
 
-## DemoBlock 组件用法
+类型检查不能证明 slug 命中。运行时必须正向确认目标 Demo 的标题或标志内容出现、fallback 文案未出现，并让 Demo 覆盖文档中的关键场景。
 
-`demo-block` 是内置的演示容器组件：
+不要假定文档名与预览 slug 永远相同。已知例外包括：
 
-| Prop | 类型 | 说明 |
-|------|------|------|
-| `title` | String | 示例标题 |
-| `desc` | String | 描述文字（可选） |
+- `preload-debugger` 的手机预览使用 `preload`。
+- `tabbar-container` 当前不声明 `phone`。
 
----
+其他别名或缺省情况必须从完整链路核对后再写。
 
-## 演示页在 pages.json 中注册
-
-编辑 `src/pages.json`：
-
-```json
-{
-  "pages": [
-    {
-      "path": "pages/my-component/index",
-      "style": {
-        "navigationBarTitleText": "MyComponent 组件名"
-      }
-    }
-  ]
-}
-```
-
----
-
-## Markdown 常用技巧
-
-### 代码块自动高亮
-
-支持语言：`vue`, `typescript`, `javascript`, `scss`, `bash`, `json`
-
-### 自定义容器
-
-```markdown
-::: tip 提示
-这是一条提示信息
-:::
-
-::: warning 注意
-这是一条警告信息
-:::
-
-::: danger 危险
-这是一条危险提示
-:::
-
-::: details 展开查看
-折叠的内容
-:::
-```
-
-### API 表格规范
-
-- **参数列**：使用驼峰（`modelValue`）
-- **类型列**：用反引号包裹（`` `string` ``）
-- **可选值列**：用 ` / ` 分隔（`primary / secondary`）
-- **默认值列**：无则写 `—`
-
----
-
-## 文档预览命令
+## 校验
 
 ```bash
-# 启动文档开发服务（端口 4173）
-pnpm run docs:dev
-
-# 构建文档
 pnpm run docs:build
-
-# 预览构建产物
-pnpm run docs:preview
 ```
+
+若改动 Demo 或预览注册，再运行：
+
+```bash
+pnpm run type-check
+pnpm run lint
+pnpm run dev:h5
+```
+
+同时运行 `pnpm run docs:dev`，检查组件文档中的 iframe 和 H5 直达路由。若修改组件行为，再执行对应单元测试。最后确认文档链接无误、API 与源码一致，并只提交本任务文件。

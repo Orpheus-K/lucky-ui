@@ -36,6 +36,7 @@ export default defineConfig({
     nav: [
       { text: '指南', link: '/guide/', activeMatch: '/guide/' },
       { text: '组件', link: '/components/', activeMatch: '/components/' },
+      { text: 'AI Skills', link: '/skills/', activeMatch: '/skills/' },
       {
         text: '资源',
         items: [
