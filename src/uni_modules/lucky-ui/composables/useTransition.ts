@@ -1,4 +1,4 @@
-import { ref, watch, computed, nextTick, isRef } from 'vue';
+import { ref, watch, computed, nextTick, isRef, onBeforeUnmount } from 'vue';
 import type { CSSProperties, Ref } from 'vue';
 import { Locale } from '../locale';
 
@@ -165,28 +165,69 @@ export function useTransition(
   let rafEnter: number | undefined;
   let rafLeave: number | undefined;
   let removeEndListeners: (() => void) | null = null;
+  let transitionGeneration = 0;
+  let unmounted = false;
 
   const clearTimersAndListeners = () => {
-    if (enterTimer) {
+    if (enterTimer !== undefined) {
       clearTimeout(enterTimer);
       enterTimer = undefined;
     }
-    if (leaveTimer) {
+    if (leaveTimer !== undefined) {
       clearTimeout(leaveTimer);
       leaveTimer = undefined;
     }
-    if (rafEnter) {
+    if (rafEnter !== undefined) {
       cAF(rafEnter);
       rafEnter = undefined;
     }
-    if (rafLeave) {
+    if (rafLeave !== undefined) {
       cAF(rafLeave);
       rafLeave = undefined;
     }
     if (removeEndListeners) {
-      removeEndListeners();
+      const remove = removeEndListeners;
       removeEndListeners = null;
+      remove();
     }
+  };
+
+  const invalidatePendingTransition = () => {
+    transitionGeneration += 1;
+    clearTimersAndListeners();
+  };
+
+  const beginTransition = () => {
+    invalidatePendingTransition();
+    return transitionGeneration;
+  };
+
+  const isCurrentTransition = (generation: number) =>
+    !unmounted && generation === transitionGeneration;
+
+  type ExpectedShow = boolean | undefined;
+  type EndExpectation =
+    | { type: 'transitionend'; total: number; startedAt: number }
+    | { type: 'animationend'; total: number; startedAt: number; animationName: string };
+
+  const isExpectedTransition = (generation: number, expectedShow: ExpectedShow) =>
+    isCurrentTransition(generation) && (expectedShow === undefined || show() === expectedShow);
+
+  const getTotalDuration = (duration: unknown, delay: unknown) =>
+    Math.max(0, Number(duration) || 0) + Math.max(0, Number(delay) || 0);
+
+  const getAnimationName = (name: TransitionName, entering: boolean) => {
+    const suffix = name.slice('bounce-in'.length);
+    if (entering) return `lk-bounce-in${suffix}`;
+
+    const oppositeDirection: Record<string, string> = {
+      '': '',
+      '-up': '-down',
+      '-down': '-up',
+      '-left': '-right',
+      '-right': '-left',
+    };
+    return `lk-bounce-out${oppositeDirection[suffix] ?? suffix}`;
   };
 
   const classes = computed(() => {
@@ -279,97 +320,173 @@ export function useTransition(
 
   const styles = computed<CSSProperties>(() => ({ ...baseStyles.value, ...phaseStyles.value }));
 
-  const attachEndListeners = (done: () => void) => {
+  const attachEndListeners = (
+    generation: number,
+    expectedShow: ExpectedShow,
+    expectation: EndExpectation,
+    done: () => void
+  ) => {
     const el = elRef?.value;
     if (!el || !useEvents) return;
-    let called = false;
-    const handler = () => {
-      if (called) return;
-      called = true;
-      done();
-      if (removeEndListeners) {
-        removeEndListeners();
-        removeEndListeners = null;
+    const handler = (event: Event) => {
+      if (
+        event.target !== event.currentTarget ||
+        event.type !== expectation.type ||
+        !isExpectedTransition(generation, expectedShow) ||
+        Date.now() - expectation.startedAt < expectation.total
+      ) {
+        return;
       }
+
+      if (expectation.type === 'transitionend') {
+        const propertyName = (event as TransitionEvent).propertyName;
+        if (propertyName !== 'opacity' && propertyName !== 'transform') return;
+      } else if ((event as AnimationEvent).animationName !== expectation.animationName) {
+        return;
+      }
+
+      done();
     };
-    const onTransitionEnd = () => handler();
-    const onAnimationEnd = () => handler();
-    el.addEventListener('transitionend', onTransitionEnd, { passive: true });
-    el.addEventListener('animationend', onAnimationEnd, { passive: true });
+    el.addEventListener(expectation.type, handler, { passive: true });
     removeEndListeners = () => {
-      el.removeEventListener('transitionend', onTransitionEnd);
-      el.removeEventListener('animationend', onAnimationEnd);
+      el.removeEventListener(expectation.type, handler);
     };
   };
 
-  const finishEnter = () => {
+  const finishEnter = (generation: number, expectedShow: ExpectedShow) => {
+    if (!isExpectedTransition(generation, expectedShow)) return;
+    invalidatePendingTransition();
     state.value.entering = false;
     callbacks.onAfterEnter?.();
   };
 
-  const finishLeave = () => {
+  const finishLeave = (generation: number, expectedShow: ExpectedShow) => {
+    if (!isExpectedTransition(generation, expectedShow)) return;
+    invalidatePendingTransition();
     state.value.leaving = false;
     state.value.display = false;
     state.value.inited = false;
     callbacks.onAfterLeave?.();
   };
 
-  const enter = () => {
+  const runEnter = (generation: number, expectedShow?: boolean) => {
+    if (!isExpectedTransition(generation, expectedShow)) return;
     const localDuration = resolve(config.duration, 300);
     const localDelay = resolve(config.delay, 0);
+    const localName = resolve(config.name, 'fade' as TransitionName);
+    const total = getTotalDuration(localDuration, localDelay);
     callbacks.onBeforeEnter?.();
+    if (!isExpectedTransition(generation, expectedShow)) return;
     state.value.entering = true;
     state.value.leaving = false;
 
     nextTick(() => {
+      if (!isExpectedTransition(generation, expectedShow)) return;
       callbacks.onEnter?.();
+      if (!isExpectedTransition(generation, expectedShow)) return;
       // 下一帧切换 active，让初始样式先落到节点。
       rafEnter = rAF(() => {
+        rafEnter = undefined;
+        if (!isExpectedTransition(generation, expectedShow)) return;
         state.value.active = true;
+        const expectation: EndExpectation = localName.startsWith('bounce-in')
+          ? {
+              type: 'animationend',
+              total,
+              startedAt: Date.now(),
+              animationName: getAnimationName(localName, true),
+            }
+          : { type: 'transitionend', total, startedAt: Date.now() };
         // 事件监听与超时降级并行。
-        attachEndListeners(finishEnter);
-        enterTimer = setTimeout(
-          () => {
-            finishEnter();
-          },
-          (localDuration as number) + (localDelay as number)
-        ) as unknown as number;
+        // DOM 事件没有 generation 标识；要求当前过渡的完整配置时长已到，
+        // 可阻止上一代迟到事件提前完成本代，跨端仍由 timeout 兜底。
+        attachEndListeners(generation, expectedShow, expectation, () =>
+          finishEnter(generation, expectedShow)
+        );
+        enterTimer = setTimeout(() => {
+          finishEnter(generation, expectedShow);
+        }, total) as unknown as number;
       });
     });
   };
 
-  const leave = () => {
+  const enter = () => {
+    const generation = beginTransition();
+    state.value.inited = true;
+    state.value.display = true;
+    state.value.active = false;
+    runEnter(generation);
+  };
+
+  const runLeave = (generation: number, expectedShow?: boolean) => {
+    if (!isExpectedTransition(generation, expectedShow)) return;
     const localDuration = resolve(config.duration, 300);
     const localDelay = resolve(config.delay, 0);
+    const localName = resolve(config.name, 'fade' as TransitionName);
+    const total = getTotalDuration(localDuration, localDelay);
     callbacks.onBeforeLeave?.();
+    if (!isExpectedTransition(generation, expectedShow)) return;
     state.value.leaving = true;
     state.value.entering = false;
 
     nextTick(() => {
+      if (!isExpectedTransition(generation, expectedShow)) return;
       callbacks.onLeave?.();
+      if (!isExpectedTransition(generation, expectedShow)) return;
       rafLeave = rAF(() => {
+        rafLeave = undefined;
+        if (!isExpectedTransition(generation, expectedShow)) return;
         state.value.active = false;
-        attachEndListeners(finishLeave);
-        leaveTimer = setTimeout(
-          () => {
-            finishLeave();
-          },
-          (localDuration as number) + (localDelay as number)
-        ) as unknown as number;
+        const expectation: EndExpectation = localName.startsWith('bounce-in')
+          ? {
+              type: 'animationend',
+              total,
+              startedAt: Date.now(),
+              animationName: getAnimationName(localName, false),
+            }
+          : { type: 'transitionend', total, startedAt: Date.now() };
+        attachEndListeners(generation, expectedShow, expectation, () =>
+          finishLeave(generation, expectedShow)
+        );
+        leaveTimer = setTimeout(() => {
+          finishLeave(generation, expectedShow);
+        }, total) as unknown as number;
       });
     });
+  };
+
+  const leave = () => runLeave(beginTransition());
+
+  const cancel = () => {
+    invalidatePendingTransition();
+    const shouldDisplay = show();
+    state.value.inited = shouldDisplay;
+    state.value.display = shouldDisplay;
+    state.value.active = shouldDisplay;
+    state.value.entering = false;
+    state.value.leaving = false;
   };
 
   watch(
     show,
     newVal => {
       if (newVal) {
+        if (
+          state.value.inited &&
+          state.value.display &&
+          state.value.active &&
+          !state.value.entering &&
+          !state.value.leaving
+        ) {
+          return;
+        }
         if (!state.value.inited) {
           state.value.inited = true;
           state.value.display = true;
           // appear 行为：默认动画进入；当 appear=false 时，首次直接激活，无进入动画
           const appear = config.appear !== false;
           if (!appear && !hasAppeared.value) {
+            invalidatePendingTransition();
             state.value.active = true;
             state.value.entering = false;
             hasAppeared.value = true;
@@ -377,20 +494,21 @@ export function useTransition(
           }
           hasAppeared.value = true;
         }
-        nextTick(() => {
-          // 防抖：先清理可能残留
-          clearTimersAndListeners();
-          enter();
-        });
+        const generation = beginTransition();
+        nextTick(() => runEnter(generation, true));
       } else {
         if (state.value.display) {
-          clearTimersAndListeners();
-          leave();
+          runLeave(beginTransition(), false);
         }
       }
     },
     { immediate: true }
   );
+
+  onBeforeUnmount(() => {
+    unmounted = true;
+    invalidatePendingTransition();
+  });
 
   return {
     /** 动画类名 */
@@ -403,8 +521,8 @@ export function useTransition(
     state: computed(() => state.value),
     /** 目标元素引用（可用于事件精确结束）；示例：<view ref="elRef" ...> */
     elRef,
-    /** 取消当前进行中的进入/离开动画（不会改变显示状态） */
-    cancel: () => clearTimersAndListeners(),
+    /** 取消当前动画，并收敛到当前 show 意图对应的稳定显示状态 */
+    cancel,
     /** 主动触发进入/离开（一般不需要，保持可用） */
     enter,
     leave,
