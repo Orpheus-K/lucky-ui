@@ -126,40 +126,171 @@ class InterceptorManager<T> {
 /**
  * 请求任务管理器
  */
+interface RequestGeneration {
+  key: string;
+  generation: number;
+  cancelled: boolean;
+  cancellationError: RequestError;
+  cancellation: Promise<never>;
+  rejectCancellation: (reason: RequestError) => void;
+  task?: UniApp.RequestTask;
+  retryTimer?: ReturnType<typeof setTimeout>;
+}
+
 class RequestTaskManager {
-  private tasks = new Map<string, UniApp.RequestTask>();
+  private generations = new Map<string, RequestGeneration>();
+  private generation = 0;
 
   /**
-   * 添加任务
+   * 开始一个逻辑请求，并让同 key 的旧 generation 失效
    */
-  add(key: string, task: UniApp.RequestTask): void {
-    this.tasks.set(key, task);
+  start(key: string, cancellationError: RequestError): RequestGeneration {
+    let rejectCancellation!: (reason: RequestError) => void;
+    const cancellation = new Promise<never>((_, reject) => {
+      rejectCancellation = reject;
+    });
+
+    // cancellation 还会参与具体的 race；这里的兜底处理确保即使初始化流程意外中断，
+    // 后续取消也不会产生未处理的 Promise 拒绝。
+    void cancellation.catch(() => undefined);
+
+    const generation: RequestGeneration = {
+      key,
+      generation: ++this.generation,
+      cancelled: false,
+      cancellationError,
+      cancellation,
+      rejectCancellation,
+    };
+    const previous = this.generations.get(key);
+
+    // 先提交新 generation，再中止旧任务；即使 abort 同步触发旧回调，
+    // 旧回调也无法删除或提交到新 generation。
+    this.generations.set(key, generation);
+    if (previous) {
+      this.cancelGeneration(previous);
+    }
+
+    return generation;
+  }
+
+  /**
+   * 将单次请求任务挂到所属逻辑请求
+   */
+  attach(generation: RequestGeneration, task: UniApp.RequestTask): boolean {
+    if (!this.isLatest(generation)) {
+      this.abortTask(task);
+      return false;
+    }
+    generation.task = task;
+    return true;
+  }
+
+  /**
+   * 单次尝试结束时只释放自己挂接的任务
+   */
+  release(generation: RequestGeneration, task: UniApp.RequestTask): void {
+    if (generation.task === task) {
+      generation.task = undefined;
+    }
+  }
+
+  /**
+   * 判断是否仍为该 key 的最新逻辑请求
+   */
+  isLatest(generation: RequestGeneration): boolean {
+    return !generation.cancelled && this.generations.get(generation.key) === generation;
+  }
+
+  /**
+   * 判断逻辑请求是否已被显式取消或替换
+   */
+  isCancelled(generation: RequestGeneration): boolean {
+    return generation.cancelled;
+  }
+
+  /**
+   * 保存重试等待计时器；generation 失效时立即清理
+   */
+  attachRetryTimer(generation: RequestGeneration, timer: ReturnType<typeof setTimeout>): boolean {
+    if (!this.isLatest(generation)) {
+      clearTimeout(timer);
+      return false;
+    }
+
+    this.clearRetryTimer(generation);
+    generation.retryTimer = timer;
+    return true;
+  }
+
+  /**
+   * 计时器自然到期时只释放自身句柄
+   */
+  releaseRetryTimer(generation: RequestGeneration, timer: ReturnType<typeof setTimeout>): void {
+    if (generation.retryTimer === timer) {
+      generation.retryTimer = undefined;
+    }
   }
 
   /**
    * 取消任务
    */
   cancel(key: string): void {
-    const task = this.tasks.get(key);
-    if (task) {
-      task.abort();
-      this.tasks.delete(key);
-    }
+    const generation = this.generations.get(key);
+    if (!generation) return;
+
+    this.generations.delete(key);
+    this.cancelGeneration(generation);
   }
 
   /**
    * 取消所有任务
    */
   cancelAll(): void {
-    this.tasks.forEach(task => task.abort());
-    this.tasks.clear();
+    const generations = [...this.generations.values()];
+    this.generations.clear();
+    generations.forEach(generation => {
+      this.cancelGeneration(generation);
+    });
   }
 
   /**
-   * 移除任务
+   * 逻辑请求结束；旧 generation 不得清理新 generation
    */
-  remove(key: string): void {
-    this.tasks.delete(key);
+  finish(generation: RequestGeneration): void {
+    generation.task = undefined;
+    this.clearRetryTimer(generation);
+    if (this.generations.get(generation.key) === generation) {
+      this.generations.delete(generation.key);
+    }
+  }
+
+  private cancelGeneration(generation: RequestGeneration): void {
+    if (generation.cancelled) return;
+
+    generation.cancelled = true;
+    const task = generation.task;
+    generation.task = undefined;
+    this.clearRetryTimer(generation);
+    generation.rejectCancellation(generation.cancellationError);
+    this.abortTask(task);
+  }
+
+  private clearRetryTimer(generation: RequestGeneration): void {
+    if (generation.retryTimer !== undefined) {
+      clearTimeout(generation.retryTimer);
+      generation.retryTimer = undefined;
+    }
+  }
+
+  private abortTask(task?: UniApp.RequestTask): void {
+    if (!task) return;
+
+    try {
+      task.abort();
+    } catch {
+      // abort 是尽力清理；底层异常不得改变已经提交的取消终态。
+    }
   }
 }
 
@@ -306,75 +437,176 @@ export class Request {
   /**
    * 延迟函数
    */
-  private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  private delay(ms: number, generation: RequestGeneration): Promise<void> {
+    return new Promise(resolve => {
+      const timer = setTimeout(() => {
+        this.taskManager.releaseRetryTimer(generation, timer);
+        resolve();
+      }, ms);
+
+      if (!this.taskManager.attachRetryTimer(generation, timer)) {
+        resolve();
+      }
+    });
+  }
+
+  /**
+   * 创建与 uni.request abort 语义一致的取消错误
+   */
+  private createCancellationError(config: RequestConfig): RequestError {
+    return {
+      errMsg: 'request:fail abort',
+      config,
+    };
+  }
+
+  /**
+   * 执行单次请求尝试
+   */
+  private performRequestAttempt<T>(
+    config: RequestConfig,
+    generation: RequestGeneration,
+    terminalOnFailure: boolean
+  ): Promise<RequestResponse<T>> {
+    return new Promise((resolve, reject) => {
+      const taskRef: { current?: UniApp.RequestTask } = {};
+      let settled = false;
+
+      const settle = (handler: () => void): void => {
+        if (settled) return;
+        settled = true;
+        if (taskRef.current) {
+          this.taskManager.release(generation, taskRef.current);
+        }
+        handler();
+      };
+
+      let task: UniApp.RequestTask;
+      try {
+        task = uni.request({
+          ...config,
+          method: config.method as UniApp.RequestOptions['method'],
+          success: (res: UniApp.RequestSuccessCallbackResult) => {
+            if (!this.taskManager.isLatest(generation)) {
+              settle(() => reject(this.createCancellationError(config)));
+              return;
+            }
+
+            const response: RequestResponse<T> = {
+              data: res.data as T,
+              statusCode: res.statusCode,
+              header: res.header,
+              cookies: res.cookies,
+              profile: res.profile,
+            };
+            settle(() => {
+              this.taskManager.finish(generation);
+              resolve(response);
+            });
+          },
+          fail: (
+            err: UniApp.GeneralCallbackResult & {
+              statusCode?: number;
+              data?: unknown;
+            }
+          ) => {
+            if (!this.taskManager.isLatest(generation)) {
+              settle(() => reject(this.createCancellationError(config)));
+              return;
+            }
+
+            const error: RequestError = {
+              errMsg: err.errMsg,
+              statusCode: err.statusCode,
+              data: err.data,
+              config,
+            };
+            settle(() => {
+              if (terminalOnFailure) {
+                this.taskManager.finish(generation);
+              }
+              reject(error);
+            });
+          },
+        });
+      } catch (error) {
+        if (settled) return;
+        if (!this.taskManager.isLatest(generation)) {
+          settle(() => reject(this.createCancellationError(config)));
+          return;
+        }
+
+        settle(() => {
+          if (terminalOnFailure) {
+            this.taskManager.finish(generation);
+          }
+          reject(error);
+        });
+        return;
+      }
+      taskRef.current = task;
+
+      if (settled) return;
+      if (!this.taskManager.attach(generation, task)) {
+        settle(() => reject(this.createCancellationError(config)));
+      }
+    });
   }
 
   /**
    * 执行请求（支持重试）
    */
-  private async performRequest<T>(
-    config: RequestConfig,
-    attempt: number = 0
-  ): Promise<RequestResponse<T>> {
-    return new Promise((resolve, reject) => {
-      const requestId = this.generateRequestId(config);
+  private async performRequest<T>(config: RequestConfig): Promise<RequestResponse<T>> {
+    const requestId = this.generateRequestId(config);
+    const cancellationError = this.createCancellationError(config);
+    const generation = this.taskManager.start(requestId, cancellationError);
+    const maxRetries = config.retry || 0;
 
-      // 取消同一个requestId的之前请求
-      if (config.requestId) {
-        this.taskManager.cancel(config.requestId);
+    const attempts = async (): Promise<RequestResponse<T>> => {
+      let attempt = 0;
+      let firstError: unknown;
+      let hasFirstError = false;
+
+      while (true) {
+        if (!this.taskManager.isLatest(generation)) {
+          throw cancellationError;
+        }
+
+        const canRetry = attempt < maxRetries;
+        try {
+          return await this.performRequestAttempt<T>(config, generation, !canRetry);
+        } catch (error) {
+          if (this.taskManager.isCancelled(generation)) {
+            throw cancellationError;
+          }
+
+          if (!hasFirstError) {
+            firstError = error;
+            hasFirstError = true;
+          }
+          if (!canRetry) {
+            throw firstError;
+          }
+
+          if (config.retryDelay) {
+            await Promise.race([
+              this.delay(config.retryDelay, generation),
+              generation.cancellation,
+            ]);
+          }
+          if (!this.taskManager.isLatest(generation)) {
+            throw cancellationError;
+          }
+          attempt += 1;
+        }
       }
+    };
 
-      const task = uni.request({
-        ...config,
-        method: config.method as UniApp.RequestOptions['method'],
-        success: (res: UniApp.RequestSuccessCallbackResult) => {
-          this.taskManager.remove(requestId);
-          const response: RequestResponse<T> = {
-            data: res.data as T,
-            statusCode: res.statusCode,
-            header: res.header,
-            cookies: res.cookies,
-            profile: res.profile,
-          };
-          resolve(response);
-        },
-        fail: async (
-          err: UniApp.GeneralCallbackResult & {
-            statusCode?: number;
-            data?: unknown;
-          }
-        ) => {
-          this.taskManager.remove(requestId);
-
-          // 重试逻辑
-          const maxRetries = config.retry || 0;
-          if (attempt < maxRetries) {
-            if (config.retryDelay) {
-              await this.delay(config.retryDelay);
-            }
-            try {
-              const result = await this.performRequest<T>(config, attempt + 1);
-              resolve(result);
-              return;
-            } catch {
-              // 重试失败，继续走原来的错误处理逻辑
-            }
-          }
-
-          const error: RequestError = {
-            errMsg: err.errMsg,
-            statusCode: err.statusCode,
-            data: err.data,
-            config,
-          };
-          reject(error);
-        },
-      });
-
-      // 保存任务
-      this.taskManager.add(requestId, task);
-    });
+    try {
+      return await Promise.race([attempts(), generation.cancellation]);
+    } finally {
+      this.taskManager.finish(generation);
+    }
   }
 
   /**
@@ -384,6 +616,7 @@ export class Request {
     const mergedConfig = this.mergeConfig(config);
     // 用于在 finally 块中访问最终配置，以判断是否需要隐藏 loading
     let finalConfig: RequestConfig = mergedConfig;
+    let loadingAcquired = false;
 
     // Promise 链，初始值为已合并的配置
     type RequestChainFn = (value: unknown) => unknown | Promise<unknown>;
@@ -394,6 +627,7 @@ export class Request {
       finalConfig = config;
       if (finalConfig.loading) {
         this.showLoading(finalConfig.loadingText);
+        loadingAcquired = true;
       }
       return this.performRequest<T>(finalConfig);
     };
@@ -425,7 +659,7 @@ export class Request {
     try {
       return (await promise) as RequestResponse<T>;
     } finally {
-      if (finalConfig.loading) {
+      if (loadingAcquired) {
         this.hideLoading();
       }
     }
