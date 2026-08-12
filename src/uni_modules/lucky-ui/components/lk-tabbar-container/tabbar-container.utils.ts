@@ -151,3 +151,50 @@ export function resolveTabbarContainerBadgeText(badge: number | undefined): stri
   if (typeof badge !== 'number' || badge <= 0) return '';
   return badge > 99 ? '99+' : String(badge);
 }
+
+export interface TabbarContainerChangeController {
+  switchTo: (tabId: string) => Promise<boolean>;
+  invalidate: () => void;
+}
+
+/**
+ * 为单个组件实例串联切换意图与事件。
+ * 相同目标只接受一次；不同目标采用 latest-wins，失效操作不得补发 change。
+ */
+export function createTabbarContainerChangeController(options: {
+  getActiveId: () => string;
+  switchTab: (tabId: string) => Promise<boolean>;
+  onBeforeChange: (tabId: string, oldTabId: string) => void;
+  onChange: (tabId: string) => void;
+}): TabbarContainerChangeController {
+  let generation = 0;
+  const pendingTargets = new Map<string, number>();
+
+  async function switchTo(tabId: string): Promise<boolean> {
+    const oldTabId = options.getActiveId();
+    if (tabId === oldTabId || pendingTargets.has(tabId)) return false;
+
+    const currentGeneration = ++generation;
+    pendingTargets.clear();
+    pendingTargets.set(tabId, currentGeneration);
+    options.onBeforeChange(tabId, oldTabId);
+
+    try {
+      const changed = await options.switchTab(tabId);
+      if (!changed || generation !== currentGeneration) return false;
+      options.onChange(tabId);
+      return true;
+    } finally {
+      if (pendingTargets.get(tabId) === currentGeneration) {
+        pendingTargets.delete(tabId);
+      }
+    }
+  }
+
+  function invalidate(): void {
+    generation += 1;
+    pendingTargets.clear();
+  }
+
+  return { switchTo, invalidate };
+}

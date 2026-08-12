@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted, watch, type StyleValue } from 'vue';
+import { computed, onBeforeUnmount, onMounted, watch, type StyleValue } from 'vue';
 import LkLoading from '../lk-loading/lk-loading.vue';
 import LkIcon from '../lk-icon/lk-icon.vue';
 import { useLocale } from '../../composables/useLocale';
-import {
-  useTabbarContainer,
-  initTabbarContainer,
-  setTabbarDebug,
-} from '../../core/src/tabbar-container';
+import { createTabbarContainer } from '../../core/src/tabbar-container';
 import {
   TabbarContainerMode,
   TabbarContainerRenderMode,
@@ -16,6 +12,7 @@ import {
   type TabConfig,
 } from './tabbar-container.props';
 import {
+  createTabbarContainerChangeController,
   getTabbarContainerPreloadIds,
   isTabbarContainerSlidingMode,
   resolveTabbarContainerActiveBgStyle,
@@ -25,7 +22,6 @@ import {
   resolveTabbarContainerIcon,
   resolveTabbarContainerSafeAreaBottom,
   resolveTabbarContainerStyle,
-  shouldChangeTabbarContainerTab,
   shouldShowTabbarContainerBadge,
 } from './tabbar-container.utils';
 
@@ -56,7 +52,16 @@ preferRuntimeSafeArea = true;
 
 const safeAreaBottom = resolveTabbarContainerSafeAreaBottom(systemInfo);
 
-const { activeId, switchTab, preloadTabs, getTabInstance, isVisited } = useTabbarContainer();
+const tabbarContainer = createTabbarContainer();
+const { activeId, switchTab, preloadTabs, getTabInstance, isVisited, init, reset, setDebug } =
+  tabbarContainer;
+const changeController = createTabbarContainerChangeController({
+  getActiveId: () => activeId.value,
+  switchTab,
+  onBeforeChange: (tabId, oldTabId) => emit('beforeChange', tabId, oldTabId),
+  onChange: tabId => emit('change', tabId),
+});
+let preloadTimer: ReturnType<typeof setTimeout> | undefined;
 
 const TABBAR_ICON_SIZE = 40;
 
@@ -148,19 +153,7 @@ function shouldRenderFallbackSlot(tabId: string) {
 }
 
 async function handleTabClick(tab: TabConfig) {
-  if (
-    !shouldChangeTabbarContainerTab({
-      nextTabId: tab.id,
-      activeId: activeId.value,
-    })
-  )
-    return;
-
-  const oldTabId = activeId.value;
-  emit('beforeChange', tab.id, oldTabId);
-
-  await switchTab(tab.id);
-  emit('change', tab.id);
+  await changeController.switchTo(tab.id);
 }
 
 async function retryLoad(tabId: string) {
@@ -173,14 +166,12 @@ async function retryLoad(tabId: string) {
 }
 
 onMounted(() => {
-  if (props.debug) {
-    setTabbarDebug(true);
-  }
+  setDebug(props.debug);
 
-  initTabbarContainer(runtimeTabs.value, props.defaultTab || runtimeTabs.value[0]?.id);
+  init(runtimeTabs.value, props.defaultTab || runtimeTabs.value[0]?.id);
 
   if (props.preloadAll) {
-    setTimeout(() => {
+    preloadTimer = setTimeout(() => {
       preloadTabs(
         getTabbarContainerPreloadIds({
           tabs: runtimeTabs.value,
@@ -194,10 +185,20 @@ onMounted(() => {
 watch(
   () => [runtimeTabs.value, props.defaultTab] as const,
   ([newTabs]) => {
-    initTabbarContainer(newTabs, activeId.value || props.defaultTab);
+    changeController.invalidate();
+    init(newTabs, activeId.value || props.defaultTab);
   },
   { deep: true }
 );
+
+onBeforeUnmount(() => {
+  changeController.invalidate();
+  if (preloadTimer !== undefined) {
+    clearTimeout(preloadTimer);
+    preloadTimer = undefined;
+  }
+  reset();
+});
 </script>
 
 <template>
