@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import type { StyleValue } from 'vue';
-import { ref, computed, watch, onMounted, nextTick, getCurrentInstance } from 'vue';
+import {
+  ref,
+  computed,
+  watch,
+  onMounted,
+  onBeforeUnmount,
+  nextTick,
+  getCurrentInstance,
+} from 'vue';
 import { useTransition } from '@/uni_modules/lucky-ui/composables/useTransition';
 import { tooltipProps, tooltipEmits } from './tooltip.props';
 import {
-  canMutateTooltipOpen,
-  canUpdateTooltipOpen,
-  createTooltipPayload,
+  createTooltipVisibilityController,
   getFallbackPlacement,
+  isTooltipTouchLikeEvent,
   resolveTooltipOpen,
   resolveTooltipPlacementClass,
   resolveTooltipPopStyle,
@@ -27,61 +34,46 @@ const popId = `lk-tooltip-pop-${instance?.uid ?? Math.floor(Math.random() * 1000
 const innerOpen = ref(false);
 const resolvedPlacement = ref(props.placement);
 let supportsHover = true;
+let lastTouchInputAt: number | undefined;
 // #ifdef MP
 supportsHover = false;
 // #endif
-const open = computed({
-  get: () => {
-    return resolveTooltipOpen({
-      always: props.always,
-      modelValue: props.modelValue,
-      innerOpen: innerOpen.value,
-    });
+// #ifdef H5
+supportsHover =
+  typeof globalThis.matchMedia !== 'function' ||
+  globalThis.matchMedia('(hover: hover) and (pointer: fine)').matches;
+// #endif
+const visibilityController = createTooltipVisibilityController({
+  getConfig: () => ({
+    always: props.always,
+    disabled: props.disabled,
+    modelValue: props.modelValue,
+    trigger: props.trigger,
+  }),
+  getInnerOpen: () => innerOpen.value,
+  setInnerOpen: value => {
+    innerOpen.value = value;
   },
-  set: (v: boolean) => {
-    if (!canMutateTooltipOpen(props.always)) return; // 常驻时忽略外部变更
-    if (props.modelValue === undefined) innerOpen.value = v;
-    emit('update:modelValue', v);
+  onUpdate: value => emit('update:modelValue', value),
+  onVisibilityChange: (visible, payload) => {
+    if (visible) {
+      emit('show', payload);
+      emit('open', payload);
+    } else {
+      emit('hide', payload);
+      emit('close', payload);
+    }
   },
+  defer: callback => void nextTick(callback),
 });
-
-let showTimer: ReturnType<typeof setTimeout> | null = null;
-let hideTimer: ReturnType<typeof setTimeout> | null = null;
-
-type TooltipOpenTrigger = 'hover' | 'click' | 'manual' | 'default';
-type TooltipCloseTrigger = TooltipOpenTrigger | 'disabled' | 'content';
-
-function doOpen(
-  v = true,
-  trigger: TooltipOpenTrigger | TooltipCloseTrigger = props.trigger,
-  event?: unknown
-) {
-  if (
-    !canUpdateTooltipOpen({
-      disabled: props.disabled,
-      always: props.always,
-      currentOpen: open.value,
-      nextOpen: v,
-    })
-  )
-    return;
-  open.value = v;
-  if (v) {
-    const payload = createTooltipPayload({
-      trigger: trigger as TooltipOpenTrigger,
-      event,
-    });
-    emit('show', payload);
-    emit('open', payload);
-  } else {
-    const payload = createTooltipPayload({
-      trigger: trigger as TooltipCloseTrigger,
-      event,
-    });
-    emit('hide', payload);
-    emit('close', payload);
-  }
-}
+const open = computed(() =>
+  resolveTooltipOpen({
+    always: props.always,
+    disabled: props.disabled,
+    modelValue: props.modelValue,
+    innerOpen: innerOpen.value,
+  })
+);
 
 function onTriggerEnter(event?: unknown) {
   emit('mouseenter-trigger', event);
@@ -93,8 +85,7 @@ function onTriggerEnter(event?: unknown) {
     })
   )
     return;
-  if (hideTimer) clearTimeout(hideTimer);
-  showTimer = setTimeout(() => doOpen(true, 'hover', event), props.showDelay);
+  visibilityController.scheduleOpen('hover', event, props.showDelay);
 }
 function onTriggerLeave(event?: unknown) {
   emit('mouseleave-trigger', event);
@@ -106,20 +97,25 @@ function onTriggerLeave(event?: unknown) {
     })
   )
     return;
-  if (showTimer) clearTimeout(showTimer);
-  hideTimer = setTimeout(() => doOpen(false, 'hover', event), props.hideDelay);
+  visibilityController.scheduleClose('hover', event, props.hideDelay);
 }
 function onTriggerClick(event?: unknown) {
   emit('click-trigger', event);
+  const touchLike = isTooltipTouchLikeEvent(event, { recentTouchAt: lastTouchInputAt });
+  lastTouchInputAt = undefined;
   if (
     !shouldToggleTooltipOnTriggerClick({
       always: props.always,
       trigger: props.trigger,
       supportsHover,
+      touchLike,
     })
   )
     return;
-  doOpen(!open.value, 'click', event);
+  visibilityController.request(!visibilityController.getRequestedOpen(), 'click', event);
+}
+function onTriggerTouchStart() {
+  lastTouchInputAt = Date.now();
 }
 function onContentEnter(event?: unknown) {
   emit('mouseenter-content', event);
@@ -130,7 +126,7 @@ function onContentEnter(event?: unknown) {
     })
   )
     return;
-  if (hideTimer) clearTimeout(hideTimer);
+  visibilityController.cancelHide();
 }
 function onContentLeave(event?: unknown) {
   emit('mouseleave-content', event);
@@ -141,14 +137,16 @@ function onContentLeave(event?: unknown) {
     })
   )
     return;
-  hideTimer = setTimeout(() => doOpen(false, 'content', event), props.hideDelay);
+  visibilityController.scheduleClose('content', event, props.hideDelay);
 }
 
 watch(
-  () => props.disabled,
-  v => {
-    if (v) doOpen(false, 'disabled');
-  }
+  () => [props.disabled, props.always, props.modelValue, innerOpen.value, props.trigger] as const,
+  (_value, oldValue) => {
+    if (oldValue && oldValue[4] !== props.trigger) visibilityController.cancelTimers();
+    visibilityController.sync('external');
+  },
+  { flush: 'sync' }
 );
 
 watch(
@@ -213,15 +211,10 @@ const popStyle = computed(() =>
 );
 
 onMounted(() => {
-  if (props.always || props.disabled) return;
-  // 仅非受控时生效
-  if (props.modelValue !== undefined) return;
-  if (props.defaultOpen) {
-    innerOpen.value = true;
-    emit('show', { trigger: 'default' });
-    emit('open', { trigger: 'default' });
-  }
+  if (props.defaultOpen) visibilityController.setDefaultOpen();
 });
+
+onBeforeUnmount(() => visibilityController.destroy());
 
 const transitionConfig = computed(() =>
   resolveTooltipTransitionConfig({
@@ -267,11 +260,14 @@ watch(
     class="lk-tooltip"
     :class="[customClass, disabled && 'is-disabled', always && 'is-always']"
     :style="rootStyle"
-    @mouseenter="onTriggerEnter"
-    @mouseleave="onTriggerLeave"
-    @tap="onTriggerClick"
   >
-    <view class="lk-tooltip__trigger">
+    <view
+      class="lk-tooltip__trigger"
+      @mouseenter="onTriggerEnter"
+      @mouseleave="onTriggerLeave"
+      @touchstart="onTriggerTouchStart"
+      @tap="onTriggerClick"
+    >
       <slot />
     </view>
 
@@ -283,6 +279,7 @@ watch(
       :style="popStyle"
       @mouseenter="onContentEnter"
       @mouseleave="onContentLeave"
+      @tap.stop
     >
       <view class="lk-tooltip__body lk-elevated" :class="tipClasses" :style="tipStyles">
         <view class="lk-tooltip__content">
