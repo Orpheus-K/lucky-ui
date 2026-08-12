@@ -213,6 +213,10 @@ describe('audit fixture contract', () => {
     expect(source).toContain('data-audit-component-status="pending-adapter"');
     expect(source).toContain(':data-audit-build-mode="buildIdentity.buildMode"');
     expect(source).toContain(':data-audit-provenance="buildIdentity.provenance"');
+    expect(source).toContain('data-audit-theme-scope="fixture-root"');
+    expect(source).toContain('data-audit-brand-scope="fixture-root"');
+    expect(source).not.toContain('themeStore');
+    expect(source).not.toContain('applyTemporaryStorageOverlay');
   });
 
   it('does not overwrite a newer global owner during cleanup', () => {

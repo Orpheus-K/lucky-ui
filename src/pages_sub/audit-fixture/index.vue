@@ -3,16 +3,14 @@ import { computed, nextTick, onBeforeUnmount, onErrorCaptured, onMounted, ref } 
 import { onLoad, onUnload } from '@dcloudio/uni-app';
 import PreviewDemoRenderer from '@/components/preview/PreviewDemoRenderer.vue';
 import {
-  applyTemporaryStorageOverlay,
   installAuditDeterminism,
   parseAuditFixtureQuery,
   stableAuditConfigJson,
   type AuditFixtureParseResult,
   type AuditFixtureQuery,
-  type AuditStorageAdapter,
 } from '@/components/audit/audit-fixture';
 import { Locale } from '@/uni_modules/lucky-ui/locale';
-import { themeStore } from '@/uni_modules/lucky-ui/theme/src/theme-store';
+import { generateBrandVars } from '@/uni_modules/lucky-ui/theme/src/brand-color';
 
 interface AuditEvent {
   sequence: number;
@@ -32,8 +30,6 @@ type RuntimeErrorUni = typeof uni & {
   offUnhandledRejection?: (callback: (result: { reason: unknown }) => void) => void;
 };
 
-const THEME_STORAGE_KEY = 'lk-theme';
-const BRAND_STORAGE_KEY = 'lk-brand-color';
 const buildIdentity = __LUCKY_UI_BUILD_IDENTITY__;
 const parseResult = ref<AuditFixtureParseResult | null>(null);
 const initialized = ref(false);
@@ -94,7 +90,9 @@ const stateJson = computed(() =>
     viewportMatches: viewportMatches.value,
     viewportMetric: config.value?.viewportMetric || 'uni-window-css-px',
     runtimeErrorCapture: runtimeErrorCapture.value,
-    nativeSystemUiScope: 'external-runtime-required',
+    themeScope: 'fixture-root',
+    brandScope: 'fixture-root',
+    nativeSystemUiScope: 'not-controlled',
   })
 );
 const revisionLabel = computed(
@@ -102,7 +100,9 @@ const revisionLabel = computed(
     `${buildIdentity.commit.slice(0, 12)}${buildIdentity.dirty ? '+dirty' : ''} / ${buildIdentity.sourceDigest.slice(0, 12)}`
 );
 const fixtureStyle = computed(() => {
-  const brandVars = themeStore.brandStyleVars;
+  const brandVars = Object.entries(generateBrandVars(config.value?.brand || '#6965db'))
+    .map(([key, value]) => `${key}:${value}`)
+    .join(';');
   const motionVars =
     config.value?.motion === 'css-tokens-reduced'
       ? '--lk-transition-fast:0s linear;--lk-transition-base:0s linear;--lk-transition-slow:0s linear;--lk-transition-duration:0s;'
@@ -110,70 +110,24 @@ const fixtureStyle = computed(() => {
   return `${brandVars};${motionVars}`;
 });
 
-const storageAdapter: AuditStorageAdapter = {
-  listKeys() {
-    const info = uni.getStorageInfoSync();
-    if (!info || !Array.isArray(info.keys)) throw new Error('storage-info-without-keys');
-    return [...info.keys];
-  },
-  get: key => uni.getStorageSync(key),
-  set: (key, value) => uni.setStorageSync(key, value),
-  remove: key => uni.removeStorageSync(key),
-};
-
-function restoreOriginalEnvironment(previousLocale: string): void {
-  const errors: string[] = [];
-  try {
-    Locale.use(previousLocale);
-  } catch (error) {
-    errors.push(`locale:${String(error)}`);
-  }
-  try {
-    themeStore.init();
-  } catch (error) {
-    errors.push(`theme:${String(error)}`);
-  }
-  if (errors.length > 0) throw new Error(errors.join('|'));
-}
-
 function applyAuditEnvironment(result: AuditFixtureParseResult): () => void {
   const previousLocale = Locale.locale;
   try {
-    applyTemporaryStorageOverlay(
-      storageAdapter,
-      {
-        [THEME_STORAGE_KEY]: result.config.theme,
-        [BRAND_STORAGE_KEY]: result.config.brand,
-      },
-      () => {
-        themeStore.init();
-        Locale.use(result.config.locale);
-        if (themeStore.theme !== result.config.theme) {
-          throw new Error(
-            `theme-postcondition:expected=${result.config.theme},actual=${themeStore.theme}`
-          );
-        }
-        if (themeStore.brandColor.toLowerCase() !== result.config.brand.toLowerCase()) {
-          throw new Error(
-            `brand-postcondition:expected=${result.config.brand},actual=${themeStore.brandColor}`
-          );
-        }
-        if (Locale.locale !== result.config.locale) {
-          throw new Error(
-            `locale-postcondition:expected=${result.config.locale},actual=${Locale.locale}`
-          );
-        }
-      }
-    );
+    Locale.use(result.config.locale);
+    if (Locale.locale !== result.config.locale) {
+      throw new Error(
+        `locale-postcondition:expected=${result.config.locale},actual=${Locale.locale}`
+      );
+    }
   } catch (error) {
     try {
-      restoreOriginalEnvironment(previousLocale);
+      Locale.use(previousLocale);
     } catch (rollbackError) {
       throw new Error(`environment:${String(error)}|rollback:${String(rollbackError)}`);
     }
     throw error;
   }
-  return () => restoreOriginalEnvironment(previousLocale);
+  return () => Locale.use(previousLocale);
 }
 
 function formatConsoleValue(value: unknown): string {
@@ -449,7 +403,7 @@ onBeforeUnmount(cleanup);
     v-if="initialized && config"
     id="audit-fixture-root"
     class="audit-fixture"
-    :class="[themeStore.themeClass, `audit-fixture--motion-${config.motion}`]"
+    :class="[`lk-theme-${config.theme}`, `audit-fixture--motion-${config.motion}`]"
     :style="fixtureStyle"
     :data-audit-shell-ready="String(shellReady)"
     :data-audit-evidence-ready="String(evidenceReady)"
@@ -478,7 +432,9 @@ onBeforeUnmount(cleanup);
     :data-audit-viewport-metric="config.viewportMetric"
     :data-audit-viewport-match="String(viewportMatches)"
     :data-audit-runtime-error-capture="runtimeErrorCapture"
-    data-audit-native-system-ui-scope="external-runtime-required"
+    data-audit-theme-scope="fixture-root"
+    data-audit-brand-scope="fixture-root"
+    data-audit-native-system-ui-scope="not-controlled"
   >
     <view class="audit-fixture__header">
       <text class="audit-fixture__title">{{ config.component }} / {{ config.profile }}</text>
