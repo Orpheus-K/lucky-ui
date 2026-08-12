@@ -19,6 +19,22 @@ export interface PickerRenderedColumn {
   virtual: boolean;
 }
 
+export interface PickerSelectionSnapshot {
+  columns: PickerOption[][];
+  indexes: number[];
+  value: PickerValue;
+  options: PickerOption[];
+}
+
+export interface PickerColumnSelection extends PickerSelectionSnapshot {
+  changed: boolean;
+}
+
+interface PickerCommitCallbacks {
+  onUpdateModelValue: (value: PickerValue) => void;
+  onChange: (value: PickerValue) => void;
+}
+
 export function normalizePickerColumns(columns: PickerColumns): PickerOption[][] {
   if (!Array.isArray(columns) || columns.length === 0) return [];
   if (Array.isArray(columns[0])) return columns as PickerOption[][];
@@ -43,6 +59,22 @@ export function buildCascadePickerColumns(
   return result;
 }
 
+export function buildCascadePickerColumnsByIndexes(
+  data: PickerOption[],
+  indexes: number[]
+): PickerOption[][] {
+  const result: PickerOption[][] = [];
+  let currentLevel = data;
+
+  for (let level = 0; currentLevel && currentLevel.length > 0; level++) {
+    result.push(currentLevel);
+    const selectedIndex = clampPickerIndex(indexes[level] ?? 0, currentLevel.length);
+    currentLevel = currentLevel[selectedIndex]?.children || [];
+  }
+
+  return result;
+}
+
 export function resolvePickerColumns(options: {
   mode: PickerMode;
   columns: PickerColumns;
@@ -61,6 +93,13 @@ export function syncPickerInnerValueFromModel(options: {
 }): PickerPrimitiveValue[] {
   if (options.mode !== 'cascade' && options.mode !== 'multi') return [];
   return Array.isArray(options.modelValue) ? options.modelValue.slice() : [];
+}
+
+export function normalizePickerIndexesForColumns(
+  indexes: number[],
+  columns: PickerOption[][]
+): number[] {
+  return columns.map((column, index) => clampPickerIndex(indexes[index] ?? 0, column.length));
 }
 
 export function resolvePickerIndexes(options: {
@@ -121,6 +160,126 @@ export function resolveCascadePickerIndexes(options: {
   }
 
   return indexes;
+}
+
+export function resolvePickerDraftSelection(options: {
+  mode: PickerMode;
+  columns: PickerColumns;
+  modelValue: PickerValue | undefined;
+}): Pick<PickerSelectionSnapshot, 'columns' | 'indexes'> & {
+  innerValue: PickerPrimitiveValue[];
+} {
+  const innerValue = syncPickerInnerValueFromModel({
+    mode: options.mode,
+    modelValue: options.modelValue,
+  });
+  const columns = resolvePickerColumns({
+    mode: options.mode,
+    columns: options.columns,
+    innerValue,
+  });
+  const indexes = normalizePickerIndexesForColumns(
+    resolvePickerIndexes({
+      mode: options.mode,
+      columns,
+      modelValue: options.modelValue,
+    }),
+    columns
+  );
+
+  return { innerValue, columns, indexes };
+}
+
+export function resolvePickerSelectionSnapshot(options: {
+  mode: PickerMode;
+  columns: PickerColumns;
+  resolvedColumns: PickerOption[][];
+  indexes: number[];
+}): PickerSelectionSnapshot {
+  const columns =
+    options.mode === 'cascade'
+      ? buildCascadePickerColumnsByIndexes(options.columns as PickerOption[], options.indexes)
+      : options.resolvedColumns;
+  const indexes = normalizePickerIndexesForColumns(options.indexes, columns);
+
+  return {
+    columns,
+    indexes,
+    value: getPickerValueByIndexes({ mode: options.mode, columns, indexes }),
+    options: getPickerOptionsByIndexes(columns, indexes),
+  };
+}
+
+export function resolvePickerColumnSelection(options: {
+  mode: PickerMode;
+  columns: PickerColumns;
+  resolvedColumns: PickerOption[][];
+  previousIndexes: number[];
+  columnIndex: number;
+  optionIndex: number;
+}): PickerColumnSelection {
+  const nextIndexes = options.resolvedColumns.map((column, index) => {
+    if (index === options.columnIndex) return clampPickerIndex(options.optionIndex, column.length);
+    return clampPickerIndex(options.previousIndexes[index] ?? 0, column.length);
+  });
+  const indexes = resolveCascadePickerIndexes({
+    nextIndexes,
+    previousIndexes: options.previousIndexes,
+    mode: options.mode,
+  });
+  const snapshot = resolvePickerSelectionSnapshot({
+    mode: options.mode,
+    columns: options.columns,
+    resolvedColumns: options.resolvedColumns,
+    indexes,
+  });
+  const changed =
+    snapshot.indexes.length !== options.previousIndexes.length ||
+    snapshot.indexes.some((item, index) => item !== options.previousIndexes[index]);
+
+  return { ...snapshot, changed };
+}
+
+export function commitPickerValue(value: PickerValue, callbacks: PickerCommitCallbacks): void {
+  callbacks.onUpdateModelValue(value);
+  callbacks.onChange(value);
+}
+
+export function dispatchPickerSelectionEvents(options: {
+  inline: boolean;
+  selection: PickerColumnSelection;
+  onPick: (value: PickerValue, indexes: number[], selected: PickerOption[]) => void;
+  onUpdateModelValue: PickerCommitCallbacks['onUpdateModelValue'];
+  onChange: PickerCommitCallbacks['onChange'];
+}): boolean {
+  if (!options.selection.changed) return false;
+
+  options.onPick(options.selection.value, options.selection.indexes, options.selection.options);
+  if (options.inline) {
+    commitPickerValue(options.selection.value, options);
+  }
+  return true;
+}
+
+export function dispatchPickerConfirmEvents(options: {
+  snapshot: PickerSelectionSnapshot;
+  onUpdateModelValue: PickerCommitCallbacks['onUpdateModelValue'];
+  onChange: PickerCommitCallbacks['onChange'];
+  onConfirm: (value: PickerValue, indexes: number[], selected: PickerOption[]) => void;
+  onVisibleChange: (visible: boolean) => void;
+}): void {
+  commitPickerValue(options.snapshot.value, options);
+  options.onConfirm(options.snapshot.value, options.snapshot.indexes, options.snapshot.options);
+  options.onVisibleChange(false);
+}
+
+export function dispatchPickerCancelEvents(options: {
+  snapshot: PickerSelectionSnapshot;
+  onCancel: (value: PickerValue, indexes: number[], selected: PickerOption[]) => void;
+  onVisibleChange: (visible: boolean) => void;
+}): void {
+  options.onCancel(options.snapshot.value, options.snapshot.indexes, options.snapshot.options);
+  options.onVisibleChange(false);
 }
 
 export function clampPickerNumber(value: number, min: number, max: number): number {

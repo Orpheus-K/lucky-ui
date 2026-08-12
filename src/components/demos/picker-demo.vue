@@ -18,10 +18,38 @@ const display = computed(() => {
   const m = new Map(columns.map(o => [o.value, o.label]));
   return m.get(value.value) || '';
 });
+const popupEvents = ref<string[]>([]);
+const inlineValue = ref('green');
+const inlineDisplay = computed(
+  () => columns.find(option => option.value === inlineValue.value)?.label || ''
+);
+const inlineEvents = ref<string[]>([]);
+
+function recordInlinePick(nextValue: string | number | (string | number)[]) {
+  inlineEvents.value.push(`pick:${String(nextValue)}`);
+}
+
+function recordInlineUpdate(nextValue: string | number | (string | number)[]) {
+  inlineEvents.value.push(`update:${String(nextValue)}`);
+}
+
+function recordInlineChange(nextValue: string | number | (string | number)[]) {
+  inlineEvents.value.push(`change:${String(nextValue)}`);
+}
 
 function onConfirm(v: string | number | (string | number)[]) {
+  popupEvents.value.push(`confirm:${String(v)}`);
   const selected = Array.isArray(v) ? undefined : columns.find(o => o.value === v);
   uni.showToast({ title: `已选择: ${selected?.label || display.value}`, icon: 'none' });
+}
+
+function openSinglePicker() {
+  popupEvents.value = [];
+  show.value = true;
+}
+
+function recordPopupEvent(name: string, nextValue?: unknown) {
+  popupEvents.value.push(nextValue === undefined ? name : `${name}:${String(nextValue)}`);
 }
 
 // 多列选择器
@@ -100,16 +128,47 @@ const cascadeDisplay = computed(() => {
 
 <template>
   <view class="component-demo">
-    <demo-block title="单列选择器">
-      <lk-button @click="show = true">选择颜色</lk-button>
-      <view class="result">当前：{{ display }}</view>
+    <demo-block title="内联即时提交">
+      <view id="picker-inline-value" class="result picker-inline-value">
+        value={{ inlineValue }}；label={{ inlineDisplay }}；events={{
+          inlineEvents.join(' > ') || 'none'
+        }}
+      </view>
       <lk-picker
+        id="picker-inline-demo"
+        v-model="inlineValue"
+        inline
+        mode="single"
+        title="选择颜色（即时生效）"
+        :columns="columns"
+        @pick="recordInlinePick"
+        @update:model-value="recordInlineUpdate"
+        @change="recordInlineChange"
+      />
+    </demo-block>
+
+    <demo-block title="单列选择器">
+      <lk-button id="picker-popup-open" @click="openSinglePicker">选择颜色</lk-button>
+      <view id="picker-popup-state" class="result">
+        value={{ value }}；label={{ display }}；visible={{ show }}；events={{
+          popupEvents.join(' > ') || 'none'
+        }}
+      </view>
+      <lk-picker
+        id="picker-popup-demo"
         v-model:visible="show"
         v-model="value"
         mode="single"
         title="请选择颜色"
         :columns="columns"
+        @open="recordPopupEvent('open')"
+        @pick="nextValue => recordPopupEvent('pick', nextValue)"
+        @update:model-value="nextValue => recordPopupEvent('update', nextValue)"
+        @change="nextValue => recordPopupEvent('change', nextValue)"
         @confirm="onConfirm"
+        @cancel="nextValue => recordPopupEvent('cancel', nextValue)"
+        @update:visible="nextVisible => recordPopupEvent('visible', nextVisible)"
+        @close="recordPopupEvent('close')"
       />
     </demo-block>
 
