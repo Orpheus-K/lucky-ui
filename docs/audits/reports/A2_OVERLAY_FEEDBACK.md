@@ -2,7 +2,7 @@
 
 ## 结论
 
-审计基线为 `c8071e6`，分支为 `audit/lucky-ui-full-review-20260813`。本批覆盖 `lk-action-sheet`、`lk-curtain`、`lk-dropdown`、`lk-modal`、`lk-overlay`、`lk-popup`、`lk-toast`、`lk-loading`、`lk-skeleton`、`lk-empty`、`lk-notice-bar` 的全部目录文件，以及对应组件文档、Demo、直接单元/视觉/showcase/微信小程序测试和必要共享调用链。
+审计基线为 `c8071e6`，分支为 `docs/lucky-ui-full-audit`。本批覆盖 `lk-action-sheet`、`lk-curtain`、`lk-dropdown`、`lk-modal`、`lk-overlay`、`lk-popup`、`lk-toast`、`lk-loading`、`lk-skeleton`、`lk-empty`、`lk-notice-bar` 的全部目录文件，以及对应组件文档、Demo、直接单元/视觉/showcase/微信小程序测试和必要共享调用链。
 
 - 逐行读取：116 个文件，16,120 个物理行；未读文件 0，未读物理行 0。
 - 发现：31 项可执行问题，其中 P1 23 项、P2 8 项；未发现需要定为 P0 的证据。

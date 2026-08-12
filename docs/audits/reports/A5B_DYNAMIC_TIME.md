@@ -2,7 +2,7 @@
 
 ## 1. 结论与边界
 
-- 审计基线：audit/lucky-ui-full-review-20260813，c8071e67f93cc95ee1ddc12cac7bfccdf74058c1。
+- 审计基线：docs/lucky-ui-full-audit，c8071e67f93cc95ee1ddc12cac7bfccdf74058c1。
 - 强制范围：lk-calendar、lk-calendar-picker、lk-countdown、lk-number-roller、lk-timeline、lk-watermark。
 - 覆盖结果：79 个唯一文件，14,598 个物理行，未读文件 0，未读物理行 0。文件总账与 SHA-256 见第 8 节。
 - 结论：共确认 31 项可执行问题，其中 P1 20 项、P2 11 项。问题覆盖日期边界、受控状态、计时语义、动画竞态、尺寸与触摸、暗色对比度、微信小程序滚动兼容、文档与测试真实性。

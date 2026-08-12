@@ -6,7 +6,7 @@
 | --- | --- |
 | 日期 | 2026-08-13 |
 | Git 基线 | `develop@c8071e67f93cc95ee1ddc12cac7bfccdf74058c1` |
-| 审计分支 | `audit/lucky-ui-full-review-20260813` |
+| 审计分支 | `docs/lucky-ui-full-audit` |
 | 审计工作树 | `D:\project\test\.worktrees\lucky-ui-full-audit` |
 | 组件分母 | 73 个 `lk-*` 目录，324 个文件 |
 | 文本分母 | 322 个文件，58,674 个物理行 |

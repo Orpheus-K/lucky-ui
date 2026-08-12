@@ -16,7 +16,7 @@
 ## 2. 审计基线与范围
 
 - Git 基线：`develop` 的 `c8071e6`。
-- 审计分支：`audit/lucky-ui-full-review-20260813`。
+- 审计分支：`docs/lucky-ui-full-audit`。
 - 审计工作树：独立于已有脏工作树，禁止搬运或覆盖其他工作树中的未提交改动。
 - 组件目录：73 个 `lk-*` 组件目录，324 个文件；其中 322 个文本文件共 58,674 个物理行，另有 2 个字体二进制文件。旧矩阵仅统计部分扩展名，不能作为逐行审计分母。
 - 共享实现：`components/common`、`core`、`composables`、`utils`、`theme`、`locale`、包入口与发布元数据，共 77 个文件、10,338 个物理行。
@@ -177,7 +177,7 @@
 
 ## 11. 工作树、分支与交付规则
 
-- 审计文档：`audit/lucky-ui-full-review-20260813`。
+- 审计文档：`docs/lucky-ui-full-audit`。
 - 单组件缺陷：`fix/<component>-<issue>`，一个功能点一个工作树。
 - 共享主题或工具缺陷：`fix/theme-<issue>`、`fix/core-<issue>`，只包含同一根因影响的组件。
 - 仅文档缺陷：`docs/<component>-<issue>`。

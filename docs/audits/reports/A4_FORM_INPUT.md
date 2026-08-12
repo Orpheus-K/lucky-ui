@@ -2,7 +2,7 @@
 
 ## 结论与证据边界
 
-- 基线：audit/lucky-ui-full-review-20260813，提交 c8071e67f93cc95ee1ddc12cac7bfccdf74058c1。
+- 基线：docs/lucky-ui-full-audit，提交 c8071e67f93cc95ee1ddc12cac7bfccdf74058c1。
 - 范围：Form、FormGroup、Input、Textarea、Checkbox、Radio、Choice、SelectList、Slider、Stepper、Switch、Rate、Upload、VerifyCode、Keyboard，共 15 个组件。
 - 覆盖：123/123 个唯一文件，20,045/20,045 个物理行，未读 0。
 - 发现：P0 0 项、P1 24 项、P2 16 项，共 40 项。

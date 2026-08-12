@@ -2,7 +2,7 @@
 
 ## 1. 审计基线
 
-- 分支：`audit/lucky-ui-full-review-20260813`
+- 分支：`docs/lucky-ui-full-audit`
 - 基线提交：`c8071e67f93cc95ee1ddc12cac7bfccdf74058c1`
 - 审计方式：只读逐行审查组件目录全部文件、对应文档与 demo、直接单元/视觉/showcase/小程序测试，以及判断问题所必需的共享依赖。
 - 审计对象：`lk-anchor`、`lk-backtop`、`lk-carousel`、`lk-collapse`、`lk-horizontal-scroll`、`lk-navbar`、`lk-pull-refresh`、`lk-sticky`、`lk-tab`、`lk-tabbar`、`lk-virtual-list`。

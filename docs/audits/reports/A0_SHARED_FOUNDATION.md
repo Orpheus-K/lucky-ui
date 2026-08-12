@@ -2,7 +2,7 @@
 
 ## 结论与证据边界
 
-- 基线：`audit/lucky-ui-full-review-20260813`，提交 `c8071e67f93cc95ee1ddc12cac7bfccdf74058c1`。
+- 基线：`docs/lucky-ui-full-audit`，提交 `c8071e67f93cc95ee1ddc12cac7bfccdf74058c1`。
 - 范围：通用 Props、Core、Composables、Utils、Theme、Locale 与包入口，共 77/77 个文件、10,338/10,338 个物理行；未读文件 0、未读物理行 0。
 - 分组：Common 1/195、Core 21/3,782、Composables 6/1,593、Utils 4/293、Theme 32/2,632、Locale 9/1,374、Package 4/469。
 - 发现：P0 0 项、P1 23 项、P2 20 项，共 43 项。编号为 A0-01～A0-43，连续且不复用。

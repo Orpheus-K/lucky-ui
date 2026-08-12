@@ -2,7 +2,7 @@
 
 ## 结论与状态
 
-- 基线：audit/lucky-ui-full-review-20260813，c8071e67f93cc95ee1ddc12cac7bfccdf74058c1。
+- 基线：docs/lucky-ui-full-audit，c8071e67f93cc95ee1ddc12cac7bfccdf74058c1。
 - 强制范围：lk-avatar、lk-badge、lk-button、lk-card、lk-cell、lk-divider、lk-fab、lk-grid、lk-icon、lk-image、lk-meta-row、lk-page、lk-progress、lk-segmented、lk-space、lk-tag。
 - 覆盖分母：176 个唯一文件，其中 174 个文本文件、35,603 个物理行；2 个字体二进制、148,404 bytes。逐文件未读数为 0，重复计数为 0。
 - 审计内容：组件目录全部文件、16 篇组件文档、16 个 demo、直接 unit/visual/showcase/playground/preview/微信小程序测试，以及 Fab→Overlay、Grid→Carousel、Ripple、主题 token、字体初始化等必要共享调用链。

@@ -2,7 +2,7 @@
 
 ## 结论
 
-审计对象为 lk-chart-area、lk-chart-bar、lk-chart-line、lk-chart-pie、lk-chart-radar-lite、lk-chart-ring、lk-chart-sparkline、lk-chart-stat-card。基线为 audit/lucky-ui-full-review-20260813 @ c8071e67f93cc95ee1ddc12cac7bfccdf74058c1。
+审计对象为 lk-chart-area、lk-chart-bar、lk-chart-line、lk-chart-pie、lk-chart-radar-lite、lk-chart-ring、lk-chart-sparkline、lk-chart-stat-card。基线为 docs/lucky-ui-full-audit @ c8071e67f93cc95ee1ddc12cac7bfccdf74058c1。
 
 本批次冻结分母为 89 个唯一文件、16,425 个物理行，重复文件 0，分母内未读文件 0。八个组件目录的 32 个文件全部逐行读取；同时覆盖共享 Canvas、主题与颜色调用链、九份图表文档、九个 Demo、直接 unit/visual、preview、showcase、component-detail、playground 与 i18n preview。
 
