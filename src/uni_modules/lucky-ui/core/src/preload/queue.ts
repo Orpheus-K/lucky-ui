@@ -30,11 +30,23 @@ const DEFAULT_CONFIG: PreloadConfig = {
  */
 export class PreloadQueue {
   private queue: PreloadTask[] = [];
+  private retryingTasks: Map<string, PreloadTask> = new Map();
+  private retryTimers: Map<string, ReturnType<typeof setTimeout>> = new Map();
   private runningTasks: Map<string, PreloadTask> = new Map();
   private completedTasks: Map<string, PreloadTask> = new Map();
+  private taskAttempts: Map<string, number> = new Map();
+  private inFlightAttempts: Map<number, string> = new Map();
+  private attemptTimeouts: Map<number, ReturnType<typeof setTimeout>> = new Map();
+  private attemptSettleTimers: Set<ReturnType<typeof setTimeout>> = new Set();
+  private nextInFlightAttemptId = 0;
+  private generation = 0;
   private config: PreloadConfig;
   private isPaused = false;
   private isProcessing = false;
+  private isProcessingScheduled = false;
+  private processingScheduleVersion = 0;
+  private processingTimers: Set<ReturnType<typeof setTimeout>> = new Set();
+  private emptyEventArmed = false;
   private eventHandlers: Map<PreloadEventType, Set<PreloadEventHandler>> = new Map();
   private idleCallbackId: number | null = null;
   private pageVisible = true;
@@ -54,7 +66,7 @@ export class PreloadQueue {
           if (this.pageVisible) {
             this.scheduleProcessing();
           } else {
-            this.cancelIdleCallback();
+            this.cancelScheduledProcessing();
           }
         }
       });
@@ -106,18 +118,24 @@ export class PreloadQueue {
       maxRetries: task.maxRetries ?? this.config.defaultRetries,
     };
 
-    // 按优先级插入队列
-    const insertIndex = this.queue.findIndex(t => t.priority > newTask.priority);
-    if (insertIndex === -1) {
-      this.queue.push(newTask);
-    } else {
-      this.queue.splice(insertIndex, 0, newTask);
-    }
+    this.enqueueTask(newTask);
+    this.emptyEventArmed = true;
+    this.emitQueueChange(newTask);
 
     this.log('Task added:', newTask.id, newTask.resource);
     this.scheduleProcessing();
 
     return newTask.id;
+  }
+
+  /** 按优先级插入待执行队列 */
+  private enqueueTask(task: PreloadTask): void {
+    const insertIndex = this.queue.findIndex(t => t.priority > task.priority);
+    if (insertIndex === -1) {
+      this.queue.push(task);
+    } else {
+      this.queue.splice(insertIndex, 0, task);
+    }
   }
 
   /** 取消任务 */
@@ -126,18 +144,25 @@ export class PreloadQueue {
     const queueIndex = this.queue.findIndex(t => t.id === taskId);
     if (queueIndex !== -1) {
       const task = this.queue[queueIndex];
-      task.status = PreloadTaskStatus.CANCELLED;
       this.queue.splice(queueIndex, 1);
-      this.completedTasks.set(taskId, task);
-      this.emit('task:cancel', task);
-      this.log('Task cancelled:', taskId);
+      this.completeCancellation(task);
       return true;
     }
 
-    // 标记运行中的任务为已取消（实际取消需要在执行器中处理）
+    const retryingTask = this.retryingTasks.get(taskId);
+    if (retryingTask) {
+      this.retryingTasks.delete(taskId);
+      this.clearRetryTimer(taskId);
+      this.completeCancellation(retryingTask);
+      return true;
+    }
+
+    // 执行器本身可能无法中断，但取消后其旧 attempt 不得再提交状态。
     const runningTask = this.runningTasks.get(taskId);
     if (runningTask) {
-      runningTask.status = PreloadTaskStatus.CANCELLED;
+      this.runningTasks.delete(taskId);
+      this.completeCancellation(runningTask);
+      this.scheduleProcessing();
       return true;
     }
 
@@ -147,7 +172,7 @@ export class PreloadQueue {
   /** 暂停队列处理 */
   pause(): void {
     this.isPaused = true;
-    this.cancelIdleCallback();
+    this.cancelScheduledProcessing();
     this.emit('queue:pause');
     this.log('Queue paused');
   }
@@ -162,12 +187,31 @@ export class PreloadQueue {
 
   /** 清空队列 */
   clear(): void {
-    this.queue.forEach(task => {
-      task.status = PreloadTaskStatus.CANCELLED;
-      this.completedTasks.set(task.id, task);
-    });
+    this.generation++;
+    this.cancelScheduledProcessing();
+    this.retryTimers.forEach(timer => clearTimeout(timer));
+    this.retryTimers.clear();
+
+    const activeTasks = new Map<string, PreloadTask>();
+    this.queue.forEach(task => activeTasks.set(task.id, task));
+    this.retryingTasks.forEach(task => activeTasks.set(task.id, task));
+    this.runningTasks.forEach(task => activeTasks.set(task.id, task));
+
     this.queue = [];
-    this.cancelIdleCallback();
+    this.retryingTasks.clear();
+    this.runningTasks.clear();
+    this.taskAttempts.clear();
+
+    activeTasks.forEach(task => {
+      this.markTaskCancelled(task);
+    });
+
+    this.emitQueueChange();
+    activeTasks.forEach(task => {
+      this.emit('task:cancel', task);
+    });
+    this.maybeEmitQueueEmpty();
+
     this.log('Queue cleared');
   }
 
@@ -184,8 +228,12 @@ export class PreloadQueue {
     });
 
     return {
-      total: this.queue.length + this.runningTasks.size + this.completedTasks.size,
-      pending: this.queue.length,
+      total:
+        this.queue.length +
+        this.retryingTasks.size +
+        this.runningTasks.size +
+        this.completedTasks.size,
+      pending: this.queue.length + this.retryingTasks.size,
       running: this.runningTasks.size,
       completed,
       failed,
@@ -211,23 +259,68 @@ export class PreloadQueue {
 
   /** 取消空闲回调 */
   private cancelIdleCallback(): void {
+    const idleCallbackId = this.idleCallbackId;
+    this.idleCallbackId = null;
+
     // #ifdef H5
     if (
-      this.idleCallbackId !== null &&
+      idleCallbackId !== null &&
       typeof window !== 'undefined' &&
       'cancelIdleCallback' in window
     ) {
       (window as typeof window & { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(
-        this.idleCallbackId
+        idleCallbackId
       );
-      this.idleCallbackId = null;
     }
     // #endif
   }
 
+  /** 取消尚未开始的队列调度，不影响已经执行中的底层 executor */
+  private cancelScheduledProcessing(): void {
+    this.processingScheduleVersion++;
+    this.isProcessingScheduled = false;
+    this.cancelIdleCallback();
+    this.processingTimers.forEach(timer => clearTimeout(timer));
+    this.processingTimers.clear();
+  }
+
+  /** 注册降级调度 timer；源码测试同时保留条件编译分支时也只消费一次 */
+  private scheduleProcessingTimer(version: number, delay: number): void {
+    const timer = setTimeout(() => {
+      this.processingTimers.delete(timer);
+      this.runScheduledQueueProcessing(version);
+    }, delay);
+    this.processingTimers.add(timer);
+  }
+
+  /** 原子消费一次队列调度，并清理同轮残留回调 */
+  private takeProcessingSchedule(version: number): boolean {
+    if (!this.isProcessingScheduled || version !== this.processingScheduleVersion) {
+      return false;
+    }
+
+    this.isProcessingScheduled = false;
+    this.cancelIdleCallback();
+    this.processingTimers.forEach(timer => clearTimeout(timer));
+    this.processingTimers.clear();
+    return true;
+  }
+
+  /** 执行降级/小程序调度回调 */
+  private runScheduledQueueProcessing(version: number): void {
+    if (this.takeProcessingSchedule(version)) {
+      this.processQueue();
+    }
+  }
+
   /** 调度处理（使用 requestIdleCallback 或 setTimeout） */
   private scheduleProcessing(): void {
-    if (this.isPaused || this.isProcessing || this.queue.length === 0) {
+    if (
+      this.isPaused ||
+      this.isProcessing ||
+      this.isProcessingScheduled ||
+      !this.canStartNewTask()
+    ) {
       return;
     }
 
@@ -235,7 +328,8 @@ export class PreloadQueue {
       return;
     }
 
-    this.cancelIdleCallback();
+    this.isProcessingScheduled = true;
+    const version = ++this.processingScheduleVersion;
 
     // #ifdef H5
     if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
@@ -248,18 +342,23 @@ export class PreloadQueue {
         }
       ).requestIdleCallback;
       this.idleCallbackId = ric(
-        deadline => this.processWithDeadline(deadline),
+        deadline => {
+          this.idleCallbackId = null;
+          if (this.takeProcessingSchedule(version)) {
+            this.processWithDeadline(deadline);
+          }
+        },
         { timeout: 5000 } // 最多等待 5 秒
       );
     } else {
       // 降级使用 setTimeout
-      setTimeout(() => this.processQueue(), 0);
+      this.scheduleProcessingTimer(version, 0);
     }
     // #endif
 
     // #ifndef H5
     // 小程序环境使用 setTimeout
-    setTimeout(() => this.processQueue(), 16); // 约一帧的时间
+    this.scheduleProcessingTimer(version, 16); // 约一帧的时间
     // #endif
   }
 
@@ -274,11 +373,9 @@ export class PreloadQueue {
 
     this.isProcessing = false;
 
-    // 如果还有任务，继续调度
-    if (this.queue.length > 0) {
+    // 空闲预算不足但仍有可运行任务时，继续调度。
+    if (this.canStartNewTask()) {
       this.scheduleProcessing();
-    } else if (this.runningTasks.size === 0) {
-      this.emit('queue:empty');
     }
   }
 
@@ -293,66 +390,111 @@ export class PreloadQueue {
 
     this.isProcessing = false;
 
-    // 如果还有任务，继续调度
-    if (this.queue.length > 0) {
+    if (this.canStartNewTask()) {
       this.scheduleProcessing();
-    } else if (this.runningTasks.size === 0) {
-      this.emit('queue:empty');
     }
   }
 
   /** 检查是否可以启动新任务 */
   private canStartNewTask(): boolean {
     return (
-      !this.isPaused && this.queue.length > 0 && this.runningTasks.size < this.config.maxConcurrency
+      !this.isPaused &&
+      this.inFlightAttempts.size < this.config.maxConcurrency &&
+      this.findNextRunnableTaskIndex() !== -1
     );
+  }
+
+  /** 已超时但底层尚未结束的 attempt 仍占槽，且同一任务不得并行重试 */
+  private findNextRunnableTaskIndex(): number {
+    return this.queue.findIndex(task => !this.hasInFlightAttempt(task.id));
+  }
+
+  private hasInFlightAttempt(taskId: string): boolean {
+    return Array.from(this.inFlightAttempts.values()).some(id => id === taskId);
   }
 
   /** 启动下一个任务 */
   private startNextTask(): void {
-    const task = this.queue.shift();
-    if (!task) return;
+    const taskIndex = this.findNextRunnableTaskIndex();
+    if (taskIndex === -1) return;
+
+    const [task] = this.queue.splice(taskIndex, 1);
 
     task.status = PreloadTaskStatus.RUNNING;
     task.startedAt = Date.now();
     this.runningTasks.set(task.id, task);
 
+    const generation = this.generation;
+    const attempt = (this.taskAttempts.get(task.id) ?? 0) + 1;
+    this.taskAttempts.set(task.id, attempt);
+    const inFlightAttemptId = ++this.nextInFlightAttemptId;
+    this.inFlightAttempts.set(inFlightAttemptId, task.id);
+
+    this.emitQueueChange(task);
+
+    if (this.runningTasks.get(task.id) !== task || task.status !== PreloadTaskStatus.RUNNING) {
+      this.releaseInFlightAttempt(inFlightAttemptId);
+      return;
+    }
+
     this.emit('task:start', task);
     this.log('Task started:', task.id, task.resource);
 
-    this.executeTask(task);
+    if (this.runningTasks.get(task.id) !== task || task.status !== PreloadTaskStatus.RUNNING) {
+      this.releaseInFlightAttempt(inFlightAttemptId);
+      return;
+    }
+
+    this.executeTask(task, generation, attempt, inFlightAttemptId);
   }
 
   /** 执行任务 */
-  private async executeTask(task: PreloadTask): Promise<void> {
+  private async executeTask(
+    task: PreloadTask,
+    generation: number,
+    attempt: number,
+    inFlightAttemptId: number
+  ): Promise<void> {
+    let rejectTimeout!: (error: Error) => void;
     const timeoutPromise = new Promise<never>((_, reject) => {
-      setTimeout(() => reject(new Error(`Task timeout: ${task.id}`)), this.config.taskTimeout);
+      rejectTimeout = reject;
     });
+    const timeoutId = setTimeout(() => {
+      this.attemptTimeouts.delete(inFlightAttemptId);
+      rejectTimeout(new Error(`Task timeout: ${task.id}`));
+    }, this.config.taskTimeout);
+    this.attemptTimeouts.set(inFlightAttemptId, timeoutId);
+
+    let executorPromise: Promise<void>;
+    try {
+      executorPromise = Promise.resolve(
+        task.executor ? task.executor() : this.defaultExecutor(task)
+      );
+    } catch (error) {
+      executorPromise = Promise.reject(error);
+    }
+
+    void executorPromise.then(
+      () => this.releaseInFlightAttempt(inFlightAttemptId),
+      () => this.releaseInFlightAttempt(inFlightAttemptId)
+    );
 
     try {
-      let executor: () => Promise<void>;
+      await Promise.race([executorPromise, timeoutPromise]);
 
-      if (task.executor) {
-        executor = task.executor;
-      } else {
-        // 使用默认执行器
-        executor = () => this.defaultExecutor(task);
-      }
-
-      await Promise.race([executor(), timeoutPromise]);
-
-      // 检查任务是否被取消
-      if (task.status === PreloadTaskStatus.CANCELLED) {
+      if (!this.isCurrentAttempt(task, generation, attempt)) {
         return;
       }
 
       task.status = PreloadTaskStatus.COMPLETED;
       task.completedAt = Date.now();
+      this.finishTask(task);
+      this.emitQueueChange(task);
       this.emit('task:complete', task);
+      this.maybeEmitQueueEmpty();
       this.log('Task completed:', task.id, task.resource);
     } catch (error) {
-      // 检查任务是否被取消
-      if (task.status === PreloadTaskStatus.CANCELLED) {
+      if (!this.isCurrentAttempt(task, generation, attempt)) {
         return;
       }
 
@@ -363,32 +505,142 @@ export class PreloadQueue {
         this.log('Task retrying:', task.id, `(${task.retryCount}/${task.maxRetries})`);
         task.status = PreloadTaskStatus.PENDING;
         this.runningTasks.delete(task.id);
+        this.retryingTasks.set(task.id, task);
 
-        setTimeout(() => {
-          // 重新加入队列（保持优先级）
-          const insertIndex = this.queue.findIndex(t => t.priority > task.priority);
-          if (insertIndex === -1) {
-            this.queue.push(task);
-          } else {
-            this.queue.splice(insertIndex, 0, task);
+        const retryTimer = setTimeout(() => {
+          this.retryTimers.delete(task.id);
+
+          if (
+            generation !== this.generation ||
+            this.retryingTasks.get(task.id) !== task ||
+            task.status !== PreloadTaskStatus.PENDING
+          ) {
+            return;
           }
+
+          this.retryingTasks.delete(task.id);
+          this.enqueueTask(task);
+          this.emitQueueChange(task);
           this.scheduleProcessing();
         }, this.config.retryDelay);
+        this.retryTimers.set(task.id, retryTimer);
+        this.emitQueueChange(task);
 
         return;
       }
 
       task.status = PreloadTaskStatus.FAILED;
       task.completedAt = Date.now();
+      this.finishTask(task);
+      this.emitQueueChange(task);
       this.emit('task:error', task, error as Error);
+      this.maybeEmitQueueEmpty();
       this.log('Task failed:', task.id, error);
     } finally {
-      this.runningTasks.delete(task.id);
-      this.completedTasks.set(task.id, task);
-
-      // 继续处理队列
       this.scheduleProcessing();
     }
+  }
+
+  /** 只有底层 executor 真正 settle 才释放物理并发槽 */
+  private releaseInFlightAttempt(inFlightAttemptId: number): void {
+    if (!this.inFlightAttempts.delete(inFlightAttemptId)) {
+      return;
+    }
+
+    const timeoutId = this.attemptTimeouts.get(inFlightAttemptId);
+    if (timeoutId !== undefined) {
+      clearTimeout(timeoutId);
+      this.attemptTimeouts.delete(inFlightAttemptId);
+    }
+
+    const settleTimer = setTimeout(() => {
+      this.attemptSettleTimers.delete(settleTimer);
+      this.scheduleProcessing();
+    }, 0);
+    this.attemptSettleTimers.add(settleTimer);
+
+    // queue:empty 描述逻辑队列；物理 attempt settle 只释放槽，不产生新的逻辑边沿。
+  }
+
+  /** 当前异步 attempt 是否仍拥有该任务的提交权 */
+  private isCurrentAttempt(task: PreloadTask, generation: number, attempt: number): boolean {
+    return (
+      generation === this.generation &&
+      this.runningTasks.get(task.id) === task &&
+      this.taskAttempts.get(task.id) === attempt &&
+      task.status === PreloadTaskStatus.RUNNING
+    );
+  }
+
+  /** 将终态任务从活动集合原子迁移到完成账本 */
+  private finishTask(task: PreloadTask): void {
+    this.runningTasks.delete(task.id);
+    this.retryingTasks.delete(task.id);
+    this.clearRetryTimer(task.id);
+    this.taskAttempts.delete(task.id);
+    this.completedTasks.set(task.id, task);
+  }
+
+  /** 只写入取消终态；clear 用它先完成整批账本，再发送事件 */
+  private markTaskCancelled(task: PreloadTask): void {
+    task.status = PreloadTaskStatus.CANCELLED;
+    task.completedAt = Date.now();
+    this.taskAttempts.delete(task.id);
+    this.clearAttemptTimeouts(task.id);
+    this.completedTasks.set(task.id, task);
+  }
+
+  /** 取消单个逻辑任务并立即发布完整状态 */
+  private completeCancellation(task: PreloadTask): void {
+    this.markTaskCancelled(task);
+    this.emitQueueChange(task);
+    this.emit('task:cancel', task);
+    this.maybeEmitQueueEmpty();
+    this.log('Task cancelled:', task.id);
+  }
+
+  /** 所有逻辑任务均进入终态才算 empty；未结束 executor 不影响逻辑 empty */
+  private isLogicallyEmpty(): boolean {
+    return this.queue.length === 0 && this.retryingTasks.size === 0 && this.runningTasks.size === 0;
+  }
+
+  /** 非空到空的边沿事件，每轮 workload 最多一次 */
+  private maybeEmitQueueEmpty(): void {
+    if (!this.emptyEventArmed || !this.isLogicallyEmpty()) {
+      return;
+    }
+
+    this.emptyEventArmed = false;
+    this.emit('queue:empty');
+  }
+
+  /** 通知统计消费者重新读取原子快照 */
+  private emitQueueChange(task?: PreloadTask): void {
+    this.emit('queue:change', task);
+  }
+
+  /** 清理指定任务的重试延时 */
+  private clearRetryTimer(taskId: string): void {
+    const timer = this.retryTimers.get(taskId);
+    if (timer !== undefined) {
+      clearTimeout(timer);
+      this.retryTimers.delete(taskId);
+    }
+  }
+
+  /** 取消逻辑任务后不再需要 attempt timeout，但底层 executor 仍占物理槽直到 settle */
+  private clearAttemptTimeouts(taskId: string): void {
+    this.inFlightAttempts.forEach((inFlightTaskId, inFlightAttemptId) => {
+      if (inFlightTaskId !== taskId) {
+        return;
+      }
+
+      const timer = this.attemptTimeouts.get(inFlightAttemptId);
+      if (timer !== undefined) {
+        clearTimeout(timer);
+        this.attemptTimeouts.delete(inFlightAttemptId);
+      }
+    });
   }
 
   /** 默认执行器 */
@@ -409,7 +661,7 @@ export class PreloadQueue {
 
   /** 获取队列中的所有任务（只读） */
   getTasks(): readonly PreloadTask[] {
-    return [...this.queue];
+    return [...this.queue, ...this.retryingTasks.values()];
   }
 
   /** 获取正在运行的任务（只读） */

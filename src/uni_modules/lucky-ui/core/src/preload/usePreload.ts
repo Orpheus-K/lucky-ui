@@ -85,11 +85,9 @@ export function usePreload(options: UsePreloadOptions = {}): UsePreloadReturn {
   };
 
   onMounted(() => {
-    // 监听内部事件以更新统计
-    manager.on('task:start', internalHandler);
-    manager.on('task:complete', internalHandler);
-    manager.on('task:error', internalHandler);
-    manager.on('task:cancel', internalHandler);
+    // 所有可观测状态迁移统一通过 queue:change 发布原子快照。
+    manager.on('queue:change', internalHandler);
+    updateStats();
 
     // 自动开始预加载
     if (autoStart) {
@@ -100,11 +98,7 @@ export function usePreload(options: UsePreloadOptions = {}): UsePreloadReturn {
   });
 
   onUnmounted(() => {
-    // 清理内部监听
-    manager.off('task:start', internalHandler);
-    manager.off('task:complete', internalHandler);
-    manager.off('task:error', internalHandler);
-    manager.off('task:cancel', internalHandler);
+    manager.off('queue:change', internalHandler);
 
     // 清理用户添加的监听
     eventListeners.forEach(({ event, handler }) => {
