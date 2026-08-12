@@ -11,8 +11,8 @@ phone: modal
 
 ```vue
 <script setup lang="ts">
-import { ref } from 'vue'
-const show = ref(false)
+import { ref } from 'vue';
+const show = ref(false);
 </script>
 
 <template>
@@ -32,11 +32,11 @@ const show = ref(false)
 
 ```vue
 <script setup lang="ts">
-import { ref } from 'vue'
-const show = ref(false)
+import { ref } from 'vue';
+const show = ref(false);
 
 function onConfirm() {
-  show.value = false
+  show.value = false;
   // 执行删除逻辑...
 }
 </script>
@@ -61,8 +61,8 @@ function onConfirm() {
 
 ```vue
 <script setup lang="ts">
-import { ref } from 'vue'
-const show = ref(false)
+import { ref } from 'vue';
+const show = ref(false);
 </script>
 
 <template>
@@ -83,9 +83,9 @@ const show = ref(false)
 
 ```vue
 <script setup lang="ts">
-import { ref } from 'vue'
-const show = ref(false)
-const form = ref({ name: '', phone: '' })
+import { ref } from 'vue';
+const show = ref(false);
+const form = ref({ name: '', phone: '' });
 </script>
 
 <template>
@@ -107,6 +107,37 @@ const form = ref({ name: '', phone: '' })
   </lk-modal>
 </template>
 ```
+
+## 异步确认
+
+默认确认按钮需要等待接口、校验或权限判断时，把异步工作放在 `beforeConfirm` 中。返回 `true` 后组件按 `confirm > update:modelValue(false)` 的顺序完成一次确认；返回 `false` 或 Promise reject 时保持打开，也不会触发 `confirm`。
+
+等待期间确认按钮显示 loading，默认确认、取消、右上角关闭与遮罩关闭入口都会禁用，避免重复任务和竞态关闭。
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const show = ref(false);
+
+async function beforeConfirm() {
+  const saved = await saveProfile();
+  return saved;
+}
+
+function onConfirm() {
+  uni.showToast({ title: '保存成功' });
+}
+</script>
+
+<template>
+  <lk-modal v-model="show" title="保存资料" :before-confirm="beforeConfirm" @confirm="onConfirm">
+    <view>确认保存当前资料吗？</view>
+  </lk-modal>
+</template>
+```
+
+`beforeConfirm` 只管理组件默认 footer 的确认动作。使用自定义 `footer` 插槽时，loading、禁用与关闭时机仍由插槽调用方管理。
 
 ## 动画类型
 
@@ -130,39 +161,40 @@ const form = ref({ name: '', phone: '' })
 
 ### Props
 
-| 参数 | 说明 | 类型 | 默认值 |
-|------|------|------|--------|
-| customClass | 组件可视根节点自定义类名 | `string \| object \| array` | `''` |
-| customStyle | 组件可视根节点自定义样式 | `string \| object` | `''` |
-| modelValue | 是否显示（v-model） | `boolean` | `false` |
-| zIndex | 层级 | `number` | `1500` |
-| title | 标题文字 | `string` | `''` |
-| width | 弹框宽度 | `string` | `600rpx` |
-| showClose | 显示右上角关闭按钮 | `boolean` | `true` |
-| closeOnOverlay | 点击遮罩关闭 | `boolean` | `true` |
-| showHeader | 是否显示标题栏 | `boolean` | `true` |
-| showFooter | 是否显示底部区域 | `boolean` | `true` |
-| confirmText | 默认确认按钮文字 | `string` | `确定` |
-| cancelText | 默认取消按钮文字 | `string` | `取消` |
-| animation | 动画预设名称 | `keyof ANIMATION_PRESETS` | `scale` |
-| animationType | 内置动画类型，支持全部 `TransitionName` | [`TransitionConfig['name']`](./animation#内置动画类型) | `undefined` |
-| duration | 动画持续时间 | `number` | `undefined` |
-| delay | 动画延迟 | `number` | `undefined` |
-| easing | 动画缓动函数 | `TransitionConfig['easing']` | `undefined` |
+| 参数           | 说明                                              | 类型                                                   | 默认值      |
+| -------------- | ------------------------------------------------- | ------------------------------------------------------ | ----------- |
+| customClass    | 组件可视根节点自定义类名                          | `string \| object \| array`                            | `''`        |
+| customStyle    | 组件可视根节点自定义样式                          | `string \| object`                                     | `''`        |
+| modelValue     | 是否显示（v-model）                               | `boolean`                                              | `false`     |
+| zIndex         | 层级                                              | `number`                                               | `1500`      |
+| title          | 标题文字                                          | `string`                                               | `''`        |
+| width          | 弹框宽度                                          | `string`                                               | `600rpx`    |
+| showClose      | 显示右上角关闭按钮                                | `boolean`                                              | `true`      |
+| closeOnOverlay | 点击遮罩关闭                                      | `boolean`                                              | `true`      |
+| showHeader     | 是否显示标题栏                                    | `boolean`                                              | `true`      |
+| showFooter     | 是否显示底部区域                                  | `boolean`                                              | `true`      |
+| confirmText    | 默认确认按钮文字                                  | `string`                                               | `确定`      |
+| beforeConfirm  | 默认确认前拦截；返回 `false` 或 reject 时保持打开 | `() => boolean \| Promise<boolean>`                    | —           |
+| cancelText     | 默认取消按钮文字                                  | `string`                                               | `取消`      |
+| animation      | 动画预设名称                                      | `keyof ANIMATION_PRESETS`                              | `scale`     |
+| animationType  | 内置动画类型，支持全部 `TransitionName`           | [`TransitionConfig['name']`](./animation#内置动画类型) | `undefined` |
+| duration       | 动画持续时间                                      | `number`                                               | `undefined` |
+| delay          | 动画延迟                                          | `number`                                               | `undefined` |
+| easing         | 动画缓动函数                                      | `TransitionConfig['easing']`                           | `undefined` |
 
 ### Events
 
-| 事件名 | 说明 | 回调参数 |
-|--------|------|----------|
-| update:modelValue | 显示状态变化 | `(visible: boolean)` |
-| open | 入场动画结束后触发 | `()` |
-| close | 离场动画结束后触发 | `()` |
-| confirm | 点击默认确认按钮时触发 | `()` |
-| cancel | 点击默认取消按钮时触发 | `()` |
-| click-overlay | 点击遮罩时触发 | `()` |
-| click-close | 点击右上角关闭按钮时触发 | `()` |
-| after-enter | 入场动画结束后触发 | `()` |
-| after-leave | 离场动画结束后触发 | `()` |
+| 事件名            | 说明                                    | 回调参数             |
+| ----------------- | --------------------------------------- | -------------------- |
+| update:modelValue | 显示状态变化                            | `(visible: boolean)` |
+| open              | 入场动画结束后触发                      | `()`                 |
+| close             | 离场动画结束后触发                      | `()`                 |
+| confirm           | 默认确认动作通过 `beforeConfirm` 后触发 | `()`                 |
+| cancel            | 点击默认取消按钮时触发                  | `()`                 |
+| click-overlay     | 点击遮罩时触发                          | `()`                 |
+| click-close       | 点击右上角关闭按钮时触发                | `()`                 |
+| after-enter       | 入场动画结束后触发                      | `()`                 |
+| after-leave       | 离场动画结束后触发                      | `()`                 |
 
 ::: warning
 `confirm` 只由默认确认按钮触发；遮罩、右上角关闭按钮和取消按钮不会触发 `confirm`。
@@ -170,11 +202,11 @@ const form = ref({ name: '', phone: '' })
 
 ### Slots
 
-| 插槽名 | 说明 |
-|--------|------|
-| default | 弹框主体内容 |
-| header | 自定义头部（会覆盖 title） |
-| footer | 自定义底部按钮区域 |
+| 插槽名  | 说明                       |
+| ------- | -------------------------- |
+| default | 弹框主体内容               |
+| header  | 自定义头部（会覆盖 title） |
+| footer  | 自定义底部按钮区域         |
 
 ## 使用建议
 
@@ -184,10 +216,20 @@ const form = ref({ name: '', phone: '' })
 
 ## 发布验收
 
-`lk-modal` 已纳入 needs-hardening showcase 回归，发布前按下面边界验收：
+发布前必须从全新构建进入 Modal Demo，分别执行 H5 与微信小程序 Peekit。下面是待执行的选择器、动作与客观通过条件；构建成功或源码单测不能替代这些运行态证据。
 
-| 场景 | 验收方式 | 要点 |
-|------|----------|------|
-| 展示台基线 | 自动回归 | `tests/visual/needs-hardening-showcase.spec.ts` 校验组件路由、verified 状态与中风险标记 |
-| 操作链路 | 人工验收 | `confirm/cancel/click-overlay/click-close` 语义互不串扰 |
-| 弹层表现 | 人工验收 | fixed 遮罩、动画结束事件和异步确认在 H5/App/小程序端稳定 |
+| 场景             | H5 Peekit selector / action                                                                                 | 微信 Peekit selector / action                                                                                       | 客观后置条件                                                                                                                                                                                                                                                                              |
+| ---------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 遮罩不关闭       | 点击 `#modal-overlay-open-controlled-false`，再点击 `.lk-overlay`                                           | 在 Modal Demo scope 点击打开按钮；进入 Modal 的 Overlay 子组件 scope，对 `.lk-overlay` 执行一次 `tap`               | `.lk-modal__panel` 仍存在；`#modal-overlay-probe-visible` 为 `visible=true`；click 为 1、update 为 0                                                                                                                                                                                      |
+| 遮罩受控关闭     | 点击 `#modal-overlay-open-controlled-true`，再点击 `.lk-overlay`，等待离场时长                              | 同一路径进入 Overlay scope 执行一次 `tap` 并等待离场                                                                | panel 由 1 变 0；visible 为 false；click、update 均严格为 1，lastUpdate 为 false                                                                                                                                                                                                          |
+| 父级仅观察更新   | 点击 `#modal-overlay-open-observe-true`，再点击一次 `.lk-overlay`                                           | 在 Modal Demo scope 打开 observe 场景，再进入 Overlay scope `tap` 遮罩                                              | panel 保持存在且 visible 为 true；click、update 均严格为 1，证明单次关闭请求没有内部双发；最后点击 `#modal-overlay-force-close` 清场                                                                                                                                                      |
+| 异步成功与防重   | 点击 `#modal-async-open-resolve`，对 `.lk-modal__confirm` 在 50ms 内点击两次；分别在 500ms、1200ms 读取状态 | 在 Modal Demo scope 打开 resolve 场景；进入 Modal scope 找到 `.lk-modal__confirm` 子组件，连续 `tap` 两次并分时读取 | 500ms 时 panel 含 `is-confirming`；H5 确认按钮或微信 LkButton scope 内 `.lk-button` 含 `is-loading`、`is-disabled` 且 disabled=true；hook=1、confirm=0、update=0；1200ms 后 visible=false，outcome=resolved，confirm=1、update=1，events 精确为 `before:resolve > confirm > update:false` |
+| 异步失败         | 点击 `#modal-async-open-reject` 与 `.lk-modal__confirm`，等待 1200ms                                        | 在 Modal Demo scope 打开 reject 场景；进入 Modal scope `tap` 确认子组件并等待                                       | panel 仍存在，visible=true，outcome=rejected，hook=1、confirm=0、update=0；`is-confirming` 与按钮 loading/disabled 已移除，可再次操作                                                                                                                                                     |
+| 过期结果竞态     | 打开 resolve 场景并点击确认，500ms 内点击 `#modal-async-race-reopen`，等待旧任务超过 1000ms                 | 同一顺序在 Modal scope 找到内部重开按钮子组件并 `tap`                                                               | 新实例状态保持 visible=true、mode=reject、outcome=idle；hook、confirm、update 均为 0，events=none，旧 Promise 不得关闭重开的 Modal                                                                                                                                                        |
+| 取消与右上角防重 | 分别重新打开异步探针，对 `.lk-modal__cancel` 或 `.lk-modal__close` 在 50ms 内点击两次                       | 分别在 Modal scope 对取消按钮子组件或关闭图标连续两次 `tap`                                                         | 对应 cancel 或 closeClick 计数严格为 1，update 严格为 1；另一个业务计数与 confirm 均为 0                                                                                                                                                                                                  |
+
+微信端先从 `PreviewDemoRenderer` 进入 `modal-demo` 自定义组件 scope，再按表格逐层进入 Modal、Overlay 或 LkButton scope。页面级全局 selector 无法穿透组件边界时不能判为失败；若自定义组件 `tap` 不稳定，可按 Peekit 规范调用对应组件事件方法后读取同一组状态。每个场景开始前都使用对应打开按钮重置计数，不跨场景复用旧状态。
+
+::: warning
+上述表格定义验收方法和通过条件，不表示当前构建已经完成 H5 或微信小程序运行态抓取。实际发布记录必须附本次构建的 selector 读数、事件文本和 console/runtime error 结果。
+:::

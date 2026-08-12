@@ -57,6 +57,11 @@
     &:active {
       background: var(--lk-bg-active);
     }
+
+    &.is-disabled {
+      opacity: 0.55;
+      pointer-events: none;
+    }
   }
 
   @include e(body) {
@@ -93,6 +98,11 @@
           background-color: var(--lk-bg-active);
         }
 
+        &.is-disabled {
+          opacity: 0.55;
+          pointer-events: none;
+        }
+
         @include m(confirm) {
           color: var(--lk-color-primary);
           font-weight: 600;
@@ -112,6 +122,15 @@
           }
         }
       }
+    }
+
+    @include e(confirm-loader) {
+      width: var(--lk-rpx-28);
+      height: var(--lk-rpx-28);
+      border: var(--lk-rpx-4) solid currentColor;
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: lk-modal-confirm-spin 0.8s linear infinite;
     }
 
     /* 两个按钮左右占比并圆角样式 */
@@ -140,5 +159,11 @@
         }
       }
     }
+  }
+}
+
+@keyframes lk-modal-confirm-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
