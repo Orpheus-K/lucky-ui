@@ -35,6 +35,13 @@
           }
         },
         {
+          "path": "audit-fixture/index",
+          "style": {
+            "navigationBarTitleText": "Audit Fixture",
+            "navigationStyle": "custom"
+          }
+        },
+        {
           "path": "i18n-preview/index",
           "style": {
             "navigationBarTitleText": "i18n Preview",

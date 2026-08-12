@@ -2,8 +2,106 @@ import { defineConfig, type Plugin } from "vite";
 import uni from "@dcloudio/vite-plugin-uni";
 import path from 'node:path';
 import fs from 'node:fs';
+import crypto from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 
 const LUCKY_UI_H5_PORT = 5188;
+
+interface LuckyUiBuildIdentity {
+  commit: string;
+  branch: string;
+  dirty: boolean;
+  sourceDigest: string;
+  version: string;
+  buildMode: 'static-build' | 'dev-server';
+  provenance: 'git-worktree' | 'unverified';
+  valid: boolean;
+}
+
+function runGitText(args: string[]): string {
+  return execFileSync('git', args, {
+    cwd: __dirname,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'ignore'],
+  }).trim();
+}
+
+function runGitBuffer(args: string[]): Buffer {
+  return execFileSync('git', args, {
+    cwd: __dirname,
+    stdio: ['ignore', 'pipe', 'ignore'],
+  });
+}
+
+function readPackageVersion(): string {
+  try {
+    const packageJson = JSON.parse(
+      fs.readFileSync(path.resolve(__dirname, 'package.json'), 'utf8')
+    );
+    return typeof packageJson.version === 'string' ? packageJson.version : 'unknown';
+  } catch {
+    return 'unknown';
+  }
+}
+
+function resolveBuildIdentity(command: 'build' | 'serve'): LuckyUiBuildIdentity {
+  const environmentCommit = process.env.GITHUB_SHA || process.env.VITE_GIT_COMMIT || '';
+  const environmentBranch = process.env.GITHUB_REF_NAME || process.env.VITE_GIT_BRANCH || '';
+  let commit = environmentCommit.slice(0, 40) || 'unknown';
+  let branch = environmentBranch.slice(0, 160) || 'unknown';
+  let dirty = true;
+  let sourceDigest = process.env.VITE_SOURCE_DIGEST || 'unknown';
+  let provenance: LuckyUiBuildIdentity['provenance'] = 'unverified';
+
+  try {
+    commit = runGitText(['rev-parse', 'HEAD']);
+    branch = environmentBranch.slice(0, 160) || runGitText(['rev-parse', '--abbrev-ref', 'HEAD']);
+    const status = runGitBuffer(['status', '--porcelain=v1', '-z', '--untracked-files=all']);
+    dirty = status.length > 0;
+
+    const hash = crypto.createHash('sha256');
+    hash.update(commit);
+    hash.update('\0');
+    hash.update(branch);
+    hash.update('\0');
+    hash.update(status);
+    hash.update(runGitBuffer(['diff', '--binary', '--no-ext-diff', 'HEAD', '--']));
+
+    const untracked = runGitBuffer(['ls-files', '--others', '--exclude-standard', '-z'])
+      .toString('utf8')
+      .split('\0')
+      .filter(Boolean)
+      .sort();
+    for (const relativePath of untracked) {
+      const filePath = path.resolve(__dirname, relativePath);
+      const insideRepository =
+        filePath === __dirname || filePath.startsWith(`${path.resolve(__dirname)}${path.sep}`);
+      if (!insideRepository) continue;
+      const fileInfo = fs.lstatSync(filePath);
+      if (!fileInfo.isFile() || fileInfo.isSymbolicLink()) continue;
+      hash.update(relativePath.replace(/\\/g, '/'));
+      hash.update('\0');
+      hash.update(fs.readFileSync(filePath));
+      hash.update('\0');
+    }
+    sourceDigest = hash.digest('hex');
+    provenance = 'git-worktree';
+  } catch {
+    // Provenance must remain unverified when any Git or source read fails.
+  }
+
+  const version = readPackageVersion();
+  const buildMode = command === 'build' ? 'static-build' : 'dev-server';
+  const valid =
+    buildMode === 'static-build' &&
+    provenance === 'git-worktree' &&
+    !dirty &&
+    /^[0-9a-f]{40}$/i.test(commit) &&
+    branch !== 'unknown' &&
+    /^[0-9a-f]{64}$/i.test(sourceDigest) &&
+    version !== 'unknown';
+  return { commit, branch, dirty, sourceDigest, version, buildMode, provenance, valid };
+}
 
 const WXSS_CHILD_TAGS = [
   'view',
@@ -131,33 +229,41 @@ function wxssCompatPlugin(): Plugin {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  server: {
-    port: LUCKY_UI_H5_PORT,
-    strictPort: true,
-  },
+export default defineConfig(({ command }) => {
+  const luckyUiBuildIdentity = resolveBuildIdentity(command);
 
-  plugins: [uni(), wxssCompatPlugin()],
+  return {
+    define: {
+      __LUCKY_UI_BUILD_IDENTITY__: JSON.stringify(luckyUiBuildIdentity),
+    },
 
-  worker: {
-    format: 'es',
-  },
+    server: {
+      port: LUCKY_UI_H5_PORT,
+      strictPort: true,
+    },
 
-  css: {
-    preprocessorOptions: {
-      scss: {
-        api: 'modern-compiler',
-        silenceDeprecations: ['legacy-js-api'],
+    plugins: [uni(), wxssCompatPlugin()],
+
+    worker: {
+      format: 'es',
+    },
+
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler',
+          silenceDeprecations: ['legacy-js-api'],
+        },
       },
     },
-  },
 
-  resolve: {
-    alias: {
-      // 创建一个名为 @bootstrap-icons 的别名
-      // 它指向 node_modules 中的 bootstrap-icons 文件夹
-      // 这能让我们的 import 路径更清晰且不受文件层级影响
-      '@bootstrap-icons': path.resolve(__dirname, 'node_modules/bootstrap-icons'),
+    resolve: {
+      alias: {
+        // 创建一个名为 @bootstrap-icons 的别名
+        // 它指向 node_modules 中的 bootstrap-icons 文件夹
+        // 这能让我们的 import 路径更清晰且不受文件层级影响
+        '@bootstrap-icons': path.resolve(__dirname, 'node_modules/bootstrap-icons'),
+      },
     },
-  },
+  };
 });
