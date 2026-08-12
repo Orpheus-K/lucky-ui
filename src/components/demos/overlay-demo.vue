@@ -10,6 +10,9 @@ const visible2 = ref(false);
 const visible3 = ref(false);
 const visible5 = ref(false);
 const visible6 = ref(false);
+const visibleLockPrimary = ref(false);
+const visibleLockSecondary = ref(false);
+const runtimeLockScroll = ref(true);
 
 const showOverlay1 = () => {
   visible1.value = true;
@@ -21,6 +24,17 @@ const showOverlay2 = () => {
 
 const showOverlay3 = () => {
   visible3.value = true;
+};
+
+const showScrollLockFixture = () => {
+  runtimeLockScroll.value = true;
+  visibleLockSecondary.value = false;
+  visibleLockPrimary.value = true;
+};
+
+const closeScrollLockFixture = () => {
+  visibleLockSecondary.value = false;
+  visibleLockPrimary.value = false;
 };
 </script>
 
@@ -54,7 +68,55 @@ const showOverlay3 = () => {
         <lk-button @click="visible6 = true">允许滚动</lk-button>
       </lk-space>
       <lk-overlay v-model="visible5" :close-on-click="false" />
-      <lk-overlay v-model="visible6" :lock-scroll="false" />
+      <lk-overlay id="overlay-scroll-unlocked" v-model="visible6" :lock-scroll="false" />
+    </demo-block>
+
+    <demo-block title="滚动锁回归演练">
+      <lk-button id="overlay-scroll-lock-open" type="primary" @click="showScrollLockFixture">
+        打开滚动锁演练
+      </lk-button>
+      <lk-overlay
+        id="overlay-scroll-lock-primary"
+        v-model="visibleLockPrimary"
+        :close-on-click="false"
+        :lock-scroll="runtimeLockScroll"
+        :z-index="910"
+      >
+        <view class="overlay-content" @click.stop>
+          <text id="overlay-scroll-lock-state" class="overlay-text">
+            主遮罩：{{ visibleLockPrimary ? '打开' : '关闭' }}；滚动锁：{{
+              runtimeLockScroll ? '开启' : '关闭'
+            }}
+          </text>
+          <lk-space wrap>
+            <lk-button
+              id="overlay-scroll-lock-toggle"
+              @click="runtimeLockScroll = !runtimeLockScroll"
+            >
+              切换滚动锁
+            </lk-button>
+            <lk-button id="overlay-scroll-lock-open-secondary" @click="visibleLockSecondary = true">
+              打开第二层
+            </lk-button>
+            <lk-button id="overlay-scroll-lock-close-primary" @click="closeScrollLockFixture">
+              关闭演练
+            </lk-button>
+          </lk-space>
+        </view>
+      </lk-overlay>
+      <lk-overlay
+        id="overlay-scroll-lock-secondary"
+        v-model="visibleLockSecondary"
+        :close-on-click="false"
+        :z-index="920"
+      >
+        <view class="overlay-content" @click.stop>
+          <text class="overlay-text">第二层遮罩已打开</text>
+          <lk-button id="overlay-scroll-lock-close-secondary" @click="visibleLockSecondary = false">
+            关闭第二层
+          </lk-button>
+        </view>
+      </lk-overlay>
     </demo-block>
   </view>
 </template>

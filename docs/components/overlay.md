@@ -11,9 +11,9 @@ phone: overlay
 
 ```vue
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const show = ref(false)
+const show = ref(false);
 </script>
 
 <template>
@@ -51,13 +51,17 @@ const show = ref(false)
 </template>
 ```
 
+当多个开启 `lockScroll` 的 Overlay 同时显示时，背景会持续锁定，直到最后一个 Overlay
+关闭或关闭自身的 `lockScroll`。运行时切换 `visible` 或 `lockScroll` 均会同步锁状态；H5
+会在最后一把锁释放时恢复 `body` 原有的内联 `overflow` 值。
+
 ## 推荐示例
 
 ### 1) 直接复用项目 Demo（推荐）
 
 ```vue
 <script setup lang="ts">
-import OverlayDemo from '@/components/demos/overlay-demo.vue'
+import OverlayDemo from '@/components/demos/overlay-demo.vue';
 </script>
 
 <template>
@@ -79,35 +83,35 @@ import OverlayDemo from '@/components/demos/overlay-demo.vue'
 
 ### Props
 
-| 参数 | 说明 | 类型 | 默认值 |
-|------|------|------|--------|
-| modelValue | 是否显示（v-model） | `boolean` | `false` |
-| zIndex | 层级 | `number` | `900` |
-| opacity | 遮罩透明度 | `number` | `0.55` |
-| background | 自定义背景色；传入后优先于 `opacity` | `string` | `''` |
-| closeOnClick | 点击遮罩是否关闭 | `boolean` | `true` |
-| lockScroll | 是否锁定背景滚动 | `boolean` | `true` |
-| duration | 动画持续时间（毫秒） | `number` | `240` |
-| id | 根节点 id | `string` | `''` |
-| customClass | 根节点自定义类名 | `string \| object \| array` | — |
-| customStyle | 根节点自定义样式 | `string \| object` | — |
+| 参数         | 说明                                 | 类型                        | 默认值  |
+| ------------ | ------------------------------------ | --------------------------- | ------- |
+| modelValue   | 是否显示（v-model）                  | `boolean`                   | `false` |
+| zIndex       | 层级                                 | `number`                    | `900`   |
+| opacity      | 遮罩透明度                           | `number`                    | `0.55`  |
+| background   | 自定义背景色；传入后优先于 `opacity` | `string`                    | `''`    |
+| closeOnClick | 点击遮罩是否关闭                     | `boolean`                   | `true`  |
+| lockScroll   | 是否锁定背景滚动                     | `boolean`                   | `true`  |
+| duration     | 动画持续时间（毫秒）                 | `number`                    | `240`   |
+| id           | 根节点 id                            | `string`                    | `''`    |
+| customClass  | 根节点自定义类名                     | `string \| object \| array` | —       |
+| customStyle  | 根节点自定义样式                     | `string \| object`          | —       |
 
 ### Events
 
-| 事件名 | 说明 | 参数 |
-|--------|------|------|
-| click | 点击遮罩时触发 | `(event?: Event) => void` |
-| open | 遮罩开始打开时触发 | `() => void` |
-| close | 点击遮罩并触发关闭时触发 | `(event?: Event) => void` |
-| update:modelValue | v-model 状态更新 | `(value: boolean) => void` |
-| after-enter | 入场动画结束 | `() => void` |
-| after-leave | 离场动画结束 | `() => void` |
-| touchmove | 触摸移动时触发，锁滚动时会阻止默认行为 | `(event?: Event) => void` |
+| 事件名            | 说明                                   | 参数                       |
+| ----------------- | -------------------------------------- | -------------------------- |
+| click             | 点击遮罩时触发                         | `(event?: Event) => void`  |
+| open              | 遮罩开始打开时触发                     | `() => void`               |
+| close             | 点击遮罩并触发关闭时触发               | `(event?: Event) => void`  |
+| update:modelValue | v-model 状态更新                       | `(value: boolean) => void` |
+| after-enter       | 入场动画结束                           | `() => void`               |
+| after-leave       | 离场动画结束                           | `() => void`               |
+| touchmove         | 触摸移动时触发，锁滚动时会阻止默认行为 | `(event?: Event) => void`  |
 
 ### Slots
 
-| 插槽名 | 说明 |
-|--------|------|
+| 插槽名  | 说明           |
+| ------- | -------------- |
 | default | 遮罩层中的内容 |
 
 ## 使用建议
@@ -118,6 +122,17 @@ import OverlayDemo from '@/components/demos/overlay-demo.vue'
 
 ## 发布验收
 
+- 稳定定位：Overlay 根节点提供 `[data-testid="lk-overlay"]` 与
+  `data-scroll-locked="true|false"`。回归 Demo 还提供
+  `#overlay-scroll-lock-primary`、`#overlay-scroll-lock-secondary` 和
+  `#overlay-scroll-unlocked`。
+- H5 Peekit：进入 Overlay Demo，点击 `#overlay-scroll-lock-open`，断言主遮罩
+  `data-scroll-locked=true` 且 `body` 的 `overflow` 为 `hidden`；打开第二层后关闭第二层，
+  主遮罩仍应为 `true` 且 `body` 仍为 `hidden`；切换主遮罩滚动锁为关闭后，两者分别为
+  `false` 和打开前的 `overflow`；再次开启并关闭演练后，`body` 必须再次恢复打开前的值。
+- 微信 Peekit：同一演练中，锁开启时在遮罩上纵向滑动，背景滚动位置不得变化；切换为
+  `lockScroll=false` 后执行相同滑动，背景滚动位置必须变化。构建产物还应客观确认锁定分支为
+  `catchtouchmove`、未锁分支为 `bindtouchmove`，不能把“事件已触发”等同于滚动已被阻止。
 - H5：打开内容遮罩后，内容区点击不应冒泡关闭；点击关闭按钮后遮罩应离场且不残留锁滚动。
 - App：重点复核 fixed 遮罩层级、软键盘弹出后的覆盖范围和页面滚动锁定。
 - 小程序：重点复核 `touchmove` 阻止默认行为、点击穿透和自定义内容内按钮事件。
