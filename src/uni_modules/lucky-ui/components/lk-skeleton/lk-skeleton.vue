@@ -38,32 +38,32 @@ const animatedClass = computed(() => resolveSkeletonAnimatedClass(props.animated
 </script>
 
 <template>
-  <view v-if="loading" :class="rootClass" :style="hostStyle">
-    <view
-      v-if="avatar"
-      class="lk-skeleton__avatar"
-      :class="animatedClass"
-      :style="avatarStyle"
-    ></view>
-    <view class="lk-skeleton__content">
-      <view v-if="title" class="lk-skeleton__title" :class="animatedClass" :style="titleStyle" />
+  <view :id="id" :class="rootClass" :style="hostStyle">
+    <view v-if="loading" class="lk-skeleton__body">
       <view
-        v-for="rowIndex in rows"
-        :key="rowIndex"
-        class="lk-skeleton__row"
-        :style="
-          resolveSkeletonRowStyle({
-            rowWidth,
-            rowHeight,
-            index: rowIndex - 1,
-          })
-        "
+        v-if="avatar"
+        class="lk-skeleton__avatar"
         :class="animatedClass"
-      />
+        :style="avatarStyle"
+      ></view>
+      <view class="lk-skeleton__content">
+        <view v-if="title" class="lk-skeleton__title" :class="animatedClass" :style="titleStyle" />
+        <view
+          v-for="rowIndex in rows"
+          :key="rowIndex"
+          class="lk-skeleton__row"
+          :style="
+            resolveSkeletonRowStyle({
+              rowWidth,
+              rowHeight,
+              index: rowIndex - 1,
+            })
+          "
+          :class="animatedClass"
+        />
+      </view>
     </view>
-  </view>
-  <view v-else>
-    <slot />
+    <slot v-else />
   </view>
 </template>
 

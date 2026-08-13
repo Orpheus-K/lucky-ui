@@ -22,8 +22,10 @@
   --lk-skel-base: var(--lk-skeleton-start);
   --lk-skel-highlight: var(--lk-skeleton-end);
 
-  display: flex;
-  align-items: flex-start;
+  @include e(body) {
+    display: flex;
+    align-items: flex-start;
+  }
 
   @include e(avatar) {
     margin-right: var(--lk-spacing-sm);
