@@ -3,12 +3,10 @@ import { addUnit } from '../../core/src/utils/unit';
 import {
   ANIMATION_PRESETS,
   type TransitionConfig,
+  type TransitionName,
 } from '@/uni_modules/lucky-ui/composables/useTransition';
 
-export const POPUP_DEFAULT_TRANSITION_BY_POSITION: Record<
-  string,
-  NonNullable<TransitionConfig['name']>
-> = {
+export const POPUP_DEFAULT_TRANSITION_BY_POSITION: Record<string, TransitionName> = {
   center: 'zoom-in',
   top: 'slide-down',
   bottom: 'slide-up',
@@ -31,6 +29,13 @@ export function isPopupBottomDraggable(options: { position: string; draggable: b
   return options.position === 'bottom' && options.draggable;
 }
 
+export interface ResolvedPopupTransitionConfig {
+  name: TransitionName;
+  duration: number;
+  delay?: number;
+  easing: string;
+}
+
 export function resolvePopupTransitionConfig(options: {
   position: string;
   draggable: boolean;
@@ -39,22 +44,22 @@ export function resolvePopupTransitionConfig(options: {
   duration?: number;
   delay?: number;
   easing?: TransitionConfig['easing'];
-}): TransitionConfig {
+}): ResolvedPopupTransitionConfig {
   if (isPopupBottomDraggable(options)) {
     return {
       name: 'fade',
       duration: options.duration ?? 260,
       delay: options.delay,
-      easing: options.easing ?? 'ease-out',
+      easing: (options.easing as string | undefined) ?? 'ease-out',
     };
   }
 
   if (options.animationType) {
     return {
-      name: options.animationType,
+      name: options.animationType as TransitionName,
       duration: options.duration ?? 260,
       delay: options.delay,
-      easing: options.easing ?? 'ease-out',
+      easing: (options.easing as string | undefined) ?? 'ease-out',
     };
   }
 
@@ -64,7 +69,10 @@ export function resolvePopupTransitionConfig(options: {
       name: preset.animation,
       duration: options.duration ?? preset.duration ?? 260,
       delay: options.delay ?? preset.delay,
-      easing: options.easing ?? preset.easing ?? 'ease-out',
+      easing:
+        (options.easing as string | undefined) ??
+        (preset.easing as string | undefined) ??
+        'ease-out',
     };
   }
 
@@ -72,7 +80,22 @@ export function resolvePopupTransitionConfig(options: {
     name: POPUP_DEFAULT_TRANSITION_BY_POSITION[options.position] || 'zoom-in',
     duration: options.duration ?? 260,
     delay: options.delay ?? 0,
-    easing: options.easing ?? 'ease-out',
+    easing: (options.easing as string | undefined) ?? 'ease-out',
+  };
+}
+
+/**
+ * Exposes a resolved Popup transition as field getters so useTransition reads
+ * the latest props whenever it computes classes/styles or starts a new phase.
+ */
+export function createPopupTransitionConfigSource(
+  getConfig: () => ResolvedPopupTransitionConfig
+): TransitionConfig {
+  return {
+    name: () => getConfig().name,
+    duration: () => getConfig().duration,
+    delay: () => getConfig().delay ?? 0,
+    easing: () => getConfig().easing,
   };
 }
 

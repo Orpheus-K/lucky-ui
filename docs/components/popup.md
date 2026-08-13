@@ -82,9 +82,7 @@ const pos = ref<'top' | 'bottom' | 'left' | 'right' | ''>('');
 ```vue
 <template>
   <lk-popup v-model="show" position="bottom" draggable>
-    <view v-for="i in 30" :key="i" style="padding: 28rpx 40rpx">
-      列表项 {{ i }}
-    </view>
+    <view v-for="i in 30" :key="i" style="padding: 28rpx 40rpx"> 列表项 {{ i }} </view>
   </lk-popup>
 </template>
 ```
@@ -116,6 +114,21 @@ const pos = ref<'top' | 'bottom' | 'left' | 'right' | ''>('');
   <view style="padding:32rpx">自定义动画</view>
 </lk-popup>
 ```
+
+`position`、`draggable`、`animation`、`animationType`、`duration`、`delay` 和 `easing` 都是响应式配置。弹层关闭后修改任一配置，下一次打开会按最新的优先级、类名、时长、延迟与缓动执行，无需重新挂载组件。
+
+### 响应式配置验收探针
+
+组件演示页提供一组跨端稳定选择器，用于客观验证运行时配置没有冻结：
+
+| 选择器                              | 用途                              |
+| ----------------------------------- | --------------------------------- |
+| `#popup-reactive-transition-probe`  | 读取当前七项输入、模式和显隐状态  |
+| `#popup-reactive-transition-next`   | 仅在弹层关闭时切换下一组配置      |
+| `#popup-reactive-transition-open`   | 使用当前配置打开同一个 Popup 实例 |
+| `.popup-reactive-transition-target` | 读取真实面板的过渡类名与计算样式  |
+
+Peekit 基准流程固定为：在 `bottom-default` 模式打开并记录 `slide-up / 180ms`；关闭后点击一次“下一组配置”，确认探针为 `right-700`；再次打开同一实例，面板必须变为 `slide-right / 700ms / 80ms / linear`。继续切换还可分别验证 draggable 的 `fade`、`bounce` 预设和显式 `fade-left` 类型。每一步都必须同时记录探针属性、面板 class、计算样式、截图及控制台/运行时错误；仅构建成功或仅看到弹层出现不能作为通过依据。H5 与微信小程序使用同一套选择器和断言。
 
 ## 圆角弹框
 
@@ -150,34 +163,34 @@ const pos = ref<'top' | 'bottom' | 'left' | 'right' | ''>('');
 
 ### Props
 
-| 参数                  | 说明                                                       | 类型                                       | 默认值       |
-| --------------------- | ---------------------------------------------------------- | ------------------------------------------ | ------------ |
-| customClass           | 组件可视根节点自定义类名                                   | `string \| object \| array`                | `''`         |
-| customStyle           | 组件可视根节点自定义样式                                   | `string \| object`                         | `''`         |
-| modelValue            | 是否显示（v-model）                                        | `boolean`                                  | `false`      |
-| zIndex                | 弹层层级                                                   | `number`                                   | `1000`       |
-| position              | 弹出位置                                                   | `top \| bottom \| left \| right \| center` | `center`     |
-| round                 | 是否圆角                                                   | `boolean`                                  | `true`       |
-| radius                | 圆角大小                                                   | `string`                                   | `32rpx`      |
-| draggable             | 是否开启拖拽，仅底部模式有效                               | `boolean`                                  | `false`      |
-| snapPoints            | 底部拖拽吸附点，值为 translateY 占窗口高度比例             | `number[]`                                 | `[0.5, 0.1]` |
-| dragDamping           | 越界拖拽阻尼系数，越小越克制                               | `number`                                   | `0.18`       |
-| dragEasing            | 拖拽吸附动画曲线                                           | `string`                                   | `cubic-bezier(0.18, 0.89, 0.32, 1.08)` |
-| title                 | 标题                                                       | `string`                                   | `''`         |
-| closable              | 是否显示关闭图标                                           | `boolean`                                  | `false`      |
-| closeIcon             | 关闭图标名称                                               | `string`                                   | `x-lg`       |
-| closeIconPosition     | 关闭图标位置                                               | `top-right \| top-left`                    | `top-right`  |
-| overlay               | 是否显示遮罩                                               | `boolean`                                  | `true`       |
-| closeOnOverlay        | 点击遮罩关闭                                               | `boolean`                                  | `true`       |
-| lockScroll            | 锁定背景滚动                                               | `boolean`                                  | `true`       |
-| safeArea              | 底部是否适配安全区                                         | `boolean`                                  | `true`       |
-| height                | 弹层高度；draggable bottom 模式下由 `snapPoints` 接管可见高度 | `string \| number`                         | `''`         |
-| width                 | 弹层宽度                                                   | `string \| number`                         | `''`         |
-| animation             | 动画预设名称                                               | `keyof ANIMATION_PRESETS`                  | `undefined`  |
-| animationType         | 内置动画类型，支持全部 `TransitionName`                     | [`TransitionConfig['name']`](./animation#内置动画类型) | `undefined`  |
-| duration              | 动画持续时间                                               | `number`                                   | `undefined`  |
-| delay                 | 动画延迟                                                   | `number`                                   | `undefined`  |
-| easing                | 动画缓动函数                                               | `TransitionConfig['easing']`               | `undefined`  |
+| 参数              | 说明                                                          | 类型                                                   | 默认值                                 |
+| ----------------- | ------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| customClass       | 组件可视根节点自定义类名                                      | `string \| object \| array`                            | `''`                                   |
+| customStyle       | 组件可视根节点自定义样式                                      | `string \| object`                                     | `''`                                   |
+| modelValue        | 是否显示（v-model）                                           | `boolean`                                              | `false`                                |
+| zIndex            | 弹层层级                                                      | `number`                                               | `1000`                                 |
+| position          | 弹出位置                                                      | `top \| bottom \| left \| right \| center`             | `center`                               |
+| round             | 是否圆角                                                      | `boolean`                                              | `true`                                 |
+| radius            | 圆角大小                                                      | `string`                                               | `32rpx`                                |
+| draggable         | 是否开启拖拽，仅底部模式有效                                  | `boolean`                                              | `false`                                |
+| snapPoints        | 底部拖拽吸附点，值为 translateY 占窗口高度比例                | `number[]`                                             | `[0.5, 0.1]`                           |
+| dragDamping       | 越界拖拽阻尼系数，越小越克制                                  | `number`                                               | `0.18`                                 |
+| dragEasing        | 拖拽吸附动画曲线                                              | `string`                                               | `cubic-bezier(0.18, 0.89, 0.32, 1.08)` |
+| title             | 标题                                                          | `string`                                               | `''`                                   |
+| closable          | 是否显示关闭图标                                              | `boolean`                                              | `false`                                |
+| closeIcon         | 关闭图标名称                                                  | `string`                                               | `x-lg`                                 |
+| closeIconPosition | 关闭图标位置                                                  | `top-right \| top-left`                                | `top-right`                            |
+| overlay           | 是否显示遮罩                                                  | `boolean`                                              | `true`                                 |
+| closeOnOverlay    | 点击遮罩关闭                                                  | `boolean`                                              | `true`                                 |
+| lockScroll        | 锁定背景滚动                                                  | `boolean`                                              | `true`                                 |
+| safeArea          | 底部是否适配安全区                                            | `boolean`                                              | `true`                                 |
+| height            | 弹层高度；draggable bottom 模式下由 `snapPoints` 接管可见高度 | `string \| number`                                     | `''`                                   |
+| width             | 弹层宽度                                                      | `string \| number`                                     | `''`                                   |
+| animation         | 动画预设名称                                                  | `keyof ANIMATION_PRESETS`                              | `undefined`                            |
+| animationType     | 内置动画类型，支持全部 `TransitionName`                       | [`TransitionConfig['name']`](./animation#内置动画类型) | `undefined`                            |
+| duration          | 动画持续时间                                                  | `number`                                               | `undefined`                            |
+| delay             | 动画延迟                                                      | `number`                                               | `undefined`                            |
+| easing            | 动画缓动函数                                                  | `TransitionConfig['easing']`                           | `undefined`                            |
 
 ### Events
 
@@ -213,3 +226,4 @@ const pos = ref<'top' | 'bottom' | 'left' | 'right' | ''>('');
 | 展示台基线 | 自动回归 | `tests/visual/needs-hardening-showcase.spec.ts` 校验组件路由、verified 状态与中风险标记 |
 | 弹出方向   | 人工验收 | `top/bottom/left/right/center` 尺寸、圆角和安全区表现稳定                               |
 | 交互关闭   | 人工验收 | 遮罩关闭、拖拽关闭、锁滚动与动画结束事件在目标端一致                                    |
+| 响应式动画 | Peekit   | 关闭时从 `bottom / 180ms` 切到 `right / 700ms`，重开同一实例后类名与计算样式同步更新    |
