@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import LkNoticeBar from '@/uni_modules/lucky-ui/components/lk-notice-bar/lk-notice-bar.vue';
 import LkIcon from '@/uni_modules/lucky-ui/components/lk-icon/lk-icon.vue';
 import LkButton from '@/uni_modules/lucky-ui/components/lk-button/lk-button.vue';
@@ -13,6 +13,30 @@ const verticalMessages = [
   '⚠️ 温馨提示：请及时更新个人信息',
   '✨ 新功能：支持多种支付方式',
 ];
+
+const loopProbeMessages = ['A', 'B'];
+const loopProbeKey = ref(0);
+const loopProbeChanges = ref<Array<{ index: number; text: string }>>([]);
+const loopProbeClicks = ref<Array<{ index: number; text: string }>>([]);
+const loopProbeResetCount = ref(0);
+const loopProbeLastChange = computed(
+  () => loopProbeChanges.value.at(-1) || { index: -1, text: '' }
+);
+
+const handleLoopProbeChange = (payload: { index: number; text: string }) => {
+  loopProbeChanges.value.push(payload);
+};
+
+const handleLoopProbeClick = (payload: { index: number; text: string }) => {
+  loopProbeClicks.value.push({ index: payload.index, text: payload.text });
+};
+
+const resetLoopProbe = () => {
+  loopProbeChanges.value = [];
+  loopProbeClicks.value = [];
+  loopProbeResetCount.value = 0;
+  loopProbeKey.value += 1;
+};
 
 const handleClick = () => {
   uni.showToast({ title: '查看消息', icon: 'none' });
@@ -56,6 +80,39 @@ const handleMore = () => {
 
     <demo-block title="竖向滚动">
       <lk-notice-bar scrollable="vertical" :messages="verticalMessages" :speed="3" />
+    </demo-block>
+
+    <demo-block title="循环事件探针">
+      <view
+        id="notice-bar-loop-fixture"
+        class="loop-probe"
+        :data-change-count="loopProbeChanges.length"
+        :data-click-count="loopProbeClicks.length"
+        :data-reset-count="loopProbeResetCount"
+        :data-last-change-index="loopProbeLastChange.index"
+        :data-last-change-text="loopProbeLastChange.text"
+        :data-change-log="JSON.stringify(loopProbeChanges)"
+        :data-click-log="JSON.stringify(loopProbeClicks)"
+      >
+        <lk-notice-bar
+          id="notice-bar-loop-probe"
+          :key="loopProbeKey"
+          scrollable="vertical"
+          :messages="loopProbeMessages"
+          :speed="0.5"
+          @message-change="handleLoopProbeChange"
+          @loop-reset="loopProbeResetCount += 1"
+          @click="handleLoopProbeClick"
+        />
+        <view id="notice-bar-loop-state" class="loop-probe__state">
+          change={{ loopProbeChanges.length }}, click={{ loopProbeClicks.length }}, reset={{
+            loopProbeResetCount
+          }}
+        </view>
+      </view>
+      <lk-button id="notice-bar-loop-reset" size="md" @click="resetLoopProbe">
+        重置循环探针
+      </lk-button>
     </demo-block>
 
     <demo-block title="带右侧插槽">
@@ -159,6 +216,17 @@ const handleMore = () => {
   cursor: pointer;
   &:hover {
     opacity: 1;
+  }
+}
+
+.loop-probe {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+
+  &__state {
+    color: var(--lk-text-secondary);
+    font-size: 24rpx;
   }
 }
 </style>

@@ -6,6 +6,7 @@ import {
   resolveNoticeBarClickPayload,
   resolveNoticeBarDisplayMessages,
   resolveNoticeBarInterval,
+  resolveNoticeBarMessagePayload,
   resolveNoticeBarScrollMode,
   resolveNoticeBarStyle,
   resolveNoticeBarVerticalList,
@@ -46,6 +47,8 @@ const enableTransition = ref(true); // 用于无缝重置时临时关闭过渡
 const verticalListEl = ref<unknown>(null);
 const resetTimer = ref<number | ReturnType<typeof setTimeout> | null>(null);
 const resumeTimer = ref<number | ReturnType<typeof setTimeout> | null>(null);
+let loopGeneration = 0;
+let loopActive = false;
 
 // 竖向渲染列表（最后追加第一项以实现无缝滚动）
 const verticalList = computed(() => resolveNoticeBarVerticalList(displayMessages.value));
@@ -58,6 +61,7 @@ const verticalListStyle = computed(() =>
 );
 
 function stopVerticalLoop() {
+  loopGeneration += 1;
   if (verticalTimer.value) {
     clearInterval(verticalTimer.value as number);
     verticalTimer.value = null;
@@ -74,20 +78,30 @@ function stopVerticalLoop() {
 
 function startVerticalLoop() {
   stopVerticalLoop();
+  if (!loopActive) return;
   // 单条不滚动
   if (scrollMode.value !== 'vertical' || displayMessages.value.length <= 1) return;
   const interval = resolveNoticeBarInterval(props.speed); // 每条停留时长（秒）
+  const generation = loopGeneration;
   verticalTimer.value = setInterval(() => {
+    if (!loopActive || generation !== loopGeneration) return;
     // 检查是否即将到达补位项（最后一项）
     if (currentIndex.value === displayMessages.value.length - 1) {
       // 先滚动到补位项（视觉上是第一条）
       enableTransition.value = true;
       currentIndex.value += 1;
+      emit(
+        'message-change',
+        resolveNoticeBarMessagePayload(displayMessages.value, currentIndex.value)
+      );
+      if (!loopActive || generation !== loopGeneration) return;
       // 在过渡完成后立即无缝重置到真正的第一条
       resetTimer.value = setTimeout(() => {
+        if (!loopActive || generation !== loopGeneration) return;
         enableTransition.value = false;
         currentIndex.value = 0;
         emit('loop-reset');
+        if (!loopActive || generation !== loopGeneration) return;
         // 强制重绘（仅 H5 需要，通过读取 offsetHeight 触发）
         // #ifdef H5
         if (verticalListEl.value) {
@@ -103,34 +117,44 @@ function startVerticalLoop() {
       // 正常步进到下一条
       enableTransition.value = true;
       currentIndex.value += 1;
-      emit('message-change', {
-        index: currentIndex.value,
-        text: displayMessages.value[currentIndex.value] || '',
-      });
+      emit(
+        'message-change',
+        resolveNoticeBarMessagePayload(displayMessages.value, currentIndex.value)
+      );
     }
   }, interval);
 }
 
 // 监听相关依赖，切换/更新时重启竖向轮播
-watch([scrollMode, () => props.speed, displayMessages], () => {
+watch(
+  [scrollMode, () => props.speed, displayMessages],
+  () => {
+    currentIndex.value = 0;
+    enableTransition.value = true;
+    startVerticalLoop();
+  },
+  { deep: true }
+);
+
+onMounted(() => {
+  loopActive = true;
+  startVerticalLoop();
+});
+
+onActivated(() => {
+  loopActive = true;
   currentIndex.value = 0;
   enableTransition.value = true;
   startVerticalLoop();
 });
 
-onMounted(() => {
-  startVerticalLoop();
-});
-
-onActivated(() => {
-  startVerticalLoop();
-});
-
 onDeactivated(() => {
+  loopActive = false;
   stopVerticalLoop();
 });
 
 onBeforeUnmount(() => {
+  loopActive = false;
   stopVerticalLoop();
 });
 
