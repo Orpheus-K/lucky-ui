@@ -34,8 +34,11 @@ export const actionSheetProps = {
     default: () => [],
   },
 
-  /** 取消按钮文字 */
-  cancelText: LkProp.string(''),
+  /** 取消按钮文字；不传时使用当前语言文案，空字符串隐藏按钮 */
+  cancelText: {
+    type: String,
+    default: undefined,
+  },
 
   /** 点击选项后是否关闭 */
   closeOnClickAction: LkProp.boolean(true),

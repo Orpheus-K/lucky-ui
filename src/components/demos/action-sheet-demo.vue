@@ -14,6 +14,8 @@ const safeAreaEnabled = ref(true);
 const safeAreaProbeStyle = {
   '--lk-action-sheet-safe-area-bottom': '24px',
 };
+const cancelProbeVisible = ref(false);
+const cancelProbeText = ref<string | undefined>(undefined);
 
 const actions1 = [
   { name: '选项一', value: 1 },
@@ -45,6 +47,14 @@ const showActionSheet4 = () => {
 
 const showSafeAreaProbe = () => {
   safeAreaVisible.value = true;
+};
+
+const showCancelProbe = () => {
+  cancelProbeVisible.value = true;
+};
+
+const toggleCancelProbe = () => {
+  cancelProbeText.value = cancelProbeText.value === '' ? undefined : '';
 };
 
 const handleSelect = (payload: { action: Action }) => {
@@ -111,6 +121,28 @@ const handleSelect = (payload: { action: Action }) => {
         :actions="actions1"
         :custom-style="safeAreaProbeStyle"
         :safe-area="safeAreaEnabled"
+      />
+    </demo-block>
+
+    <demo-block title="取消按钮显隐">
+      <view
+        id="action-sheet-cancel-probe"
+        :data-cancel-mode="cancelProbeText === '' ? 'hidden' : 'default'"
+        :data-visible="cancelProbeVisible ? 'true' : 'false'"
+      >
+        未传 cancelText 使用当前语言文案；空字符串隐藏取消按钮。
+      </view>
+      <lk-button id="action-sheet-cancel-toggle" @click="toggleCancelProbe">
+        {{ cancelProbeText === '' ? '恢复取消按钮' : '隐藏取消按钮' }}
+      </lk-button>
+      <lk-button id="action-sheet-cancel-open" type="primary" @click="showCancelProbe">
+        打开取消按钮探针
+      </lk-button>
+      <lk-action-sheet
+        id="action-sheet-cancel-target"
+        v-model="cancelProbeVisible"
+        :actions="actions1"
+        :cancel-text="cancelProbeText"
       />
     </demo-block>
   </view>
