@@ -27,10 +27,15 @@ image {
 
 button,
 input,
-textarea,
+textarea {
+  font: inherit;
+}
+
+/* #ifdef H5 */
 select {
   font: inherit;
 }
+/* #endif */
 
 page,
 view,

@@ -17,6 +17,27 @@ function showToast() {
     <demo-block title="Toast 宿主">
       <lk-button block @click="showToast">显示 Toast</lk-button>
     </demo-block>
+
+    <!-- #ifdef H5 -->
+    <demo-block title="H5 native select reset">
+      <view
+        id="theme-select-reset-fixture"
+        class="theme-select-reset-fixture"
+        data-expected-font-family="Courier New"
+        data-expected-font-size="19px"
+      >
+        <text id="theme-select-reset-reference">Inherited font reference</text>
+        <select
+          id="theme-select-reset-probe"
+          class="theme-select-reset-probe"
+          aria-label="Theme select reset probe"
+          data-reset-contract="font-inherit"
+        >
+          <option>Inherited font select</option>
+        </select>
+      </view>
+    </demo-block>
+    <!-- #endif -->
   </lk-root>
 </template>
 
@@ -30,4 +51,30 @@ function showToast() {
 .root-demo {
   --lk-demo-block-self-gap: 0;
 }
+
+/* #ifdef H5 */
+.theme-select-reset-fixture {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  color: var(--lk-text-primary);
+  font-family: 'Courier New', monospace;
+  font-size: 19px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 29px;
+  background: var(--lk-fill-1);
+  border-radius: var(--lk-radius-sm);
+}
+
+.theme-select-reset-probe {
+  width: 100%;
+  padding: 8px 12px;
+  color: inherit;
+  background: var(--lk-bg-container);
+  border: 1px solid var(--lk-color-border);
+  border-radius: var(--lk-radius-xs);
+}
+/* #endif */
 </style>
