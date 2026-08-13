@@ -37,8 +37,61 @@ export function shouldScheduleToastClose(duration: number): boolean {
   return duration > 0;
 }
 
-export function resolveToastOverlayClass(forbidClick: boolean) {
-  return { 'is-lock': forbidClick };
+export interface ToastBlockerConfig {
+  overlay: boolean;
+  forbidClick: boolean;
+}
+
+export interface ToastBlockerState {
+  sync: (options: ToastBlockerConfig & { visible: boolean }) => ToastBlockerConfig;
+  finishLeave: () => void;
+  dispose: () => void;
+}
+
+export function createToastBlockerState(): ToastBlockerState {
+  let phase: 'hidden' | 'visible' | 'leaving' | 'disposed' = 'hidden';
+  let config: ToastBlockerConfig = { overlay: false, forbidClick: false };
+
+  const sync = (options: ToastBlockerConfig & { visible: boolean }) => {
+    if (phase === 'disposed') return config;
+
+    if (options.visible) {
+      phase = 'visible';
+      config = {
+        overlay: options.overlay,
+        forbidClick: options.forbidClick,
+      };
+    } else if (phase === 'visible') {
+      phase = 'leaving';
+    }
+
+    return config;
+  };
+
+  return {
+    sync,
+    finishLeave() {
+      if (phase === 'leaving') phase = 'hidden';
+    },
+    dispose() {
+      phase = 'disposed';
+    },
+  };
+}
+
+export function shouldRenderToastBlocker(options: {
+  display: boolean;
+  overlay: boolean;
+  forbidClick: boolean;
+}): boolean {
+  return options.display && (options.overlay || options.forbidClick);
+}
+
+export function resolveToastOverlayClass(options: { overlay: boolean; forbidClick: boolean }) {
+  return {
+    'is-visible': options.overlay,
+    'is-lock': options.forbidClick,
+  };
 }
 
 export function resolveToastOverlayStyle(zIndex: number): StyleValue {
