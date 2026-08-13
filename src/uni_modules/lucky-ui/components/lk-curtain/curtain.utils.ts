@@ -1,7 +1,32 @@
-import type { StyleValue } from 'vue';
+import type { InjectionKey, StyleValue } from 'vue';
 import type { TransitionConfig } from '@/uni_modules/lucky-ui/composables/useTransition';
 import { addUnit } from '../../core/src/utils/unit';
-import type { CurtainClosePosition } from './curtain.props';
+import type { CurtainClosePosition, CurtainLinkType } from './curtain.props';
+
+type CurtainForwardLinkType = Exclude<CurtainLinkType, 'navigateBack'>;
+
+export type CurtainNavigationAction =
+  | {
+      type: CurtainForwardLinkType;
+      options: { url: string };
+    }
+  | {
+      type: 'navigateBack';
+      options: { delta: number };
+    };
+
+export type CurtainNavigationRuntime = {
+  navigateTo?: (options: { url: string }) => unknown;
+  redirectTo?: (options: { url: string }) => unknown;
+  reLaunch?: (options: { url: string }) => unknown;
+  switchTab?: (options: { url: string }) => unknown;
+  navigateBack?: (options: { delta: number }) => unknown;
+};
+
+export type CurtainNavigationDispatchObserver = (action: CurtainNavigationAction) => void;
+
+export const curtainNavigationDispatchObserverKey: InjectionKey<CurtainNavigationDispatchObserver> =
+  Symbol('LkCurtainNavigationDispatchObserver');
 
 export function resolveCurtainWidth(width: string | number): string {
   return addUnit(width) || '';
@@ -119,6 +144,50 @@ export function shouldCloseCurtainOnOverlay(closeOnOverlay: boolean): boolean {
 
 export function shouldNavigateCurtainLink(link: string): boolean {
   return link.length > 0;
+}
+
+export function normalizeCurtainBackDelta(backDelta: number): number {
+  return Number.isInteger(backDelta) && backDelta > 0 ? backDelta : 1;
+}
+
+export function resolveCurtainNavigationAction(options: {
+  linkType: CurtainLinkType;
+  link: string;
+  backDelta: number;
+}): CurtainNavigationAction | null {
+  if (options.linkType === 'navigateBack') {
+    return {
+      type: 'navigateBack',
+      options: { delta: normalizeCurtainBackDelta(options.backDelta) },
+    };
+  }
+
+  if (!shouldNavigateCurtainLink(options.link)) return null;
+
+  return {
+    type: options.linkType,
+    options: { url: options.link },
+  };
+}
+
+export function executeCurtainNavigation(
+  action: CurtainNavigationAction,
+  runtime: CurtainNavigationRuntime,
+  observer?: CurtainNavigationDispatchObserver
+): boolean {
+  if (action.type === 'navigateBack') {
+    const navigation = runtime.navigateBack;
+    if (typeof navigation !== 'function') return false;
+    navigation.call(runtime, action.options);
+    observer?.(action);
+    return true;
+  }
+
+  const navigation = runtime[action.type];
+  if (typeof navigation !== 'function') return false;
+  navigation.call(runtime, action.options);
+  observer?.(action);
+  return true;
 }
 
 export function isCurtainHttpLink(link: string): boolean {
