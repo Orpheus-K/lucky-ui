@@ -9,6 +9,11 @@ const visible1 = ref(false);
 const visible2 = ref(false);
 const visible3 = ref(false);
 const visible4 = ref(false);
+const safeAreaVisible = ref(false);
+const safeAreaEnabled = ref(true);
+const safeAreaProbeStyle = {
+  '--lk-action-sheet-safe-area-bottom': '24px',
+};
 
 const actions1 = [
   { name: '选项一', value: 1 },
@@ -36,6 +41,10 @@ const showActionSheet3 = () => {
 
 const showActionSheet4 = () => {
   visible4.value = true;
+};
+
+const showSafeAreaProbe = () => {
+  safeAreaVisible.value = true;
 };
 
 const handleSelect = (payload: { action: Action }) => {
@@ -79,6 +88,30 @@ const handleSelect = (payload: { action: Action }) => {
     <demo-block title="禁用选项">
       <lk-button type="primary" @click="showActionSheet4">禁用选项</lk-button>
       <lk-action-sheet v-model="visible4" :actions="actions2" />
+    </demo-block>
+
+    <demo-block title="安全区单一所有者">
+      <view
+        id="action-sheet-safe-area-probe"
+        :data-safe-area="safeAreaEnabled ? 'true' : 'false'"
+        :data-visible="safeAreaVisible ? 'true' : 'false'"
+        data-expected-inset="24"
+      >
+        ActionSheet 与内部 Popup 合计只能渲染一个安全区节点。
+      </view>
+      <lk-button id="action-sheet-safe-area-toggle" @click="safeAreaEnabled = !safeAreaEnabled">
+        {{ safeAreaEnabled ? '关闭安全区' : '开启安全区' }}
+      </lk-button>
+      <lk-button id="action-sheet-safe-area-open" type="primary" @click="showSafeAreaProbe">
+        打开安全区探针
+      </lk-button>
+      <lk-action-sheet
+        id="action-sheet-safe-area-target"
+        v-model="safeAreaVisible"
+        :actions="actions1"
+        :custom-style="safeAreaProbeStyle"
+        :safe-area="safeAreaEnabled"
+      />
     </demo-block>
   </view>
 </template>

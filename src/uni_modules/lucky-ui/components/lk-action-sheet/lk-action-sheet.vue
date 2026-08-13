@@ -101,6 +101,7 @@ const resolvedCancelText = computed(() =>
     :duration="duration"
     :delay="delay"
     :easing="easing"
+    :safe-area="false"
     @update:model-value="onPopupModelChange"
     @click-overlay="emit('click-overlay', $event)"
     @after-enter="emit('after-enter')"
@@ -147,7 +148,7 @@ const resolvedCancelText = computed(() =>
         <text class="lk-action-sheet__cancel-text">{{ resolvedCancelText }}</text>
         <view class="lk-ripple__wave" :style="rippleWaveStyle" />
       </view>
-      <view v-if="safeArea" class="lk-action-sheet__safe" />
+      <view v-if="safeArea" class="lk-action-sheet__safe" data-testid="lk-action-sheet-safe-area" />
     </view>
   </lk-popup>
 </template>
