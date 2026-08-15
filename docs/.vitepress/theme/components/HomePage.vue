@@ -502,7 +502,7 @@ const installCmd = 'pnpm add uni-lucky-ui'
 
 /* title */
 .lk-hero__title {
-  font-family: var(--lk-font-family-serif), Georgia, serif;
+  font-family: inherit;
   font-size: clamp(32px, 4.5vw, 52px);
   font-weight: 800;
   line-height: 1.2;
