@@ -1,13 +1,58 @@
 import { defineConfig } from 'vitepress';
+import {
+  createNoindexHead,
+  createSeoHead,
+  resolvePageDescription,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
+} from './seo';
 
 const LUCKY_UI_DOCS_PORT = 4188;
 
 export default defineConfig({
   lang: 'zh-CN',
-  title: 'Lucky UI',
-  description: '注入精致美学设计的 Uni-app 跨端组件库，让跨端应用拥有令人心动的高颜值。',
+  title: SITE_NAME,
+  titleTemplate: `:title | ${SITE_NAME}`,
+  description: SITE_DESCRIPTION,
   appearance: 'dark',
   lastUpdated: true,
+  srcExclude: [
+    'ANIMATION_FIX.md',
+    'COMPONENT_COMPLETION_SUMMARY.md',
+    'COMPONENT_DEMO_PLAN.md',
+    'DEMO_IMPLEMENTATION_PLAN.md',
+    'NEW_ARCHITECTURE.md',
+    'OPEN_SOURCE_COMPONENT_SCORE.md',
+    'TESTING_GUIDE.md',
+    'TEST_PAGE_STYLES.md',
+    'TEST_PAGE_STYLES_QUICK_REF.md',
+    'TRANSITION_SUMMARY.md',
+    'USE_TRANSITION_GUIDE.md',
+    'Z_INDEX_GUIDE.md',
+    'assets/**',
+  ],
+  sitemap: {
+    hostname: SITE_URL,
+    transformItems: items =>
+      items.filter(
+        item =>
+          !item.url.includes('/components/basic/') && !item.url.startsWith('components/basic/')
+      ),
+  },
+
+  transformPageData(pageData) {
+    pageData.frontmatter.head ??= [];
+
+    if (pageData.relativePath === '404.md') {
+      pageData.frontmatter.head.push(...createNoindexHead());
+      return;
+    }
+
+    const description = resolvePageDescription(pageData);
+    pageData.description = description;
+    pageData.frontmatter.head.push(...createSeoHead(pageData, description));
+  },
 
   vite: {
     server: {
@@ -22,11 +67,18 @@ export default defineConfig({
 
   head: [
     ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1.0' }],
+    ['meta', { name: 'application-name', content: SITE_NAME }],
     ['meta', { name: 'theme-color', content: '#837fe1' }],
     ['link', { rel: 'icon', type: 'image/png', href: '/logo.png' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
-    ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,500&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@300;400;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap' }],
+    [
+      'link',
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,500&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@300;400;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap',
+      },
+    ],
   ],
 
   themeConfig: {

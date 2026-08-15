@@ -54,6 +54,7 @@
     "assets:svg:report": "node src/uni_modules/lucky-ui/scripts/svg-assets/index.js --check --report",
     "docs:dev": "vitepress dev docs --port 4188",
     "docs:build": "vitepress build docs",
+    "docs:seo-check": "node scripts/check-docs-seo.mjs",
     "docs:preview": "vitepress preview docs --port 4188",
     "report:showcase": "node scripts/export-showcase-report.js",
     "test:visual": "playwright test tests/visual",
