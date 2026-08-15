@@ -253,6 +253,8 @@ The default plugin registers only public `Lk*` components. Demo and debugging ut
 | `pnpm run dev:mp-weixin`    | 编译微信小程序开发包                        |
 | `pnpm run docs:dev`         | 启动文档站点                                |
 | `pnpm run docs:build`       | 构建文档站点                                |
+| `pnpm run docs:deploy`      | 构建、原子部署并刷新 EdgeOne 缓存           |
+| `pnpm run docs:purge`       | 单独刷新 EdgeOne 文档站缓存                 |
 | `pnpm run build:h5`         | 构建 H5 产物                                |
 | `pnpm run build:mp:all`     | 构建多小程序端产物                          |
 | `pnpm run assets:svg`       | 转换 SVG 资产并写入图标、字体与空态插画产物 |
@@ -262,6 +264,21 @@ The default plugin registers only public `Lk*` components. Demo and debugging ut
 | `pnpm run lint`             | ESLint 与 Stylelint 检查                    |
 | `pnpm run test:unit`        | 单元测试                                    |
 | `pnpm run test:visual`      | Playwright 视觉回归                         |
+
+### 文档生产部署
+
+文档发布脚本会依次执行构建、SEO 校验、SSH 上传、远端原子切换、源站健康检查、EdgeOne 缓存刷新和公网健康检查。任何后置检查失败时，脚本会恢复上一个 `dist` 版本。
+
+首次执行前，在当前终端配置以下环境变量。腾讯云密钥仅从环境变量读取，不得提交到仓库：
+
+```powershell
+$env:TENCENTCLOUD_SECRET_ID = '<SecretId>'
+$env:TENCENTCLOUD_SECRET_KEY = '<SecretKey>'
+$env:EDGEONE_ZONE_ID = '<lucky-ui.cn 的 ZoneId>'
+pnpm run docs:deploy
+```
+
+默认配置为 SSH 别名 `tx`、远端目录 `/www/wwwroot/lucky-ui-docs`、域名 `lucky-ui.cn`。如环境不同，可通过 `DOCS_DEPLOY_SSH_HOST`、`DOCS_DEPLOY_REMOTE_BASE` 和 `EDGEONE_HOSTNAME` 覆盖。仅在 EdgeOne 故障且明确接受跳过缓存刷新时，才使用 `pnpm run docs:deploy -- --skip-purge`。
 
 ## 文档
 
