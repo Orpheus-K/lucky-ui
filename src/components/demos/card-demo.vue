@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { nextTick, onMounted, ref } from 'vue';
 import LkButton from '@/uni_modules/lucky-ui/components/lk-button/lk-button.vue';
 import LkCard from '@/uni_modules/lucky-ui/components/lk-card/lk-card.vue';
 import LkCell from '@/uni_modules/lucky-ui/components/lk-cell/lk-cell.vue';
@@ -8,6 +9,27 @@ import LkProgress from '@/uni_modules/lucky-ui/components/lk-progress/lk-progres
 import LkSpace from '@/uni_modules/lucky-ui/components/lk-space/lk-space.vue';
 import LkTag from '@/uni_modules/lucky-ui/components/lk-tag/lk-tag.vue';
 import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.vue';
+
+const coverContractStatus = ref('pending');
+const uniImageObjectFit = ref('');
+const nativeImageObjectFit = ref('');
+
+// #ifdef H5
+onMounted(async () => {
+  await nextTick();
+  const uniImage = document.querySelector<HTMLElement>('#card-cover-uni-image');
+  const nativeImage = document.querySelector<HTMLImageElement>('#card-cover-native-img');
+
+  if (!uniImage || !nativeImage) {
+    coverContractStatus.value = 'missing';
+    return;
+  }
+
+  uniImageObjectFit.value = window.getComputedStyle(uniImage).objectFit;
+  nativeImageObjectFit.value = window.getComputedStyle(nativeImage).objectFit;
+  coverContractStatus.value = 'ready';
+});
+// #endif
 </script>
 
 <template>
@@ -86,6 +108,45 @@ import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.v
           </lk-space>
         </lk-space>
       </lk-card>
+    </demo-block>
+
+    <demo-block title="跨端封面契约">
+      <view
+        id="card-cover-contract"
+        class="cover-contract"
+        data-contract="card-cover-v1"
+        :data-contract-status="coverContractStatus"
+        :data-uni-object-fit="uniImageObjectFit"
+        :data-native-object-fit="nativeImageObjectFit"
+      >
+        <lk-card id="card-cover-uni-card" title="Uni Image" shadow="sm">
+          <template #cover>
+            <image
+              id="card-cover-uni-image"
+              class="cover-contract__media"
+              src="/static/logo.png"
+              mode="aspectFill"
+              data-cover-kind="uni-image"
+            />
+          </template>
+          <text class="cover-contract__copy">所有端使用 image，宽度由 Card cover 契约铺满。</text>
+        </lk-card>
+
+        <!-- #ifdef H5 -->
+        <lk-card id="card-cover-native-card" title="Native Img" shadow="sm">
+          <template #cover>
+            <img
+              id="card-cover-native-img"
+              class="cover-contract__media"
+              src="/static/logo.png"
+              alt="Card native image cover probe"
+              data-cover-kind="native-img"
+            />
+          </template>
+          <text class="cover-contract__copy">H5 原生 img 兼容分支不会进入小程序样式。</text>
+        </lk-card>
+        <!-- #endif -->
+      </view>
     </demo-block>
 
     <demo-block title="业务操作">
@@ -309,6 +370,25 @@ import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.v
 
 .cover-badge__value {
   margin-left: 8rpx;
+}
+
+.cover-contract {
+  display: flex;
+  flex-direction: column;
+
+  > :not(:first-child) {
+    margin-top: 24rpx;
+  }
+}
+
+.cover-contract__media {
+  height: 220rpx;
+}
+
+.cover-contract__copy {
+  font-size: 24rpx;
+  line-height: 1.6;
+  color: var(--card-demo-muted);
 }
 
 .card-copy {
