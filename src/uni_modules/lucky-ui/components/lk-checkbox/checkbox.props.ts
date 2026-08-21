@@ -92,6 +92,10 @@ export const checkboxProps = {
   labelDisabled: LkProp.boolean(false),
   /** 是否为不确定状态（半选） */
   indeterminate: LkProp.boolean(false),
+  /** 单独使用时的表单字段名 */
+  prop: LkProp.string(''),
+  /** 单独使用时是否触发表单验证 */
+  validateEvent: LkProp.boolean(true),
 } as const;
 
 export type CheckboxGroupProps = ExtractPropTypes<typeof checkboxGroupProps>;

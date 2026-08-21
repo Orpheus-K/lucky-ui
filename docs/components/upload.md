@@ -123,26 +123,22 @@ const onCancel = () => {
 
 ## 自定义上传函数
 
-通过 `customRequest` 接入外部请求工具（如项目中的 `Request` 类），替代内置 `uni.uploadFile`。
+通过 `customRequest` 接管上传过程。下面直接返回原生 `UploadTask` 的取消句柄，因此删除、清空、Form disabled 或卸载都能主动终止传输；若外部请求封装只返回 Promise，就不能伪装成可取消任务。
 
 ```vue
 <script setup lang="ts">
-import { createRequest } from '@/uni_modules/lucky-ui/core/src';
-
-const request = createRequest({ baseURL: 'https://api.example.com' });
-
 const customRequest = ({ file, action, name, headers, data, onProgress, onSuccess, onFail }) => {
-  request
-    .upload({
-      url: action,
-      filePath: file.url,
-      name,
-      header: headers,
-      formData: data,
-      onProgress: res => onProgress(res.progress),
-    })
-    .then(res => onSuccess(res))
-    .catch(err => onFail(err));
+  const task = uni.uploadFile({
+    url: action,
+    filePath: file.url,
+    name,
+    header: headers,
+    formData: data,
+    success: onSuccess,
+    fail: onFail,
+  });
+  task.onProgressUpdate(result => onProgress(result.progress));
+  return { abort: () => task.abort() };
 };
 </script>
 
@@ -243,21 +239,21 @@ import UploadDemo from '@/components/demos/upload-demo.vue';
 
 ### Events
 
-| 事件名         | 说明             | 回调参数                                        |
-| -------------- | ---------------- | ----------------------------------------------- |
-| `update:modelValue` | 文件列表变化，支持 `v-model` | `(fileList: UploadFile[])` |
-| `change`       | 文件列表变化     | `(fileList: UploadFile[])`                      |
-| `afterRead`    | 文件读取完毕     | `(file: UploadFile \| UploadFile[], { index })` |
-| `oversize`     | 文件超出大小限制 | `(file: UploadFile \| UploadFile[])`            |
-| `overcount`    | 文件数量超出限制 | `({ maxCount, currentCount })`                  |
-| `delete`       | 删除文件         | `(file: UploadFile, { index })`                 |
-| `clear`        | 清空文件         | `()`                                            |
-| `clickPreview` | 点击预览         | `(file: UploadFile, { index })`                 |
-| `clickUpload`  | 点击上传区域     | `(event)`                                       |
-| `retry`        | 点击失败遮罩重新上传前触发 | `(file: UploadFile, { index })`       |
-| `progress`     | 上传进度         | `(file: UploadFile, { progress })`              |
-| `success`      | 上传成功         | `(file: UploadFile, { response })`              |
-| `fail`         | 上传失败         | `(file: UploadFile, { error })`                 |
+| 事件名              | 说明                         | 回调参数                                        |
+| ------------------- | ---------------------------- | ----------------------------------------------- |
+| `update:modelValue` | 文件列表变化，支持 `v-model` | `(fileList: UploadFile[])`                      |
+| `change`            | 文件列表变化                 | `(fileList: UploadFile[])`                      |
+| `afterRead`         | 文件读取完毕                 | `(file: UploadFile \| UploadFile[], { index })` |
+| `oversize`          | 文件超出大小限制             | `(file: UploadFile \| UploadFile[])`            |
+| `overcount`         | 文件数量超出限制             | `({ maxCount, currentCount })`                  |
+| `delete`            | 删除文件                     | `(file: UploadFile, { index })`                 |
+| `clear`             | 清空文件                     | `()`                                            |
+| `clickPreview`      | 点击预览                     | `(file: UploadFile, { index })`                 |
+| `clickUpload`       | 点击上传区域                 | `(event)`                                       |
+| `retry`             | 点击失败遮罩重新上传前触发   | `(file: UploadFile, { index })`                 |
+| `progress`          | 上传进度                     | `(file: UploadFile, { progress })`              |
+| `success`           | 上传成功                     | `(file: UploadFile, { response })`              |
+| `fail`              | 上传失败                     | `(file: UploadFile, { error })`                 |
 
 ### Slots
 
@@ -267,10 +263,10 @@ import UploadDemo from '@/components/demos/upload-demo.vue';
 
 ### Methods（通过 ref 调用）
 
-| 方法名          | 说明                          | 参数              |
-| --------------- | ----------------------------- | ----------------- |
-| `chooseFile`    | 手动触发文件选择              | —                 |
-| `retryUpload`   | 重新上传指定文件              | `(index: number)` |
-| `removeFile`    | 删除指定文件（直接删除）      | `(index: number)` |
-| `confirmRemove` | 确认删除文件（弹出 lk-modal） | `(index: number)` |
-| `clearFiles`    | 清空所有文件                  | —                 |
+| 方法名          | 说明                                                               | 参数              |
+| --------------- | ------------------------------------------------------------------ | ----------------- |
+| `chooseFile`    | 手动触发文件选择；组件或祖先 Form disabled 时不执行                | —                 |
+| `retryUpload`   | 重新上传指定文件；程序化维护方法，Form disabled 时仍可执行         | `(index: number)` |
+| `removeFile`    | 直接删除指定文件；程序化维护方法，Form disabled 时仍可执行         | `(index: number)` |
+| `confirmRemove` | 弹出删除确认；程序化维护方法，Form disabled 时仍可执行             | `(index: number)` |
+| `clearFiles`    | 清空全部文件并取消活动任务；程序化维护方法，Form disabled 时仍执行 | —                 |

@@ -72,7 +72,7 @@ export type CustomRequestFn = (options: {
   onProgress: (progress: number) => void;
   onSuccess: (response: unknown) => void;
   onFail: (error: unknown) => void;
-}) => void;
+}) => void | { abort?: () => void };
 
 export const uploadProps = {
   ...baseProps,

@@ -3,12 +3,10 @@ import type { StyleValue } from 'vue';
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { pickerProps, pickerEmits, type PickerOption } from './picker.props';
 import LkPopup from '../lk-popup/lk-popup.vue';
+import { useFormDisabled } from '../lk-form/useFormField';
 import { useLocale } from '../../composables/useLocale';
 import {
   clampPickerIndex,
-  dispatchPickerCancelEvents,
-  dispatchPickerConfirmEvents,
-  dispatchPickerSelectionEvents,
   resolvePickerColumnOffset,
   resolvePickerColumnOffsetByDelta,
   resolvePickerColumnWrapperStyle,
@@ -33,6 +31,8 @@ defineOptions({ name: 'LkPicker' });
 const props = defineProps(pickerProps);
 const emit = defineEmits(pickerEmits);
 const { t } = useLocale('picker');
+const formDisabled = useFormDisabled(() => false);
+const isDisabled = formDisabled.disabled;
 
 const resolvedConfirmText = computed(() => props.confirmText || t('confirm'));
 const resolvedCancelText = computed(() => props.cancelText || t('cancel'));
@@ -57,6 +57,7 @@ const touchState = {
   startOffset: 0,
   startTime: 0,
   pxToRpx: 1,
+  interaction: null as number | null,
 };
 
 // 计算列数据
@@ -222,7 +223,8 @@ watch(
   }
 );
 
-function commitColumnIndex(columnIndex: number, optionIndex: number) {
+async function commitColumnIndex(columnIndex: number, optionIndex: number, interaction: number) {
+  if (!formDisabled.isInteractionCurrent(interaction)) return;
   const columns = computedColumns.value;
   const selection = resolvePickerColumnSelection({
     mode: props.mode,
@@ -241,15 +243,20 @@ function commitColumnIndex(columnIndex: number, optionIndex: number) {
       : [];
   }
 
-  dispatchPickerSelectionEvents({
-    inline: props.inline,
-    selection,
-    onPick: (value, indexes, options) => emit('pick', value, indexes, options),
-    onUpdateModelValue: value => emit('update:modelValue', value),
-    onChange: value => emit('change', value),
-  });
+  if (selection.changed) {
+    emit('pick', selection.value, selection.indexes, selection.options);
+    if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
+
+    if (props.inline) {
+      emit('update:modelValue', selection.value);
+      if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
+      emit('change', selection.value);
+      if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
+    }
+  }
 
   nextTick(() => {
+    if (!formDisabled.isInteractionCurrent(interaction)) return;
     const normalized = computedColumns.value.map((column, index) =>
       clampPickerIndex(selectedIndexes.value[index] ?? 0, column.length)
     );
@@ -259,7 +266,9 @@ function commitColumnIndex(columnIndex: number, optionIndex: number) {
 }
 
 function onColumnTouchStart(event: unknown, columnIndex: number) {
+  if (isDisabled.value) return;
   touchState.columnIndex = columnIndex;
+  touchState.interaction = formDisabled.captureInteraction();
   touchState.startY = getTouchY(event);
   touchState.startOffset = columnOffsets.value[columnIndex] ?? 0;
   touchState.startTime = Date.now();
@@ -269,7 +278,14 @@ function onColumnTouchStart(event: unknown, columnIndex: number) {
 }
 
 function onColumnTouchMove(event: unknown, columnIndex: number) {
-  if (touchState.columnIndex !== columnIndex) return;
+  if (
+    touchState.columnIndex !== columnIndex ||
+    touchState.interaction === null ||
+    !formDisabled.isInteractionCurrent(touchState.interaction)
+  ) {
+    cancelPickerInteraction();
+    return;
+  }
 
   const column = computedColumns.value[columnIndex] || [];
   const delta = (getTouchY(event) - touchState.startY) * touchState.pxToRpx;
@@ -283,15 +299,24 @@ function onColumnTouchMove(event: unknown, columnIndex: number) {
   setColumnScrollState(columnIndex, offset, 0);
 }
 
-function onColumnTouchEnd(event: unknown, columnIndex: number) {
-  if (touchState.columnIndex !== columnIndex) return;
+async function onColumnTouchEnd(event: unknown, columnIndex: number) {
+  if (
+    touchState.columnIndex !== columnIndex ||
+    touchState.interaction === null ||
+    !formDisabled.isInteractionCurrent(touchState.interaction)
+  ) {
+    cancelPickerInteraction();
+    return;
+  }
 
   const column = computedColumns.value[columnIndex] || [];
   const offset = columnOffsets.value[columnIndex] ?? 0;
   const moveDistance = (getTouchY(event, true) - touchState.startY) * touchState.pxToRpx;
   const moveDuration = Date.now() - touchState.startTime;
 
+  const interaction = touchState.interaction;
   touchState.columnIndex = -1;
+  touchState.interaction = null;
 
   if (offset === touchState.startOffset) return;
 
@@ -306,19 +331,34 @@ function onColumnTouchEnd(event: unknown, columnIndex: number) {
 
   updateRenderedColumn(columnIndex, offset, result.offset, result.fast);
   setColumnScrollState(columnIndex, result.offset, result.duration);
-  commitColumnIndex(columnIndex, result.index);
+  await commitColumnIndex(columnIndex, result.index, interaction);
+  if (!formDisabled.isInteractionCurrent(interaction)) return;
   scheduleRenderedColumnSettle(columnIndex, result.offset, result.duration);
 }
 
-function onClickItem(columnIndex: number, optionIndex: number) {
+async function onClickItem(columnIndex: number, optionIndex: number) {
+  if (isDisabled.value) return;
+  const interaction = formDisabled.captureInteraction();
   const column = computedColumns.value[columnIndex] || [];
   const index = clampPickerIndex(optionIndex, column.length);
   const offset = resolvePickerColumnOffset(index, props.itemHeight);
 
   updateRenderedColumn(columnIndex, columnOffsets.value[columnIndex] ?? 0, offset);
   setColumnScrollState(columnIndex, offset, 200);
-  commitColumnIndex(columnIndex, index);
+  await commitColumnIndex(columnIndex, index, interaction);
+  if (!formDisabled.isInteractionCurrent(interaction)) return;
   scheduleRenderedColumnSettle(columnIndex, offset, 200);
+}
+
+function cancelPickerInteraction() {
+  touchState.columnIndex = -1;
+  touchState.interaction = null;
+  renderedColumnTimers.forEach((timer, index) => {
+    if (!timer) return;
+    clearTimeout(timer);
+    renderedColumnTimers[index] = undefined;
+  });
+  resetDraftSelection();
 }
 
 onBeforeUnmount(() => {
@@ -327,23 +367,26 @@ onBeforeUnmount(() => {
   });
 });
 
-function onCancel() {
+async function onCancel() {
   resetDraftSelection();
-  dispatchPickerCancelEvents({
-    snapshot: getSelectionSnapshot(),
-    onCancel: (value, indexes, options) => emit('cancel', value, indexes, options),
-    onVisibleChange: visible => emit('update:visible', visible),
-  });
+  const snapshot = getSelectionSnapshot();
+  emit('cancel', snapshot.value, snapshot.indexes, snapshot.options);
+  if (!(await formDisabled.awaitActive())) return;
+  emit('update:visible', false);
 }
 
-function onConfirm() {
-  dispatchPickerConfirmEvents({
-    snapshot: getSelectionSnapshot(),
-    onUpdateModelValue: value => emit('update:modelValue', value),
-    onChange: value => emit('change', value),
-    onConfirm: (value, indexes, options) => emit('confirm', value, [...indexes], options),
-    onVisibleChange: visible => emit('update:visible', visible),
-  });
+async function onConfirm() {
+  if (isDisabled.value) return;
+  const interaction = formDisabled.captureInteraction();
+  const snapshot = getSelectionSnapshot();
+
+  emit('update:modelValue', snapshot.value);
+  if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
+  emit('change', snapshot.value);
+  if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
+  emit('confirm', snapshot.value, [...snapshot.indexes], snapshot.options);
+  if (!(await formDisabled.awaitActive())) return;
+  emit('update:visible', false);
 }
 
 /** 分层样式挂在 text 上，减少整项节点在滚动选中时的样式抖动。 */
@@ -369,6 +412,7 @@ const cls = computed(() => [
     inline: props.inline,
     customClass: props.customClass,
   }),
+  { 'is-disabled': isDisabled.value },
 ]);
 const style = computed(() => props.customStyle as StyleValue);
 const itemStyle = computed(() => resolvePickerItemStyle(props.itemHeight));
@@ -381,11 +425,19 @@ function columnWrapperStyle(columnIndex: number): string {
     visibleCount: props.visibleCount,
   });
 }
+
+watch(
+  isDisabled,
+  disabled => {
+    if (disabled) cancelPickerInteraction();
+  },
+  { flush: 'sync' }
+);
 </script>
 
 <template>
   <!-- 内联模式 -->
-  <view v-if="inline" :id="id" :class="cls" :style="style">
+  <view v-if="inline" :id="id" :class="cls" :style="style" :aria-disabled="isDisabled">
     <view v-if="title" class="lk-picker__header">
       <text class="lk-picker__title">{{ title }}</text>
     </view>
@@ -454,7 +506,7 @@ function columnWrapperStyle(columnIndex: number): string {
     :round="round"
     @update:model-value="(v: boolean) => emit('update:visible', v)"
   >
-    <view :id="id" :class="cls" :style="style">
+    <view :id="id" :class="cls" :style="style" :aria-disabled="isDisabled">
       <view class="lk-picker__toolbar">
         <view class="lk-picker__btn lk-picker__btn--cancel" @tap="onCancel">
           {{ resolvedCancelText }}

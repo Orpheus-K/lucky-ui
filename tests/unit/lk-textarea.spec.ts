@@ -1,14 +1,20 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   applyTextareaMaxlength,
+  createTextareaBlurController,
   isTextareaNativeFocused,
   readTextareaValue,
   resolveTextareaClass,
   resolveTextareaCount,
   resolveTextareaPlaceholder,
+  shouldCommitTextareaBlur,
   shouldShowTextareaClear,
   shouldShowTextareaFooter,
 } from '../../src/uni_modules/lucky-ui/components/lk-textarea/textarea.utils';
+
+afterEach(() => {
+  vi.useRealTimers();
+});
 
 describe('lk-textarea value and display rules', () => {
   it('reads values from textarea event payloads', () => {
@@ -36,54 +42,114 @@ describe('lk-textarea value and display rules', () => {
     expect(isTextareaNativeFocused({ focus: false, autofocus: true })).toBe(true);
   });
 
+  it('cancels stale blur callbacks on refocus, reschedule and dispose', () => {
+    vi.useFakeTimers();
+    const controller = createTextareaBlurController();
+    const firstBlur = vi.fn();
+    const secondBlur = vi.fn();
+
+    controller.schedule(firstBlur);
+    controller.cancel();
+    vi.advanceTimersByTime(100);
+    expect(firstBlur).not.toHaveBeenCalled();
+
+    controller.schedule(firstBlur);
+    controller.schedule(secondBlur);
+    vi.advanceTimersByTime(100);
+    expect(firstBlur).not.toHaveBeenCalled();
+    expect(secondBlur).toHaveBeenCalledOnce();
+
+    controller.schedule(firstBlur);
+    controller.dispose();
+    vi.runAllTimers();
+    expect(firstBlur).not.toHaveBeenCalled();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('keeps readonly and disabled blur out of change and form validation commits', () => {
+    expect(shouldCommitTextareaBlur({ disabled: false, readonly: false })).toBe(true);
+    expect(shouldCommitTextareaBlur({ disabled: false, readonly: true })).toBe(false);
+    expect(shouldCommitTextareaBlur({ disabled: true, readonly: false })).toBe(false);
+  });
+
+  it('can cancel a pending blur when readonly becomes true or clear is tapped', () => {
+    vi.useFakeTimers();
+    const controller = createTextareaBlurController();
+    const formBlur = vi.fn();
+
+    controller.schedule(formBlur);
+    controller.cancel();
+    vi.advanceTimersByTime(100);
+    expect(formBlur).not.toHaveBeenCalled();
+
+    controller.schedule(formBlur);
+    controller.cancel();
+    vi.advanceTimersByTime(100);
+    expect(formBlur).not.toHaveBeenCalled();
+  });
+
   it('guards clear button visibility by value and interaction state', () => {
-    expect(shouldShowTextareaClear({
-      clearable: true,
-      value: 'text',
-      disabled: false,
-      readonly: false,
-    })).toBe(true);
-    expect(shouldShowTextareaClear({
-      clearable: true,
-      value: '',
-      disabled: false,
-      readonly: false,
-    })).toBe(false);
-    expect(shouldShowTextareaClear({
-      clearable: true,
-      value: 'text',
-      disabled: true,
-      readonly: false,
-    })).toBe(false);
+    expect(
+      shouldShowTextareaClear({
+        clearable: true,
+        value: 'text',
+        disabled: false,
+        readonly: false,
+      })
+    ).toBe(true);
+    expect(
+      shouldShowTextareaClear({
+        clearable: true,
+        value: '',
+        disabled: false,
+        readonly: false,
+      })
+    ).toBe(false);
+    expect(
+      shouldShowTextareaClear({
+        clearable: true,
+        value: 'text',
+        disabled: true,
+        readonly: false,
+      })
+    ).toBe(false);
   });
 
   it('shows footer for bounded counts or footer slot', () => {
-    expect(shouldShowTextareaFooter({
-      showCount: true,
-      maxlength: 100,
-      hasFooterSlot: false,
-    })).toBe(true);
-    expect(shouldShowTextareaFooter({
-      showCount: true,
-      maxlength: -1,
-      hasFooterSlot: false,
-    })).toBe(false);
-    expect(shouldShowTextareaFooter({
-      showCount: false,
-      maxlength: -1,
-      hasFooterSlot: true,
-    })).toBe(true);
+    expect(
+      shouldShowTextareaFooter({
+        showCount: true,
+        maxlength: 100,
+        hasFooterSlot: false,
+      })
+    ).toBe(true);
+    expect(
+      shouldShowTextareaFooter({
+        showCount: true,
+        maxlength: -1,
+        hasFooterSlot: false,
+      })
+    ).toBe(false);
+    expect(
+      shouldShowTextareaFooter({
+        showCount: false,
+        maxlength: -1,
+        hasFooterSlot: true,
+      })
+    ).toBe(true);
   });
 
   it('builds root classes from variant and state', () => {
-    expect(resolveTextareaClass({
-      variant: 'filled',
-      disabled: true,
-      focused: true,
-      autoHeight: true,
-      label: '备注',
-      customClass: 'custom',
-    })).toEqual([
+    expect(
+      resolveTextareaClass({
+        variant: 'filled',
+        disabled: true,
+        focused: true,
+        autoHeight: true,
+        label: '备注',
+        customClass: 'custom',
+      })
+    ).toEqual([
       'lk-textarea',
       'lk-textarea--filled',
       {

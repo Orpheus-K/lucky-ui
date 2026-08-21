@@ -1,5 +1,12 @@
 import type { CSSProperties } from 'vue';
-import type { FormItemContext, FormRule, FormRules, ValidateError } from './context';
+import type {
+  FormItemContext,
+  FormRule,
+  FormRules,
+  FormValidateOptions,
+  ValidateError,
+} from './context';
+import { FormValidationSupersededError } from './context';
 
 export type FormValidateTrigger = 'blur' | 'change';
 export type FormValidateStatus = 'idle' | 'validating' | 'success' | 'error';
@@ -52,10 +59,12 @@ export async function validateFormValue(options: {
   rules: FormRule[];
   model?: Record<string, unknown>;
   fallbackMessage: string;
-}): Promise<ValidateError[]> {
+  isCurrent?: () => boolean;
+}): Promise<ValidateError[] | null> {
   const errors: ValidateError[] = [];
 
   for (const rule of options.rules) {
+    if (options.isCurrent?.() === false) return null;
     const message = rule.message || options.fallbackMessage;
 
     if (rule.required && isEmptyFormValue(options.value)) {
@@ -94,12 +103,14 @@ export async function validateFormValue(options: {
     if (rule.validator) {
       try {
         const result = await rule.validator(options.value, rule, options.model);
+        if (options.isCurrent?.() === false) return null;
         if (result === false) {
           errors.push({ field: options.field, message, rule });
         } else if (typeof result === 'string') {
           errors.push({ field: options.field, message: result, rule });
         }
       } catch (error: unknown) {
+        if (options.isCurrent?.() === false) return null;
         const errorMessage = error instanceof Error ? error.message : message;
         errors.push({ field: options.field, message: errorMessage || message, rule });
       }
@@ -128,9 +139,288 @@ export function resolveTargetFormFields(
   });
 }
 
+export function resolveFormItemProps(prop?: string | string[], names?: string[]): string[] {
+  const props = (Array.isArray(prop) ? prop : [prop]).filter(
+    (item): item is string => typeof item === 'string' && item.length > 0
+  );
+  const uniqueProps = Array.from(new Set(props));
+  if (!names?.length) return uniqueProps;
+  return uniqueProps.filter(item => names.includes(item));
+}
+
+export function resolveFormControlProp(
+  controlProp?: string,
+  itemProp?: string | string[]
+): string | undefined {
+  if (controlProp) return controlProp;
+  const itemProps = resolveFormItemProps(itemProp);
+  return itemProps.length === 1 ? itemProps[0] : undefined;
+}
+
+export interface FormItemInitialValue {
+  exists: boolean;
+  value: unknown;
+}
+
+export type FormItemInitialValues = Map<string, FormItemInitialValue>;
+
+export function cloneFormValue<T>(value: T, seen = new WeakMap<object, unknown>()): T {
+  if (value === null || typeof value !== 'object') return value;
+
+  const cached = seen.get(value);
+  if (cached !== undefined) return cached as T;
+
+  if (value instanceof Date) return new Date(value.getTime()) as T;
+  if (value instanceof RegExp) return new RegExp(value.source, value.flags) as T;
+
+  if (Array.isArray(value)) {
+    const result = new Array(value.length) as unknown[];
+    seen.set(value, result);
+    for (let index = 0; index < value.length; index += 1) {
+      if (index in value) result[index] = cloneFormValue(value[index], seen);
+    }
+    return result as T;
+  }
+
+  if (value instanceof Map) {
+    const result = new Map<unknown, unknown>();
+    seen.set(value, result);
+    value.forEach((entryValue, entryKey) => {
+      result.set(cloneFormValue(entryKey, seen), cloneFormValue(entryValue, seen));
+    });
+    return result as T;
+  }
+
+  if (value instanceof Set) {
+    const result = new Set<unknown>();
+    seen.set(value, result);
+    value.forEach(entryValue => result.add(cloneFormValue(entryValue, seen)));
+    return result as T;
+  }
+
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype !== Object.prototype && prototype !== null) return value;
+
+  const result = Object.create(prototype) as Record<string, unknown>;
+  seen.set(value, result);
+  Object.keys(value).forEach(key => {
+    result[key] = cloneFormValue((value as Record<string, unknown>)[key], seen);
+  });
+  return result as T;
+}
+
+export function captureFormItemInitialValues(
+  model: Record<string, unknown>,
+  prop?: string | string[]
+): FormItemInitialValues {
+  const result: FormItemInitialValues = new Map();
+  resolveFormItemProps(prop).forEach(field => {
+    result.set(field, {
+      exists: Object.prototype.hasOwnProperty.call(model, field),
+      value: cloneFormValue(model[field]),
+    });
+  });
+  return result;
+}
+
+export function restoreFormItemInitialValues(
+  model: Record<string, unknown>,
+  initialValues: FormItemInitialValues,
+  names?: string[]
+) {
+  initialValues.forEach((initial, field) => {
+    if (names?.length && !names.includes(field)) return;
+    if (initial.exists) {
+      model[field] = cloneFormValue(initial.value);
+    } else {
+      delete model[field];
+    }
+  });
+}
+
+export interface RegisteredFormValidationResult {
+  errors: ValidateError[];
+  stale: boolean;
+  reports: Array<{
+    prop: string;
+    ok: boolean;
+    errors: ValidateError[] | null;
+  }>;
+  /** Restore only commits that are still owned by this validation run. */
+  rollback: () => void;
+  /** Discard rollback snapshots after all public observers accepted the run. */
+  release: () => void;
+  /** Verify that every target reservation and external form state still belongs to this run. */
+  isCurrent: () => boolean;
+}
+
+export async function validateRegisteredFormFields(options: {
+  fields: FormItemContext[];
+  model: Record<string, unknown>;
+  customValidator?: (
+    model: Record<string, unknown>
+  ) => Record<string, string> | null | Promise<Record<string, string> | null>;
+  validateOptions?: FormValidateOptions;
+  isCurrent?: () => boolean;
+}): Promise<RegisteredFormValidationResult> {
+  const names = options.validateOptions?.fields;
+  const silent = options.validateOptions?.silent === true;
+  const target = resolveTargetFormFields(options.fields, names);
+  const createResult = (
+    errors: ValidateError[],
+    reports: RegisteredFormValidationResult['reports'],
+    rollback: () => void,
+    release: () => void,
+    isCurrent: () => boolean
+  ): RegisteredFormValidationResult => {
+    const result = { errors, stale: false } as RegisteredFormValidationResult;
+    Object.defineProperties(result, {
+      reports: { value: reports },
+      rollback: { value: rollback },
+      release: { value: release },
+      isCurrent: { value: isCurrent },
+    });
+    return result;
+  };
+  const emptyResult = () =>
+    createResult(
+      [],
+      [],
+      () => undefined,
+      () => undefined,
+      () => true
+    );
+  if (!target.length) return emptyResult();
+  const reports: Array<{
+    prop: string;
+    ok: boolean;
+    errors: ValidateError[] | null;
+  }> = [];
+  const candidates = target
+    .map(field => ({
+      field,
+      props: options.customValidator
+        ? resolveFormItemProps(field.prop, names)
+        : field.getValidationProps(undefined, names),
+    }))
+    .filter(entry => entry.props.length > 0);
+  if (!candidates.length) return emptyResult();
+  const baselineGenerations = new Map(
+    candidates.map(candidate => [candidate.field, candidate.field.captureValidationGeneration()])
+  );
+  const startedGenerations = new Map<FormItemContext, number>();
+  const entries: Array<
+    (typeof candidates)[number] & {
+      generation: number;
+      errors: ValidateError[];
+    }
+  > = [];
+  const errors: ValidateError[] = [];
+  const commitTokens = new Map<FormItemContext, number>();
+  const isCurrent = () =>
+    (!options.isCurrent || options.isCurrent()) &&
+    candidates.every(candidate =>
+      candidate.field.isValidationCurrent(
+        startedGenerations.get(candidate.field) ??
+          (baselineGenerations.get(candidate.field) as number)
+      )
+    );
+  let ownershipClosed = false;
+  const rollback = () => {
+    if (ownershipClosed) return;
+    ownershipClosed = true;
+    entries.forEach(entry => {
+      const commitToken = commitTokens.get(entry.field);
+      if (commitToken !== undefined) {
+        entry.field.rollbackValidation(entry.generation, commitToken);
+      }
+    });
+  };
+  const release = () => {
+    if (ownershipClosed) return;
+    ownershipClosed = true;
+    entries.forEach(entry => {
+      const commitToken = commitTokens.get(entry.field);
+      if (commitToken !== undefined) entry.field.releaseValidation(commitToken);
+    });
+  };
+  const superseded = (): never => {
+    rollback();
+    throw new FormValidationSupersededError();
+  };
+
+  // Reserve every target before any validator starts. Reservations are silent, so a
+  // form-wide run cannot expose partially validating state while another field is pending.
+  for (const candidate of candidates) {
+    if (!isCurrent()) superseded();
+    const generation = candidate.field.beginValidation(true);
+    startedGenerations.set(candidate.field, generation);
+    entries.push({ ...candidate, generation, errors: [] });
+    if (!isCurrent()) superseded();
+  }
+
+  if (options.customValidator) {
+    let errorMap: Record<string, string>;
+    let validatorError: string | undefined;
+    try {
+      errorMap = (await options.customValidator(options.model)) || {};
+    } catch (error) {
+      errorMap = {};
+      validatorError = error instanceof Error ? error.message : String(error);
+    }
+    if (!isCurrent()) superseded();
+    entries.forEach(entry => {
+      entry.errors = validatorError
+        ? [{ field: entry.props[0], message: validatorError }]
+        : entry.props
+            .filter(prop => !!errorMap[prop])
+            .map(prop => ({ field: prop, message: errorMap[prop] }));
+      errors.push(...entry.errors);
+    });
+  } else {
+    for (const entry of entries) {
+      if (!isCurrent()) superseded();
+      try {
+        const result = await entry.field.validateGeneration(entry.generation, undefined, {
+          silent: true,
+          fields: names,
+        });
+        if (result === 'stale') superseded();
+      } catch (error: unknown) {
+        if (error instanceof FormValidationSupersededError) throw error;
+        entry.errors = normalizeValidateErrors(error);
+        errors.push(...entry.errors);
+      }
+      if (!isCurrent()) superseded();
+    }
+  }
+
+  if (!silent) {
+    for (const entry of entries) {
+      const commitToken = isCurrent()
+        ? entry.field.commitValidation(entry.generation, entry.errors)
+        : undefined;
+      if (commitToken === undefined) return superseded();
+      commitTokens.set(entry.field, commitToken);
+      if (!isCurrent()) superseded();
+      entry.props.forEach(prop => {
+        const matchedErrors = entry.errors.filter(error => error.field === prop);
+        reports.push({
+          prop,
+          ok: matchedErrors.length === 0,
+          errors: matchedErrors.length ? matchedErrors : null,
+        });
+      });
+    }
+    if (!isCurrent()) superseded();
+  }
+  return createResult(errors, reports, rollback, release, isCurrent);
+}
+
 export function resolveFormClass(options: {
   border: boolean;
   card: boolean;
+  disabled: boolean;
   customClass: unknown;
 }) {
   return [
@@ -138,17 +428,10 @@ export function resolveFormClass(options: {
     {
       'lk-form--border': options.border,
       'lk-form--card': options.card,
+      'is-disabled': options.disabled,
     },
     options.customClass,
   ];
-}
-
-export function resolveFormItemResetValue(value: unknown): unknown {
-  if (Array.isArray(value)) return [];
-  if (typeof value === 'boolean') return false;
-  if (typeof value === 'number') return 0;
-  if (value === null || value === undefined) return null;
-  return '';
 }
 
 export function resolveFormItemLabelStyle(width?: string | number): CSSProperties {

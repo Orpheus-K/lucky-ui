@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { StyleValue } from 'vue';
-import { provide, computed, inject } from 'vue';
+import { provide, computed } from 'vue';
 import type { CheckboxValue } from './checkbox.props';
 import { checkboxGroupProps, checkboxGroupEmits } from './checkbox.props';
-import { formContextKey } from '../lk-form/context';
+import { useFormField } from '../lk-form/useFormField';
 import { resolveCheckboxGroupClass, resolveCheckboxGroupToggle } from './checkbox.utils';
 
 defineOptions({ name: 'LkCheckboxGroup' });
@@ -11,22 +11,19 @@ defineOptions({ name: 'LkCheckboxGroup' });
 const props = defineProps(checkboxGroupProps);
 const emit = defineEmits(checkboxGroupEmits);
 
-const form = inject(formContextKey, null);
+const formField = useFormField({
+  prop: () => props.prop,
+  disabled: () => props.disabled,
+  validateEvent: () => props.validateEvent,
+});
+const isDisabled = formField.disabled;
 
 const LK_CHECKBOX_GROUP_KEY = Symbol.for('LkCheckboxGroup');
 
 const style = computed(() => props.customStyle as StyleValue);
 
-function updateValue(value: CheckboxValue[], changedValue: CheckboxValue, checked: boolean) {
-  emit('update:modelValue', value);
-  emit('change', value);
-  emit('item-change', changedValue, checked, value);
-  if (props.validateEvent && props.prop) {
-    form?.emitFieldChange(props.prop, value);
-  }
-}
-
-function toggleValue(name: CheckboxValue) {
+async function toggleValue(name: CheckboxValue, interaction = formField.captureInteraction()) {
+  if (!formField.isInteractionCurrent(interaction)) return;
   const result = resolveCheckboxGroupToggle({
     currentValue: props.modelValue,
     name,
@@ -38,11 +35,19 @@ function toggleValue(name: CheckboxValue) {
     return;
   }
 
-  updateValue(result.value, name, result.checked);
+  emit('update:modelValue', result.value);
+  if (!(await formField.awaitInteractionCurrent(interaction))) return;
+  emit('change', result.value);
+  if (!(await formField.awaitInteractionCurrent(interaction))) return;
+  emit('item-change', name, result.checked, result.value);
+  if (!(await formField.awaitInteractionCurrent(interaction))) return;
+  await formField.emitChange(result.value, interaction);
 }
 
 provide(LK_CHECKBOX_GROUP_KEY, {
   props,
+  disabled: isDisabled,
+  captureInteraction: formField.captureInteraction,
   toggleValue,
 });
 
@@ -55,7 +60,7 @@ const groupClass = computed(() => {
 </script>
 
 <template>
-  <view :id="id" :class="groupClass" :style="style">
+  <view :id="id" :class="groupClass" :style="style" :aria-disabled="isDisabled">
     <slot />
   </view>
 </template>

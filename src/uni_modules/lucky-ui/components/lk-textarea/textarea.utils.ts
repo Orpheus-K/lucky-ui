@@ -31,6 +31,51 @@ export function isTextareaNativeFocused(options: { focus: boolean; autofocus: bo
   return options.focus || options.autofocus;
 }
 
+export function shouldCommitTextareaBlur(options: {
+  disabled: boolean;
+  readonly: boolean;
+}): boolean {
+  return !options.disabled && !options.readonly;
+}
+
+export interface TextareaBlurController {
+  schedule: (callback: () => void) => void;
+  cancel: () => void;
+  dispose: () => void;
+}
+
+export function createTextareaBlurController(delay = 100): TextareaBlurController {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  let generation = 0;
+  let disposed = false;
+
+  function cancel() {
+    generation += 1;
+    if (timer !== undefined) {
+      clearTimeout(timer);
+      timer = undefined;
+    }
+  }
+
+  function schedule(callback: () => void) {
+    cancel();
+    if (disposed) return;
+    const currentGeneration = generation;
+    timer = setTimeout(() => {
+      timer = undefined;
+      if (disposed || currentGeneration !== generation) return;
+      callback();
+    }, delay);
+  }
+
+  function dispose() {
+    disposed = true;
+    cancel();
+  }
+
+  return { schedule, cancel, dispose };
+}
+
 export function shouldShowTextareaClear(options: {
   clearable: boolean;
   value: string;

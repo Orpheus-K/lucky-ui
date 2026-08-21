@@ -24,6 +24,10 @@ export function hasInputValue(value: unknown): boolean {
   return value !== undefined && value !== null && value !== '';
 }
 
+export function shouldCommitInputBlur(options: { disabled: boolean; readonly: boolean }): boolean {
+  return !options.disabled && !options.readonly;
+}
+
 export function resolveInputNativeState(options: { type: InputType; passwordVisible: boolean }) {
   return {
     nativeType: options.type === 'password' ? 'text' : options.type,

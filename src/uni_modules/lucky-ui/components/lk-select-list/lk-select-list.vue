@@ -2,6 +2,7 @@
 import type { StyleValue } from 'vue';
 import { computed } from 'vue';
 import LkIcon from '../lk-icon/lk-icon.vue';
+import { useFormDisabled } from '../lk-form/useFormField';
 import {
   selectListEmits,
   selectListProps,
@@ -25,12 +26,14 @@ defineOptions({ name: 'LkSelectList' });
 
 const props = defineProps(selectListProps);
 const emit = defineEmits(selectListEmits);
+const formDisabled = useFormDisabled(() => props.disabled);
+const isDisabled = formDisabled.disabled;
 
 const rootClass = computed(() => [
   ...resolveSelectListClass({
     size: props.size,
     inset: props.inset,
-    disabled: props.disabled,
+    disabled: isDisabled.value,
     bordered: props.bordered,
     selectedBg: props.selectedBg,
     selectedBorder: props.selectedBorder,
@@ -69,7 +72,7 @@ function getDescription(option: SelectListOption): string {
 function isOptionDisabled(option: SelectListOption): boolean {
   return isSelectListOptionDisabled({
     option,
-    disabled: props.disabled,
+    disabled: isDisabled.value,
     disabledKey: props.disabledKey,
   });
 }
@@ -90,7 +93,8 @@ function optionClass(option: SelectListOption) {
   });
 }
 
-function onSelect(option: SelectListOption) {
+async function onSelect(option: SelectListOption) {
+  const interaction = formDisabled.captureInteraction();
   const result = resolveSelectListSelection({
     option,
     valueKey: props.valueKey,
@@ -111,14 +115,16 @@ function onSelect(option: SelectListOption) {
 
   if (result.type === 'select') {
     emit('update:modelValue', result.value);
+    if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
     emit('change', result.value, option);
+    if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
     emit('select', option, result.selected);
   }
 }
 </script>
 
 <template>
-  <view :id="id" :class="rootClass" :style="rootStyle">
+  <view :id="id" :class="rootClass" :style="rootStyle" :aria-disabled="isDisabled">
     <view
       v-for="option in options"
       :key="String(getValue(option))"

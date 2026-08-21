@@ -5,8 +5,10 @@
   box-sizing: border-box;
 
   @include when(disabled) {
-    opacity: 0.6;
-    pointer-events: none;
+    .lk-calendar-picker__trigger,
+    .lk-calendar-picker__reset {
+      opacity: 0.6;
+    }
   }
 
   @include e(trigger) {

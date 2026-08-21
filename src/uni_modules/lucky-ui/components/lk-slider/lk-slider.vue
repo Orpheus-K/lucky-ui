@@ -3,13 +3,13 @@ import {
   ref,
   watch,
   computed,
-  inject,
   getCurrentInstance,
+  onBeforeUnmount,
   onMounted,
   nextTick,
   type StyleValue,
 } from 'vue';
-import { formContextKey } from '../lk-form/context';
+import { useFormField } from '../lk-form/useFormField';
 import type { SliderValue } from './slider.props';
 import { sliderProps, sliderEmits } from './slider.props';
 import {
@@ -25,7 +25,6 @@ import {
   resolveSliderThumbStyle,
   resolveSliderTrackStyle,
   resolveSliderUpdate,
-  shouldValidateSliderField,
   type SliderPointerEvent,
 } from './slider.utils';
 
@@ -33,11 +32,28 @@ defineOptions({ name: 'LkSlider' });
 
 const props = defineProps(sliderProps);
 const emit = defineEmits(sliderEmits);
-const form = inject(formContextKey, null);
+const formField = useFormField({
+  prop: () => props.prop,
+  disabled: () => props.disabled,
+  validateEvent: () => props.validateEvent,
+});
+const isDisabled = formField.disabled;
 
 const currentVal = ref<number[]>([]);
 const dragging = ref(false);
 const draggingIndex = ref(-1);
+let dragInteraction: number | null = null;
+let updateGeneration = 0;
+let activeDragGeneration: number | null = null;
+
+function beginUpdate() {
+  updateGeneration += 1;
+  return updateGeneration;
+}
+
+function ownsUpdate(generation: number) {
+  return generation === updateGeneration;
+}
 
 const instance = getCurrentInstance();
 const trackId = `lk-slider-track-${instance?.uid ?? Math.random().toString(36).slice(2)}`;
@@ -84,7 +100,7 @@ const barStyle = computed(() => {
 const rootClass = computed(() => [
   ...resolveSliderRootClass({
     size: props.size,
-    disabled: props.disabled,
+    disabled: isDisabled.value,
     dragging: dragging.value,
     customClass: props.customClass,
   }),
@@ -122,12 +138,22 @@ const blockCustomStyle = computed(() => {
   });
 });
 
-function measureTrack(): Promise<{ left: number; width: number }> {
+function measureTrack(
+  interaction = formField.captureInteraction()
+): Promise<{ left: number; width: number }> {
   return new Promise(resolve => {
+    if (!formField.isInteractionCurrent(interaction)) {
+      resolve(trackRect.value);
+      return;
+    }
     const q = uni.createSelectorQuery();
     if (instance?.proxy) q.in(instance.proxy);
     q.select(`#${trackId}`)
       .boundingClientRect(data => {
+        if (!formField.isInteractionCurrent(interaction)) {
+          resolve(trackRect.value);
+          return;
+        }
         const node = Array.isArray(data) ? data[0] : data;
         trackRect.value = { left: node?.left ?? 0, width: node?.width ?? 0 };
         resolve(trackRect.value);
@@ -151,16 +177,26 @@ function emitValue(): SliderValue {
   });
 }
 
-function commitChange() {
+async function commitChange(
+  interaction: number,
+  ownsCommit: () => boolean = () => true
+): Promise<SliderValue | null> {
+  if (!ownsCommit() || !formField.isInteractionCurrent(interaction)) return null;
   const finalVal = emitValue();
   emit('change', finalVal);
-  if (shouldValidateSliderField({ validateEvent: props.validateEvent, prop: props.prop })) {
-    form?.emitFieldChange(props.prop, finalVal);
-  }
+  if (!(await formField.awaitInteractionCurrent(interaction)) || !ownsCommit()) return null;
+  await formField.emitChange(finalVal, interaction);
+  if (!(await formField.awaitInteractionCurrent(interaction)) || !ownsCommit()) return null;
   return finalVal;
 }
 
-function updateValue(clientX: number, isClick = false): SliderValue | null {
+async function updateValue(
+  clientX: number,
+  isClick: boolean,
+  interaction: number,
+  ownsUpdate: () => boolean = () => true
+): Promise<SliderValue | null> {
+  if (!ownsUpdate() || !formField.isInteractionCurrent(interaction)) return null;
   const result = resolveSliderUpdate({
     clientX,
     rect: trackRect.value,
@@ -181,54 +217,126 @@ function updateValue(clientX: number, isClick = false): SliderValue | null {
   if (result.changed) {
     currentVal.value = result.values;
     emit('update:modelValue', result.emitValue);
+    const interactionCurrent = await formField.awaitInteractionCurrent(interaction);
+    if (!ownsUpdate()) return null;
+    if (!interactionCurrent) {
+      initValue(props.modelValue);
+      return null;
+    }
     emit('input', result.emitValue);
+    if (!(await formField.awaitInteractionCurrent(interaction)) || !ownsUpdate()) return null;
   }
 
   return result.emitValue;
 }
 
 async function onTouchStart(e: Event | SliderPointerEvent) {
-  if (props.disabled) return;
-  await measureTrack();
+  if (isDisabled.value) return;
+  const generation = beginUpdate();
+  activeDragGeneration = generation;
+  const interaction = formField.captureInteraction();
+  await measureTrack(interaction);
+  function ownsDrag() {
+    return activeDragGeneration === generation && ownsUpdate(generation);
+  }
+  if (!ownsDrag() || !formField.isInteractionCurrent(interaction)) return;
+  dragInteraction = interaction;
   dragging.value = true;
   const clientX = getPointX(e);
-  updateValue(clientX, true);
+  if ((await updateValue(clientX, true, interaction, ownsDrag)) === null) return;
+  if (!ownsDrag() || !formField.isInteractionCurrent(interaction)) return;
   emit('dragstart', emitValue(), draggingIndex.value, e);
 }
 
 function onTouchMove(e: Event | SliderPointerEvent) {
-  if (props.disabled || !dragging.value) return;
+  if (isDisabled.value || !dragging.value || dragInteraction === null) return;
   const clientX = getPointX(e);
-  updateValue(clientX);
+  const generation = activeDragGeneration;
+  if (generation === null) return;
+  void updateValue(
+    clientX,
+    false,
+    dragInteraction,
+    () => activeDragGeneration === generation && ownsUpdate(generation)
+  );
 }
 
-function onTouchEnd(e?: Event | SliderPointerEvent) {
-  if (props.disabled || !dragging.value) return;
+async function onTouchEnd(e?: Event | SliderPointerEvent) {
+  if (isDisabled.value || !dragging.value) {
+    if (activeDragGeneration !== null && ownsUpdate(activeDragGeneration)) beginUpdate();
+    activeDragGeneration = null;
+    dragging.value = false;
+    draggingIndex.value = -1;
+    dragInteraction = null;
+    return;
+  }
+  const generation = activeDragGeneration;
+  const interaction = dragInteraction;
   const index = draggingIndex.value;
+  activeDragGeneration = null;
   dragging.value = false;
   draggingIndex.value = -1;
-  const finalVal = commitChange();
+  dragInteraction = null;
+  if (interaction === null || generation === null) return;
+  const commitGeneration = generation;
+  function ownsCommit() {
+    return ownsUpdate(commitGeneration);
+  }
+  const finalVal = await commitChange(interaction, ownsCommit);
+  if (finalVal === null || !ownsCommit() || !formField.isInteractionCurrent(interaction)) return;
   emit('dragend', finalVal, index, e);
+  if (!(await formField.awaitInteractionCurrent(interaction)) || !ownsCommit()) return;
   emit('drag-release', finalVal);
 }
 
 async function onTrackClick(e: Event | SliderPointerEvent) {
-  if (props.disabled || dragging.value) return;
-  if (trackRect.value.width <= 0) await measureTrack();
-  const clientX = getPointX(e);
-  const nextValue = updateValue(clientX, true);
-  if (nextValue !== null) {
-    emit('click', nextValue, e);
-    commitChange();
+  if (isDisabled.value || dragging.value) return;
+  const generation = beginUpdate();
+  activeDragGeneration = null;
+  const interaction = formField.captureInteraction();
+  if (trackRect.value.width <= 0) await measureTrack(interaction);
+  function ownsClick() {
+    return ownsUpdate(generation);
   }
-  draggingIndex.value = -1;
+  if (!ownsClick() || !formField.isInteractionCurrent(interaction)) return;
+  const clientX = getPointX(e);
+  const nextValue = await updateValue(clientX, true, interaction, ownsClick);
+  if (nextValue !== null && ownsClick()) {
+    emit('click', nextValue, e);
+    if (!(await formField.awaitInteractionCurrent(interaction)) || !ownsClick()) return;
+    await commitChange(interaction, ownsClick);
+  }
+  if (ownsClick()) draggingIndex.value = -1;
 }
 
-onMounted(() => nextTick(() => measureTrack()));
+onMounted(() => {
+  const interaction = formField.captureInteraction();
+  void nextTick(() => {
+    if (formField.isInteractionCurrent(interaction)) void measureTrack(interaction);
+  });
+});
+
+watch(
+  isDisabled,
+  disabled => {
+    if (!disabled) return;
+    beginUpdate();
+    activeDragGeneration = null;
+    dragging.value = false;
+    draggingIndex.value = -1;
+    dragInteraction = null;
+  },
+  { flush: 'sync' }
+);
+
+onBeforeUnmount(() => {
+  beginUpdate();
+  activeDragGeneration = null;
+});
 </script>
 
 <template>
-  <view :id="id" :class="rootClass" :style="rootStyle">
+  <view :id="id" :class="rootClass" :style="rootStyle" :aria-disabled="isDisabled">
     <view
       :id="trackId"
       class="lk-slider__track-container"

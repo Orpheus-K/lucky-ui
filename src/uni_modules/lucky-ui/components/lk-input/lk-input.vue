@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { StyleValue } from 'vue';
-import { ref, watch, computed, inject, useSlots } from 'vue';
-import { formContextKey, formItemContextKey } from '../lk-form/context';
+import { ref, watch, computed, onBeforeUnmount, useSlots } from 'vue';
+import { useFormField } from '../lk-form/useFormField';
 import type { InputEventPayload, InputValue } from './input.props';
 import { inputProps, inputEmits } from './input.props';
 import LkIcon from '../lk-icon/lk-icon.vue';
@@ -13,6 +13,7 @@ import {
   resolveInputClass,
   resolveInputCount,
   resolveInputNativeState,
+  shouldCommitInputBlur,
   shouldShowPasswordToggle,
   shouldShowSuffix,
   shouldShowTrailingBalance,
@@ -24,12 +25,28 @@ const props = defineProps(inputProps);
 const emit = defineEmits(inputEmits);
 const slots = useSlots();
 
-const form = inject(formContextKey, null);
-const formItem = inject(formItemContextKey, null);
-
 const inner = ref<InputValue>(props.modelValue);
 const composing = ref(false);
+let compositionInteraction: number | null = null;
+let compositionInputValue: InputValue | null = null;
 const passwordVisible = ref(false);
+const formField = useFormField({
+  prop: () => props.prop,
+  disabled: () => props.disabled,
+  validateEvent: () => props.validateEvent,
+  inheritFormItemProp: true,
+  interactionLocked: () => props.readonly || props.fake,
+});
+const isDisabled = formField.disabled;
+const resolvedFormProp = formField.prop;
+const isNativeDisabled = computed(() => {
+  // H5 keeps readonly text focusable/selectable; mini-programs need disabled to suppress keyboards.
+  let disabled = isDisabled.value || props.readonly;
+  // #ifdef H5
+  disabled = isDisabled.value;
+  // #endif
+  return disabled;
+});
 
 const nativeState = computed(() =>
   resolveInputNativeState({
@@ -42,51 +59,101 @@ const nativePassword = computed(() => nativeState.value.nativePassword);
 
 const style = computed(() => props.customStyle as StyleValue);
 const isFocused = computed(() => props.focus || props.autofocus);
-const hasValidationError = computed(() => formItem?.validateStatus?.value === 'error');
+const hasValidationError = formField.hasError;
 
-function commit(val: InputValue, change = false) {
+async function commit(
+  val: InputValue,
+  change = false,
+  interaction = formField.captureInteraction()
+) {
+  if (!formField.isInteractionCurrent(interaction) || props.readonly || props.fake) return;
   inner.value = val;
   emit('update:modelValue', val);
+  if (!(await formField.awaitInteractionCurrent(interaction))) return;
   emit('input', val);
+  if (!(await formField.awaitInteractionCurrent(interaction))) return;
   if (change) {
     emit('change', val);
-    if (props.prop) form?.emitFieldChange(props.prop, val);
+    if (!(await formField.awaitInteractionCurrent(interaction))) return;
   }
+  await formField.emitChange(val, interaction);
 }
 
-function onInput(e: InputEventPayload) {
+async function onInput(e: InputEventPayload, interaction = formField.captureInteraction()) {
+  if (!formField.isInteractionCurrent(interaction) || props.readonly || props.fake) return;
   const v = applyInputMaxlength(readInputValue(e), props.maxlength);
-  if (!composing.value) commit(v, false);
+  if (composing.value) {
+    if (interaction === compositionInteraction) compositionInputValue = v;
+    return;
+  }
+  await commit(v, false, interaction);
 }
-function onBlur(e: InputEventPayload) {
+async function onBlur(e: InputEventPayload) {
+  const interaction = formField.captureInteraction();
   emit('blur', e);
+  if (!(await formField.awaitInteractionCurrent(interaction))) return;
+  if (!shouldCommitInputBlur({ disabled: isDisabled.value, readonly: props.readonly })) return;
   emit('change', inner.value);
-  if (props.prop) form?.emitFieldBlur(props.prop);
+  if (!(await formField.awaitInteractionCurrent(interaction))) return;
+  await formField.emitBlur(interaction);
 }
 function onFocus(e: InputEventPayload) {
+  if (isDisabled.value) return;
   emit('focus', e);
 }
 function onConfirm(e: InputEventPayload) {
+  if (isDisabled.value) return;
   emit('confirm', e);
 }
 function onKeyboardHeightChange(e: InputEventPayload) {
+  if (isDisabled.value) return;
   emit('keyboardheightchange', e);
 }
-function onCompositionStart(e: InputEventPayload) {
+async function onCompositionStart(e: InputEventPayload) {
+  if (isDisabled.value || props.readonly || props.fake) return;
+  const interaction = formField.captureInteraction();
+  compositionInteraction = interaction;
+  compositionInputValue = null;
   composing.value = true;
   emit('compositionstart', e);
+  if (!(await formField.awaitInteractionCurrent(interaction))) {
+    if (compositionInteraction === interaction) compositionInteraction = null;
+    compositionInputValue = null;
+    composing.value = false;
+  }
 }
 function onCompositionUpdate(e: InputEventPayload) {
+  if (
+    compositionInteraction === null ||
+    !formField.isInteractionCurrent(compositionInteraction) ||
+    !composing.value
+  )
+    return;
   emit('compositionupdate', e);
 }
-function onCompositionEnd(e: InputEventPayload) {
+async function onCompositionEnd(e: InputEventPayload) {
+  const interaction = compositionInteraction;
+  if (
+    interaction === null ||
+    !composing.value ||
+    props.readonly ||
+    props.fake ||
+    !formField.isInteractionCurrent(interaction)
+  )
+    return;
+  const value = compositionInputValue ?? applyInputMaxlength(readInputValue(e), props.maxlength);
+  compositionInteraction = null;
+  compositionInputValue = null;
   composing.value = false;
   emit('compositionend', e);
-  onInput(e);
+  if (!(await formField.awaitInteractionCurrent(interaction))) return;
+  await commit(value, false, interaction);
 }
-function clear() {
-  if (props.disabled || props.readonly || !hasInputValue(inner.value)) return;
-  commit('', true);
+async function clear() {
+  if (isDisabled.value || props.readonly || !hasInputValue(inner.value)) return;
+  const interaction = formField.captureInteraction();
+  await commit('', true, interaction);
+  if (!(await formField.awaitInteractionCurrent(interaction))) return;
   emit('clear');
 }
 
@@ -96,7 +163,7 @@ function togglePassword() {
 }
 
 function onFakeClick(e: unknown) {
-  if (props.disabled) return;
+  if (isDisabled.value) return;
   emit('click', e);
 }
 
@@ -112,7 +179,7 @@ const count = computed(() => {
 const classes = computed(() => [
   ...resolveInputClass({
     size: props.size,
-    disabled: props.disabled,
+    disabled: isDisabled.value,
     readonly: props.readonly,
     fake: props.fake,
     value: props.fake ? props.fakeText : inner.value,
@@ -134,7 +201,7 @@ const showPasswordToggle = computed(() => {
   return shouldShowPasswordToggle({
     showPassword: props.showPassword,
     type: props.type,
-    disabled: props.disabled,
+    disabled: isDisabled.value,
     readonly: props.readonly,
     fake: props.fake,
   });
@@ -162,7 +229,7 @@ const showTrailingBalance = computed(() =>
 const showClear = computed(
   () =>
     props.clearable &&
-    !props.disabled &&
+    !isDisabled.value &&
     !props.readonly &&
     hasInputValue(inner.value) &&
     !props.fake
@@ -172,10 +239,44 @@ watch(
   () => props.modelValue,
   v => (inner.value = v)
 );
+watch(
+  isDisabled,
+  disabled => {
+    if (disabled) {
+      composing.value = false;
+      compositionInteraction = null;
+      compositionInputValue = null;
+    }
+  },
+  { flush: 'sync' }
+);
+watch(
+  () => props.readonly,
+  readonly => {
+    if (!readonly) return;
+    composing.value = false;
+    compositionInteraction = null;
+    compositionInputValue = null;
+  },
+  { flush: 'sync' }
+);
+
+onBeforeUnmount(() => {
+  composing.value = false;
+  compositionInteraction = null;
+  compositionInputValue = null;
+});
 </script>
 
 <template>
-  <view :id="id" :class="classes" :style="style" @tap="fake ? onFakeClick($event) : undefined">
+  <view
+    :id="id"
+    :class="classes"
+    :style="style"
+    :data-form-prop="resolvedFormProp || ''"
+    :data-disabled="isDisabled ? 'true' : 'false'"
+    @tap="fake ? onFakeClick($event) : undefined"
+  >
     <view v-if="$slots.prefix || prefixIcon" class="lk-input__prefix">
       <slot name="prefix">
         <lk-icon v-if="prefixIcon" :name="prefixIcon" size="36" />
@@ -203,7 +304,7 @@ watch(
         :placeholder-style="placeholderStyle"
         :placeholder-class="placeholderClass"
         :maxlength="maxlength > -1 ? maxlength : 140000"
-        :disabled="disabled"
+        :disabled="isNativeDisabled"
         :readonly="readonly"
         :focus="isFocused"
         :confirm-type="confirmType"
@@ -216,7 +317,7 @@ watch(
         :hold-keyboard="holdKeyboard"
         :inputmode="inputmode"
         :ignore-composition-event="ignoreCompositionEvent"
-        :aria-disabled="disabled"
+        :aria-disabled="isDisabled"
         :aria-readonly="readonly"
         :aria-label="placeholder"
         @input="onInput"

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { StyleValue } from 'vue';
-import { computed, ref, inject } from 'vue';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { switchProps, switchEmits } from './switch.props';
-import { formContextKey } from '../lk-form/context';
+import { useFormField } from '../lk-form/useFormField';
 import {
   canToggleSwitch,
   isSwitchChecked,
@@ -10,7 +10,6 @@ import {
   resolveSwitchNextValue,
   resolveSwitchPromptText,
   resolveSwitchStyle,
-  shouldValidateSwitchField,
 } from './switch.utils';
 
 defineOptions({ name: 'LkSwitch' });
@@ -18,7 +17,12 @@ defineOptions({ name: 'LkSwitch' });
 const props = defineProps(switchProps);
 const emit = defineEmits(switchEmits);
 
-const form = inject(formContextKey, null);
+const formField = useFormField({
+  prop: () => props.prop,
+  disabled: () => props.disabled,
+  validateEvent: () => props.validateEvent,
+});
+const isDisabled = formField.disabled;
 
 const isChecked = computed(() =>
   isSwitchChecked({
@@ -28,6 +32,20 @@ const isChecked = computed(() =>
 );
 
 const changing = ref(false);
+let changeGeneration = 0;
+let changingGeneration: number | null = null;
+
+function isChangeCurrent(generation: number, interaction: number) {
+  return generation === changeGeneration && formField.isInteractionCurrent(interaction);
+}
+
+async function awaitChangeCurrent(generation: number, interaction: number) {
+  return (
+    generation === changeGeneration &&
+    (await formField.awaitInteractionCurrent(interaction)) &&
+    generation === changeGeneration
+  );
+}
 
 const rootStyle = computed(() => {
   return resolveSwitchStyle({
@@ -51,17 +69,18 @@ const classes = computed(() =>
     customClass: props.customClass,
     size: props.size,
     checked: isChecked.value,
-    disabled: props.disabled,
+    disabled: isDisabled.value,
     loading: props.loading,
     changing: changing.value,
     inlinePrompt: props.inlinePrompt,
   })
 );
 
-async function toggle() {
+async function toggle(interaction: number, generation: number) {
+  if (!isChangeCurrent(generation, interaction)) return;
   if (
     !canToggleSwitch({
-      disabled: props.disabled,
+      disabled: isDisabled.value,
       loading: props.loading,
       changing: changing.value,
     })
@@ -74,6 +93,7 @@ async function toggle() {
     inactiveValue: props.inactiveValue,
   });
   emit('before-change', nextValue);
+  if (!(await awaitChangeCurrent(generation, interaction))) return;
 
   // 轻震动反馈（只在支持的平台上触发）
   if (props.hapticFeedback) {
@@ -86,41 +106,68 @@ async function toggle() {
 
   // beforeChange 拦截
   if (props.beforeChange) {
+    changingGeneration = generation;
     changing.value = true;
     try {
       const allowed = await props.beforeChange(nextValue);
+      if (!(await awaitChangeCurrent(generation, interaction))) return;
       if (!allowed) {
         emit('change-cancel', nextValue, 'before-change');
         return;
       }
     } catch {
+      if (!(await awaitChangeCurrent(generation, interaction))) return;
       emit('change-cancel', nextValue, 'error');
       return;
     } finally {
-      changing.value = false;
+      if (changingGeneration === generation) {
+        changingGeneration = null;
+        changing.value = false;
+      }
     }
   }
 
-  emit('update:modelValue', nextValue);
-  emit('change', nextValue);
+  if (!isChangeCurrent(generation, interaction)) return;
 
-  if (shouldValidateSwitchField({ validateEvent: props.validateEvent, prop: props.prop })) {
-    form?.emitFieldChange(props.prop, nextValue);
-  }
+  emit('update:modelValue', nextValue);
+  if (!(await awaitChangeCurrent(generation, interaction))) return;
+  emit('change', nextValue);
+  if (!(await awaitChangeCurrent(generation, interaction))) return;
+
+  await formField.emitChange(nextValue, interaction);
 }
 
-function onClick(e: unknown) {
+async function onClick(e: unknown) {
   if (
     !canToggleSwitch({
-      disabled: props.disabled,
+      disabled: isDisabled.value,
       loading: props.loading,
       changing: changing.value,
     })
   )
     return;
+  const generation = ++changeGeneration;
+  const interaction = formField.captureInteraction();
   emit('click', e, isChecked.value);
-  toggle();
+  if (!(await awaitChangeCurrent(generation, interaction))) return;
+  await toggle(interaction, generation);
 }
+
+watch(
+  isDisabled,
+  disabled => {
+    if (!disabled) return;
+    changeGeneration += 1;
+    changingGeneration = null;
+    changing.value = false;
+  },
+  { flush: 'sync' }
+);
+
+onBeforeUnmount(() => {
+  changeGeneration += 1;
+  changingGeneration = null;
+});
 </script>
 
 <template>
@@ -130,6 +177,7 @@ function onClick(e: unknown) {
     :class="classes"
     :style="rootStyle"
     :aria-checked="isChecked"
+    :aria-disabled="isDisabled"
     role="switch"
     @tap="onClick"
   >
