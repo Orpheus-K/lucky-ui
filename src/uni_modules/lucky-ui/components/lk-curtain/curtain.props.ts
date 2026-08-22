@@ -101,6 +101,14 @@ export const curtainProps = {
    */
   link: LkProp.string(''),
   /**
+   * 返回页面层数，仅在 linkType="navigateBack" 时生效
+   */
+  backDelta: {
+    type: Number,
+    default: 1,
+    validator: (value: number) => Number.isInteger(value) && value > 0,
+  },
+  /**
    * 小程序端复制链接成功提示
    */
   copySuccessText: LkProp.string(''),

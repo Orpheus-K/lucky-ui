@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { StyleValue } from 'vue';
-import { computed, useSlots } from 'vue';
+import { computed, inject, useSlots } from 'vue';
 
 import LkOverlay from '../lk-overlay/lk-overlay.vue';
 import LkIcon from '../lk-icon/lk-icon.vue';
@@ -9,7 +9,11 @@ import { useTransition } from '@/uni_modules/lucky-ui/composables/useTransition'
 import { useLocale } from '../../composables/useLocale';
 import { curtainProps, curtainEmits } from './curtain.props';
 import {
+  type CurtainNavigationRuntime,
+  curtainNavigationDispatchObserverKey,
   isCurtainHttpLink,
+  executeCurtainNavigation,
+  resolveCurtainNavigationAction,
   resolveCurtainCloseStyle,
   resolveCurtainContentStyle,
   resolveCurtainCopySuccessText,
@@ -18,7 +22,6 @@ import {
   resolveCurtainTransitionConfig,
   resolveCurtainWidth,
   shouldCloseCurtainOnOverlay,
-  shouldNavigateCurtainLink,
 } from './curtain.utils';
 
 defineOptions({ name: 'LkCurtain' });
@@ -28,6 +31,15 @@ const emit = defineEmits(curtainEmits);
 const { t } = useLocale('curtain');
 
 const slots = useSlots();
+const navigationDispatchObserver = inject(curtainNavigationDispatchObserverKey, undefined);
+
+const navigationRuntime: CurtainNavigationRuntime = {
+  navigateTo: options => uni.navigateTo(options),
+  redirectTo: options => uni.redirectTo(options),
+  reLaunch: options => uni.reLaunch(options),
+  switchTab: options => uni.switchTab(options),
+  navigateBack: options => uni.navigateBack(options),
+};
 
 const widthStr = computed(() => resolveCurtainWidth(props.width));
 const heightStr = computed(() => resolveCurtainHeight(props.height));
@@ -84,13 +96,23 @@ function onClose() {
 
 function onClick() {
   emit('click');
-  if (!shouldNavigateCurtainLink(props.link)) return;
+  const navigation = resolveCurtainNavigationAction({
+    linkType: props.linkType,
+    link: props.link,
+    backDelta: props.backDelta,
+  });
+  if (!navigation) return;
 
-  const isHttp = isCurtainHttpLink(props.link);
+  if (navigation.type === 'navigateBack') {
+    executeCurtainNavigation(navigation, navigationRuntime, navigationDispatchObserver);
+    return;
+  }
+
+  const isHttp = isCurtainHttpLink(navigation.options.url);
 
   // #ifdef H5
   if (isHttp) {
-    window.location.href = props.link;
+    window.location.href = navigation.options.url;
     return;
   }
   // #endif
@@ -100,7 +122,7 @@ function onClick() {
     const runtime = (globalThis as { plus?: { runtime?: { openURL?: (url: string) => void } } })
       .plus?.runtime;
     if (runtime && typeof runtime.openURL === 'function') {
-      runtime.openURL(props.link);
+      runtime.openURL(navigation.options.url);
       return;
     }
   }
@@ -108,18 +130,13 @@ function onClick() {
 
   // #ifdef MP
   if (isHttp) {
-    uni.setClipboardData({ data: props.link });
+    uni.setClipboardData({ data: navigation.options.url });
     uni.showToast({ title: resolvedCopySuccessText.value, icon: 'none' });
     return;
   }
   // #endif
 
-  const navFn = (uni as unknown as Record<string, (...args: unknown[]) => unknown>)[props.linkType];
-  if (typeof navFn === 'function') {
-    navFn({
-      url: props.link,
-    });
-  }
+  executeCurtainNavigation(navigation, navigationRuntime, navigationDispatchObserver);
 }
 </script>
 

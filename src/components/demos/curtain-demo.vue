@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { computed, provide, ref } from 'vue';
 import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.vue';
 import LkChoice from '@/uni_modules/lucky-ui/components/lk-choice/lk-choice.vue';
 import type { CurtainClosePosition } from '@/uni_modules/lucky-ui/components/lk-curtain/curtain.props';
+import {
+  curtainNavigationDispatchObserverKey,
+  type CurtainNavigationAction,
+} from '@/uni_modules/lucky-ui/components/lk-curtain/curtain.utils';
 
 // 基础展示
 const showBasic = ref(false);
@@ -26,6 +30,49 @@ const showOverlayClose = ref(false);
 
 // 自定义内容 (插槽)
 const showCustom = ref(false);
+
+// 返回导航协议探针
+const showNavigateBack = ref(false);
+const showNavigateForward = ref(false);
+const navigationClickCount = ref(0);
+const navigationProbeStorageKey = 'lucky-ui:curtain-navigation-probe';
+
+interface CurtainNavigationProbe {
+  calls: CurtainNavigationAction[];
+}
+
+function readNavigationProbe(): CurtainNavigationProbe {
+  const stored = uni.getStorageSync(navigationProbeStorageKey) as
+    | CurtainNavigationProbe
+    | undefined;
+  return stored && Array.isArray(stored.calls) ? stored : { calls: [] };
+}
+
+const navigationProbe = ref<CurtainNavigationProbe>(readNavigationProbe());
+const navigationCallsJson = computed(() => JSON.stringify(navigationProbe.value.calls));
+
+provide(curtainNavigationDispatchObserverKey, action => {
+  const current = readNavigationProbe();
+  const next: CurtainNavigationProbe = {
+    calls: [...current.calls, action],
+  };
+  uni.setStorageSync(navigationProbeStorageKey, next);
+  navigationProbe.value = next;
+});
+
+function prepareNavigationStack() {
+  const emptyProbe: CurtainNavigationProbe = { calls: [] };
+  uni.setStorageSync(navigationProbeStorageKey, emptyProbe);
+  navigationProbe.value = emptyProbe;
+  navigationClickCount.value = 0;
+  uni.navigateTo({
+    url: '/pages_sub/component-detail/index?name=curtain&curtainNavigationDepth=2',
+  });
+}
+
+const onNavigateBackClick = () => {
+  navigationClickCount.value += 1;
+};
 
 /**
  * 这里的点击事件在小程序端需要注意：
@@ -105,6 +152,46 @@ const onReceive = () => {
         />
       </demo-block>
 
+      <demo-block title="返回导航">
+        <view
+          id="curtain-navigation-probe"
+          class="demo-p"
+          :data-click-count="String(navigationClickCount)"
+          :data-navigation-call-count="String(navigationProbe.calls.length)"
+          :data-navigation-calls="navigationCallsJson"
+        >
+          三层页面栈中，返回幕帘应只调用一次 navigateBack({ delta: 2 })；普通前进跳转仍应只传 url。
+        </view>
+        <lk-button id="curtain-prepare-navigation-stack" block @click="prepareNavigationStack">
+          准备三层页面栈
+        </lk-button>
+        <lk-button id="curtain-open-navigation" block @click="showNavigateBack = true">
+          显示返回幕帘
+        </lk-button>
+        <lk-curtain
+          v-model="showNavigateBack"
+          link-type="navigateBack"
+          :back-delta="2"
+          width="520rpx"
+          height="320rpx"
+          @click="onNavigateBackClick"
+        >
+          <view id="curtain-navigate-back-target" class="navigation-card">返回上一页</view>
+        </lk-curtain>
+        <lk-button id="curtain-open-forward-navigation" block @click="showNavigateForward = true">
+          显示前进幕帘
+        </lk-button>
+        <lk-curtain
+          v-model="showNavigateForward"
+          link="/pages_sub/component-detail/index?name=button"
+          link-type="navigateTo"
+          width="520rpx"
+          height="320rpx"
+        >
+          <view id="curtain-navigate-forward-target" class="navigation-card">前往 Button</view>
+        </lk-curtain>
+      </demo-block>
+
       <!-- 自定义内容 -->
       <demo-block title="自定义插槽内容">
         <view class="demo-p">使用默认插槽实现高度自定义的营销弹窗。</view>
@@ -168,6 +255,17 @@ const onReceive = () => {
   font-size: 26rpx;
   color: test.$test-text-secondary;
   margin-bottom: 20rpx;
+}
+
+.navigation-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--lk-color-white);
+  background: var(--lk-brand-600);
+  border-radius: var(--lk-radius-lg);
 }
 
 /* 自定义优惠券卡片样式 */
