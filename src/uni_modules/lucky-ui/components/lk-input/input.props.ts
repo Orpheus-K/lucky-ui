@@ -129,6 +129,9 @@ export const inputProps = {
   /** 表单字段名，用于表单验证联动 */
   prop: LkProp.string(''),
 
+  /** Whether value and blur events should trigger Form validation. */
+  validateEvent: LkProp.boolean(true),
+
   /** 是否自动聚焦 */
   autofocus: LkProp.boolean(false),
 

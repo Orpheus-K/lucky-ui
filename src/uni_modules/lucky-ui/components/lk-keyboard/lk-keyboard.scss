@@ -9,6 +9,13 @@
   background: var(--lk-keyboard-bg);
   color: var(--lk-keyboard-text);
 
+  @include when(disabled) {
+    .lk-keyboard__body,
+    .lk-keyboard__done {
+      opacity: 0.5;
+    }
+  }
+
   @include e(header) {
     display: flex;
     align-items: center;

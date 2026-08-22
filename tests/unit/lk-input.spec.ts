@@ -7,6 +7,7 @@ import {
   resolveInputClass,
   resolveInputCount,
   resolveInputNativeState,
+  shouldCommitInputBlur,
   shouldShowPasswordToggle,
   shouldShowSuffix,
   shouldShowTrailingBalance,
@@ -36,34 +37,52 @@ describe('lk-input value and display rules', () => {
     expect(hasInputValue(undefined)).toBe(false);
   });
 
+  it('does not commit change or form blur for readonly and disabled blur', () => {
+    expect(shouldCommitInputBlur({ disabled: false, readonly: false })).toBe(true);
+    expect(shouldCommitInputBlur({ disabled: false, readonly: true })).toBe(false);
+    expect(shouldCommitInputBlur({ disabled: true, readonly: false })).toBe(false);
+  });
+
   it('resolves native password state for cross-platform input props', () => {
-    expect(resolveInputNativeState({ type: 'password', passwordVisible: false }))
-      .toEqual({ nativeType: 'text', nativePassword: true });
-    expect(resolveInputNativeState({ type: 'password', passwordVisible: true }))
-      .toEqual({ nativeType: 'text', nativePassword: false });
-    expect(resolveInputNativeState({ type: 'number', passwordVisible: false }))
-      .toEqual({ nativeType: 'number', nativePassword: false });
+    expect(resolveInputNativeState({ type: 'password', passwordVisible: false })).toEqual({
+      nativeType: 'text',
+      nativePassword: true,
+    });
+    expect(resolveInputNativeState({ type: 'password', passwordVisible: true })).toEqual({
+      nativeType: 'text',
+      nativePassword: false,
+    });
+    expect(resolveInputNativeState({ type: 'number', passwordVisible: false })).toEqual({
+      nativeType: 'number',
+      nativePassword: false,
+    });
   });
 
   it('builds count text from showCount and showWordLimit aliases', () => {
-    expect(resolveInputCount({
-      value: 'hello',
-      maxlength: 10,
-      showCount: false,
-      showWordLimit: true,
-    })).toBe('5/10');
-    expect(resolveInputCount({
-      value: 123,
-      maxlength: -1,
-      showCount: true,
-      showWordLimit: false,
-    })).toBe('3');
-    expect(resolveInputCount({
-      value: 'hidden',
-      maxlength: 10,
-      showCount: false,
-      showWordLimit: false,
-    })).toBe('');
+    expect(
+      resolveInputCount({
+        value: 'hello',
+        maxlength: 10,
+        showCount: false,
+        showWordLimit: true,
+      })
+    ).toBe('5/10');
+    expect(
+      resolveInputCount({
+        value: 123,
+        maxlength: -1,
+        showCount: true,
+        showWordLimit: false,
+      })
+    ).toBe('3');
+    expect(
+      resolveInputCount({
+        value: 'hidden',
+        maxlength: 10,
+        showCount: false,
+        showWordLimit: false,
+      })
+    ).toBe('');
   });
 
   it('prioritizes password toggle over suffix content', () => {
@@ -76,59 +95,69 @@ describe('lk-input value and display rules', () => {
     });
 
     expect(passwordToggle).toBe(true);
-    expect(shouldShowPasswordToggle({
-      showPassword: true,
-      type: 'password',
-      disabled: true,
-      readonly: false,
-      fake: false,
-    })).toBe(false);
-    expect(shouldShowSuffix({
-      hasSuffixSlot: true,
-      suffixIcon: 'calendar-fill',
-      showPasswordToggle: passwordToggle,
-    })).toBe(false);
+    expect(
+      shouldShowPasswordToggle({
+        showPassword: true,
+        type: 'password',
+        disabled: true,
+        readonly: false,
+        fake: false,
+      })
+    ).toBe(false);
+    expect(
+      shouldShowSuffix({
+        hasSuffixSlot: true,
+        suffixIcon: 'calendar-fill',
+        showPasswordToggle: passwordToggle,
+      })
+    ).toBe(false);
   });
 
   it('adds trailing balance for centered input controls that need right-side affordances', () => {
-    expect(shouldShowTrailingBalance({
-      inputAlign: 'center',
-      prefixIcon: '',
-      hasPrefixSlot: false,
-      showPasswordToggle: false,
-      showSuffix: false,
-      value: 0,
-      clearable: true,
-      count: '',
-    })).toBe(true);
+    expect(
+      shouldShowTrailingBalance({
+        inputAlign: 'center',
+        prefixIcon: '',
+        hasPrefixSlot: false,
+        showPasswordToggle: false,
+        showSuffix: false,
+        value: 0,
+        clearable: true,
+        count: '',
+      })
+    ).toBe(true);
 
-    expect(shouldShowTrailingBalance({
-      inputAlign: 'center',
-      prefixIcon: 'search',
-      hasPrefixSlot: false,
-      showPasswordToggle: false,
-      showSuffix: false,
-      value: 'abc',
-      clearable: true,
-      count: '',
-    })).toBe(false);
+    expect(
+      shouldShowTrailingBalance({
+        inputAlign: 'center',
+        prefixIcon: 'search',
+        hasPrefixSlot: false,
+        showPasswordToggle: false,
+        showSuffix: false,
+        value: 'abc',
+        clearable: true,
+        count: '',
+      })
+    ).toBe(false);
   });
 
   it('builds root classes and fake display text', () => {
-    expect(resolveInputClass({
-      size: 'lg',
-      disabled: true,
-      readonly: false,
-      fake: true,
-      value: 'selected',
-      borderless: true,
-      inputAlign: 'center',
-      prefixIcon: 'search',
-      trailingBalance: true,
-      count: '1/10',
-      error: true,
-      customClass: 'custom',
-    })).toEqual([
+    expect(
+      resolveInputClass({
+        size: 'lg',
+        disabled: true,
+        readonly: false,
+        fake: true,
+        value: 'selected',
+        borderless: true,
+        inputAlign: 'center',
+        prefixIcon: 'search',
+        trailingBalance: true,
+        count: '1/10',
+        error: true,
+        customClass: 'custom',
+      })
+    ).toEqual([
       'lk-input',
       'lk-input--lg',
       {

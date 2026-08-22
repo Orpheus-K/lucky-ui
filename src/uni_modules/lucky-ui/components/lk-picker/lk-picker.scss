@@ -11,6 +11,13 @@
   width: 100%;
   background: var(--lk-picker-bg);
 
+  @include when(disabled) {
+    .lk-picker__view-wrap,
+    .lk-picker__btn--confirm {
+      opacity: 0.5;
+    }
+  }
+
   @include m(inline) {
     border-radius: var(--lk-radius-lg);
     overflow: hidden;

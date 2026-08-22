@@ -83,6 +83,10 @@ export const radioProps = {
   label: LkProp.string(''),
   /** 是否禁用标签点击 */
   labelDisabled: LkProp.boolean(false),
+  /** 单独使用时的表单字段名 */
+  prop: LkProp.string(''),
+  /** 单独使用时是否触发表单验证 */
+  validateEvent: LkProp.boolean(true),
 } as const;
 
 export type RadioGroupProps = ExtractPropTypes<typeof radioGroupProps>;

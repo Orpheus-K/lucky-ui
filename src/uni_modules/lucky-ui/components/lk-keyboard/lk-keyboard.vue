@@ -8,6 +8,7 @@ import {
 } from './keyboard.utils';
 import LkIcon from '../lk-icon/lk-icon.vue';
 import LkPopup from '../lk-popup/lk-popup.vue';
+import { useFormDisabled } from '../lk-form/useFormField';
 import { useLocale } from '../../composables/useLocale';
 
 defineOptions({ name: 'LkKeyboard' });
@@ -15,6 +16,8 @@ defineOptions({ name: 'LkKeyboard' });
 const props = defineProps(keyboardProps);
 const emit = defineEmits(keyboardEmits);
 const { t } = useLocale('keyboard');
+const formDisabled = useFormDisabled(() => false);
+const isDisabled = formDisabled.disabled;
 
 const plateMode = ref<KeyboardPlateMode>('province');
 
@@ -54,27 +57,32 @@ function triggerHaptic() {
   // #endif
 }
 
-function closeKeyboard() {
+async function closeKeyboard() {
   emit('update:visible', false);
+  if (!(await formDisabled.awaitActive())) return;
   emit('close');
 }
 
-function onPopupModelChange(visible: boolean) {
+async function onPopupModelChange(visible: boolean) {
   if (visible) {
     emit('update:visible', true);
     return;
   }
 
-  closeKeyboard();
+  await closeKeyboard();
 }
 
-function onConfirm() {
+async function onConfirm() {
+  if (isDisabled.value) return;
   triggerHaptic();
   emit('confirm', props.modelValue);
-  closeKeyboard();
+  if (!(await formDisabled.awaitActive())) return;
+  await closeKeyboard();
 }
 
-function onKeyPress(key: KeyboardKey) {
+async function onKeyPress(key: KeyboardKey) {
+  if (isDisabled.value) return;
+  const interaction = formDisabled.captureInteraction();
   const action = resolveKeyboardPressAction({
     key,
     modelValue: props.modelValue,
@@ -86,9 +94,11 @@ function onKeyPress(key: KeyboardKey) {
 
   triggerHaptic();
   emit('key-press', key);
+  if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
 
   if (action.kind === 'delete') {
     emit('delete');
+    if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
     if (props.modelValue.length > 0) {
       emit('update:modelValue', action.nextValue);
     }
@@ -97,7 +107,8 @@ function onKeyPress(key: KeyboardKey) {
 
   if (action.kind === 'confirm') {
     emit('confirm', props.modelValue);
-    closeKeyboard();
+    if (!(await formDisabled.awaitActive())) return;
+    await closeKeyboard();
     return;
   }
 
@@ -107,6 +118,7 @@ function onKeyPress(key: KeyboardKey) {
   }
 
   emit('input', action.input);
+  if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
   emit('update:modelValue', action.nextValue);
 }
 
@@ -139,10 +151,20 @@ function getKeyStyle(key: KeyboardKey): Record<string, number> {
     :custom-style="popupStyle"
     @update:model-value="onPopupModelChange"
   >
-    <view :id="id" class="lk-keyboard" :class="[`lk-keyboard--${type}`, customClass]">
+    <view
+      :id="id"
+      class="lk-keyboard"
+      :class="[`lk-keyboard--${type}`, customClass, { 'is-disabled': isDisabled }]"
+      :data-disabled="isDisabled ? 'true' : 'false'"
+      :aria-disabled="isDisabled"
+    >
       <view v-if="title || showClose || showConfirm" class="lk-keyboard__header">
         <view class="lk-keyboard__header-side">
-          <view v-if="showClose" class="lk-keyboard__header-action" @tap="closeKeyboard">
+          <view
+            v-if="showClose"
+            class="lk-keyboard__header-action lk-keyboard__close"
+            @tap="closeKeyboard"
+          >
             <text>{{ t('hide') }}</text>
           </view>
         </view>
@@ -150,7 +172,11 @@ function getKeyStyle(key: KeyboardKey): Record<string, number> {
         <text class="lk-keyboard__title">{{ title }}</text>
 
         <view class="lk-keyboard__header-side lk-keyboard__header-side--end">
-          <view v-if="showConfirm" class="lk-keyboard__header-action" @tap="onConfirm">
+          <view
+            v-if="showConfirm"
+            class="lk-keyboard__header-action lk-keyboard__done"
+            @tap="onConfirm"
+          >
             <text>{{ resolvedConfirmText }}</text>
           </view>
         </view>
@@ -163,6 +189,7 @@ function getKeyStyle(key: KeyboardKey): Record<string, number> {
             :key="keyIndex"
             :class="getKeyClass(key)"
             :style="getKeyStyle(key)"
+            :data-key="key.text"
             @tap="onKeyPress(key)"
           >
             <lk-icon v-if="key.type === 'delete'" name="eraser" :size="40" />

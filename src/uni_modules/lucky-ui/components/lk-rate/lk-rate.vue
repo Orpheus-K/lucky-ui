@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { StyleValue } from 'vue';
-import { ref, watch, computed, inject } from 'vue';
-import { formContextKey } from '../lk-form/context';
+import { ref, watch, computed } from 'vue';
+import { useFormField } from '../lk-form/useFormField';
 import { rateProps, rateEmits } from './rate.props';
 import {
   createRateStars,
@@ -16,7 +16,12 @@ defineOptions({ name: 'LkRate' });
 const props = defineProps(rateProps);
 const emit = defineEmits(rateEmits);
 
-const form = inject(formContextKey, null);
+const formField = useFormField({
+  prop: () => props.prop,
+  disabled: () => props.disabled,
+  validateEvent: () => props.validateEvent,
+});
+const isDisabled = formField.disabled;
 
 const innerValue = ref<number>(props.modelValue);
 
@@ -54,12 +59,13 @@ function getStarColor(index: number) {
   return status === 'void' ? voidColor.value : activeColor.value;
 }
 
-function select(index: number, event?: unknown) {
+async function select(index: number, event?: unknown) {
+  const interaction = formField.captureInteraction();
   const result = resolveRateSelection({
     currentValue: innerValue.value,
     index,
     allowClear: props.allowClear,
-    disabled: props.disabled,
+    disabled: isDisabled.value,
     readonly: props.readonly,
   });
 
@@ -67,7 +73,7 @@ function select(index: number, event?: unknown) {
     emit('click-disabled', {
       value: innerValue.value,
       index,
-      disabled: props.disabled,
+      disabled: isDisabled.value,
       readonly: props.readonly,
       event,
     });
@@ -77,25 +83,27 @@ function select(index: number, event?: unknown) {
   const newValue = result.value;
   const oldValue = result.oldValue;
   emit('click', { value: newValue, oldValue, index, event });
+  if (!(await formField.awaitInteractionCurrent(interaction))) return;
 
   // 点击当前已选中的星才清零
   if (result.cleared) {
     emit('clear', { oldValue, index, event });
+    if (!(await formField.awaitInteractionCurrent(interaction))) return;
   }
 
   if (!result.changed) return;
 
   innerValue.value = newValue;
   emit('update:modelValue', newValue);
+  if (!(await formField.awaitInteractionCurrent(interaction))) return;
   emit('change', newValue, oldValue);
+  if (!(await formField.awaitInteractionCurrent(interaction))) return;
 
-  if (props.prop) {
-    form?.emitFieldChange(props.prop, newValue);
-  }
+  await formField.emitChange(newValue, interaction);
 }
 
-function onTap(_e: unknown, index: number) {
-  select(index, _e);
+async function onTap(_e: unknown, index: number) {
+  await select(index, _e);
 }
 </script>
 
@@ -106,11 +114,12 @@ function onTap(_e: unknown, index: number) {
     :class="[
       customClass,
       {
-        'is-disabled': props.disabled,
+        'is-disabled': isDisabled,
         'is-readonly': props.readonly,
       },
     ]"
     :style="rootStyle"
+    :aria-disabled="isDisabled"
   >
     <view v-for="item in stars" :key="item" class="lk-rate__item" @tap="onTap($event, item)">
       <lk-icon :name="getStarIcon(item)" :size="iconSize" :color="getStarColor(item)" />

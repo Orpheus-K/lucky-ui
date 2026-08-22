@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import type { StyleValue } from 'vue';
 import {
-  inject,
-  provide,
-  ref,
-  readonly,
-  onMounted,
-  onBeforeUnmount,
   computed,
-  watch,
   getCurrentInstance,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  nextTick,
+  provide,
+  readonly,
+  ref,
   useSlots,
+  watch,
 } from 'vue';
 import { formItemEmits, formItemProps } from './form.props';
 import LkIcon from '../lk-icon/lk-icon.vue';
@@ -18,18 +19,23 @@ import {
   formContextKey,
   formItemContextKey,
   type FormContext,
-  type FormRule,
   type FormItemContext,
+  type FormRule,
 } from './context';
+import {
+  createFormItemValidationController,
+  watchFormItemInitialValueSources,
+} from './form.validation';
 import { useLocale } from '../../composables/useLocale';
 import {
-  filterFormRulesByTrigger,
+  captureFormItemInitialValues,
   getFormFieldRules,
   resolveFormItemClass,
   resolveFormItemLabelStyle,
+  resolveFormItemProps,
   resolveFormItemRequired,
-  resolveFormItemResetValue,
-  validateFormValue,
+  restoreFormItemInitialValues,
+  type FormItemInitialValues,
   type FormValidateStatus,
 } from './form.utils';
 import { addUnit } from '../../core/src/utils/unit';
@@ -44,75 +50,39 @@ const slots = useSlots();
 
 const status = ref<FormValidateStatus>('idle');
 const msg = ref('');
-const requiredMark = ref(false);
+let initialValues: FormItemInitialValues = new Map();
 
 function rules(): FormRule[] {
   return getFormFieldRules(form?.rules, props.prop);
 }
-function computeReq() {
-  return resolveFormItemRequired({
+
+const requiredMark = computed(() =>
+  resolveFormItemRequired({
     explicitRequired: props.required,
     rules: rules(),
-  });
-}
+  })
+);
 
 const resolvedAsteriskPosition = computed(() => {
   return props.asteriskPosition || form?.asteriskPosition || 'left';
 });
 
-async function doValidate(trigger?: 'blur' | 'change') {
-  const prop = props.prop;
-  if (!prop || !form) return;
+const validation = createFormItemValidationController({
+  getForm: () => form,
+  getProp: () => props.prop || undefined,
+  getStatus: () => status.value,
+  getMessage: () => msg.value,
+  setState(nextStatus, message) {
+    status.value = nextStatus;
+    msg.value = message;
+  },
+  fallbackMessage: () => t<string>('validationFailed'),
+});
 
-  // 1. 如果使用了自定义验证器 (例如 Zod)
-  if (form.customValidator) {
-    try {
-      const errorMap = await form.customValidator(form.model);
-      const propsList = Array.isArray(prop) ? prop : [prop];
-      const matchedProp = errorMap ? propsList.find(p => errorMap[p]) : undefined;
-      if (matchedProp) {
-        status.value = 'error';
-        msg.value = errorMap?.[matchedProp] || '';
-        return Promise.reject([{ field: matchedProp, message: msg.value }]);
-      } else {
-        status.value = 'success';
-        msg.value = '';
-      }
-    } catch (e) {
-      status.value = 'error';
-      msg.value = e instanceof Error ? e.message : String(e);
-      return Promise.reject([{ field: Array.isArray(prop) ? prop[0] : prop, message: msg.value }]);
-    }
-    return;
-  }
-
-  // 2. 默认的表单规则校验
-  const propsList = Array.isArray(prop) ? prop : [prop];
-  for (const p of propsList) {
-    const list = filterFormRulesByTrigger(getFormFieldRules(form.rules, p), trigger);
-    if (!list.length) continue;
-    const val = form.model[p];
-    status.value = 'validating';
-    msg.value = '';
-    const errs = await validateFormValue({
-      field: p,
-      value: val,
-      rules: list,
-      model: form.model,
-      fallbackMessage: t<string>('validationFailed'),
-    });
-    if (errs.length) {
-      status.value = 'error';
-      msg.value = errs[0].message;
-      return Promise.reject(errs);
-    }
-  }
-  status.value = 'success';
-  msg.value = '';
-}
-
-const itemCtx: FormItemContext = {
-  prop: props.prop || undefined,
+const itemContext: FormItemContext = {
+  get prop() {
+    return props.prop || undefined;
+  },
   validateStatus: readonly(status),
   getBoundingClientRect() {
     return new Promise(resolve => {
@@ -128,80 +98,113 @@ const itemCtx: FormItemContext = {
         .exec();
     });
   },
-  setValidateStatus(s, m) {
-    status.value = s;
-    if (m !== undefined) msg.value = m;
+  setValidateStatus(nextStatus, message) {
+    validation.setStatus(
+      nextStatus,
+      message !== undefined
+        ? message
+        : nextStatus === 'idle' || nextStatus === 'success'
+          ? ''
+          : msg.value
+    );
   },
-  validate: doValidate,
-  reset() {
-    if (props.prop && form) {
-      const propsList = Array.isArray(props.prop) ? props.prop : [props.prop];
-      propsList.forEach(p => {
-        const v = form.model[p];
-        form.model[p] = resolveFormItemResetValue(v);
-      });
-    }
-    status.value = 'idle';
-    msg.value = '';
+  beginValidation: validation.begin,
+  isValidationCurrent: validation.isCurrent,
+  captureValidationGeneration: validation.captureGeneration,
+  commitValidation: validation.commitGeneration,
+  rollbackValidation: validation.rollbackGeneration,
+  releaseValidation: validation.releaseGeneration,
+  getValidationProps: validation.getValidationProps,
+  invalidateValidation: validation.invalidate,
+  validate: validation.validate,
+  validateGeneration: validation.validateGeneration,
+  reset(fieldNames) {
+    validation.invalidate();
+    if (form) restoreFormItemInitialValues(form.model, initialValues, fieldNames);
+    validation.setStatus('idle');
   },
 };
+let active = true;
 
-provide(formItemContextKey, itemCtx);
+provide(formItemContextKey, itemContext);
 
-onMounted(() => {
-  requiredMark.value = computeReq();
-  form?.addField(itemCtx);
+function rebuildInitialValues() {
+  validation.invalidate();
+  initialValues = form ? captureFormItemInitialValues(form.model, props.prop) : new Map();
+  validation.setStatus('idle');
+}
+
+rebuildInitialValues();
+watchFormItemInitialValueSources({
+  model: () => form?.model,
+  prop: () => props.prop || undefined,
+  rebuild: rebuildInitialValues,
 });
-onBeforeUnmount(() => form?.removeField(itemCtx));
-watch([() => props.required, () => form?.rules], () => (requiredMark.value = computeReq()), {
-  deep: true,
+watch(
+  () => form?.disabled,
+  () => {
+    validation.invalidate(true);
+  },
+  { flush: 'sync' }
+);
+watch(
+  () => resolveFormItemProps(props.prop).map(prop => form?.rules?.[prop]),
+  () => validation.invalidate(true),
+  { deep: true, flush: 'sync' }
+);
+
+onMounted(() => form?.addField(itemContext));
+onBeforeUnmount(() => {
+  active = false;
+  validation.invalidate();
+  form?.removeField(itemContext);
 });
 
 const labelStyle = computed(() => {
-  const w = props.labelWidth || form?.labelWidth;
-  return resolveFormItemLabelStyle(w);
+  const width = props.labelWidth || form?.labelWidth;
+  return resolveFormItemLabelStyle(width);
 });
-
-// 继承表单的 labelAlign
 const resolvedLabelAlign = computed(() => props.labelAlign || form?.labelAlign || 'left');
-
-// 是否 top 布局
 const isTopLayout = computed(() => resolvedLabelAlign.value === 'top' || props.vertical);
-
-// 表单是否开启 border/card
 const hasBorder = computed(() => {
   return props.border !== undefined ? props.border : !!form?.border;
 });
-
+const isFormDisabled = computed(() => !!form?.disabled);
 const style = computed(() => props.customStyle as StyleValue);
 const errorStyle = computed<StyleValue>(() => {
   if (isTopLayout.value || (!props.label && !slots.label)) return {};
-
   const width = addUnit(props.labelWidth || form?.labelWidth) || 'var(--lk-rpx-160)';
   return {
     paddingLeft: `calc(var(--_padding-x) + ${width} + var(--_gap-x))`,
   };
 });
-const classes = computed(() =>
-  resolveFormItemClass({
+const classes = computed(() => [
+  ...resolveFormItemClass({
     customClass: props.customClass,
     status: status.value,
     labelAlign: resolvedLabelAlign.value,
     topLayout: isTopLayout.value,
     border: hasBorder.value,
     link: props.isLink,
-  })
-);
+  }),
+  { 'is-disabled': isFormDisabled.value },
+]);
 
-function onItemTap(event: unknown) {
+async function onItemTap(event: unknown) {
+  if (isFormDisabled.value) return;
   emit('tap', event);
+  await nextTick();
+  if (!active || isFormDisabled.value) return;
   emit('click', event);
 }
 
 defineExpose({
-  validate: doValidate,
-  resetField: itemCtx.reset,
-  clearValidate: () => itemCtx.setValidateStatus('idle'),
+  validate: validation.validate,
+  resetField: itemContext.reset,
+  clearValidate: () => {
+    itemContext.invalidateValidation();
+    itemContext.setValidateStatus('idle');
+  },
 });
 </script>
 
@@ -212,6 +215,10 @@ defineExpose({
     :class="classes"
     :style="style"
     :data-prop="Array.isArray(prop) ? prop.join(',') : prop"
+    :data-validation-status="status"
+    :data-validation-message="msg"
+    :data-disabled="isFormDisabled ? 'true' : 'false'"
+    :aria-disabled="isFormDisabled"
     @tap="onItemTap"
   >
     <view class="lk-form-item__body">

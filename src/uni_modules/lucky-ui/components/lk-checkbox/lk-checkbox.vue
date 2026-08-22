@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { StyleValue } from 'vue';
+import type { Ref, StyleValue } from 'vue';
 import { inject, computed } from 'vue';
 import type { CheckboxValue } from './checkbox.props';
 import { checkboxProps, checkboxEmits } from './checkbox.props';
 import LkIcon from '../lk-icon/lk-icon.vue';
+import { useFormField } from '../lk-form/useFormField';
 import {
   isCheckboxChecked,
   isCheckboxDisabled,
@@ -33,10 +34,17 @@ type CheckboxGroupContext = {
     size: string;
     activeColor: string;
   };
-  toggleValue: (name: CheckboxValue) => void;
+  disabled: Readonly<Ref<boolean>>;
+  captureInteraction: () => number;
+  toggleValue: (name: CheckboxValue, interaction?: number) => void | Promise<void>;
 };
 
 const group = inject<CheckboxGroupContext | null>(LK_CHECKBOX_GROUP_KEY, null);
+const formField = useFormField({
+  prop: () => props.prop,
+  disabled: () => props.disabled || !!group?.disabled.value,
+  validateEvent: () => props.validateEvent,
+});
 
 const checkboxValue = computed(() => resolveCheckboxValue(props.name, props.label));
 const style = computed(() => props.customStyle as StyleValue);
@@ -51,8 +59,8 @@ const isChecked = computed(() => {
 
 const isDisabled = computed(() => {
   return isCheckboxDisabled({
-    disabled: props.disabled,
-    group: group?.props,
+    disabled: formField.disabled.value,
+    group: group ? { ...group.props, disabled: group.disabled.value } : undefined,
   });
 });
 
@@ -96,15 +104,21 @@ const iconStyle = computed(() => {
   });
 });
 
-function handleToggle(event?: unknown) {
+async function handleToggle(event?: unknown) {
   if (isDisabled.value) return;
+  const interaction = formField.captureInteraction();
+  const groupInteraction = group?.captureInteraction();
   emit('click', event, isChecked.value, checkboxValue.value);
+  if (!(await formField.awaitInteractionCurrent(interaction)) || isDisabled.value) return;
   if (group) {
-    group.toggleValue(checkboxValue.value);
+    await group.toggleValue(checkboxValue.value, groupInteraction);
   } else {
     const nextValue = !props.modelValue;
     emit('update:modelValue', nextValue);
+    if (!(await formField.awaitInteractionCurrent(interaction)) || isDisabled.value) return;
     emit('change', nextValue);
+    if (!(await formField.awaitInteractionCurrent(interaction)) || isDisabled.value) return;
+    await formField.emitChange(nextValue, interaction);
   }
 }
 

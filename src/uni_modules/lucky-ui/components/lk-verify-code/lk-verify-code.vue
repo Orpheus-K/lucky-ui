@@ -19,12 +19,15 @@ import {
   type VerifyCodeKeydownEventLike,
 } from './verify-code.utils';
 import { useLocale } from '../../composables/useLocale';
+import { useFormDisabled } from '../lk-form/useFormField';
 
 defineOptions({ name: 'LkVerifyCode' });
 
 const props = defineProps(verifyCodeProps);
 const emit = defineEmits(verifyCodeEmits);
 const { t } = useLocale('verifyCode');
+const formDisabled = useFormDisabled(() => props.disabled);
+const isDisabled = formDisabled.disabled;
 
 interface FocusableInput {
   focus?: () => void;
@@ -39,6 +42,7 @@ const focusIndex = ref(0);
 const isCountingDown = ref(false);
 const countdownRemaining = ref(0);
 let countdownTimer: ReturnType<typeof setInterval> | null = null;
+let countdownInteraction: number | null = null;
 
 // 当前激活的单元格索引（基于输入值长度）
 const activeIndex = computed(() => resolveVerifyCodeActiveIndex(val.value, props.length));
@@ -74,7 +78,7 @@ const rootClass = computed(() =>
   resolveVerifyCodeRootClass({
     variant: props.variant,
     statusClass: statusClass.value,
-    disabled: props.disabled,
+    disabled: isDisabled.value,
     customClass: props.customClass,
   })
 );
@@ -95,7 +99,7 @@ watch(
 );
 
 function focus() {
-  if (props.disabled) return;
+  if (isDisabled.value) return;
   // #ifdef H5
   try {
     inputRef.value?.focus?.();
@@ -120,7 +124,7 @@ function blur() {
 }
 
 function onFocus() {
-  if (props.disabled) return;
+  if (isDisabled.value) return;
   isFocused.value = true;
   emit('focus');
 }
@@ -130,8 +134,9 @@ function onBlur() {
   emit('blur');
 }
 
-function onInput(e: Event | VerifyCodeInputEventLike) {
-  if (props.disabled) return;
+async function onInput(e: Event | VerifyCodeInputEventLike) {
+  if (isDisabled.value) return;
+  const interaction = formDisabled.captureInteraction();
 
   const v = resolveVerifyCodeInputValue({
     event: e,
@@ -142,6 +147,7 @@ function onInput(e: Event | VerifyCodeInputEventLike) {
   val.value = v;
   focusIndex.value = resolveVerifyCodeFocusIndex(v, props.length);
   emit('update:modelValue', v);
+  if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
 
   if (shouldFinishVerifyCode(v, props.length)) {
     emit('finish', v);
@@ -149,8 +155,9 @@ function onInput(e: Event | VerifyCodeInputEventLike) {
 }
 
 // 处理粘贴（H5平台）
-function onPaste(e: ClipboardEvent) {
-  if (props.disabled) return;
+async function onPaste(e: ClipboardEvent) {
+  if (isDisabled.value) return;
+  const interaction = formDisabled.captureInteraction();
 
   // #ifdef H5
   try {
@@ -161,15 +168,15 @@ function onPaste(e: ClipboardEvent) {
     });
 
     if (pastedText) {
+      e.preventDefault?.();
       val.value = pastedText;
       focusIndex.value = resolveVerifyCodeFocusIndex(pastedText, props.length);
       emit('update:modelValue', pastedText);
+      if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
 
       if (shouldFinishVerifyCode(pastedText, props.length)) {
         emit('finish', pastedText);
       }
-
-      e.preventDefault?.();
     }
   } catch (err) {
     console.warn('Paste handling failed', err);
@@ -178,7 +185,8 @@ function onPaste(e: ClipboardEvent) {
 }
 
 function onKeydown(e: KeyboardEvent | VerifyCodeKeydownEventLike) {
-  if (props.disabled) return;
+  if (isDisabled.value) return;
+  const interaction = formDisabled.captureInteraction();
 
   const newVal = resolveVerifyCodeKeydownValue({
     event: e,
@@ -189,17 +197,19 @@ function onKeydown(e: KeyboardEvent | VerifyCodeKeydownEventLike) {
     val.value = newVal;
     focusIndex.value = resolveVerifyCodeFocusIndex(newVal, props.length);
     emit('update:modelValue', newVal);
+    if (!formDisabled.isInteractionCurrent(interaction)) return;
   }
 }
 
 function onCellClick(index: number) {
-  if (props.disabled) return;
+  if (isDisabled.value) return;
   focusIndex.value = index;
   focus();
 }
 
-function startCountdown() {
-  if (isCountingDown.value || props.disabled) return;
+async function startCountdown() {
+  if (isCountingDown.value || isDisabled.value) return;
+  const interaction = formDisabled.captureInteraction();
 
   // 触发发送事件
   if (val.value.length === 0) {
@@ -207,14 +217,21 @@ function startCountdown() {
   } else {
     emit('resend');
   }
+  if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
 
   isCountingDown.value = true;
   countdownRemaining.value = props.countdownDuration;
+  countdownInteraction = interaction;
 
   countdownTimer = setInterval(() => {
+    if (countdownInteraction !== interaction || !formDisabled.isInteractionCurrent(interaction)) {
+      stopCountdown();
+      return;
+    }
     countdownRemaining.value--;
     if (countdownRemaining.value <= 0) {
       stopCountdown();
+      if (!formDisabled.isInteractionCurrent(interaction)) return;
       emit('countdownEnd');
     }
   }, 1000);
@@ -227,6 +244,7 @@ function stopCountdown() {
   }
   isCountingDown.value = false;
   countdownRemaining.value = 0;
+  countdownInteraction = null;
 }
 
 function clear() {
@@ -252,7 +270,9 @@ function setValue(code: string) {
 
 onMounted(async () => {
   if (props.autofocus) {
+    const interaction = formDisabled.captureInteraction();
     await nextTick();
+    if (!formDisabled.isInteractionCurrent(interaction)) return;
     focus();
   }
 });
@@ -260,6 +280,16 @@ onMounted(async () => {
 onUnmounted(() => {
   stopCountdown();
 });
+
+watch(
+  isDisabled,
+  disabled => {
+    if (!disabled) return;
+    blur();
+    stopCountdown();
+  },
+  { flush: 'sync' }
+);
 
 defineExpose({
   focus,
@@ -272,7 +302,14 @@ defineExpose({
 </script>
 
 <template>
-  <view class="lk-verify-code" :class="rootClass" :style="rootStyle">
+  <view
+    :id="id"
+    class="lk-verify-code"
+    :class="rootClass"
+    :style="rootStyle"
+    :data-disabled="isDisabled ? 'true' : 'false'"
+    :aria-disabled="isDisabled"
+  >
     <!-- 隐藏的真实输入框 -->
     <input
       ref="inputRef"
@@ -280,7 +317,7 @@ defineExpose({
       :value="val"
       :maxlength="props.length"
       :type="props.type === 'number' ? 'number' : 'text'"
-      :disabled="props.disabled"
+      :disabled="isDisabled"
       :focus="isFocused"
       @input="onInput"
       @focus="onFocus"
@@ -337,7 +374,7 @@ defineExpose({
     <view v-if="props.countdown" class="lk-verify-code__countdown">
       <text
         class="lk-verify-code__countdown-btn"
-        :class="{ 'is-disabled': isCountingDown || props.disabled }"
+        :class="{ 'is-disabled': isCountingDown || isDisabled }"
         @tap="startCountdown"
       >
         {{ countdownDisplayText }}

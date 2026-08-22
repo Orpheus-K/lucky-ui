@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { StyleValue } from 'vue';
+import type { Ref, StyleValue } from 'vue';
 import { inject, computed } from 'vue';
 import type { RadioValue } from './radio.props';
 import { radioProps, radioEmits } from './radio.props';
 import LkIcon from '../lk-icon/lk-icon.vue';
+import { useFormField } from '../lk-form/useFormField';
 import {
   isRadioChecked,
   isRadioDisabled,
@@ -33,10 +34,17 @@ type RadioGroupContext = {
     size: string;
     activeColor: string;
   };
-  updateValue: (value: RadioValue) => void;
+  disabled: Readonly<Ref<boolean>>;
+  captureInteraction: () => number;
+  updateValue: (value: RadioValue, interaction?: number) => void | Promise<void>;
 };
 
 const group = inject<RadioGroupContext | null>(LK_RADIO_GROUP_KEY, null);
+const formField = useFormField({
+  prop: () => props.prop,
+  disabled: () => props.disabled || !!group?.disabled.value,
+  validateEvent: () => props.validateEvent,
+});
 
 const radioValue = computed(() => resolveRadioValue(props.name, props.label));
 const style = computed(() => props.customStyle as StyleValue);
@@ -51,8 +59,8 @@ const isChecked = computed(() => {
 
 const isDisabled = computed(() => {
   return isRadioDisabled({
-    disabled: props.disabled,
-    group: group?.props,
+    disabled: formField.disabled.value,
+    group: group ? { ...group.props, disabled: group.disabled.value } : undefined,
   });
 });
 
@@ -94,15 +102,21 @@ const iconStyle = computed(() => {
   });
 });
 
-function handleToggle(event?: unknown) {
+async function handleToggle(event?: unknown) {
   if (isDisabled.value) return;
+  const interaction = formField.captureInteraction();
+  const groupInteraction = group?.captureInteraction();
   emit('click', event, isChecked.value, radioValue.value);
+  if (!(await formField.awaitInteractionCurrent(interaction)) || isDisabled.value) return;
   if (isChecked.value) return;
   if (group) {
-    group.updateValue(radioValue.value);
+    await group.updateValue(radioValue.value, groupInteraction);
   } else {
     emit('update:modelValue', radioValue.value);
+    if (!(await formField.awaitInteractionCurrent(interaction)) || isDisabled.value) return;
     emit('change', radioValue.value);
+    if (!(await formField.awaitInteractionCurrent(interaction)) || isDisabled.value) return;
+    await formField.emitChange(radioValue.value, interaction);
   }
 }
 

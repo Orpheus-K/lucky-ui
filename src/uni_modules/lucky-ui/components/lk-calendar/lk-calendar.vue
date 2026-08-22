@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { StyleValue } from 'vue';
-import { computed, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { useLocale } from '../../composables/useLocale';
+import { useFormDisabled } from '../lk-form/useFormField';
 import {
   CalendarViewMode,
   calendarEmits,
@@ -39,6 +40,8 @@ defineOptions({ name: 'LkCalendar' });
 const props = defineProps(calendarProps);
 const emit = defineEmits(calendarEmits);
 const { t } = useLocale('calendar');
+const formDisabled = useFormDisabled(() => props.disabled);
+const isDisabled = formDisabled.disabled;
 
 const fallbackMonthNames = [
   '一月',
@@ -112,6 +115,7 @@ const switchDirection = ref<'prev' | 'next'>('next');
 const ignoreNextTap = ref(false);
 let switchStartTimer: ReturnType<typeof setTimeout> | null = null;
 let switchTimer: ReturnType<typeof setTimeout> | null = null;
+let panelGeneration = 0;
 let ignoreTapTimer: ReturnType<typeof setTimeout> | null = null;
 const touchState = {
   startX: 0,
@@ -120,6 +124,7 @@ const touchState = {
   deltaY: 0,
   tracking: false,
   locked: false,
+  interaction: null as number | null,
 };
 
 const markerMap = computed(() => {
@@ -165,7 +170,7 @@ const cls = computed(() => [
     size: props.size,
     mode: props.mode,
     viewMode: props.viewMode,
-    disabled: props.disabled,
+    disabled: isDisabled.value,
     readonly: props.readonly,
     customClass: props.customClass,
   }),
@@ -196,7 +201,7 @@ function createDay(date: Date): CalendarDay {
     mode: props.mode,
     viewMode: props.viewMode,
     firstDayOfWeek: props.firstDayOfWeek,
-    disabled: props.disabled,
+    disabled: isDisabled.value,
     minDate: props.minDate,
     maxDate: props.maxDate,
     disabledDates: props.disabledDates,
@@ -214,29 +219,47 @@ const days = computed(() => {
   });
 });
 
-function emitPanelChange() {
+async function emitPanelChange(interaction: number, generation: number) {
+  if (!formDisabled.isInteractionCurrent(interaction) || generation !== panelGeneration) return;
   const value = viewDateValue.value;
-  emit('update:viewDate', value);
-  emit('month-change', value);
-  if (props.viewMode === CalendarViewMode.Week && days.value.length) {
-    emit('week-change', {
-      start: days.value[0].date,
-      end: days.value[days.value.length - 1].date,
-      viewDate: value,
-    });
-  }
-  emit('panel-change', {
+  const week =
+    props.viewMode === CalendarViewMode.Week && days.value.length
+      ? {
+          start: days.value[0].date,
+          end: days.value[days.value.length - 1].date,
+          viewDate: value,
+        }
+      : null;
+  const panel = {
     year: cursor.value.getFullYear(),
     month: cursor.value.getMonth() + 1,
-  });
+  };
+  emit('update:viewDate', value);
+  if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
+  if (generation !== panelGeneration) return;
+  emit('month-change', value);
+  if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
+  if (generation !== panelGeneration) return;
+  if (week) {
+    emit('week-change', week);
+    if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
+    if (generation !== panelGeneration) return;
+  }
+  emit('panel-change', panel);
+}
+
+function stopSwitchAnimation() {
+  if (switchStartTimer) clearTimeout(switchStartTimer);
+  if (switchTimer) clearTimeout(switchTimer);
+  switchStartTimer = null;
+  switchTimer = null;
+  isSwitching.value = false;
 }
 
 function playSwitchAnimation(amount: number) {
   if (!amount) return;
   switchDirection.value = amount > 0 ? 'next' : 'prev';
-  isSwitching.value = false;
-  if (switchStartTimer) clearTimeout(switchStartTimer);
-  if (switchTimer) clearTimeout(switchTimer);
+  stopSwitchAnimation();
   switchStartTimer = setTimeout(() => {
     isSwitching.value = true;
     switchStartTimer = null;
@@ -247,27 +270,34 @@ function playSwitchAnimation(amount: number) {
   }, 0);
 }
 
-function movePanel(amount: number, animate = true) {
-  if (props.disabled) return;
+async function movePanel(
+  amount: number,
+  animate = true,
+  interaction = formDisabled.captureInteraction()
+) {
+  if (!formDisabled.isInteractionCurrent(interaction)) return;
+  const generation = ++panelGeneration;
   cursor.value =
     props.viewMode === CalendarViewMode.Week
       ? addDays(cursor.value, amount * 7)
       : addMonths(cursor.value, amount);
   if (animate) playSwitchAnimation(amount);
-  emitPanelChange();
+  await emitPanelChange(interaction, generation);
 }
 
 function moveMonth(amount: number) {
-  movePanel(amount);
+  void movePanel(amount);
 }
 
-function goToday() {
-  if (props.disabled) return;
+async function goToday() {
+  const interaction = formDisabled.captureInteraction();
+  if (!formDisabled.isInteractionCurrent(interaction)) return;
+  const generation = ++panelGeneration;
   const now = new Date();
   const direction = now.getTime() >= cursor.value.getTime() ? 1 : -1;
   cursor.value = props.viewMode === CalendarViewMode.Week ? now : monthStart(now);
   playSwitchAnimation(direction);
-  emitPanelChange();
+  await emitPanelChange(interaction, generation);
 }
 
 function getTouchPoint(event: CalendarTouchEvent) {
@@ -284,6 +314,7 @@ function resetSwipe() {
   touchState.locked = false;
   touchState.deltaX = 0;
   touchState.deltaY = 0;
+  touchState.interaction = null;
   isDragging.value = false;
   dragOffset.value = 0;
 }
@@ -298,7 +329,7 @@ function suppressNextTap() {
 }
 
 function onTouchStart(event: CalendarTouchEvent) {
-  if (!props.swipeable || props.disabled) return;
+  if (!props.swipeable || isDisabled.value) return;
   const point = getTouchPoint(event);
   if (!point) return;
   touchState.startX = point.x;
@@ -307,10 +338,19 @@ function onTouchStart(event: CalendarTouchEvent) {
   touchState.deltaY = 0;
   touchState.tracking = true;
   touchState.locked = false;
+  touchState.interaction = formDisabled.captureInteraction();
 }
 
 function onTouchMove(event: CalendarTouchEvent) {
-  if (!touchState.tracking || !props.swipeable || props.disabled) return;
+  if (
+    !touchState.tracking ||
+    !props.swipeable ||
+    touchState.interaction === null ||
+    !formDisabled.isInteractionCurrent(touchState.interaction)
+  ) {
+    resetSwipe();
+    return;
+  }
   const point = getTouchPoint(event);
   if (!point) return;
 
@@ -336,7 +376,12 @@ function onTouchMove(event: CalendarTouchEvent) {
 }
 
 function onTouchEnd() {
-  if (!touchState.tracking || !props.swipeable || props.disabled) {
+  if (
+    !touchState.tracking ||
+    !props.swipeable ||
+    touchState.interaction === null ||
+    !formDisabled.isInteractionCurrent(touchState.interaction)
+  ) {
     resetSwipe();
     return;
   }
@@ -346,11 +391,12 @@ function onTouchEnd() {
     Math.abs(touchState.deltaX) >= SWIPE_THRESHOLD &&
     Math.abs(touchState.deltaX) > Math.abs(touchState.deltaY) * 1.15;
   const direction = touchState.deltaX < 0 ? 1 : -1;
+  const interaction = touchState.interaction;
 
   resetSwipe();
   if (shouldMove) {
     suppressNextTap();
-    movePanel(direction);
+    void movePanel(direction, true, interaction);
   }
 }
 
@@ -365,7 +411,7 @@ function nextValue(day: CalendarDay): CalendarValue {
   });
 }
 
-function selectDay(day: CalendarDay) {
+async function selectDay(day: CalendarDay) {
   if (ignoreNextTap.value) {
     ignoreNextTap.value = false;
     return;
@@ -376,9 +422,13 @@ function selectDay(day: CalendarDay) {
   }
   if (props.readonly) return;
 
+  const interaction = formDisabled.captureInteraction();
+  if (!formDisabled.isInteractionCurrent(interaction)) return;
   const value = nextValue(day);
   emit('update:modelValue', value);
+  if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
   emit('select', day);
+  if (!(await formDisabled.awaitInteractionCurrent(interaction))) return;
   emit('change', value, day);
 }
 
@@ -416,13 +466,38 @@ watch(
   () => props.viewDate,
   value => {
     const next = parseDate(value);
-    if (next) cursor.value = props.viewMode === CalendarViewMode.Week ? next : monthStart(next);
+    if (!next) return;
+    const nextCursor = props.viewMode === CalendarViewMode.Week ? next : monthStart(next);
+    if (getCalendarViewDateValue(nextCursor) !== viewDateValue.value) panelGeneration += 1;
+    cursor.value = nextCursor;
   }
 );
+
+watch(
+  isDisabled,
+  disabled => {
+    if (!disabled) return;
+    panelGeneration += 1;
+    stopSwitchAnimation();
+    resetSwipe();
+    ignoreNextTap.value = false;
+    if (ignoreTapTimer) {
+      clearTimeout(ignoreTapTimer);
+      ignoreTapTimer = null;
+    }
+  },
+  { flush: 'sync' }
+);
+
+onBeforeUnmount(() => {
+  panelGeneration += 1;
+  stopSwitchAnimation();
+  if (ignoreTapTimer) clearTimeout(ignoreTapTimer);
+});
 </script>
 
 <template>
-  <view :id="id" :class="cls" :style="style">
+  <view :id="id" :class="cls" :style="style" :aria-disabled="isDisabled">
     <slot
       v-if="showHeader"
       name="header"
@@ -462,7 +537,13 @@ watch(
       @touchcancel="onTouchEnd"
     >
       <view :class="gridClass" :style="gridStyle">
-        <view v-for="day in days" :key="day.date" :class="dayClass(day)" @tap="selectDay(day)">
+        <view
+          v-for="day in days"
+          :key="day.date"
+          :class="dayClass(day)"
+          :data-date="day.date"
+          @tap="selectDay(day)"
+        >
           <slot name="day" :day="day">
             <view class="lk-calendar__day-core">
               <text v-if="viewMode === CalendarViewMode.Week" class="lk-calendar__week-label">

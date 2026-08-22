@@ -42,6 +42,9 @@ export const rateProps = {
 
   /** 表单字段名 */
   prop: LkProp.string(''),
+
+  /** 值变化时是否触发表单校验 */
+  validateEvent: LkProp.boolean(true),
 } as const;
 
 export type RateProps = ExtractPropTypes<typeof rateProps>;

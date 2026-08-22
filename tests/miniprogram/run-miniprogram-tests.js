@@ -1,5 +1,6 @@
 const { runButtonSnapshotTest, runButtonTapBindingTest } = require('./button.spec');
 const { runTimelineBasicTest, runTimelineStatusTest } = require('./timeline.spec');
+const { runInputReadonlyBindingTest } = require('./input.spec');
 
 function run() {
   try {
@@ -10,6 +11,8 @@ function run() {
     runTimelineBasicTest();
     runTimelineStatusTest();
     console.log('[test:mp] lk-timeline 小程序渲染测试通过。');
+    runInputReadonlyBindingTest();
+    console.log('[test:mp] lk-input readonly native disabled mapping passed.');
   } catch (error) {
     console.error('[test:mp] 小程序渲染测试失败。');
     console.error(error instanceof Error ? error.message : error);

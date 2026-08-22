@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { StyleValue } from 'vue';
-import { computed, ref, watch } from 'vue';
+import { computed, getCurrentInstance, ref, watch } from 'vue';
 import { useLocale } from '../../composables/useLocale';
+import { useFormDisabled } from '../lk-form/useFormField';
 import LkButton from '../lk-button/lk-button.vue';
 import LkCalendar from '../lk-calendar/lk-calendar.vue';
 import { CalendarMode, type CalendarDay, type CalendarValue } from '../lk-calendar/calendar.props';
@@ -33,16 +34,21 @@ defineOptions({ name: 'LkCalendarPicker' });
 const props = defineProps(calendarPickerProps);
 const emit = defineEmits(calendarPickerEmits);
 const { t } = useLocale('calendarPicker');
+const formInteraction = useFormDisabled(() => props.disabled || props.readonly);
+const instance = getCurrentInstance();
+const isInteractionLocked = formInteraction.disabled;
+const isDisabled = computed(() => props.disabled || !!formInteraction.form?.disabled);
 
 const innerShow = ref(props.show);
 const tempValue = ref<CalendarValue>(normalizePickerValue(props.modelValue));
 const startTime = ref(parseTime(props.defaultStartTime, 0));
 const endTime = ref(parseTime(props.defaultEndTime, 86399));
 const panelDate = ref(props.viewDate);
+let showGeneration = 0;
 
 const cls = computed(() => [
   ...resolveCalendarPickerClass({
-    disabled: props.disabled,
+    disabled: isDisabled.value,
     readonly: props.readonly,
     customClass: props.customClass,
   }),
@@ -117,7 +123,7 @@ function syncDraftFromValue(value: CalendarPickerValue) {
 }
 
 function open() {
-  if (!canOpenCalendarPicker({ disabled: props.disabled, readonly: props.readonly })) return;
+  if (!canOpenCalendarPicker({ disabled: isDisabled.value, readonly: props.readonly })) return;
   syncDraftFromValue(props.modelValue);
   innerShow.value = true;
 }
@@ -126,31 +132,42 @@ function close() {
   innerShow.value = false;
 }
 
-function reset() {
+async function reset() {
+  if (isInteractionLocked.value) return;
+  const interaction = formInteraction.captureInteraction();
   const value = resolveCalendarPickerResetValue(props.mode);
   tempValue.value = value;
   startTime.value = parseTime(props.defaultStartTime, 0);
   endTime.value = parseTime(props.defaultEndTime, 86399);
   emit('update:modelValue', value);
+  if (!(await formInteraction.awaitInteractionCurrent(interaction))) return;
   emit('change', value);
+  if (!(await formInteraction.awaitInteractionCurrent(interaction))) return;
   emit('reset');
 }
 
-function confirm() {
+async function confirm() {
+  if (isInteractionLocked.value || confirmDisabled.value) return;
+  const interaction = formInteraction.captureInteraction();
   const value = mergeTime(tempValue.value);
   emit('update:modelValue', value);
+  if (!(await formInteraction.awaitInteractionCurrent(interaction))) return;
   emit('change', value);
+  if (!(await formInteraction.awaitInteractionCurrent(interaction))) return;
   emit('confirm', value);
+  if (!(await formInteraction.awaitActive())) return;
   if (props.closeOnConfirm) close();
 }
 
 function onSelect(day: CalendarDay) {
+  if (isInteractionLocked.value) return;
   emit('select', day);
 }
 
 watch(
   () => props.show,
   value => {
+    if (innerShow.value !== value) showGeneration += 1;
     innerShow.value = value;
     if (value) syncDraftFromValue(props.modelValue);
   }
@@ -164,18 +181,32 @@ watch(
   { deep: true }
 );
 
-watch(innerShow, value => {
+watch(innerShow, async value => {
+  const generation = ++showGeneration;
+  const interaction = formInteraction.captureInteraction();
   emit('update:show', value);
   if (value) {
+    if (!(await formInteraction.awaitInteractionCurrent(interaction))) return;
+    if (instance?.vnode.props?.['onUpdate:show'] && props.show !== value) {
+      innerShow.value = props.show;
+      return;
+    }
+    if (generation !== showGeneration || innerShow.value !== value) return;
     emit('open');
   } else {
+    if (!(await formInteraction.awaitActive())) return;
+    if (instance?.vnode.props?.['onUpdate:show'] && props.show !== value) {
+      innerShow.value = props.show;
+      return;
+    }
+    if (generation !== showGeneration || innerShow.value !== value) return;
     emit('close');
   }
 });
 </script>
 
 <template>
-  <view :id="id" :class="cls" :style="style">
+  <view :id="id" :class="cls" :style="style" :aria-disabled="isDisabled" :aria-readonly="readonly">
     <slot name="trigger" :open="open" :value="modelValue" :display-value="displayValue">
       <view class="lk-calendar-picker__trigger" :class="{ 'is-empty': !hasValue }" @tap="open">
         <text class="lk-calendar-picker__trigger-text">{{ displayValue }}</text>
@@ -218,6 +249,8 @@ watch(innerShow, value => {
           :show-today="showToday"
           :show-year="showYear"
           :swipeable="swipeable"
+          :disabled="isDisabled"
+          :readonly="readonly"
           @select="onSelect"
         />
 
@@ -232,6 +265,7 @@ watch(innerShow, value => {
                 :min="0"
                 :max="timeMax"
                 :step="timeStep"
+                :disabled="isInteractionLocked"
                 show-value
                 :show-value-text="false"
                 :format-value="formatTime"
@@ -247,7 +281,7 @@ watch(innerShow, value => {
                 :min="0"
                 :max="timeMax"
                 :step="timeStep"
-                :disabled="endTimeDisabled"
+                :disabled="endTimeDisabled || isInteractionLocked"
                 show-value
                 :show-value-text="false"
                 :format-value="formatTime"
@@ -262,7 +296,7 @@ watch(innerShow, value => {
             block
             shape="round"
             size="lg"
-            :disabled="confirmDisabled"
+            :disabled="confirmDisabled || isInteractionLocked"
             hover-class="none"
             @tap="confirm"
           >
