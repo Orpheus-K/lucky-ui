@@ -1,22 +1,29 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onErrorCaptured, onMounted, ref } from 'vue';
 import { onLoad, onUnload } from '@dcloudio/uni-app';
+import AuditAdapterRenderer from '@/components/audit/AuditAdapterRenderer.vue';
 import PreviewDemoRenderer from '@/components/preview/PreviewDemoRenderer.vue';
 import {
+  createAuditEvidenceSession,
+  getCurrentAuditComponentEvents,
+  hasAuditComponentAdapter,
   installAuditDeterminism,
   parseAuditFixtureQuery,
+  reduceAuditEvidenceSession,
   stableAuditConfigJson,
+  type AuditAdapterErrorPayload,
+  type AuditAdapterEventPayload,
+  type AuditAdapterReadyPayload,
+  type AuditComponentStatus,
+  type AuditEvidenceSessionAction,
+  type AuditEvidenceSessionState,
+  type AuditEvidenceScope,
   type AuditFixtureParseResult,
   type AuditFixtureQuery,
+  type AuditRuntimePlatform,
 } from '@/components/audit/audit-fixture';
 import { Locale } from '@/uni_modules/lucky-ui/locale';
 import { generateBrandVars } from '@/uni_modules/lucky-ui/theme/src/brand-color';
-
-interface AuditEvent {
-  sequence: number;
-  name: string;
-  detail?: string;
-}
 
 type WindowResizeUni = typeof uni & {
   onWindowResize?: (callback: () => void) => void;
@@ -34,21 +41,27 @@ const buildIdentity = __LUCKY_UI_BUILD_IDENTITY__;
 const parseResult = ref<AuditFixtureParseResult | null>(null);
 const initialized = ref(false);
 const shellReady = ref(false);
-const evidenceReady = ref(false);
 const environmentValid = ref(false);
 const runtimeErrors = ref<string[]>([]);
-const auditEvents = ref<AuditEvent[]>([]);
+const evidenceSession = ref<AuditEvidenceSessionState | null>(null);
 const actualViewport = ref('pending');
 const viewportMatches = ref(false);
-const platform = ref('unknown');
+const platform = ref<AuditRuntimePlatform>('unknown');
 const runtimeErrorCapture = ref<'pending' | 'h5-global' | 'mp-global' | 'unsupported'>('pending');
 let restoreDeterminism: (() => void) | null = null;
 let restoreEnvironment: (() => void) | null = null;
 let restoreRuntimeCapture: (() => void) | null = null;
 let restoreResizeCapture: (() => void) | null = null;
-let eventSequence = 0;
 let disposed = false;
 let lifecycleGeneration = 0;
+let evidenceGenerationEpoch = 0;
+
+// #ifdef H5
+platform.value = 'h5';
+// #endif
+// #ifdef MP-WEIXIN
+platform.value = 'mp-weixin';
+// #endif
 
 const config = computed(() => parseResult.value?.config);
 const configJson = computed(() => (config.value ? stableAuditConfigJson(config.value) : '{}'));
@@ -65,7 +78,7 @@ const validationErrors = computed(() => {
   return [...new Set(errors)];
 });
 const errorsJson = computed(() => JSON.stringify(validationErrors.value));
-const eventsJson = computed(() => JSON.stringify(auditEvents.value));
+const eventsJson = computed(() => JSON.stringify(evidenceSession.value?.history || []));
 const fixtureValid = computed(
   () =>
     initialized.value &&
@@ -75,15 +88,60 @@ const fixtureValid = computed(
     validationErrors.value.length === 0
 );
 const canRenderPreview = computed(() => fixtureValid.value);
+const adapterSupported = computed(() =>
+  config.value ? hasAuditComponentAdapter(config.value.component) : false
+);
+const componentEvidence = computed(() => evidenceSession.value?.evidence || null);
+const componentStatus = computed<AuditComponentStatus>(() => {
+  if (!adapterSupported.value) return 'pending-adapter';
+  if (evidenceSession.value?.status === 'failed') return 'failed';
+  if (evidenceSession.value?.status === 'ready') return 'ready';
+  return 'booting';
+});
+const evidenceReady = computed(
+  () =>
+    shellReady.value &&
+    fixtureValid.value &&
+    componentStatus.value === 'ready' &&
+    componentEvidence.value !== null
+);
+const componentEvents = computed(() =>
+  getCurrentAuditComponentEvents(evidenceSession.value, evidenceReady.value)
+);
+const lastComponentEvent = computed(() => componentEvents.value.at(-1) || null);
+const lastComponentEventDetailJson = computed(() =>
+  JSON.stringify(lastComponentEvent.value?.detail ?? null)
+);
+const evidenceScope = computed<AuditEvidenceScope>(() =>
+  evidenceReady.value ? 'component' : 'fixture-shell'
+);
+const activeInteractionCapability = computed(() =>
+  evidenceReady.value ? evidenceSession.value?.activeInteractionCapability || 'none' : 'none'
+);
+const targetLocator = computed(() => evidenceSession.value?.targetLocator || null);
+const targetLocatorJson = computed(() => JSON.stringify(targetLocator.value));
+const adapterGeneration = computed(() => evidenceSession.value?.generation || 0);
+const canMountAdapter = computed(
+  () =>
+    canRenderPreview.value &&
+    adapterSupported.value &&
+    (evidenceSession.value?.status === 'booting' || evidenceSession.value?.status === 'ready')
+);
+const componentEvidenceJson = computed(() => JSON.stringify(componentEvidence.value));
 const stateJson = computed(() =>
   JSON.stringify({
     initialized: initialized.value,
     shellReady: shellReady.value,
     evidenceReady: evidenceReady.value,
     fixtureValid: fixtureValid.value,
-    evidenceScope: 'fixture-shell',
-    componentStatus: 'pending-adapter',
-    interactionCapability: config.value?.interactionCapability || 'none',
+    evidenceScope: evidenceScope.value,
+    componentStatus: componentStatus.value,
+    generation: adapterGeneration.value,
+    interactionCapability: activeInteractionCapability.value,
+    targetLocator: targetLocator.value,
+    componentEventCount: componentEvents.value.length,
+    lastComponentEvent: lastComponentEvent.value?.name || '',
+    lastComponentEventDetail: lastComponentEvent.value?.detail ?? null,
     build: buildIdentity,
     platform: platform.value,
     actualViewport: actualViewport.value,
@@ -145,11 +203,15 @@ function installRuntimeCapture(): () => void {
   const originalWarn = console.warn;
   let active = true;
   const capturedError = (...args: unknown[]) => {
-    if (active) runtimeErrors.value.push(`console-error:${args.map(formatConsoleValue).join(' ')}`);
+    if (active) {
+      recordRuntimeFailure(`console-error:${args.map(formatConsoleValue).join(' ')}`);
+    }
     Reflect.apply(originalError, console, args);
   };
   const capturedWarn = (...args: unknown[]) => {
-    if (active) runtimeErrors.value.push(`console-warn:${args.map(formatConsoleValue).join(' ')}`);
+    if (active) {
+      recordRuntimeFailure(`console-warn:${args.map(formatConsoleValue).join(' ')}`);
+    }
     Reflect.apply(originalWarn, console, args);
   };
 
@@ -158,12 +220,14 @@ function installRuntimeCapture(): () => void {
   const handleWindowError = (event: ErrorEvent) => {
     if (!active) return;
     const target = event.target as (EventTarget & { src?: string; href?: string }) | null;
-    runtimeErrors.value.push(
+    recordRuntimeFailure(
       `window-error:${event.message || target?.src || target?.href || 'resource-error'}`
     );
   };
   const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-    if (active) runtimeErrors.value.push(`unhandled-rejection:${formatConsoleValue(event.reason)}`);
+    if (active) {
+      recordRuntimeFailure(`unhandled-rejection:${formatConsoleValue(event.reason)}`);
+    }
   };
   // #endif
 
@@ -172,11 +236,11 @@ function installRuntimeCapture(): () => void {
   let appErrorInstalled = false;
   let rejectionInstalled = false;
   const handleAppError = (error: string) => {
-    if (active) runtimeErrors.value.push(`mp-app-error:${error}`);
+    if (active) recordRuntimeFailure(`mp-app-error:${error}`);
   };
   const handleAppUnhandledRejection = (result: { reason: unknown }) => {
     if (active) {
-      runtimeErrors.value.push(`mp-unhandled-rejection:${formatConsoleValue(result.reason)}`);
+      recordRuntimeFailure(`mp-unhandled-rejection:${formatConsoleValue(result.reason)}`);
     }
   };
   // #endif
@@ -275,9 +339,45 @@ function installResizeCapture(): () => void {
   };
 }
 
-function recordEvent(name: string, detail?: string) {
-  eventSequence += 1;
-  auditEvents.value.push({ sequence: eventSequence, name, detail });
+function dispatchEvidence(action: AuditEvidenceSessionAction) {
+  if (!evidenceSession.value) return;
+  evidenceSession.value = reduceAuditEvidenceSession(evidenceSession.value, action);
+  evidenceGenerationEpoch = Math.max(evidenceGenerationEpoch, evidenceSession.value.generation);
+}
+
+function recordEvent(name: string, detail?: unknown) {
+  dispatchEvidence({ type: 'note', name, detail });
+}
+
+function recordRuntimeFailure(message: string) {
+  dispatchEvidence({ type: 'runtime-error', message });
+  runtimeErrors.value.push(message);
+}
+
+function dispatchAdapterAction(action: AuditEvidenceSessionAction) {
+  if (!evidenceSession.value || disposed || !initialized.value) return;
+  const previousFailure = evidenceSession.value.failure;
+  dispatchEvidence(action);
+  const currentFailure = evidenceSession.value?.failure;
+  if (
+    currentFailure?.kind === 'terminal' &&
+    (currentFailure.generation !== previousFailure?.generation ||
+      currentFailure.reason !== previousFailure?.reason)
+  ) {
+    runtimeErrors.value.push(`adapter:${currentFailure.reason}`);
+  }
+}
+
+function handleAdapterReady(payload: AuditAdapterReadyPayload) {
+  dispatchAdapterAction({ type: 'adapter-ready', payload });
+}
+
+function handleAdapterEvent(payload: AuditAdapterEventPayload) {
+  dispatchAdapterAction({ type: 'adapter-event', payload });
+}
+
+function handleAdapterError(payload: AuditAdapterErrorPayload) {
+  dispatchAdapterAction({ type: 'adapter-error', payload });
 }
 
 function restoreOwnedEnvironment() {
@@ -300,14 +400,19 @@ function initialize(query: AuditFixtureQuery) {
   const result = parseAuditFixtureQuery(query);
   parseResult.value = result;
   runtimeErrors.value = [];
-  auditEvents.value = [];
-  eventSequence = 0;
+  evidenceSession.value = createAuditEvidenceSession({
+    component: result.config.component,
+    fingerprint: result.fingerprint,
+    platform: platform.value,
+    initialGeneration: evidenceGenerationEpoch + 1,
+  });
+  evidenceGenerationEpoch = evidenceSession.value.generation;
   disposed = false;
   runtimeErrorCapture.value = 'pending';
   try {
     restoreRuntimeCapture = installRuntimeCapture();
   } catch (error) {
-    runtimeErrors.value.push(`runtime-capture:${String(error)}`);
+    recordRuntimeFailure(`runtime-capture:${String(error)}`);
     environmentValid.value = false;
     initialized.value = true;
     return;
@@ -319,7 +424,7 @@ function initialize(query: AuditFixtureQuery) {
       restoreDeterminism = installAuditDeterminism(result.config);
       environmentValid.value = true;
     } catch (error) {
-      runtimeErrors.value.push(`initialize:${String(error)}`);
+      recordRuntimeFailure(`initialize:${String(error)}`);
       environmentValid.value = false;
       restoreOwnedEnvironment();
     }
@@ -339,10 +444,15 @@ function readViewport() {
     actualViewport.value = `${width}x${height}`;
     viewportMatches.value =
       width === config.value?.viewportWidth && height === config.value?.viewportHeight;
+    dispatchEvidence({
+      type: 'viewport',
+      valid: viewportMatches.value,
+      reason: `viewport-mismatch:expected=${config.value?.viewport || 'unknown'},actual=${actualViewport.value}`,
+    });
   } catch (error) {
-    runtimeErrors.value.push(`viewport:${String(error)}`);
     actualViewport.value = 'unavailable';
     viewportMatches.value = false;
+    recordRuntimeFailure(`viewport:${String(error)}`);
   }
 }
 
@@ -351,7 +461,7 @@ function cleanup() {
   disposed = true;
   lifecycleGeneration += 1;
   shellReady.value = false;
-  evidenceReady.value = false;
+  evidenceSession.value = null;
   environmentValid.value = false;
   try {
     restoreResizeCapture?.();
@@ -370,7 +480,7 @@ function cleanup() {
 }
 
 onErrorCaptured((error, _instance, info) => {
-  runtimeErrors.value.push(`vue-descendant:${info}:${formatConsoleValue(error)}`);
+  recordRuntimeFailure(`vue-descendant:${info}:${formatConsoleValue(error)}`);
 });
 
 onLoad((query?: AuditFixtureQuery) => {
@@ -380,12 +490,6 @@ onLoad((query?: AuditFixtureQuery) => {
 onMounted(async () => {
   if (!initialized.value) initialize({});
   const generation = ++lifecycleGeneration;
-  // #ifdef H5
-  platform.value = 'h5';
-  // #endif
-  // #ifdef MP-WEIXIN
-  platform.value = 'mp-weixin';
-  // #endif
   readViewport();
   restoreResizeCapture = installResizeCapture();
   await nextTick();
@@ -409,13 +513,23 @@ onBeforeUnmount(cleanup);
     :data-audit-evidence-ready="String(evidenceReady)"
     :data-audit-fixture-valid="String(fixtureValid)"
     :data-audit-error-count="String(validationErrors.length)"
-    data-audit-evidence-scope="fixture-shell"
-    data-audit-component-status="pending-adapter"
+    :data-audit-evidence-scope="evidenceScope"
+    :data-audit-component-status="componentStatus"
     :data-audit-component="config.component"
     :data-audit-component-kind="config.componentKind"
     :data-audit-profile="config.profile"
     :data-audit-scenario="config.scenario"
-    :data-audit-interaction-capability="config.interactionCapability"
+    :data-audit-generation="String(adapterGeneration)"
+    :data-audit-interaction-capability="activeInteractionCapability"
+    :data-audit-target-locator="targetLocatorJson"
+    :data-audit-target-selector="
+      targetLocator?.kind === 'page-selector' ? targetLocator.selector : ''
+    "
+    :data-audit-target-scope="targetLocator?.scope || ''"
+    :data-audit-target-interaction="targetLocator?.interactionCapability || 'none'"
+    :data-audit-component-event-count="String(componentEvents.length)"
+    :data-audit-last-component-event="lastComponentEvent?.name || ''"
+    :data-audit-last-component-event-detail="lastComponentEventDetailJson"
     :data-audit-motion-coverage="config.motionCoverage"
     :data-audit-resource-policy="config.resourcePolicy"
     :data-audit-resource-enforcement="config.resourceEnforcement"
@@ -446,7 +560,18 @@ onBeforeUnmount(cleanup);
       :data-audit-preview-slug="config.previewSlug"
       :data-audit-preview-mounted="String(canRenderPreview)"
     >
-      <preview-demo-renderer v-if="canRenderPreview" :slug="config.previewSlug" />
+      <audit-adapter-renderer
+        v-if="canMountAdapter && parseResult"
+        :key="`${parseResult.fingerprint}:${adapterGeneration}`"
+        :component="config.component"
+        :fingerprint="parseResult.fingerprint"
+        :generation="adapterGeneration"
+        :platform="platform"
+        @ready="handleAdapterReady"
+        @event="handleAdapterEvent"
+        @error="handleAdapterError"
+      />
+      <preview-demo-renderer v-else-if="canRenderPreview" :slug="config.previewSlug" />
       <view v-else class="audit-fixture__invalid">
         <text>当前只允许确定性的壳层基线；配置、资源或环境不满足门槛时禁止生成组件证据。</text>
       </view>
@@ -455,6 +580,7 @@ onBeforeUnmount(cleanup);
     <view class="audit-fixture__diagnostics">
       <text class="audit-fixture__config">{{ configJson }}</text>
       <text class="audit-fixture__state">{{ stateJson }}</text>
+      <text class="audit-fixture__component-evidence">{{ componentEvidenceJson }}</text>
       <text class="audit-fixture__events">{{ eventsJson }}</text>
       <text class="audit-fixture__errors">{{ errorsJson }}</text>
     </view>
@@ -514,6 +640,7 @@ onBeforeUnmount(cleanup);
 
 .audit-fixture__config,
 .audit-fixture__state,
+.audit-fixture__component-evidence,
 .audit-fixture__events,
 .audit-fixture__errors {
   display: block;
@@ -525,6 +652,7 @@ onBeforeUnmount(cleanup);
 }
 
 .audit-fixture__state,
+.audit-fixture__component-evidence,
 .audit-fixture__events,
 .audit-fixture__errors {
   margin-top: 8rpx;
