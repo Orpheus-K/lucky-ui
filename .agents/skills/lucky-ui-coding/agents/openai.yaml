@@ -1,0 +1,4 @@
+interface:
+  display_name: "Lucky UI 业务编码"
+  short_description: "从业务关键词精准匹配 Lucky UI 组件、文档与源码路径"
+  default_prompt: "使用 $lucky-ui-coding 将这个业务界面需求精准映射到组件、文档和代码。"

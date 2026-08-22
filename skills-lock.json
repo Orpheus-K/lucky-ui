@@ -16,6 +16,10 @@
     "lucky-ui-icon": {
       "source": "local",
       "sourceType": "local"
+    },
+    "lucky-ui-coding": {
+      "source": "local",
+      "sourceType": "local"
     }
   }
 }
