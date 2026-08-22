@@ -132,7 +132,7 @@ function toggleAll(checked: boolean) {
 
 ```vue
 <script setup lang="ts">
-import CheckboxDemo from '@/components/demos/checkbox-demo.vue';
+import CheckboxDemo from '@/pages_sub/components/demos/checkbox-demo.vue';
 </script>
 
 <template>

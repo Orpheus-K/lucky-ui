@@ -182,7 +182,7 @@ const options = [
 
 ```vue
 <script setup lang="ts">
-import TabDemo from '@/components/demos/tab-demo.vue'
+import TabDemo from '@/pages_sub/components/demos/tab-demo.vue'
 </script>
 
 <template>

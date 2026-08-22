@@ -72,7 +72,7 @@ const score = ref(3);
 
 ```vue
 <script setup lang="ts">
-import RateDemo from '@/components/demos/rate-demo.vue';
+import RateDemo from '@/pages_sub/components/demos/rate-demo.vue';
 </script>
 
 <template>

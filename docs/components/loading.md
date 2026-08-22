@@ -77,7 +77,7 @@ phone: loading
 
 ```vue
 <script setup lang="ts">
-import LoadingDemo from '@/components/demos/loading-demo.vue'
+import LoadingDemo from '@/pages_sub/components/demos/loading-demo.vue'
 </script>
 
 <template>

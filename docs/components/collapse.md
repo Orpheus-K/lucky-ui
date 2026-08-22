@@ -89,7 +89,7 @@ const activeName = ref('1')
 
 ```vue
 <script setup lang="ts">
-import CollapseDemo from '@/components/demos/collapse-demo.vue'
+import CollapseDemo from '@/pages_sub/components/demos/collapse-demo.vue'
 </script>
 
 <template>

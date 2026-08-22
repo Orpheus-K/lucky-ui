@@ -84,7 +84,7 @@ const loading = ref(true);
 
 ```vue
 <script setup lang="ts">
-import SkeletonDemo from '@/components/demos/skeleton-demo.vue';
+import SkeletonDemo from '@/pages_sub/components/demos/skeleton-demo.vue';
 </script>
 
 <template>

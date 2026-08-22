@@ -51,7 +51,7 @@ phone: meta-row
 
 ```vue
 <script setup lang="ts">
-import MetaRowDemo from '@/components/demos/meta-row-demo.vue'
+import MetaRowDemo from '@/pages_sub/components/demos/meta-row-demo.vue'
 </script>
 
 <template>

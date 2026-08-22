@@ -108,7 +108,7 @@ const range = ref([20, 60])
 
 ```vue
 <script setup lang="ts">
-import SliderDemo from '@/components/demos/slider-demo.vue'
+import SliderDemo from '@/pages_sub/components/demos/slider-demo.vue'
 </script>
 
 <template>

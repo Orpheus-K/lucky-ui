@@ -134,7 +134,7 @@ const options = [
 
 ```vue
 <script setup lang="ts">
-import SegmentedDemo from '@/components/demos/segmented-demo.vue'
+import SegmentedDemo from '@/pages_sub/components/demos/segmented-demo.vue'
 </script>
 
 <template>

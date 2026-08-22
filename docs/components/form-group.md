@@ -68,7 +68,7 @@ phone: form-group
 
 ## 直接 Demo
 
-项目内置可运行示例位于 `src/components/demos/form-group-demo.vue`，文档预览与 showcase 都使用同一个直连 Demo。
+项目内置可运行示例位于 `src/pages_sub/components/demos/form-group-demo.vue`，文档预览与 showcase 都使用同一个直连 Demo。
 
 ## API
 

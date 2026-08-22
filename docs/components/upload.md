@@ -172,7 +172,7 @@ const customRequest = ({ file, action, name, headers, data, onProgress, onSucces
 
 ```vue
 <script setup lang="ts">
-import UploadDemo from '@/components/demos/upload-demo.vue';
+import UploadDemo from '@/pages_sub/components/demos/upload-demo.vue';
 </script>
 
 <template>

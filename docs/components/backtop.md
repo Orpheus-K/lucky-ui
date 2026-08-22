@@ -81,7 +81,7 @@ function onScroll(e) {
 
 ```vue
 <script setup lang="ts">
-import BacktopDemo from '@/components/demos/backtop-demo.vue'
+import BacktopDemo from '@/pages_sub/components/demos/backtop-demo.vue'
 </script>
 
 <template>

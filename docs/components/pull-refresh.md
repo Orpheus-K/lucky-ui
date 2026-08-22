@@ -84,4 +84,4 @@ function onRefresh() {
 
 ## Demo
 
-项目演示位于 `src/components/demos/pull-refresh-demo.vue`。
+项目演示位于 `src/pages_sub/components/demos/pull-refresh-demo.vue`。

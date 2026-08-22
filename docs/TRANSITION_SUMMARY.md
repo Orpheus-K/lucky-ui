@@ -67,7 +67,7 @@
 
 ### 4. Demo 页面 ✅
 
-**文件**: `src/components/demos/transition-demo.vue`
+**文件**: `src/pages_sub/components/demos/transition-demo.vue`
 
 **功能**:
 - 所有动画效果的展示
@@ -286,7 +286,7 @@ src/uni_modules/lucky-ui/components/lk-transition/
 ├── index.ts           # 导出和使用指南
 └── README.md          # 文档
 
-src/components/demos/
+src/pages_sub/components/demos/
 └── transition-demo.vue # Demo 页面
 ```
 

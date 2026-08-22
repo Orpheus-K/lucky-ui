@@ -44,7 +44,7 @@ phone: horizontal-scroll
 
 ```vue
 <script setup lang="ts">
-import HorizontalScrollDemo from '@/components/demos/horizontal-scroll-demo.vue'
+import HorizontalScrollDemo from '@/pages_sub/components/demos/horizontal-scroll-demo.vue'
 </script>
 
 <template>

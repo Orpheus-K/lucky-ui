@@ -60,6 +60,9 @@
       "ignoreDevUnusedFiles": false,
       "ignoreUploadUnusedFiles": false
     },
+    "optimization": {
+      "subPackages": true
+    },
     "usingComponents": true
   },
   "mp-alipay": {

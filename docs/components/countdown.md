@@ -91,4 +91,4 @@ phone: countdown
 
 ## Demo
 
-项目演示位于 `src/components/demos/countdown-demo.vue`。
+项目演示位于 `src/pages_sub/components/demos/countdown-demo.vue`。

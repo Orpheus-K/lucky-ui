@@ -115,7 +115,7 @@ const beforeChange = async (value: number) => {
 
 ```vue
 <script setup lang="ts">
-import StepperDemo from '@/components/demos/stepper-demo.vue'
+import StepperDemo from '@/pages_sub/components/demos/stepper-demo.vue'
 </script>
 
 <template>

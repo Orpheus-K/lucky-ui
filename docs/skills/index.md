@@ -43,7 +43,7 @@ Lucky UI 在 `.agents/skills/` 提供仓库级 skills。请以 `lucky-ui` 为当
 1. 从需求提取关键词，在映射表中选择最小组件集合。
 2. 先读 `docs/components/<name>.md`，确认 Props、Events、Slots 与用法。
 3. 文档不明确时再读源码；源码是 API 真相。
-4. 需要运行示例时，从文档 `phone` 或预览目录取得 `<preview-slug>`，再读取 `src/components/demos/<preview-slug>-demo.vue`。
+4. 需要运行示例时，从文档 `phone` 或预览目录取得 `<preview-slug>`，再读取 `src/pages_sub/components/demos/<preview-slug>-demo.vue`。
 
 不要读取旧的 `docs/components/basic/`。新增或重命名组件时，必须同步维护组件源码、正式文档和关键词映射，保持一一对应。
 

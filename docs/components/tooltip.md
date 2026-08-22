@@ -89,7 +89,7 @@ const open = ref(false);
 
 ```vue
 <script setup lang="ts">
-import TooltipDemo from '@/components/demos/tooltip-demo.vue';
+import TooltipDemo from '@/pages_sub/components/demos/tooltip-demo.vue';
 </script>
 
 <template>

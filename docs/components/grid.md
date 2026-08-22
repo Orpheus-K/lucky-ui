@@ -65,7 +65,7 @@ const items = [
 
 ```vue
 <script setup lang="ts">
-import GridDemo from '@/components/demos/grid-demo.vue'
+import GridDemo from '@/pages_sub/components/demos/grid-demo.vue'
 </script>
 
 <template>

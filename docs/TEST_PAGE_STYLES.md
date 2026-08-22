@@ -123,7 +123,7 @@
 ### ❌ 不应该使用测试样式的地方
 
 - `src/uni_modules/lucky-ui/` 组件库源码
-- `src/components/demos/` 组件演示（这些演示用于展示组件本身的样式）
+- `src/pages_sub/components/demos/` 组件演示（这些演示用于展示组件本身的样式）
 
 ## 效果对比
 

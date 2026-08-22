@@ -110,7 +110,7 @@ function jumpTo500() {
 
 ```vue
 <script setup lang="ts">
-import VirtualListDemo from '@/components/demos/virtual-list-demo.vue'
+import VirtualListDemo from '@/pages_sub/components/demos/virtual-list-demo.vue'
 </script>
 
 <template>

@@ -122,7 +122,7 @@ const bio = ref('');
 
 ```vue
 <script setup lang="ts">
-import TextareaDemo from '@/components/demos/textarea-demo.vue';
+import TextareaDemo from '@/pages_sub/components/demos/textarea-demo.vue';
 </script>
 
 <template>

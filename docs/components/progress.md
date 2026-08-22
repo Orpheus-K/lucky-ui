@@ -91,7 +91,7 @@ function increase() {
 
 ```vue
 <script setup lang="ts">
-import ProgressDemo from '@/components/demos/progress-demo.vue'
+import ProgressDemo from '@/pages_sub/components/demos/progress-demo.vue'
 </script>
 
 <template>
