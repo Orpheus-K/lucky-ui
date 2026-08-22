@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import LkButton from '@/uni_modules/lucky-ui/components/lk-button/lk-button.vue';
 import LkPopup from '@/uni_modules/lucky-ui/components/lk-popup/lk-popup.vue';
 import LkIcon from '@/uni_modules/lucky-ui/components/lk-icon/lk-icon.vue';
 import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.vue';
+import type { TransitionName } from '@/uni_modules/lucky-ui/composables/useTransition';
 
 const visible1 = ref(false);
 const visible2 = ref(false);
@@ -21,6 +22,78 @@ const visibleWithTitle = ref(false);
 const visibleWithClose = ref(false);
 const visibleWithBoth = ref(false);
 const visibleCustomTitle = ref(false);
+const reactiveTransitionVisible = ref(false);
+
+type ReactiveTransitionProbeConfig = {
+  key: string;
+  position: 'bottom' | 'right' | 'center';
+  draggable: boolean;
+  animation?: 'bounce';
+  animationType?: TransitionName;
+  duration: number;
+  delay: number;
+  easing: string;
+};
+
+const reactiveTransitionConfigs: ReactiveTransitionProbeConfig[] = [
+  {
+    key: 'bottom-default',
+    position: 'bottom',
+    draggable: false,
+    duration: 180,
+    delay: 0,
+    easing: 'ease-out',
+  },
+  {
+    key: 'right-700',
+    position: 'right',
+    draggable: false,
+    duration: 700,
+    delay: 80,
+    easing: 'linear',
+  },
+  {
+    key: 'bottom-draggable',
+    position: 'bottom',
+    draggable: true,
+    duration: 360,
+    delay: 20,
+    easing: 'ease-in',
+  },
+  {
+    key: 'bounce-preset',
+    position: 'center',
+    draggable: false,
+    animation: 'bounce',
+    duration: 420,
+    delay: 30,
+    easing: 'ease-in-out',
+  },
+  {
+    key: 'fade-left-type',
+    position: 'center',
+    draggable: false,
+    animationType: 'fade-left',
+    duration: 500,
+    delay: 40,
+    easing: 'ease-out',
+  },
+];
+const reactiveTransitionIndex = ref(0);
+const reactiveTransitionConfig = computed(
+  () => reactiveTransitionConfigs[reactiveTransitionIndex.value]!
+);
+
+function nextReactiveTransitionConfig() {
+  if (reactiveTransitionVisible.value) return;
+  reactiveTransitionIndex.value =
+    (reactiveTransitionIndex.value + 1) % reactiveTransitionConfigs.length;
+}
+
+function resetReactiveTransitionConfig() {
+  if (reactiveTransitionVisible.value) return;
+  reactiveTransitionIndex.value = 0;
+}
 
 const showPopup1 = () => {
   visible1.value = true;
@@ -130,6 +203,64 @@ const showRight = () => {
       </lk-popup>
     </demo-block>
 
+    <demo-block title="运行时动画配置">
+      <view
+        id="popup-reactive-transition-probe"
+        :data-mode="reactiveTransitionConfig.key"
+        :data-visible="reactiveTransitionVisible ? 'true' : 'false'"
+        :data-position="reactiveTransitionConfig.position"
+        :data-draggable="reactiveTransitionConfig.draggable ? 'true' : 'false'"
+        :data-animation="reactiveTransitionConfig.animation || 'none'"
+        :data-animation-type="reactiveTransitionConfig.animationType || 'none'"
+        :data-duration="String(reactiveTransitionConfig.duration)"
+        :data-delay="String(reactiveTransitionConfig.delay)"
+        :data-easing="reactiveTransitionConfig.easing"
+        class="reactive-transition-probe"
+      >
+        关闭弹层后切换配置，再打开应使用当前模式，而不是首次挂载时的动画。
+      </view>
+      <view class="button-row">
+        <lk-button
+          id="popup-reactive-transition-next"
+          :disabled="reactiveTransitionVisible"
+          @click="nextReactiveTransitionConfig"
+        >
+          下一组配置
+        </lk-button>
+        <lk-button
+          id="popup-reactive-transition-reset"
+          :disabled="reactiveTransitionVisible"
+          @click="resetReactiveTransitionConfig"
+        >
+          重置配置
+        </lk-button>
+        <lk-button
+          id="popup-reactive-transition-open"
+          type="primary"
+          @click="reactiveTransitionVisible = true"
+        >
+          打开探针
+        </lk-button>
+      </view>
+      <lk-popup
+        v-model="reactiveTransitionVisible"
+        :position="reactiveTransitionConfig.position"
+        :draggable="reactiveTransitionConfig.draggable"
+        :animation="reactiveTransitionConfig.animation"
+        :animation-type="reactiveTransitionConfig.animationType"
+        :duration="reactiveTransitionConfig.duration"
+        :delay="reactiveTransitionConfig.delay"
+        :easing="reactiveTransitionConfig.easing"
+        custom-class="popup-reactive-transition-target"
+        title="响应式动画探针"
+        closable
+      >
+        <view id="popup-reactive-transition-content" class="popup-content">
+          {{ reactiveTransitionConfig.key }}
+        </view>
+      </lk-popup>
+    </demo-block>
+
     <demo-block title="圆角与自定义圆角">
       <view class="button-row">
         <lk-button type="primary" @click="showPopup2">默认圆角</lk-button>
@@ -201,6 +332,13 @@ const showRight = () => {
     margin-left: 16rpx;
   }
   flex-wrap: wrap;
+}
+
+.reactive-transition-probe {
+  margin-bottom: 16rpx;
+  color: var(--lk-text-secondary);
+  font-size: 26rpx;
+  line-height: 1.5;
 }
 
 .popup-content {

@@ -7,6 +7,7 @@ import { popupProps, popupEmits } from './popup.props';
 import { useTransition } from '@/uni_modules/lucky-ui/composables/useTransition';
 import {
   applyPopupRubberBand,
+  createPopupTransitionConfigSource,
   getPopupInitialOpenTranslateY,
   getPopupMinSnapY,
   getPopupTouchClientY,
@@ -41,12 +42,13 @@ const transitionConfig = computed(() =>
     easing: props.easing,
   })
 );
+const transitionConfigSource = createPopupTransitionConfigSource(() => transitionConfig.value);
 
 const {
   classes: transitionClasses,
   styles: transitionStyles,
   display,
-} = useTransition(() => props.modelValue, transitionConfig.value, {
+} = useTransition(() => props.modelValue, transitionConfigSource, {
   onAfterEnter: () => emit('after-enter'),
   onAfterLeave: () => emit('after-leave'),
 });
