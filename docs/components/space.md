@@ -98,7 +98,7 @@ phone: space
 
 ```vue
 <script setup lang="ts">
-import SpaceDemo from '@/components/demos/space-demo.vue'
+import SpaceDemo from '@/pages_sub/components/demos/space-demo.vue'
 </script>
 
 <template>

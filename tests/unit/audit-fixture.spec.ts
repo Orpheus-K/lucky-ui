@@ -33,9 +33,9 @@ import {
 const COMPONENT_ROOT = fileURLToPath(
   new URL('../../src/uni_modules/lucky-ui/components/', import.meta.url)
 );
-const DEMO_ROOT = fileURLToPath(new URL('../../src/components/demos/', import.meta.url));
+const DEMO_ROOT = fileURLToPath(new URL('../../src/pages_sub/components/demos/', import.meta.url));
 const RENDERER_PATH = fileURLToPath(
-  new URL('../../src/components/preview/PreviewDemoRenderer.vue', import.meta.url)
+  new URL('../../src/pages_sub/components/PreviewDemoRenderer.vue', import.meta.url)
 );
 const FIXTURE_PAGE_PATH = fileURLToPath(
   new URL('../../src/pages_sub/audit-fixture/index.vue', import.meta.url)

@@ -147,7 +147,7 @@ REMOVE_PATTERNS = [
     r'## API\s*\n\s*- 建议按.*?(?=\Z)',
     # 参考链接行
     r'参考 Demo：\s*\n- https?://[^\n]+\n',
-    r'运行示例参考：\s*`src/components/demos/[^`]+`\s*\n',
+    r'运行示例参考：\s*`src/pages_sub/components/demos/[^`]+`\s*\n',
 ]
 
 def clean_file(fp):

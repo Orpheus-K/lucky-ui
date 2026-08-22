@@ -172,7 +172,7 @@ function clearUsernameError() {
 
 ```vue
 <script setup lang="ts">
-import FormDemo from '@/components/demos/form-demo.vue';
+import FormDemo from '@/pages_sub/components/demos/form-demo.vue';
 </script>
 
 <template>

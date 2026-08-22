@@ -171,4 +171,4 @@ interface TabConfig {
 ## 参考
 
 - 逻辑实现：`uni_modules/lucky-ui/core/src/tabbar-container`
-- 本仓库演示：`src/components/demos/tabbar-container-demo.vue`、`src/pages/app-main/index.vue`
+- 本仓库演示：`src/pages_sub/components/demos/tabbar-container-demo.vue`、`src/pages/app-main/index.vue`

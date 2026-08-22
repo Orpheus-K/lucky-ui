@@ -36,7 +36,7 @@ function getComponentNameFromDoc(filePath) {
 }
 
 function buildSpecBlock(componentName) {
-  const demoFile = `src/components/demos/${componentName}-demo.vue`;
+  const demoFile = `src/pages_sub/components/demos/${componentName}-demo.vue`;
   return [
     '',
     '## 规范示例（推荐）',

@@ -83,7 +83,7 @@ const count = ref(12890)
 
 ```vue
 <script setup lang="ts">
-import NumberRollerDemo from '@/components/demos/number-roller-demo.vue'
+import NumberRollerDemo from '@/pages_sub/components/demos/number-roller-demo.vue'
 </script>
 
 <template>

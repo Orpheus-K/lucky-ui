@@ -84,7 +84,7 @@ onMounted(() => {
 
 ```vue
 <script setup lang="ts">
-import AnchorDemo from '@/components/demos/anchor-demo.vue'
+import AnchorDemo from '@/pages_sub/components/demos/anchor-demo.vue'
 </script>
 
 <template>

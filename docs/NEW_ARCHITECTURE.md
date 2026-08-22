@@ -195,7 +195,7 @@ src/pages/
 └── component-detail/
     └── index.vue           # 组件详情页(动态加载)
 
-src/components/demos/       # 各组件详细演示
+src/pages_sub/components/demos/       # 各组件详细演示
 ├── ButtonDemo.vue
 ├── InputDemo.vue
 ├── ModalDemo.vue

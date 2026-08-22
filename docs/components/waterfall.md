@@ -79,7 +79,7 @@ const items = [
 
 ```vue
 <script setup lang="ts">
-import WaterfallDemo from '@/components/demos/waterfall-demo.vue';
+import WaterfallDemo from '@/pages_sub/components/demos/waterfall-demo.vue';
 </script>
 
 <template>

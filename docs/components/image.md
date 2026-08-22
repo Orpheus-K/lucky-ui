@@ -81,7 +81,7 @@ phone: image
 
 ```vue
 <script setup lang="ts">
-import ImageDemo from '@/components/demos/image-demo.vue'
+import ImageDemo from '@/pages_sub/components/demos/image-demo.vue'
 </script>
 
 <template>

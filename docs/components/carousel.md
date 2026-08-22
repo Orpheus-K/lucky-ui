@@ -109,7 +109,7 @@ const cards = [
 
 ```vue
 <script setup lang="ts">
-import CarouselDemo from '@/components/demos/carousel-demo.vue'
+import CarouselDemo from '@/pages_sub/components/demos/carousel-demo.vue'
 </script>
 
 <template>

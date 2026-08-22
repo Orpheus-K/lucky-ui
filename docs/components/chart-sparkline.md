@@ -55,7 +55,7 @@ const revenue = [
 
 ## 直接 Demo
 
-项目内置可运行示例位于 `src/components/demos/chart-sparkline-demo.vue`，文档预览、preview catalog 与 showcase 都使用这个独立 Demo，不再借用 `chart-lite` 聚合页。
+项目内置可运行示例位于 `src/pages_sub/components/demos/chart-sparkline-demo.vue`，文档预览、preview catalog 与 showcase 都使用这个独立 Demo，不再借用 `chart-lite` 聚合页。
 
 ## 数据格式
 

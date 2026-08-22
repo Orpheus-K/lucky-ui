@@ -92,7 +92,7 @@ const messages = ['📢 您有新的订单待处理', '🎁 双11 活动即将�
 
 ```vue
 <script setup lang="ts">
-import NoticeBarDemo from '@/components/demos/notice-bar-demo.vue';
+import NoticeBarDemo from '@/pages_sub/components/demos/notice-bar-demo.vue';
 </script>
 
 <template>

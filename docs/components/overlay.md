@@ -61,7 +61,7 @@ const show = ref(false);
 
 ```vue
 <script setup lang="ts">
-import OverlayDemo from '@/components/demos/overlay-demo.vue';
+import OverlayDemo from '@/pages_sub/components/demos/overlay-demo.vue';
 </script>
 
 <template>

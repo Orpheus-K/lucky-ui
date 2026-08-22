@@ -73,7 +73,7 @@ def enrich_doc(path: str) -> bool:
 
 ```vue
 <script setup lang=\"ts\">
-import {demo_import} from '@/components/demos/{slug}-demo.vue'
+import {demo_import} from '@/pages_sub/components/demos/{slug}-demo.vue'
 </script>
 
 <template>

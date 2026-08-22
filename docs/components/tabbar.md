@@ -235,7 +235,7 @@ interface TabbarItemConfig {
 
 ## 参考
 
-- 组件演示：`src/components/demos/tabbar-demo.vue`
+- 组件演示：`src/pages_sub/components/demos/tabbar-demo.vue`
 - 单页多 Tab 容器（另一种场景）：[Tabbar 容器 tabbar-container](./tabbar-container)
 
 ## 发布验收

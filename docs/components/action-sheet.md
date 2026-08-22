@@ -116,7 +116,7 @@ function handleSelect() {
 
 ```vue
 <script setup lang="ts">
-import ActionSheetDemo from '@/components/demos/action-sheet-demo.vue';
+import ActionSheetDemo from '@/pages_sub/components/demos/action-sheet-demo.vue';
 </script>
 
 <template>

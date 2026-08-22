@@ -5,7 +5,7 @@ import { usePreviewQuery } from '@/composables/usePreviewQuery';
 import ComponentCase from '@/components/showcase/component-case.vue';
 import type { ShowcaseCase } from '@/components/showcase/showcase-cases';
 import { SHOWCASE_CASES } from '@/components/showcase/showcase-cases';
-import PreviewDemoRenderer from '@/components/preview/PreviewDemoRenderer.vue';
+import PreviewDemoRenderer from '@/pages_sub/components/PreviewDemoRenderer.vue';
 import PreviewLocalePicker from '@/components/preview/PreviewLocalePicker.vue';
 
 const currentSlug = ref('');

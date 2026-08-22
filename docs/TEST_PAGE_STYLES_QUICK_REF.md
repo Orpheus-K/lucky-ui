@@ -25,7 +25,7 @@
 ### ❌ 不应该使用测试样式
 
 - lucky-ui 组件库源码（`src/uni_modules/lucky-ui/`）
-- 组件演示代码（`src/components/demos/`）
+- 组件演示代码（`src/pages_sub/components/demos/`）
 - 传递给 lucky-ui 组件的 props（如 `<lk-tag text-color="var(--lk-color-primary)">`）
 
 ## 两种使用方式

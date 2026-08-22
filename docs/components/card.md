@@ -86,7 +86,7 @@ phone: card
 
 ```vue
 <script setup lang="ts">
-import CardDemo from '@/components/demos/card-demo.vue';
+import CardDemo from '@/pages_sub/components/demos/card-demo.vue';
 </script>
 
 <template>

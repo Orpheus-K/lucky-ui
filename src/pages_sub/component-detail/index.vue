@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import { useTheme } from '@/uni_modules/lucky-ui/theme';
 import { usePreviewQuery } from '@/composables/usePreviewQuery';
 import { PREVIEW_COMPONENT_META_MAP } from '@/components/preview/preview-catalog';
-import PreviewDemoRenderer from '@/components/preview/PreviewDemoRenderer.vue';
+import PreviewDemoRenderer from '@/pages_sub/components/PreviewDemoRenderer.vue';
 
 const componentName = ref('');
 const componentMeta = computed(() => PREVIEW_COMPONENT_META_MAP[componentName.value]);

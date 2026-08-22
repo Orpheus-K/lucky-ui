@@ -80,7 +80,7 @@ const show = ref(false);
 
 ```vue
 <script setup lang="ts">
-import CurtainDemo from '@/components/demos/curtain-demo.vue';
+import CurtainDemo from '@/pages_sub/components/demos/curtain-demo.vue';
 </script>
 
 <template>

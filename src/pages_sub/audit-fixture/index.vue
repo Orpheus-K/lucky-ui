@@ -2,7 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onErrorCaptured, onMounted, ref } from 'vue';
 import { onLoad, onUnload } from '@dcloudio/uni-app';
 import AuditAdapterRenderer from '@/components/audit/AuditAdapterRenderer.vue';
-import PreviewDemoRenderer from '@/components/preview/PreviewDemoRenderer.vue';
+import PreviewDemoRenderer from '@/pages_sub/components/PreviewDemoRenderer.vue';
 import {
   createAuditEvidenceSession,
   getCurrentAuditComponentEvents,

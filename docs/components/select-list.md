@@ -84,4 +84,4 @@ phone: select-list
 
 ## Demo
 
-项目演示位于 `src/components/demos/select-list-demo.vue`。
+项目演示位于 `src/pages_sub/components/demos/select-list-demo.vue`。
