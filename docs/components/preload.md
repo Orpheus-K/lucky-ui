@@ -31,10 +31,7 @@ onMounted(() => {
   preloadPage({ path: '/pages_sub/settings/index', priority: PreloadPriority.MEDIUM });
 
   preloadImages(
-    [
-      'https://picsum.photos/420/240?random=11',
-      'https://picsum.photos/420/240?random=12',
-    ],
+    ['https://picsum.photos/420/240?random=11', 'https://picsum.photos/420/240?random=12'],
     PreloadPriority.LOW
   );
 });
@@ -113,15 +110,15 @@ console.log(isPreloaded('settings'));
 
 队列全局配置。
 
-| 参数           | 类型      | 默认值  | 说明                     |
-| -------------- | --------- | ------- | ------------------------ |
-| maxConcurrency | `number`  | `2`     | 最大并发数               |
-| defaultRetries | `number`  | `2`     | 默认重试次数             |
-| retryDelay     | `number`  | `1000`  | 重试延迟（毫秒）         |
-| idleThreshold  | `number`  | `10`    | 空闲时间阈值（毫秒）     |
-| taskTimeout    | `number`  | `30000` | 任务超时时间（毫秒）     |
-| debug          | `boolean` | `false` | 是否启用调试日志         |
-| pauseOnHidden  | `boolean` | `true`  | 页面隐藏时是否暂停预加载 |
+| 参数           | 类型      | 默认值  | 说明                         |
+| -------------- | --------- | ------- | ---------------------------- |
+| maxConcurrency | `number`  | `2`     | 同时执行的底层 executor 上限 |
+| defaultRetries | `number`  | `2`     | 默认重试次数                 |
+| retryDelay     | `number`  | `1000`  | 重试延迟（毫秒）             |
+| idleThreshold  | `number`  | `10`    | 空闲时间阈值（毫秒）         |
+| taskTimeout    | `number`  | `30000` | 逻辑尝试超时时间（毫秒）     |
+| debug          | `boolean` | `false` | 是否启用调试日志             |
+| pauseOnHidden  | `boolean` | `true`  | 页面隐藏时是否暂停预加载     |
 
 ### PreloadPriority
 
@@ -135,15 +132,21 @@ console.log(isPreloaded('settings'));
 
 ### 事件
 
-| 事件            | 说明     |
-| --------------- | -------- |
-| `task:start`    | 任务开始 |
-| `task:complete` | 任务完成 |
-| `task:error`    | 任务失败 |
-| `task:cancel`   | 任务取消 |
-| `queue:empty`   | 队列清空 |
-| `queue:pause`   | 队列暂停 |
-| `queue:resume`  | 队列恢复 |
+| 事件            | 说明                                             |
+| --------------- | ------------------------------------------------ |
+| `task:start`    | 任务开始                                         |
+| `task:complete` | 任务完成                                         |
+| `task:error`    | 任务失败                                         |
+| `task:cancel`   | 任务取消                                         |
+| `queue:change`  | 任一可观察状态迁移；回调中可重新读取原子统计快照 |
+| `queue:empty`   | 逻辑活动任务从非空变为空，每轮任务只触发一次     |
+| `queue:pause`   | 队列暂停                                         |
+| `queue:resume`  | 队列恢复                                         |
+
+`taskTimeout` 会结束当前逻辑尝试，但 JavaScript Promise 本身不可强制中止。若自定义
+`executor` 在超时或取消后仍未 settle，它会继续占用一个物理并发槽，队列不会以启动额外
+executor 的方式突破 `maxConcurrency`。需要立即释放资源的任务应在自身 executor 中实现
+可中止协议，并保证中止后 Promise 尽快 settle。
 
 ## 调试面板（推荐开发环境开启）
 
@@ -231,12 +234,12 @@ manager.addTask({
 
 ## 平台差异
 
-| 功能                | H5  | 微信小程序            | 其他小程序            |
-| ------------------- | --- | --------------------- | --------------------- |
-| requestIdleCallback | ✅  | setTimeout fallback   | setTimeout fallback   |
-| link prefetch       | ✅  | 依运行端能力          | 依运行端能力          |
-| uni.preloadPage     | 依运行端能力 | ✅           | 依运行端能力          |
-| Image 预加载        | ✅  | ✅ (uni.getImageInfo) | ✅ (uni.getImageInfo) |
+| 功能                | H5           | 微信小程序            | 其他小程序            |
+| ------------------- | ------------ | --------------------- | --------------------- |
+| requestIdleCallback | ✅           | setTimeout fallback   | setTimeout fallback   |
+| link prefetch       | ✅           | 依运行端能力          | 依运行端能力          |
+| uni.preloadPage     | 依运行端能力 | ✅                    | 依运行端能力          |
+| Image 预加载        | ✅           | ✅ (uni.getImageInfo) | ✅ (uni.getImageInfo) |
 
 ## 注意事项
 

@@ -93,6 +93,7 @@ export type PreloadEventType =
   | 'task:complete'
   | 'task:error'
   | 'task:cancel'
+  | 'queue:change'
   | 'queue:empty'
   | 'queue:pause'
   | 'queue:resume';

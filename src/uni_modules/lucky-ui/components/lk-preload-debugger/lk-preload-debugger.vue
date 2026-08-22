@@ -104,12 +104,10 @@ function handleClear() {
 
 function handleTaskStart(event: Parameters<PreloadEventHandler>[0]) {
   addLog('start', t('taskStart', { resource: event.task?.resource || t('unknown') }));
-  updateStats();
 }
 
 function handleTaskComplete(event: Parameters<PreloadEventHandler>[0]) {
   addLog('complete', t('taskComplete', { resource: event.task?.resource || t('unknown') }));
-  updateStats();
 }
 
 function handleTaskError(event: Parameters<PreloadEventHandler>[0]) {
@@ -120,12 +118,12 @@ function handleTaskError(event: Parameters<PreloadEventHandler>[0]) {
       message: event.error?.message || '',
     })
   );
-  updateStats();
 }
 
 onMounted(() => {
   updateStats();
 
+  manager.on('queue:change', updateStats);
   manager.on('task:start', handleTaskStart);
   manager.on('task:complete', handleTaskComplete);
   manager.on('task:error', handleTaskError);
@@ -134,6 +132,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  manager.off('queue:change', updateStats);
   manager.off('task:start', handleTaskStart);
   manager.off('task:complete', handleTaskComplete);
   manager.off('task:error', handleTaskError);
