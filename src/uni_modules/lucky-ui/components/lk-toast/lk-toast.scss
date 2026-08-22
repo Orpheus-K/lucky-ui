@@ -76,8 +76,12 @@
     top: 0;
     right: 0;
     bottom: 0;
-    background: var(--lk-fill-quaternary);
-    pointer-events: auto;
+    background: transparent;
+    pointer-events: none;
+
+    @include when(visible) {
+      background: var(--lk-fill-quaternary);
+    }
 
     @include when(lock) {
       pointer-events: auto;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, ref } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 import LkButton from '@/uni_modules/lucky-ui/components/lk-button/lk-button.vue';
 import LkSpace from '@/uni_modules/lucky-ui/components/lk-space/lk-space.vue';
 import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.vue';
@@ -80,6 +80,53 @@ const rapidReopenLifecycleToast = async () => {
   await nextTick();
   lifecycleVisible.value = true;
 };
+
+type ToastBlockerMode = 'none' | 'visual' | 'lock' | 'visual-lock';
+
+const blockerMode = ref<ToastBlockerMode>('none');
+const blockerVisible = ref(false);
+const blockerUnderClickCount = ref(0);
+const blockerOpenCycle = ref(0);
+const blockerAfterLeaveCount = ref(0);
+const blockerOverlay = computed(
+  () => blockerMode.value === 'visual' || blockerMode.value === 'visual-lock'
+);
+const blockerForbidClick = computed(
+  () => blockerMode.value === 'lock' || blockerMode.value === 'visual-lock'
+);
+
+const openBlockerMode = (mode: ToastBlockerMode) => {
+  blockerMode.value = mode;
+  blockerVisible.value = true;
+  blockerOpenCycle.value += 1;
+};
+
+const closeAndResetBlockerToast = () => {
+  blockerVisible.value = false;
+  blockerMode.value = 'none';
+};
+
+const closeAndResetBlockerForbidClick = () => {
+  blockerVisible.value = false;
+  blockerMode.value = 'visual';
+};
+
+const rapidReopenBlockerToast = async (mode: Extract<ToastBlockerMode, 'none' | 'visual'>) => {
+  blockerVisible.value = false;
+  blockerMode.value = 'none';
+  await nextTick();
+  blockerMode.value = mode;
+  blockerVisible.value = true;
+  blockerOpenCycle.value += 1;
+};
+
+const resetBlockerUnderClickCount = () => {
+  blockerUnderClickCount.value = 0;
+};
+
+const onBlockerAfterLeave = () => {
+  blockerAfterLeaveCount.value += 1;
+};
 </script>
 
 <template>
@@ -122,6 +169,72 @@ const rapidReopenLifecycleToast = async () => {
       </view>
     </demo-block>
 
+    <demo-block title="遮罩与点击拦截演练">
+      <view
+        id="toast-blocker-fixture"
+        class="toast-blocker-fixture"
+        :data-blocker-mode="blockerMode"
+        :data-overlay="blockerOverlay ? 'true' : 'false'"
+        :data-forbid-click="blockerForbidClick ? 'true' : 'false'"
+        :data-toast-visible="blockerVisible ? 'true' : 'false'"
+        :data-under-click-count="blockerUnderClickCount"
+        :data-open-cycle="blockerOpenCycle"
+        :data-after-leave-count="blockerAfterLeaveCount"
+      >
+        <view id="toast-blocker-probe" class="toast-blocker-fixture__evidence">
+          mode={{ blockerMode }} / under-click={{ blockerUnderClickCount }}
+        </view>
+        <view class="toast-blocker-fixture__controls">
+          <lk-button id="toast-blocker-mode-none" @click="openBlockerMode('none')">
+            无遮罩 / 可点击
+          </lk-button>
+          <lk-button id="toast-blocker-mode-visual" @click="openBlockerMode('visual')">
+            有遮罩 / 可点击
+          </lk-button>
+          <lk-button id="toast-blocker-mode-lock" @click="openBlockerMode('lock')">
+            无遮罩 / 禁止点击
+          </lk-button>
+          <lk-button id="toast-blocker-mode-visual-lock" @click="openBlockerMode('visual-lock')">
+            有遮罩 / 禁止点击
+          </lk-button>
+          <lk-button id="toast-blocker-close" @click="closeAndResetBlockerToast">
+            关闭并同批重置
+          </lk-button>
+          <lk-button id="toast-blocker-close-reset-forbid" @click="closeAndResetBlockerForbidClick">
+            关闭并仅重置拦截
+          </lk-button>
+          <lk-button id="toast-blocker-rapid-none" @click="rapidReopenBlockerToast('none')">
+            快速重开为无遮罩
+          </lk-button>
+          <lk-button id="toast-blocker-rapid-visual" @click="rapidReopenBlockerToast('visual')">
+            快速重开为仅视觉遮罩
+          </lk-button>
+          <lk-button id="toast-blocker-reset" @click="resetBlockerUnderClickCount">
+            重置计数
+          </lk-button>
+        </view>
+        <view class="toast-blocker-fixture__underlay">
+          <lk-button
+            id="toast-blocker-under-button"
+            type="primary"
+            @click="blockerUnderClickCount += 1"
+          >
+            底层按钮
+          </lk-button>
+        </view>
+        <lk-toast
+          v-model="blockerVisible"
+          message="遮罩与点击拦截是两个独立状态"
+          :duration="0"
+          position="top"
+          :z-index="2200"
+          :overlay="blockerOverlay"
+          :forbid-click="blockerForbidClick"
+          @after-leave="onBlockerAfterLeave"
+        />
+      </view>
+    </demo-block>
+
     <demo-block title="动画效果">
       <lk-space wrap>
         <lk-button @click="showSlideUp">向上滑动</lk-button>
@@ -154,5 +267,35 @@ const rapidReopenLifecycleToast = async () => {
   color: var(--lk-text-secondary);
   font-size: 24rpx;
   line-height: 1.5;
+}
+
+.toast-blocker-fixture {
+  position: relative;
+}
+
+.toast-blocker-fixture__evidence {
+  margin-bottom: 20rpx;
+  color: var(--lk-text-secondary);
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.toast-blocker-fixture__controls {
+  position: relative;
+  z-index: 2202;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  padding: 16rpx;
+  border-radius: var(--lk-radius-md);
+  background: var(--lk-bg-page);
+}
+
+.toast-blocker-fixture__underlay {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  padding: 48rpx 0 16rpx;
 }
 </style>

@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount } from 'vue';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import type { StyleValue } from 'vue';
 import { useTransition } from '@/uni_modules/lucky-ui/composables/useTransition';
 import { createToastLifecycle, watchToastLifecycle } from './toast.lifecycle';
 import { toastProps, toastEmits } from './toast.props';
 import {
+  createToastBlockerState,
   resolveToastOverlayClass,
   resolveToastOverlayStyle,
   resolveToastRootClass,
   resolveToastRootStyle,
   resolveToastTransition,
+  shouldRenderToastBlocker,
 } from './toast.utils';
 
 defineOptions({ name: 'LkToast' });
@@ -17,7 +19,6 @@ defineOptions({ name: 'LkToast' });
 const props = defineProps(toastProps);
 const emit = defineEmits(toastEmits);
 
-const show = computed(() => props.modelValue);
 const lifecycle = createToastLifecycle({
   getDuration: () => props.duration,
   onOpen: () => emit('open'),
@@ -38,10 +39,24 @@ const transitionName = computed(() => {
   });
 });
 
-const overlayClass = computed(() => resolveToastOverlayClass(props.forbidClick));
 const overlayStyle = computed(() => resolveToastOverlayStyle(props.zIndex));
 const rootClass = computed(() => resolveToastRootClass(props.position));
 const rootStyle = computed(() => resolveToastRootStyle(props.zIndex));
+const blockerState = createToastBlockerState();
+const blockerConfig = ref(
+  blockerState.sync({
+    visible: props.modelValue,
+    overlay: props.overlay,
+    forbidClick: props.forbidClick,
+  })
+);
+const stopBlockerWatch = watch(
+  [() => props.modelValue, () => props.overlay, () => props.forbidClick],
+  ([visible, overlay, forbidClick]) => {
+    blockerConfig.value = blockerState.sync({ visible, overlay, forbidClick });
+  },
+  { flush: 'pre' }
+);
 
 const {
   classes: transitionClasses,
@@ -52,8 +67,24 @@ const {
   () => props.modelValue,
   { name: transitionName.value, duration: 260, easing: 'ease-out' },
   {
-    onAfterLeave: () => lifecycle.finishLeave(),
+    onAfterLeave: () => {
+      blockerState.finishLeave();
+      lifecycle.finishLeave();
+    },
   }
+);
+const showBlocker = computed(() =>
+  shouldRenderToastBlocker({
+    display: display.value,
+    overlay: blockerConfig.value.overlay,
+    forbidClick: blockerConfig.value.forbidClick,
+  })
+);
+const overlayClass = computed(() =>
+  resolveToastOverlayClass({
+    overlay: blockerConfig.value.overlay,
+    forbidClick: blockerConfig.value.forbidClick,
+  })
 );
 const innerClass = computed(() => [transitionClasses.value, props.customClass]);
 const innerStyle = computed<StyleValue>(
@@ -61,6 +92,8 @@ const innerStyle = computed<StyleValue>(
 );
 
 onBeforeUnmount(() => {
+  stopBlockerWatch();
+  blockerState.dispose();
   stopLifecycleWatches();
   lifecycle.dispose();
   cancelTransition();
@@ -68,12 +101,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <view
-    v-if="overlay && show"
-    class="lk-toast__overlay"
-    :class="overlayClass"
-    :style="overlayStyle"
-  />
+  <view v-if="showBlocker" class="lk-toast__overlay" :class="overlayClass" :style="overlayStyle" />
   <view v-if="display" class="lk-toast" :class="rootClass" :style="rootStyle">
     <view class="lk-toast__inner" :class="innerClass" :style="innerStyle">
       <text class="lk-toast__text"

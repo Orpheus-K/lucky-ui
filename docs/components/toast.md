@@ -187,6 +187,19 @@ function onAfterLeave() {
 
 每个已交付给 Toast 的 `false → true` 边沿都会取消上一轮尚未到期的计时和离场完成信号，并为新一轮重新计时。若父组件在同一个 Vue 渲染批次内先写 `false` 再写 `true`，子组件只会收到最终的 `true`，因此这不构成一次关闭和重开；需要把 `false` 作为真实边沿交付时，应在写入 `false` 后等待一次 `nextTick()` 再重开。显示期间修改 `duration` 会从修改时刻重新计算：改为正数会按新时长调度，改为 `0` 会立即取消自动关闭。组件卸载时也会废弃计时，不会在卸载后继续发出更新或生命周期事件。`duration=0` 表示不自动关闭。
 
+## 遮罩与点击拦截
+
+直接使用 `LkToast` 时，`overlay` 只控制是否绘制遮罩底色，`forbidClick` 只控制是否拦截对底层页面的点击。两者彼此独立：需要“透明但禁止操作”的加载提示时只开启 `forbidClick`；需要展示底色但允许页面继续操作时只开启 `overlay`。
+
+| `overlay` | `forbidClick` | 遮罩底色 | 底层页面点击 |
+| --------- | ------------- | -------- | ------------ |
+| `false`   | `false`       | 无       | 允许         |
+| `true`    | `false`       | 有       | 允许         |
+| `false`   | `true`        | 无       | 拦截         |
+| `true`    | `true`        | 有       | 拦截         |
+
+关闭 Toast 后，拦截层会和 Toast 一起完成离场动画，再释放底层点击，避免动画仍可见时页面已经提前可操作。若父组件在关闭的同一个渲染批次内把 `overlay` 或 `forbidClick` 重置为 `false`，本轮离场仍冻结关闭前最后一次可见配置；显示期间修改这两个属性则会立即生效。离场途中快速重开时，新一轮使用重开时的当前配置，上一轮已取消的离场完成信号不得移除新一轮节点。
+
 ## API
 
 ### toastStore 方法
@@ -207,6 +220,13 @@ function onAfterLeave() {
 | duration    | 自动关闭时长（ms），0 表示不关闭 | `number`                    | `2000`     |
 | position    | 显示位置                         | `top \| center \| bottom`   | `center`   |
 | transition  | 动画效果                         | `slide-up \| fade \| zoom`  | `slide-up` |
+
+### LkToast 遮罩 Props
+
+| 参数        | 说明                     | 类型      | 默认值  |
+| ----------- | ------------------------ | --------- | ------- |
+| overlay     | 是否绘制遮罩底色         | `boolean` | `false` |
+| forbidClick | 是否拦截对底层页面的点击 | `boolean` | `false` |
 
 ### LkToastManager 组件
 
@@ -239,12 +259,19 @@ function onAfterLeave() {
 
 Toast 演练页提供了不依赖文案和 DOM 层级的稳定选择器：
 
-| 选择器                          | 用途                                                                                                         |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `#toast-lifecycle-fixture`      | 读取 `data-toast-visible`、`data-toast-open-count`、`data-toast-close-count`、`data-toast-after-leave-count` |
-| `#toast-lifecycle-open`         | 开始一轮新的受控 Toast                                                                                       |
-| `#toast-lifecycle-close`        | 在 duration 到期前手动关闭                                                                                   |
-| `#toast-lifecycle-rapid-reopen` | 触发一次关闭并在下一次响应式刷新后立即重开                                                                   |
+| 选择器                              | 用途                                                                                                         |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `#toast-lifecycle-fixture`          | 读取 `data-toast-visible`、`data-toast-open-count`、`data-toast-close-count`、`data-toast-after-leave-count` |
+| `#toast-lifecycle-open`             | 开始一轮新的受控 Toast                                                                                       |
+| `#toast-lifecycle-close`            | 在 duration 到期前手动关闭                                                                                   |
+| `#toast-lifecycle-rapid-reopen`     | 触发一次关闭并在下一次响应式刷新后立即重开                                                                   |
+| `#toast-blocker-fixture`            | 读取四态模式、显隐状态与底层按钮点击计数                                                                     |
+| `#toast-blocker-mode-*`             | 切换 `none/visual/lock/visual-lock` 四种组合                                                                 |
+| `#toast-blocker-under-button`       | 在遮罩覆盖区域重放底层点击                                                                                   |
+| `#toast-blocker-close`              | 同批关闭并把两项配置重置为 `false`，验证离场仍冻结上一份配置                                                 |
+| `#toast-blocker-close-reset-forbid` | 同批关闭且只重置 `forbidClick`，验证离场期间仍维持点击拦截                                                   |
+| `#toast-blocker-rapid-none`         | 交付一次真实关闭边沿后立即重开为无视觉、无拦截                                                               |
+| `#toast-blocker-rapid-visual`       | 交付一次真实关闭边沿后立即重开为仅视觉遮罩                                                                   |
 
 H5 和微信小程序必须分别通过 Peekit 连接真实运行页并留存查询结果或快照，按同一套断言验收：
 
@@ -252,5 +279,7 @@ H5 和微信小程序必须分别通过 Peekit 连接真实运行页并留存查
 2. 点击 `#toast-lifecycle-open`，在 1600ms 内点击 `#toast-lifecycle-close`。本轮三个计数各只增加 1；继续等待超过原 duration，计数不得再次变化。
 3. 再次打开后点击 `#toast-lifecycle-rapid-reopen`。等待 300ms 时必须仍为 `visible=true`，上一轮的 `after-leave` 不得增加；新一轮到期后 `close` 与 `after-leave` 才各增加 1。
 4. 全流程页面错误与控制台错误均为 0，截图中 Toast 位置、文字和离场后的页面布局无跳动。
+
+遮罩与点击拦截还必须在同一页面逐一重放四种组合：只有 `overlay=true` 时 `.lk-toast__overlay` 的 computed background 才能为非透明；只有 `forbidClick=true` 时点击 `#toast-blocker-under-button` 不得增加 `data-under-click-count`。在 `visual-lock` 模式点击 `#toast-blocker-close` 后，fixture 必须立即显示两项配置都已重置，但离场动画结束前遮罩节点仍保留 `is-visible/is-lock` 且底层点击仍被拦截；动画结束后节点移除并恢复点击。`#toast-blocker-close-reset-forbid` 必须证明仅重置 `forbidClick` 也不会提前解锁。两种快速重开动作等待超过旧离场时限后，新 Toast 及其 `none/visual` 当前配置仍必须存在，并且 `data-after-leave-count` 不得被旧轮次增加。每一步都要保存 fixture 属性、遮罩节点数量、computed background/pointer-events、点击前后计数和页面错误。
 
 H5 构建、微信小程序构建和单元测试只是静态门禁，不能替代以上两端运行态证据；任一端未实际连接时，应明确记录为“未验收”，不能标记为通过。
