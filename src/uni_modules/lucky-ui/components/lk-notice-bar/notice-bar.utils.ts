@@ -68,6 +68,19 @@ export function resolveNoticeBarInterval(speed: number): number {
   return Math.max(0.5, speed) * 1000;
 }
 
+export function resolveNoticeBarLogicalIndex(visualIndex: number, messageCount: number): number {
+  if (!Number.isFinite(visualIndex) || messageCount <= 0) return 0;
+  return ((Math.trunc(visualIndex) % messageCount) + messageCount) % messageCount;
+}
+
+export function resolveNoticeBarMessagePayload(messages: string[], visualIndex: number) {
+  const index = resolveNoticeBarLogicalIndex(visualIndex, messages.length);
+  return {
+    index,
+    text: messages[index] || '',
+  };
+}
+
 export function resolveNoticeBarClickPayload(options: {
   scrollMode: NoticeBarScrollMode;
   displayMessages: string[];
@@ -76,9 +89,10 @@ export function resolveNoticeBarClickPayload(options: {
   event?: unknown;
 }) {
   const vertical = options.scrollMode === 'vertical';
+  const message = resolveNoticeBarMessagePayload(options.displayMessages, options.currentIndex);
   return {
-    text: vertical ? options.displayMessages[options.currentIndex] || '' : options.text,
-    index: vertical ? options.currentIndex : 0,
+    text: vertical ? message.text : options.text,
+    index: vertical ? message.index : 0,
     event: options.event,
   };
 }
