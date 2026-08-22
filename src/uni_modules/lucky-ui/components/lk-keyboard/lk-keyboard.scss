@@ -1,254 +1,133 @@
 @use '../../theme/src/mixins' as *;
 
-// LkKeyboard - Apple Style Keyboard
-
 @include b(keyboard) {
-  // CSS Variables
-  --kb-bg: var(--lk-keyboard-bg);
-  --kb-key-bg: var(--lk-keyboard-key-bg);
-  --kb-key-bg-active: var(--lk-keyboard-key-bg-active);
-  --kb-key-text: var(--lk-keyboard-key-text);
-  --kb-key-shadow: var(--lk-keyboard-key-shadow);
-  --kb-key-border: var(--lk-keyboard-key-border);
-  --kb-special-bg: var(--lk-keyboard-special-bg);
-  --kb-special-text: var(--lk-keyboard-special-text);
-  --kb-accent: var(--lk-color-primary);
-  --kb-radius: var(--lk-radius-md);
-  --kb-key-height: var(--lk-control-height-md);
-  --kb-gap: var(--lk-spacing-sm);
-  --kb-padding: var(--lk-spacing-sm);
+  --kb-key-height: var(--lk-rpx-104);
 
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transform: translateY(100%);
-  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-  will-change: transform;
-  border-top-left-radius: var(--lk-radius-lg);
-  border-top-right-radius: var(--lk-radius-lg);
+  box-sizing: border-box;
+  width: 100%;
   overflow: hidden;
+  background: var(--lk-keyboard-bg);
+  color: var(--lk-keyboard-text);
 
-  @include when(visible) {
-    transform: translateY(0);
-  }
-
-  @include when(blur) {
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-  }
-
-  // 遮罩
-  @include e(overlay) {
-    position: fixed;
-    inset: 0;
-    background: var(--lk-keyboard-overlay-bg);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-    z-index: 999;
-
-    @include when(visible) {
-      opacity: 1;
-      pointer-events: auto;
-    }
-  }
-
-  // 标题栏
   @include e(header) {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    height: calc(var(--lk-control-height-sm) + var(--lk-spacing-xs));
-    padding: 0 var(--lk-spacing-md);
-    background: var(--kb-bg);
-    border-bottom: var(--lk-rpx-1) solid var(--lk-keyboard-header-border);
-    box-shadow: inset 0 calc(var(--lk-rpx-1) * -1) 0 var(--lk-color-border-light);
+    min-height: var(--lk-rpx-88);
+    padding: var(--lk-spacing-xs) var(--lk-spacing-lg) 0;
   }
 
-  @include e(header-left) {
-    flex: 1;
+  @include e(header-side) {
     display: flex;
+    flex: 1;
     justify-content: flex-start;
+
+    @include m(end) {
+      justify-content: flex-end;
+    }
   }
 
-  @include e(header-right) {
-    flex: 1;
+  @include e(header-action) {
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    min-height: var(--lk-rpx-64);
+    padding: 0 var(--lk-spacing-sm);
+    font-size: var(--lk-font-size-base);
+    font-weight: var(--lk-font-weight-semibold);
+    color: inherit;
+    cursor: pointer;
+    transition: opacity var(--lk-transition-fast);
+
+    &:active {
+      opacity: 0.56;
+    }
   }
 
   @include e(title) {
     flex: 2;
+    overflow: hidden;
+    font-size: var(--lk-font-size-base);
+    font-weight: var(--lk-font-weight-semibold);
+    color: inherit;
     text-align: center;
-    font-size: var(--lk-font-size-base);
-    font-weight: 500;
-    color: var(--kb-key-text);
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  @include e(close) {
-    padding: var(--lk-spacing-xs) var(--lk-spacing-md);
-  }
-
-  @include e(close-text) {
-    font-size: var(--lk-font-size-base);
-    color: var(--kb-key-text);
-    opacity: 0.6;
-  }
-
-  @include e(done) {
-    padding: var(--lk-spacing-xs) var(--lk-spacing-md);
-  }
-
-  @include e(done-text) {
-    font-size: var(--lk-font-size-base);
-    color: var(--kb-accent);
-    font-weight: 600;
-  }
-
-  // 拖拽指示条
-  @include e(indicator) {
-    display: flex;
-    justify-content: center;
-    padding: var(--lk-spacing-sm) 0 var(--lk-spacing-xs);
-    background: var(--kb-bg);
-  }
-
-  @include e(indicator-bar) {
-    width: calc(var(--lk-control-height-xs) + var(--lk-spacing-lg));
-    height: var(--lk-spacing-xs);
-    background: var(--lk-keyboard-indicator-bg);
-    border-radius: var(--lk-radius-xs);
-  }
-
-  // 键盘主体
   @include e(body) {
-    background: var(--kb-bg);
-    padding: var(--kb-padding);
-    padding-top: var(--lk-spacing-xs);
-    border-top: var(--lk-rpx-1) solid var(--lk-keyboard-header-border);
+    box-sizing: border-box;
+    width: 100%;
+    padding: var(--lk-spacing-md) var(--lk-spacing-lg) var(--lk-spacing-lg);
   }
 
-  // 键盘行
   @include e(row) {
     display: flex;
-    margin-bottom: var(--kb-gap);
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-
-    & > view:not(:first-child) {
-      margin-left: var(--kb-gap);
-    }
+    width: 100%;
   }
 
-  // 按键
   @include e(key) {
-    flex: 1;
-    height: var(--kb-key-height);
     display: flex;
+    flex: 1;
     align-items: center;
     justify-content: center;
-    background: var(--kb-key-bg);
-    border-radius: var(--kb-radius);
-    border: var(--lk-rpx-1) solid var(--kb-key-border);
-    box-shadow: none;
+    min-width: 0;
+    height: var(--kb-key-height);
+    color: inherit;
+    cursor: pointer;
+    user-select: none;
     transition:
-      background-color var(--lk-transition-fast),
-      transform var(--lk-transition-fast),
-      box-shadow var(--lk-transition-fast);
+      opacity var(--lk-transition-fast),
+      transform var(--lk-transition-fast);
 
     &:active {
-      background: var(--kb-key-bg-active);
-      transform: translateY(var(--lk-rpx-2)) scale(0.985);
+      opacity: 0.52;
+      transform: scale(0.9);
     }
 
-    // 删除键
-    @include m(delete) {
-      background: var(--kb-special-bg);
-      color: var(--kb-special-text);
-
-      &:active {
-        background: var(--kb-key-bg-active);
-      }
-    }
-
-    // 确认键
-    @include m(confirm) {
-      background: var(--kb-accent);
-      color: var(--lk-color-white);
-      border-color: transparent;
-
-      &:active {
-        opacity: 0.9;
-      }
-    }
-
-    // 额外按键
-    @include m(extra) {
-      background: var(--kb-special-bg);
-      color: var(--kb-special-text);
-      font-size: var(--lk-font-size-sm);
-
-      &:active {
-        background: var(--kb-key-bg-active);
-      }
-    }
-
-    // 空按键
     @include m(empty) {
-      background: transparent;
-      box-shadow: none;
       pointer-events: none;
     }
 
-    // 禁用
     @include m(disabled) {
-      opacity: 0.4;
+      opacity: 0.28;
       pointer-events: none;
     }
 
-    // 宽按键
-    @include m(wide) {
-      flex: 1.5;
+    @include m(extra) {
+      .lk-keyboard__key-text {
+        font-size: var(--lk-font-size-base);
+      }
     }
   }
 
-  // 按键文字
   @include e(key-text) {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
     font-size: var(--lk-font-size-xl);
-    font-weight: var(--lk-font-weight-semibold);
-    color: var(--kb-key-text);
+    font-weight: var(--lk-font-weight-medium);
     line-height: 1;
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    color: inherit;
   }
 
-  // 车牌键盘特殊样式
   @include m(plate) {
-    .lk-keyboard__key {
-      --kb-key-height: var(--lk-rpx-72);
-      --kb-radius: var(--lk-radius-sm);
+    --kb-key-height: var(--lk-rpx-80);
+
+    .lk-keyboard__body {
+      padding-right: var(--lk-spacing-sm);
+      padding-left: var(--lk-spacing-sm);
     }
 
     .lk-keyboard__key-text {
       font-size: var(--lk-font-size-lg);
     }
 
-    .lk-keyboard__row {
-      justify-content: center;
-    }
-
     .lk-keyboard__key {
-      flex: 0 0 auto;
-      width: calc((100% - var(--kb-gap) * 9) / 10);
-      min-width: var(--lk-control-height-xs);
+      flex: 0 0 10%;
+      width: 10%;
     }
 
     .lk-keyboard__key--extra,
     .lk-keyboard__key--delete {
-      width: calc((100% - var(--kb-gap)) / 2);
       flex: 1;
+      width: auto;
     }
   }
 }

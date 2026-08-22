@@ -1,4 +1,3 @@
-import type { StyleValue } from 'vue';
 import {
   KeyboardType,
   type KeyboardKey,
@@ -258,57 +257,4 @@ export function resolveKeyboardPressAction(options: {
   }
 
   return { kind: 'ignore' };
-}
-
-export function resolveKeyboardClass(options: {
-  type: string;
-  isVisible: boolean;
-  blur: boolean;
-  customClass?: unknown;
-}) {
-  return [
-    'lk-keyboard',
-    `lk-keyboard--${options.type}`,
-    {
-      'is-visible': options.isVisible,
-      'is-blur': options.blur,
-    },
-    options.customClass,
-  ];
-}
-
-export function resolveKeyboardStyle(options: {
-  zIndex: number;
-  safeAreaInsetBottom: boolean;
-  safeBottom: number;
-  customStyle?: StyleValue;
-}): StyleValue {
-  return [
-    {
-      zIndex: options.zIndex,
-      paddingBottom: options.safeAreaInsetBottom ? `${options.safeBottom}px` : '0',
-    },
-    options.customStyle || '',
-  ] as StyleValue;
-}
-
-export function resolveKeyboardKeyClass(key: KeyboardKey, customClass?: unknown) {
-  return [
-    'lk-keyboard__key',
-    {
-      'lk-keyboard__key--delete': key.type === 'delete',
-      'lk-keyboard__key--confirm': key.type === 'confirm',
-      'lk-keyboard__key--extra': key.type === 'extra',
-      'lk-keyboard__key--empty': key.type === 'empty',
-      'lk-keyboard__key--disabled': key.disabled,
-      'lk-keyboard__key--wide': (key.flex || 1) > 1,
-    },
-    customClass,
-    key.className,
-  ];
-}
-
-export function resolveKeyboardKeyStyle(key: KeyboardKey, customStyle?: StyleValue): StyleValue {
-  const baseStyle = key.flex && key.flex !== 1 ? { flex: key.flex } : {};
-  return [baseStyle, customStyle || '', key.style || ''] as StyleValue;
 }
