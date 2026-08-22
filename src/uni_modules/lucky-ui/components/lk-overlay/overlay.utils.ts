@@ -1,4 +1,10 @@
-import type { StyleValue } from 'vue';
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import type { Ref, StyleValue } from 'vue';
+
+export interface OverlayScrollLockController {
+  sync(shouldLock: boolean): boolean;
+  release(): void;
+}
 
 export function resolveOverlayVisible(options: { modelValue: boolean }): boolean {
   return options.modelValue;
@@ -40,6 +46,28 @@ export function shouldLockOverlayScroll(options: {
   return options.visible && options.lockScroll;
 }
 
-export function shouldPreventOverlayTouchMove(lockScroll: boolean): boolean {
-  return lockScroll;
+export function useOverlayScrollLock(
+  shouldLock: () => boolean,
+  controller: OverlayScrollLockController
+): Ref<boolean> {
+  const scrollLocked = ref(false);
+  const sync = () => {
+    scrollLocked.value = controller.sync(shouldLock());
+  };
+
+  watch(shouldLock, sync, { immediate: true });
+  onMounted(sync);
+  onBeforeUnmount(() => {
+    controller.release();
+    scrollLocked.value = false;
+  });
+
+  return scrollLocked;
+}
+
+export function preventOverlayTouchMove(
+  event: Pick<TouchEvent, 'preventDefault'>,
+  scrollLocked: boolean
+): void {
+  if (scrollLocked) event.preventDefault();
 }
