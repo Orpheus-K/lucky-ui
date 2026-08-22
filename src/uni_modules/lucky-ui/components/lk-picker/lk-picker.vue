@@ -1,19 +1,21 @@
 <script setup lang="ts">
 import type { StyleValue } from 'vue';
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
-import { pickerProps, pickerEmits, type PickerOption, type PickerValue } from './picker.props';
+import { pickerProps, pickerEmits, type PickerOption } from './picker.props';
 import LkPopup from '../lk-popup/lk-popup.vue';
 import { useLocale } from '../../composables/useLocale';
 import {
   clampPickerIndex,
+  dispatchPickerCancelEvents,
+  dispatchPickerConfirmEvents,
+  dispatchPickerSelectionEvents,
   resolvePickerColumnOffset,
   resolvePickerColumnOffsetByDelta,
   resolvePickerColumnWrapperStyle,
-  getPickerOptionsByIndexes,
-  getPickerValueByIndexes,
-  resolveCascadePickerIndexes,
   resolvePickerClass,
+  resolvePickerColumnSelection,
   resolvePickerColumns,
+  resolvePickerDraftSelection,
   resolvePickerIndicatorStyle,
   resolvePickerItemStyle,
   resolvePickerItemLabelClass,
@@ -21,8 +23,7 @@ import {
   resolvePickerScrollEnd,
   resolvePickerViewHeight,
   resolvePickerViewWrapStyle,
-  resolvePickerIndexes,
-  syncPickerInnerValueFromModel,
+  resolvePickerSelectionSnapshot,
   type PickerRenderedColumn,
   type PickerPrimitiveValue,
 } from './picker.utils';
@@ -80,43 +81,6 @@ function getTouchY(event: unknown, changed = false): number {
   const touchEvent = event as PickerTouchEvent;
   const points = changed ? touchEvent.changedTouches : touchEvent.touches;
   return points?.[0]?.clientY || 0;
-}
-
-function normalizeIndexesForColumns(indexes: number[], columns: PickerOption[][]): number[] {
-  return columns.map((column, index) => clampPickerIndex(indexes[index] ?? 0, column.length));
-}
-
-function resolveSelectionSnapshot(indexes: number[], columns = computedColumns.value) {
-  let resolvedColumns = columns;
-  let resolvedIndexes = normalizeIndexesForColumns(indexes, resolvedColumns);
-
-  if (props.mode === 'cascade') {
-    const draftValue = getPickerValueByIndexes({
-      mode: props.mode,
-      columns: resolvedColumns,
-      indexes: resolvedIndexes,
-    });
-    resolvedColumns = resolvePickerColumns({
-      mode: props.mode,
-      columns: props.columns,
-      innerValue: Array.isArray(draftValue) ? (draftValue as PickerPrimitiveValue[]) : [],
-    });
-    resolvedIndexes = normalizeIndexesForColumns(resolvedIndexes, resolvedColumns);
-  }
-
-  const value = getPickerValueByIndexes({
-    mode: props.mode,
-    columns: resolvedColumns,
-    indexes: resolvedIndexes,
-  });
-  const options = getPickerOptionsByIndexes(resolvedColumns, resolvedIndexes);
-
-  return {
-    columns: resolvedColumns,
-    indexes: resolvedIndexes,
-    value,
-    options,
-  };
 }
 
 function setColumnScrollState(columnIndex: number, offset: number, duration: number) {
@@ -185,7 +149,9 @@ function updateRenderedColumns(skipColumnIndex = -1) {
 
 function syncColumnScrollState(indexes = selectedIndexes.value, skipColumnIndex = -1) {
   const columns = computedColumns.value;
-  const nextIndexes = normalizeIndexesForColumns(indexes, columns);
+  const nextIndexes = columns.map((column, index) =>
+    clampPickerIndex(indexes[index] ?? 0, column.length)
+  );
   columnOffsets.value = columns.map((column, columnIndex) => {
     if (columnIndex === skipColumnIndex && columnOffsets.value[columnIndex] !== undefined) {
       return columnOffsets.value[columnIndex];
@@ -208,62 +174,24 @@ function scheduleRenderedColumnSettle(columnIndex: number, offset: number, durat
   }, duration + 40);
 }
 
-// 根据 modelValue 初始化选中索引
-function initIndexes() {
-  const cols = computedColumns.value;
-  const mv = props.modelValue;
-
-  if (!cols.length) {
-    selectedIndexes.value = [];
-    return;
-  }
-
-  if (props.mode === 'single') {
-    selectedIndexes.value = normalizeIndexesForColumns(
-      resolvePickerIndexes({
-        mode: props.mode,
-        columns: cols,
-        modelValue: mv,
-      }),
-      cols
-    );
-  } else {
-    const arr = Array.isArray(mv) ? mv : [];
-    innerValue.value = arr.slice();
-    selectedIndexes.value = normalizeIndexesForColumns(
-      resolvePickerIndexes({
-        mode: props.mode,
-        columns: cols,
-        modelValue: mv,
-      }),
-      cols
-    );
-  }
-}
-
-function syncInnerValueFromModel() {
-  innerValue.value = syncPickerInnerValueFromModel({
+function getSelectionSnapshot(indexes = selectedIndexes.value) {
+  return resolvePickerSelectionSnapshot({
     mode: props.mode,
-    modelValue: props.modelValue,
-  });
-}
-
-function getValueByIndexes(indexes: number[]): PickerValue {
-  return getPickerValueByIndexes({
-    mode: props.mode,
-    columns: computedColumns.value,
+    columns: props.columns,
+    resolvedColumns: computedColumns.value,
     indexes,
   });
 }
 
-function getOptionsByIndexes(indexes: number[]): PickerOption[] {
-  return getPickerOptionsByIndexes(computedColumns.value, indexes);
-}
-
 function resetDraftSelection() {
-  syncInnerValueFromModel();
-  initIndexes();
-  syncColumnScrollState();
+  const draft = resolvePickerDraftSelection({
+    mode: props.mode,
+    columns: props.columns,
+    modelValue: props.modelValue,
+  });
+  innerValue.value = draft.innerValue;
+  selectedIndexes.value = draft.indexes;
+  syncColumnScrollState(draft.indexes);
 }
 
 watch(
@@ -296,32 +224,35 @@ watch(
 
 function commitColumnIndex(columnIndex: number, optionIndex: number) {
   const columns = computedColumns.value;
-  const nextIndexes = columns.map((column, index) => {
-    if (index === columnIndex) return clampPickerIndex(optionIndex, column.length);
-    return clampPickerIndex(selectedIndexes.value[index] ?? 0, column.length);
-  });
-  const cascadeIndexes = resolveCascadePickerIndexes({
-    nextIndexes,
-    previousIndexes: selectedIndexes.value,
+  const selection = resolvePickerColumnSelection({
     mode: props.mode,
+    columns: props.columns,
+    resolvedColumns: columns,
+    previousIndexes: selectedIndexes.value,
+    columnIndex,
+    optionIndex,
   });
-  const snapshot = resolveSelectionSnapshot(cascadeIndexes, columns);
-  const changed = snapshot.indexes.some((item, index) => item !== selectedIndexes.value[index]);
 
-  selectedIndexes.value = snapshot.indexes;
+  selectedIndexes.value = selection.indexes;
 
   if (props.mode !== 'single') {
-    innerValue.value = Array.isArray(snapshot.value)
-      ? (snapshot.value as PickerPrimitiveValue[])
+    innerValue.value = Array.isArray(selection.value)
+      ? (selection.value as PickerPrimitiveValue[])
       : [];
   }
 
-  if (changed) {
-    emit('pick', snapshot.value, snapshot.indexes, snapshot.options);
-  }
+  dispatchPickerSelectionEvents({
+    inline: props.inline,
+    selection,
+    onPick: (value, indexes, options) => emit('pick', value, indexes, options),
+    onUpdateModelValue: value => emit('update:modelValue', value),
+    onChange: value => emit('change', value),
+  });
 
   nextTick(() => {
-    const normalized = normalizeIndexesForColumns(selectedIndexes.value, computedColumns.value);
+    const normalized = computedColumns.value.map((column, index) =>
+      clampPickerIndex(selectedIndexes.value[index] ?? 0, column.length)
+    );
     selectedIndexes.value = normalized;
     syncColumnScrollState(normalized, columnIndex);
   });
@@ -398,21 +329,21 @@ onBeforeUnmount(() => {
 
 function onCancel() {
   resetDraftSelection();
-  const value = getValueByIndexes(selectedIndexes.value);
-  emit('cancel', value, selectedIndexes.value, getOptionsByIndexes(selectedIndexes.value));
-  emit('update:visible', false);
+  dispatchPickerCancelEvents({
+    snapshot: getSelectionSnapshot(),
+    onCancel: (value, indexes, options) => emit('cancel', value, indexes, options),
+    onVisibleChange: visible => emit('update:visible', visible),
+  });
 }
 
 function onConfirm() {
-  const snapshot = resolveSelectionSnapshot(selectedIndexes.value);
-  const value = snapshot.value;
-  const indexes = [...snapshot.indexes];
-  const options = snapshot.options;
-
-  emit('update:modelValue', value);
-  emit('change', value);
-  emit('confirm', value, indexes, options);
-  emit('update:visible', false);
+  dispatchPickerConfirmEvents({
+    snapshot: getSelectionSnapshot(),
+    onUpdateModelValue: value => emit('update:modelValue', value),
+    onChange: value => emit('change', value),
+    onConfirm: (value, indexes, options) => emit('confirm', value, [...indexes], options),
+    onVisibleChange: visible => emit('update:visible', visible),
+  });
 }
 
 /** 分层样式挂在 text 上，减少整项节点在滚动选中时的样式抖动。 */
