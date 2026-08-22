@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, useSlots } from 'vue';
+import { computed, onBeforeUnmount, ref, useSlots, watch } from 'vue';
 import type { StyleValue } from 'vue';
 import LkOverlay from '../lk-overlay/lk-overlay.vue';
 import LkIcon from '../lk-icon/lk-icon.vue';
@@ -11,7 +11,7 @@ import {
   type TransitionConfig,
 } from '@/uni_modules/lucky-ui/composables/useTransition';
 import {
-  canTriggerModalAction,
+  createModalActionController,
   resolveModalFooterClass,
   resolveModalHeaderClass,
   resolveModalPanelStyle,
@@ -22,7 +22,6 @@ import {
   resolveModalTransitionDuration,
   resolveModalTransitionEasing,
   resolveModalTransitionName,
-  shouldCloseModalOnOverlay,
   shouldModalHeaderRender,
 } from './modal.utils';
 
@@ -110,39 +109,61 @@ const {
     },
   }
 );
-const panelClass = computed(() => [transitionClasses.value, props.customClass]);
+const confirming = ref(false);
+const closeRequested = ref(false);
+const actionController = createModalActionController({
+  isVisible: () => props.modelValue,
+  isLeaving: () => state.value.leaving,
+  isConfirming: () => confirming.value,
+  setConfirming: value => {
+    confirming.value = value;
+  },
+  isCloseRequested: () => closeRequested.value,
+  setCloseRequested: value => {
+    closeRequested.value = value;
+  },
+  getBeforeConfirm: () => props.beforeConfirm,
+  onUpdateModelValue: value => emit('update:modelValue', value),
+  onConfirm: () => emit('confirm'),
+  onCancel: () => emit('cancel'),
+  onClickOverlay: () => emit('click-overlay'),
+  onClickClose: () => emit('click-close'),
+});
+const actionsDisabled = computed(() => !actionController.canAct());
+const overlayCloseOnClick = computed(() =>
+  actionController.shouldCloseOnOverlay(props.closeOnOverlay)
+);
+const panelClass = computed(() => [
+  transitionClasses.value,
+  props.customClass,
+  { 'is-confirming': confirming.value },
+]);
 
-function close() {
-  // 如果正在离开，直接返回（防止重复触发）
-  if (!canTriggerModalAction(state.value.leaving)) return;
-  emit('update:modelValue', false);
-}
+watch(
+  () => props.modelValue,
+  () => actionController.syncVisibility(),
+  { flush: 'sync' }
+);
+onBeforeUnmount(() => actionController.destroy());
 
 function confirm() {
-  if (!canTriggerModalAction(state.value.leaving)) return;
-  emit('confirm');
-  emit('update:modelValue', false);
+  void actionController.confirm();
 }
 
 function onOverlayClick() {
-  emit('click-overlay');
-  if (
-    shouldCloseModalOnOverlay({
-      leaving: state.value.leaving,
-      closeOnOverlay: props.closeOnOverlay,
-    })
-  )
-    close();
+  actionController.clickOverlay();
+}
+
+function onOverlayModelUpdate(value: boolean) {
+  if (!value) actionController.closeFromOverlay();
 }
 
 function cancel() {
-  emit('cancel');
-  close();
+  actionController.cancel();
 }
 
 function onCloseClick() {
-  emit('click-close');
-  close();
+  actionController.clickClose();
 }
 </script>
 
@@ -151,7 +172,8 @@ function onCloseClick() {
   <lk-overlay
     :model-value="props.modelValue"
     :z-index="zIndex"
-    @update:model-value="close"
+    :close-on-click="overlayCloseOnClick"
+    @update:model-value="onOverlayModelUpdate"
     @click="onOverlayClick"
   />
 
@@ -172,6 +194,8 @@ function onCloseClick() {
           name="x"
           size="48"
           class="lk-modal__close"
+          :class="{ 'is-disabled': actionsDisabled }"
+          :aria-disabled="actionsDisabled"
           @click="onCloseClick"
         />
       </view>
@@ -191,19 +215,22 @@ function onCloseClick() {
           <template v-if="footerType === 'button'">
             <lk-button
               v-if="showCancel"
-              class="lk-modal__footer-btn lk-modal__footer-btn--cancel"
+              class="lk-modal__footer-btn lk-modal__footer-btn--cancel lk-modal__cancel"
               block
               size="md"
               variant="soft"
+              :disabled="actionsDisabled"
               @click="cancel"
             >
               {{ resolvedCancelText }}
             </lk-button>
             <lk-button
-              class="lk-modal__footer-btn"
+              class="lk-modal__footer-btn lk-modal__confirm"
               block
               size="md"
               variant="solid"
+              :loading="confirming"
+              :disabled="actionsDisabled"
               @click="confirm"
             >
               {{ resolvedConfirmText }}
@@ -212,13 +239,21 @@ function onCloseClick() {
           <template v-else>
             <view
               v-if="showCancel"
-              class="lk-modal__text-btn lk-modal__text-btn--cancel"
+              class="lk-modal__text-btn lk-modal__text-btn--cancel lk-modal__cancel"
+              :class="{ 'is-disabled': actionsDisabled }"
+              :aria-disabled="actionsDisabled"
               @tap="cancel"
             >
               {{ resolvedCancelText }}
             </view>
-            <view class="lk-modal__text-btn lk-modal__text-btn--confirm" @tap="confirm">
-              {{ resolvedConfirmText }}
+            <view
+              class="lk-modal__text-btn lk-modal__text-btn--confirm lk-modal__confirm"
+              :class="{ 'is-disabled': actionsDisabled, 'is-loading': confirming }"
+              :aria-disabled="actionsDisabled"
+              @tap="confirm"
+            >
+              <view v-if="confirming" class="lk-modal__confirm-loader" />
+              <text v-else>{{ resolvedConfirmText }}</text>
             </view>
           </template>
         </slot>

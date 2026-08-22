@@ -5,6 +5,8 @@ import type {
   TransitionConfig,
 } from '@/uni_modules/lucky-ui/composables/useTransition';
 
+export type ModalBeforeConfirm = () => boolean | Promise<boolean>;
+
 export const modalProps = {
   ...baseProps,
 
@@ -51,6 +53,12 @@ export const modalProps = {
 
   /** 确认按钮文本 */
   confirmText: LkProp.string(''),
+
+  /** 确认前拦截：返回 false 或 Promise<false> 时保持打开 */
+  beforeConfirm: {
+    type: Function as PropType<ModalBeforeConfirm>,
+    default: null,
+  },
 
   /** 取消按钮文本 */
   cancelText: LkProp.string(''),

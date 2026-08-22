@@ -11,7 +11,6 @@ import type { SegmentedOption } from '@/uni_modules/lucky-ui/components/lk-segme
 const visible1 = ref(false);
 const visible2 = ref(false);
 const visible3 = ref(false);
-const visible4 = ref(false);
 const visibleScale = ref(false);
 const visibleBounce = ref(false);
 const visibleNoHeader = ref(false);
@@ -40,14 +39,117 @@ const easingOptions: SegmentedOption[] = [
   { label: 'ease-in-out', value: 'ease-in-out' },
 ];
 
-const handleConfirm = () => {
-  return new Promise(resolve => {
+type OverlayProbeMode = 'controlled' | 'observe';
+const overlayProbeVisible = ref(false);
+const overlayProbeMode = ref<OverlayProbeMode>('controlled');
+const overlayProbeCloseOnOverlay = ref(false);
+const overlayProbeClickCount = ref(0);
+const overlayProbeUpdateCount = ref(0);
+const overlayProbeLastUpdate = ref('none');
+
+function openOverlayProbe(closeOnOverlay: boolean, mode: OverlayProbeMode) {
+  overlayProbeVisible.value = true;
+  overlayProbeMode.value = mode;
+  overlayProbeCloseOnOverlay.value = closeOnOverlay;
+  overlayProbeClickCount.value = 0;
+  overlayProbeUpdateCount.value = 0;
+  overlayProbeLastUpdate.value = 'none';
+}
+
+function onOverlayProbeClick() {
+  overlayProbeClickCount.value += 1;
+}
+
+function onOverlayProbeUpdate(value: boolean) {
+  overlayProbeUpdateCount.value += 1;
+  overlayProbeLastUpdate.value = String(value);
+  if (overlayProbeMode.value === 'controlled') {
+    overlayProbeVisible.value = value;
+  }
+}
+
+function closeOverlayProbe() {
+  overlayProbeVisible.value = false;
+}
+
+type AsyncProbeMode = 'resolve' | 'reject';
+const asyncProbeVisible = ref(false);
+const asyncProbeMode = ref<AsyncProbeMode>('resolve');
+const asyncProbeOutcome = ref('idle');
+const asyncProbeHookCount = ref(0);
+const asyncProbeConfirmCount = ref(0);
+const asyncProbeCancelCount = ref(0);
+const asyncProbeCloseClickCount = ref(0);
+const asyncProbeUpdateCount = ref(0);
+const asyncProbeEvents = ref<string[]>([]);
+let asyncProbeSession = 0;
+
+function openAsyncProbe(mode: AsyncProbeMode) {
+  asyncProbeSession += 1;
+  asyncProbeVisible.value = true;
+  asyncProbeMode.value = mode;
+  asyncProbeOutcome.value = 'idle';
+  asyncProbeHookCount.value = 0;
+  asyncProbeConfirmCount.value = 0;
+  asyncProbeCancelCount.value = 0;
+  asyncProbeCloseClickCount.value = 0;
+  asyncProbeUpdateCount.value = 0;
+  asyncProbeEvents.value = [];
+}
+
+function beforeAsyncConfirm() {
+  const session = asyncProbeSession;
+  const mode = asyncProbeMode.value;
+  asyncProbeHookCount.value += 1;
+  asyncProbeOutcome.value = 'pending';
+  asyncProbeEvents.value.push(`before:${mode}`);
+
+  return new Promise<boolean>((resolve, reject) => {
     setTimeout(() => {
-      uni.showToast({ title: '删除成功' });
-      resolve(true);
+      if (session === asyncProbeSession) {
+        asyncProbeOutcome.value = mode === 'resolve' ? 'resolved' : 'rejected';
+      }
+
+      if (mode === 'resolve') {
+        resolve(true);
+      } else {
+        reject(new Error('demo rejection'));
+      }
     }, 1000);
   });
-};
+}
+
+function onAsyncProbeConfirm() {
+  asyncProbeConfirmCount.value += 1;
+  asyncProbeEvents.value.push('confirm');
+}
+
+function onAsyncProbeCancel() {
+  asyncProbeCancelCount.value += 1;
+  asyncProbeEvents.value.push('cancel');
+}
+
+function onAsyncProbeCloseClick() {
+  asyncProbeCloseClickCount.value += 1;
+  asyncProbeEvents.value.push('click-close');
+}
+
+function onAsyncProbeUpdate(value: boolean) {
+  asyncProbeUpdateCount.value += 1;
+  asyncProbeEvents.value.push(`update:${value}`);
+  asyncProbeVisible.value = value;
+}
+
+function reopenAsyncProbeDuringPending() {
+  asyncProbeSession += 1;
+  asyncProbeVisible.value = false;
+  Promise.resolve().then(() => openAsyncProbe('reject'));
+}
+
+function closeAsyncProbe() {
+  asyncProbeSession += 1;
+  asyncProbeVisible.value = false;
+}
 </script>
 
 <template>
@@ -73,13 +175,106 @@ const handleConfirm = () => {
       </lk-space>
     </demo-block>
 
-    <demo-block title="异步确认">
+    <demo-block title="遮罩关闭控制流" desc="稳定计数用于 H5 与微信小程序交互验收">
       <lk-space wrap>
-        <lk-button @click="visible4 = true">异步确认</lk-button>
-        <lk-modal v-model="visible4" animation="quick" @confirm="handleConfirm"
-          >确定删除吗？</lk-modal
+        <lk-button
+          id="modal-overlay-open-controlled-false"
+          @click="openOverlayProbe(false, 'controlled')"
         >
+          受控：遮罩不关闭
+        </lk-button>
+        <lk-button
+          id="modal-overlay-open-controlled-true"
+          @click="openOverlayProbe(true, 'controlled')"
+        >
+          受控：遮罩关闭
+        </lk-button>
+        <lk-button id="modal-overlay-open-observe-true" @click="openOverlayProbe(true, 'observe')">
+          仅观察关闭请求
+        </lk-button>
       </lk-space>
+      <view class="probe-state">
+        <text id="modal-overlay-probe-visible">visible={{ overlayProbeVisible }}</text>
+        <text id="modal-overlay-probe-mode">mode={{ overlayProbeMode }}</text>
+        <text id="modal-overlay-probe-close-on-overlay">
+          closeOnOverlay={{ overlayProbeCloseOnOverlay }}
+        </text>
+        <text id="modal-overlay-probe-click-count">click={{ overlayProbeClickCount }}</text>
+        <text id="modal-overlay-probe-update-count">update={{ overlayProbeUpdateCount }}</text>
+        <text id="modal-overlay-probe-last-update">lastUpdate={{ overlayProbeLastUpdate }}</text>
+      </view>
+      <lk-modal
+        :model-value="overlayProbeVisible"
+        :close-on-overlay="overlayProbeCloseOnOverlay"
+        :show-close="false"
+        :show-footer="false"
+        title="遮罩关闭探针"
+        @click-overlay="onOverlayProbeClick"
+        @update:model-value="onOverlayProbeUpdate"
+      >
+        <view id="modal-overlay-probe-content" class="probe-modal-content">
+          <text>点击遮罩后读取页面上的计数与可见状态。</text>
+          <lk-button id="modal-overlay-force-close" size="sm" @click="closeOverlayProbe">
+            结束探针
+          </lk-button>
+        </view>
+      </lk-modal>
+    </demo-block>
+
+    <demo-block title="异步确认" desc="beforeConfirm 决定关闭，pending 期间默认操作全部禁用">
+      <lk-space wrap>
+        <lk-button id="modal-async-open-resolve" @click="openAsyncProbe('resolve')">
+          异步成功
+        </lk-button>
+        <lk-button id="modal-async-open-reject" @click="openAsyncProbe('reject')">
+          异步失败
+        </lk-button>
+      </lk-space>
+      <view class="probe-state">
+        <text id="modal-async-probe-visible">visible={{ asyncProbeVisible }}</text>
+        <text id="modal-async-probe-mode">mode={{ asyncProbeMode }}</text>
+        <text id="modal-async-probe-outcome">outcome={{ asyncProbeOutcome }}</text>
+        <text id="modal-async-probe-hook-count">hook={{ asyncProbeHookCount }}</text>
+        <text id="modal-async-probe-confirm-count">confirm={{ asyncProbeConfirmCount }}</text>
+        <text id="modal-async-probe-cancel-count">cancel={{ asyncProbeCancelCount }}</text>
+        <text id="modal-async-probe-close-count">closeClick={{ asyncProbeCloseClickCount }}</text>
+        <text id="modal-async-probe-update-count">update={{ asyncProbeUpdateCount }}</text>
+        <text id="modal-async-probe-events"
+          >events={{ asyncProbeEvents.join(' > ') || 'none' }}</text
+        >
+      </view>
+      <lk-modal
+        :model-value="asyncProbeVisible"
+        :before-confirm="beforeAsyncConfirm"
+        animation="quick"
+        title="异步确认探针"
+        @cancel="onAsyncProbeCancel"
+        @click-close="onAsyncProbeCloseClick"
+        @confirm="onAsyncProbeConfirm"
+        @update:model-value="onAsyncProbeUpdate"
+      >
+        <view id="modal-async-probe-content" class="probe-modal-content">
+          <text>确认后等待 1 秒；成功才关闭，失败保持打开。</text>
+          <lk-space wrap>
+            <lk-button
+              id="modal-async-race-reopen"
+              size="sm"
+              variant="soft"
+              @click="reopenAsyncProbeDuringPending"
+            >
+              外部关闭并重开
+            </lk-button>
+            <lk-button
+              id="modal-async-force-close"
+              size="sm"
+              variant="soft"
+              @click="closeAsyncProbe"
+            >
+              结束探针
+            </lk-button>
+          </lk-space>
+        </view>
+      </lk-modal>
     </demo-block>
 
     <demo-block title="更多预设与形态">
@@ -217,5 +412,25 @@ const handleConfirm = () => {
   > :not(:first-child) {
     margin-top: 16rpx;
   }
+}
+
+.probe-state,
+.probe-modal-content {
+  display: flex;
+  flex-direction: column;
+
+  > :not(:first-child) {
+    margin-top: var(--lk-spacing-xs);
+  }
+}
+
+.probe-state {
+  margin-top: var(--lk-spacing-md);
+  color: var(--lk-text-secondary);
+  font-size: var(--lk-font-size-sm);
+}
+
+.probe-modal-content {
+  color: var(--lk-text-primary);
 }
 </style>
