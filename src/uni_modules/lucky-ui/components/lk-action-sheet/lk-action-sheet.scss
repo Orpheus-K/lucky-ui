@@ -120,6 +120,6 @@
   }
 
   @include e(safe) {
-    height: env(safe-area-inset-bottom);
+    height: var(--lk-action-sheet-safe-area-bottom, env(safe-area-inset-bottom));
   }
 }
