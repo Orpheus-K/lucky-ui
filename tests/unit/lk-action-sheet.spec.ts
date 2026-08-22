@@ -3,8 +3,15 @@ import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
-import { describe, expect, it } from 'vitest';
-import {
+import * as VueRuntime from 'vue';
+import { describe, expect, it, vi } from 'vitest';
+import * as RippleModule from '../../src/uni_modules/lucky-ui/composables/useRipple';
+import * as LocaleComposableModule from '../../src/uni_modules/lucky-ui/composables/useLocale';
+import { Locale } from '../../src/uni_modules/lucky-ui/locale';
+import * as ActionSheetPropsModule from '../../src/uni_modules/lucky-ui/components/lk-action-sheet/action-sheet.props';
+import * as ActionSheetUtilsModule from '../../src/uni_modules/lucky-ui/components/lk-action-sheet/action-sheet.utils';
+
+const {
   canSelectAction,
   createActionSheetPayload,
   resolveActionSheetCancelClass,
@@ -14,10 +21,168 @@ import {
   resolveActionSheetListClass,
   resolveActionSheetRootStyle,
   shouldCloseAfterAction,
+  shouldRenderActionSheetCancel,
   shouldRenderActionSheetHead,
-} from '../../src/uni_modules/lucky-ui/components/lk-action-sheet/action-sheet.utils';
+} = ActionSheetUtilsModule;
 
 const nodeRequire = createRequire(import.meta.url);
+const actionSheetSfcUrl = new URL(
+  '../../src/uni_modules/lucky-ui/components/lk-action-sheet/lk-action-sheet.vue',
+  import.meta.url
+);
+
+type HostNode = {
+  type: string;
+  props: Record<string, unknown>;
+  children: HostNode[];
+  parent: HostNode | null;
+  text?: string;
+};
+
+type CompilerSfc = {
+  parse: (
+    source: string,
+    options: { filename: string }
+  ) => { descriptor: unknown; errors: unknown[] };
+  compileScript: (
+    descriptor: unknown,
+    options: {
+      id: string;
+      inlineTemplate: boolean;
+      templateOptions: { compilerOptions: { isCustomElement: (tag: string) => boolean } };
+    }
+  ) => { content: string };
+};
+
+type Babel = {
+  transformSync: (
+    source: string,
+    options: {
+      babelrc: boolean;
+      configFile: boolean;
+      filename: string;
+      plugins: unknown[];
+    }
+  ) => { code?: string | null } | null;
+};
+
+type CommonJsModule = {
+  exports: Record<string, unknown>;
+};
+
+const actionSheetRenderer = VueRuntime.createRenderer<HostNode, HostNode>({
+  patchProp(element, key, _previousValue, nextValue) {
+    element.props[key] = nextValue;
+  },
+  insert(child, parent, anchor) {
+    child.parent = parent;
+    const anchorIndex = anchor ? parent.children.indexOf(anchor) : -1;
+    if (anchorIndex === -1) parent.children.push(child);
+    else parent.children.splice(anchorIndex, 0, child);
+  },
+  remove(child) {
+    if (!child.parent) return;
+    const index = child.parent.children.indexOf(child);
+    if (index >= 0) child.parent.children.splice(index, 1);
+    child.parent = null;
+  },
+  createElement(type) {
+    return { type, props: {}, children: [], parent: null };
+  },
+  createText(text) {
+    return { type: 'text', props: {}, children: [], parent: null, text };
+  },
+  createComment(text) {
+    return { type: 'comment', props: {}, children: [], parent: null, text };
+  },
+  setText(node, text) {
+    node.text = text;
+  },
+  setElementText(node, text) {
+    node.text = text;
+    node.children = [];
+  },
+  parentNode(node) {
+    return node.parent;
+  },
+  nextSibling(node) {
+    if (!node.parent) return null;
+    const index = node.parent.children.indexOf(node);
+    return node.parent.children[index + 1] ?? null;
+  },
+});
+
+function compileProductionActionSheet(): VueRuntime.Component {
+  const uniPluginManifest = nodeRequire.resolve('@dcloudio/vite-plugin-uni/package.json');
+  const dependencyRequire = createRequire(uniPluginManifest);
+  const compiler = dependencyRequire('@vue/compiler-sfc') as CompilerSfc;
+  const babel = dependencyRequire('@babel/core') as Babel;
+  const typeScriptPlugin = (
+    dependencyRequire('@babel/plugin-transform-typescript') as { default: unknown }
+  ).default;
+  const commonJsPlugin = (
+    dependencyRequire('@babel/plugin-transform-modules-commonjs') as { default: unknown }
+  ).default;
+  const source = readFileSync(actionSheetSfcUrl, 'utf8');
+  const { descriptor, errors } = compiler.parse(source, {
+    filename: actionSheetSfcUrl.pathname,
+  });
+
+  if (errors.length > 0) {
+    throw new Error(`Failed to parse lk-action-sheet.vue: ${String(errors[0])}`);
+  }
+
+  const compiledScript = compiler.compileScript(descriptor, {
+    id: 'lk-action-sheet-cancel-production-wire',
+    inlineTemplate: true,
+    templateOptions: {
+      compilerOptions: {
+        isCustomElement: tag => tag === 'view' || tag === 'text',
+      },
+    },
+  });
+  const transformed = babel.transformSync(compiledScript.content, {
+    babelrc: false,
+    configFile: false,
+    filename: 'lk-action-sheet.vue.ts',
+    plugins: [typeScriptPlugin, commonJsPlugin],
+  });
+
+  if (!transformed?.code) {
+    throw new Error('Failed to transform compiled lk-action-sheet.vue script');
+  }
+
+  const PopupStub = VueRuntime.defineComponent({
+    setup(_props, { slots }) {
+      return () => VueRuntime.h('popup-stub', {}, slots.default?.());
+    },
+  });
+  const popupModule = { __esModule: true, default: PopupStub };
+  const requireFromActionSheet = (request: string): unknown => {
+    if (request === 'vue') return VueRuntime;
+    if (request === '../lk-popup/lk-popup.vue') return popupModule;
+    if (request === './action-sheet.props') return ActionSheetPropsModule;
+    if (request === '@/uni_modules/lucky-ui/composables/useRipple') return RippleModule;
+    if (request === '../../composables/useLocale') return LocaleComposableModule;
+    if (request === './action-sheet.utils') return ActionSheetUtilsModule;
+    throw new Error(`Unexpected lk-action-sheet.vue import: ${request}`);
+  };
+  const compiledModule: CommonJsModule = { exports: {} };
+  const executeModule = new Function('require', 'module', 'exports', transformed.code);
+  executeModule(requireFromActionSheet, compiledModule, compiledModule.exports);
+
+  return compiledModule.exports.default as VueRuntime.Component;
+}
+
+function nodesByClass(node: HostNode, className: string): HostNode[] {
+  const classes = typeof node.props.class === 'string' ? node.props.class.split(' ') : [];
+  const matches = classes.includes(className) ? [node] : [];
+  return matches.concat(node.children.flatMap(child => nodesByClass(child, className)));
+}
+
+function hostText(node: HostNode): string {
+  return `${node.text ?? ''}${node.children.map(hostText).join('')}`;
+}
 
 describe('lk-action-sheet selection rules', () => {
   it('compiles exactly one conditional safe-area owner for WeChat', () => {
@@ -87,6 +252,136 @@ describe('lk-action-sheet selection rules', () => {
     expect(existsSync(outputDirectory)).toBe(false);
   }, 60_000);
 
+  it('executes the production SFC cancel fallback and hide contract reactively', async () => {
+    type CancelMode = 'omitted' | 'undefined' | 'null' | 'empty' | 'custom';
+
+    const ActionSheet = compileProductionActionSheet();
+    const mode = VueRuntime.ref<CancelMode>('omitted');
+    const warning = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const originalLocale = Locale.locale;
+    const App = VueRuntime.defineComponent({
+      render() {
+        const props: Record<string, unknown> = {
+          modelValue: true,
+          actions: [],
+          safeArea: false,
+        };
+        if (mode.value === 'undefined') props.cancelText = undefined;
+        if (mode.value === 'null') props.cancelText = null;
+        if (mode.value === 'empty') props.cancelText = '';
+        if (mode.value === 'custom') props.cancelText = 'Close';
+        return VueRuntime.h(ActionSheet, props);
+      },
+    });
+    const root: HostNode = { type: 'root', props: {}, children: [], parent: null };
+    const app = actionSheetRenderer.createApp(App);
+
+    const expectCancel = (expectedText: string) => {
+      const cancelNodes = nodesByClass(root, 'lk-action-sheet__cancel');
+      expect(cancelNodes).toHaveLength(1);
+      expect(hostText(cancelNodes[0])).toBe(expectedText);
+    };
+
+    try {
+      Locale.use('zh-Hans');
+      app.mount(root);
+      await VueRuntime.nextTick();
+      expectCancel('取消');
+
+      mode.value = 'undefined';
+      await VueRuntime.nextTick();
+      expectCancel('取消');
+
+      mode.value = 'null';
+      await VueRuntime.nextTick();
+      expectCancel('取消');
+
+      Locale.use('en');
+      await VueRuntime.nextTick();
+      expectCancel('Cancel');
+
+      mode.value = 'custom';
+      await VueRuntime.nextTick();
+      expectCancel('Close');
+
+      Locale.use('ja');
+      await VueRuntime.nextTick();
+      expectCancel('Close');
+
+      mode.value = 'empty';
+      await VueRuntime.nextTick();
+      expect(nodesByClass(root, 'lk-action-sheet__cancel')).toHaveLength(0);
+
+      Locale.use('fr');
+      await VueRuntime.nextTick();
+      expect(nodesByClass(root, 'lk-action-sheet__cancel')).toHaveLength(0);
+
+      mode.value = 'omitted';
+      await VueRuntime.nextTick();
+      expectCancel('Annuler');
+      expect(warning).not.toHaveBeenCalled();
+    } finally {
+      app.unmount();
+      Locale.use(originalLocale);
+      warning.mockRestore();
+    }
+  });
+
+  it('compiles omitted and empty cancel text as distinct WeChat states', () => {
+    const uniBin = nodeRequire.resolve('@dcloudio/vite-plugin-uni/bin/uni.js');
+    const temporaryParent = resolve(tmpdir());
+    const outputDirectory = mkdtempSync(join(temporaryParent, 'lucky-ui-action-sheet-cancel-mp-'));
+    const componentDirectory = join(
+      outputDirectory,
+      'uni_modules/lucky-ui/components/lk-action-sheet'
+    );
+    const wxmlPath = join(componentDirectory, 'lk-action-sheet.wxml');
+    const scriptPath = join(componentDirectory, 'lk-action-sheet.js');
+    const propsPath = join(componentDirectory, 'action-sheet.props.js');
+
+    expect(dirname(outputDirectory)).toBe(temporaryParent);
+    expect(existsSync(wxmlPath)).toBe(false);
+
+    try {
+      execFileSync(process.execPath, [uniBin, 'build', '-p', 'mp-weixin'], {
+        cwd: process.cwd(),
+        env: {
+          ...process.env,
+          NODE_ENV: 'production',
+          UNI_OUTPUT_DIR: outputDirectory,
+        },
+        stdio: 'pipe',
+      });
+
+      const wxml = readFileSync(wxmlPath, 'utf8');
+      const script = readFileSync(scriptPath, 'utf8');
+      const props = readFileSync(propsPath, 'utf8');
+      const cancelTagPattern =
+        /<view(?=[^>]*\blk-action-sheet__cancel\b)(?=[^>]*\bwx:if="\{\{([A-Za-z_$][\w$]*)\}\}")[^>]*>/;
+      const cancelTag = wxml.match(cancelTagPattern);
+      const showCancelComputed = script.match(
+        /([A-Za-z_$][\w$]*)=[A-Za-z_$][\w$]*\.computed\(\(\)=>[A-Za-z_$][\w$]*\.shouldRenderActionSheetCancel\(/
+      );
+
+      expect(cancelTag?.[0]).toContain('lk-action-sheet__cancel');
+      expect(cancelTag?.[0]).toContain('wx:if=');
+      expect(showCancelComputed?.[1]).toBeTruthy();
+      expect(
+        script.match(
+          new RegExp(`\\b${cancelTag?.[1]}\\s*:\\s*${showCancelComputed?.[1]}\\.value\\b`)
+        )
+      ).not.toBeNull();
+      expect(props).toContain('cancelText:{type:String,default:void 0}');
+      expect(
+        cancelTag?.[0].replace(/\s+wx:if="\{\{[A-Za-z_$][\w$]*\}\}"/, '').match(cancelTagPattern)
+      ).toBeNull();
+    } finally {
+      rmSync(outputDirectory, { recursive: true, force: true });
+    }
+
+    expect(existsSync(outputDirectory)).toBe(false);
+  }, 60_000);
+
   it('resolves title, description and cancel text fallback', () => {
     expect(
       shouldRenderActionSheetHead({
@@ -107,18 +402,22 @@ describe('lk-action-sheet selection rules', () => {
       })
     ).toEqual({ 'is-no-head': true });
 
+    expect(resolveActionSheetCancelText({ fallback: '取消' })).toBe('取消');
+    expect(resolveActionSheetCancelText({ cancelText: null, fallback: '取消' })).toBe('取消');
     expect(
       resolveActionSheetCancelText({
         cancelText: '',
         fallback: '取消',
       })
-    ).toBe('取消');
+    ).toBe('');
     expect(
       resolveActionSheetCancelText({
         cancelText: '关闭',
         fallback: '取消',
       })
     ).toBe('关闭');
+    expect(shouldRenderActionSheetCancel('取消')).toBe(true);
+    expect(shouldRenderActionSheetCancel('')).toBe(false);
   });
 
   it('guards disabled and loading actions before select emit', () => {

@@ -6,10 +6,14 @@ export function resolveActionSheetRootStyle(customStyle: StyleValue): StyleValue
 }
 
 export function resolveActionSheetCancelText(options: {
-  cancelText: string;
+  cancelText?: string | null;
   fallback: string;
 }): string {
-  return options.cancelText || options.fallback;
+  return options.cancelText == null ? options.fallback : options.cancelText;
+}
+
+export function shouldRenderActionSheetCancel(cancelText: string): boolean {
+  return cancelText.length > 0;
 }
 
 export function shouldRenderActionSheetHead(options: {

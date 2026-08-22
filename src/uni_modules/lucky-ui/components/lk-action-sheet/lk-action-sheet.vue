@@ -15,6 +15,7 @@ import {
   resolveActionSheetListClass,
   resolveActionSheetRootStyle,
   shouldCloseAfterAction,
+  shouldRenderActionSheetCancel,
 } from './action-sheet.utils';
 
 defineOptions({ name: 'LkActionSheet' });
@@ -88,6 +89,7 @@ const resolvedCancelText = computed(() =>
     fallback: t('cancel'),
   })
 );
+const showCancel = computed(() => shouldRenderActionSheetCancel(resolvedCancelText.value));
 </script>
 
 <template>
@@ -140,7 +142,7 @@ const resolvedCancelText = computed(() =>
       </view>
 
       <view
-        v-if="cancelText || t('cancel')"
+        v-if="showCancel"
         class="lk-action-sheet__cancel lk-ripple"
         :class="resolveActionSheetCancelClass({ rippleActive, activeIndex })"
         @tap="cancel"

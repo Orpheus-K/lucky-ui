@@ -98,6 +98,14 @@ function handleSelect() {
 />
 ```
 
+## 取消按钮显隐
+
+不传 `cancelText` 时使用当前语言的默认取消文案；显式传入空字符串时不渲染取消按钮。
+
+```vue
+<lk-action-sheet v-model="visible" :actions="actions" cancel-text="" />
+```
+
 ## 底部安全区
 
 `safeArea` 默认开启。ActionSheet 自身是底部安全区的唯一所有者，内部 Popup 不会再叠加第二层空白；关闭后两层都不会保留安全区节点。
@@ -130,21 +138,21 @@ import ActionSheetDemo from '@/components/demos/action-sheet-demo.vue';
 
 ### Props
 
-| 参数               | 说明                                    | 类型                                                   | 默认值      |
-| ------------------ | --------------------------------------- | ------------------------------------------------------ | ----------- |
-| modelValue         | 是否显示，支持 `v-model`                | `boolean`                                              | `false`     |
-| zIndex             | 弹层层级                                | `number`                                               | `1000`      |
-| title              | 标题                                    | `string`                                               | `''`        |
-| description        | 描述文案                                | `string`                                               | `''`        |
-| actions            | 操作项列表                              | `Action[]`                                             | `[]`        |
-| cancelText         | 取消按钮文字；传空字符串可隐藏取消按钮  | `string`                                               | `'取消'`    |
-| closeOnClickAction | 点击选项后是否自动关闭                  | `boolean`                                              | `true`      |
-| safeArea           | 是否适配底部安全区                      | `boolean`                                              | `true`      |
-| animation          | 动画预设名称                            | `keyof ANIMATION_PRESETS`                              | `undefined` |
-| animationType      | 内置动画类型，支持全部 `TransitionName` | [`TransitionConfig['name']`](./animation#内置动画类型) | `undefined` |
-| duration           | 动画时长                                | `number`                                               | `undefined` |
-| delay              | 动画延迟                                | `number`                                               | `undefined` |
-| easing             | 动画缓动函数                            | `TransitionConfig['easing']`                           | `undefined` |
+| 参数               | 说明                                                   | 类型                                                   | 默认值           |
+| ------------------ | ------------------------------------------------------ | ------------------------------------------------------ | ---------------- |
+| modelValue         | 是否显示，支持 `v-model`                               | `boolean`                                              | `false`          |
+| zIndex             | 弹层层级                                               | `number`                                               | `1000`           |
+| title              | 标题                                                   | `string`                                               | `''`             |
+| description        | 描述文案                                               | `string`                                               | `''`             |
+| actions            | 操作项列表                                             | `Action[]`                                             | `[]`             |
+| cancelText         | 取消按钮文字；不传时使用当前语言文案，空字符串隐藏按钮 | `string`                                               | 当前语言的“取消” |
+| closeOnClickAction | 点击选项后是否自动关闭                                 | `boolean`                                              | `true`           |
+| safeArea           | 是否适配底部安全区                                     | `boolean`                                              | `true`           |
+| animation          | 动画预设名称                                           | `keyof ANIMATION_PRESETS`                              | `undefined`      |
+| animationType      | 内置动画类型，支持全部 `TransitionName`                | [`TransitionConfig['name']`](./animation#内置动画类型) | `undefined`      |
+| duration           | 动画时长                                               | `number`                                               | `undefined`      |
+| delay              | 动画延迟                                               | `number`                                               | `undefined`      |
+| easing             | 动画缓动函数                                           | `TransitionConfig['easing']`                           | `undefined`      |
 
 ### Action
 
@@ -187,3 +195,10 @@ Demo 提供 `#action-sheet-safe-area-probe`、`#action-sheet-safe-area-toggle`�
 
 - H5：开启并打开后，面板内 `[data-testid="lk-action-sheet-safe-area"]` 数量必须为 1、computed height 必须为 24px，`.lk-popup__safe` 为 0；关闭安全区再打开，两者数量都必须为 0，目标面板高度必须恰好减少 24px。每次记录 rect、computed height、页面与 console errors。
 - 微信小程序：在真实开发者工具中重放相同步骤，读取 WXML、节点数量与 bounding box；开启时合计 1，关闭时合计 0。构建成功或 WXML 字符串只能证明模板结构，不能替代运行态验收。
+
+取消按钮显隐探针：
+
+Demo 提供 `#action-sheet-cancel-probe`、`#action-sheet-cancel-toggle`、`#action-sheet-cancel-open` 与 `#action-sheet-cancel-target`。
+
+- H5：默认模式打开后，目标面板内 `.lk-action-sheet__cancel` 必须恰好为 1 且文案为当前语言的取消文案；关闭面板、切换为 hidden 再打开后，该节点必须为 0。每步记录 probe 属性、目标 rect、节点数量、console 与 runtime errors。
+- 微信小程序：在真实开发者工具中重放相同步骤并读取节点数量与 bounding box；默认模式为 1、hidden 为 0。构建成功或 WXML 条件节点只能证明编译结构，不能代替运行态验收。
