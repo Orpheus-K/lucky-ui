@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { watch, computed, onUnmounted } from 'vue';
+import { computed, onBeforeUnmount } from 'vue';
 import type { StyleValue } from 'vue';
 import { useTransition } from '@/uni_modules/lucky-ui/composables/useTransition';
+import { createToastLifecycle, watchToastLifecycle } from './toast.lifecycle';
 import { toastProps, toastEmits } from './toast.props';
 import {
   resolveToastOverlayClass,
@@ -9,7 +10,6 @@ import {
   resolveToastRootClass,
   resolveToastRootStyle,
   resolveToastTransition,
-  shouldScheduleToastClose,
 } from './toast.utils';
 
 defineOptions({ name: 'LkToast' });
@@ -18,40 +18,18 @@ const props = defineProps(toastProps);
 const emit = defineEmits(toastEmits);
 
 const show = computed(() => props.modelValue);
-let timer: ReturnType<typeof setTimeout> | null = null;
+const lifecycle = createToastLifecycle({
+  getDuration: () => props.duration,
+  onOpen: () => emit('open'),
+  onRequestClose: () => emit('update:modelValue', false),
+  onClose: () => emit('close'),
+  onAfterLeave: () => emit('after-leave'),
+});
 
-function clearTimers() {
-  if (timer) {
-    clearTimeout(timer);
-    timer = null;
-  }
-}
-
-function scheduleClose() {
-  clearTimers();
-  if (shouldScheduleToastClose(props.duration)) {
-    timer = setTimeout(() => close(), props.duration);
-  }
-}
-
-watch(
-  () => props.modelValue,
-  v => {
-    if (v) {
-      emit('open');
-      scheduleClose();
-    } else {
-      emit('close');
-      setTimeout(() => emit('after-leave'), 260);
-    }
-  }
-);
-
-function close() {
-  if (!show.value) return;
-  emit('update:modelValue', false);
-  emit('close');
-}
+const stopLifecycleWatches = watchToastLifecycle(lifecycle, {
+  visible: () => props.modelValue,
+  duration: () => props.duration,
+});
 
 const transitionName = computed(() => {
   return resolveToastTransition({
@@ -69,11 +47,12 @@ const {
   classes: transitionClasses,
   styles: transitionStyles,
   display,
+  cancel: cancelTransition,
 } = useTransition(
   () => props.modelValue,
   { name: transitionName.value, duration: 260, easing: 'ease-out' },
   {
-    onAfterLeave: () => emit('after-leave'),
+    onAfterLeave: () => lifecycle.finishLeave(),
   }
 );
 const innerClass = computed(() => [transitionClasses.value, props.customClass]);
@@ -81,7 +60,11 @@ const innerStyle = computed<StyleValue>(
   () => [props.customStyle, transitionStyles.value] as StyleValue
 );
 
-onUnmounted(() => clearTimers());
+onBeforeUnmount(() => {
+  stopLifecycleWatches();
+  lifecycle.dispose();
+  cancelTransition();
+});
 </script>
 
 <template>

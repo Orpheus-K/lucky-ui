@@ -36,10 +36,10 @@ phone: toast
 
 ```vue
 <script setup lang="ts">
-import { toastStore } from '@/uni_modules/lucky-ui/components/lk-toast/toast-manager'
+import { toastStore } from '@/uni_modules/lucky-ui/components/lk-toast/toast-manager';
 
 function showMsg() {
-  toastStore.show('操作成功！')
+  toastStore.show('操作成功！');
 }
 </script>
 
@@ -52,11 +52,17 @@ function showMsg() {
 
 ```vue
 <script setup lang="ts">
-import { toastStore } from '@/uni_modules/lucky-ui'
+import { toastStore } from '@/uni_modules/lucky-ui';
 
-function top() { toastStore.show({ message: '顶部提示', position: 'top' }) }
-function center() { toastStore.show({ message: '居中提示', position: 'center' }) }
-function bottom() { toastStore.show({ message: '底部提示', position: 'bottom' }) }
+function top() {
+  toastStore.show({ message: '顶部提示', position: 'top' });
+}
+function center() {
+  toastStore.show({ message: '居中提示', position: 'center' });
+}
+function bottom() {
+  toastStore.show({ message: '底部提示', position: 'bottom' });
+}
 </script>
 
 <template>
@@ -72,11 +78,17 @@ function bottom() { toastStore.show({ message: '底部提示', position: 'bottom
 
 ```vue
 <script setup lang="ts">
-import { toastStore } from '@/uni_modules/lucky-ui'
+import { toastStore } from '@/uni_modules/lucky-ui';
 
-function show1s() { toastStore.show({ message: '显示 1 秒', duration: 1000 }) }
-function show4s() { toastStore.show({ message: '显示 4 秒', duration: 4000 }) }
-function stay() { toastStore.show({ message: '不自动关闭', duration: 0 }) }
+function show1s() {
+  toastStore.show({ message: '显示 1 秒', duration: 1000 });
+}
+function show4s() {
+  toastStore.show({ message: '显示 4 秒', duration: 4000 });
+}
+function stay() {
+  toastStore.show({ message: '不自动关闭', duration: 0 });
+}
 </script>
 
 <template>
@@ -92,7 +104,7 @@ function stay() { toastStore.show({ message: '不自动关闭', duration: 0 }) }
 
 ```vue
 <script setup lang="ts">
-import { toastStore } from '@/uni_modules/lucky-ui'
+import { toastStore } from '@/uni_modules/lucky-ui';
 </script>
 
 <template>
@@ -100,12 +112,8 @@ import { toastStore } from '@/uni_modules/lucky-ui'
     <lk-button @click="toastStore.show({ message: 'slide-up', transition: 'slide-up' })">
       SlideUp
     </lk-button>
-    <lk-button @click="toastStore.show({ message: 'fade', transition: 'fade' })">
-      Fade
-    </lk-button>
-    <lk-button @click="toastStore.show({ message: 'zoom', transition: 'zoom' })">
-      Zoom
-    </lk-button>
+    <lk-button @click="toastStore.show({ message: 'fade', transition: 'fade' })"> Fade </lk-button>
+    <lk-button @click="toastStore.show({ message: 'zoom', transition: 'zoom' })"> Zoom </lk-button>
   </view>
 </template>
 ```
@@ -114,19 +122,19 @@ import { toastStore } from '@/uni_modules/lucky-ui'
 
 ```vue
 <script setup lang="ts">
-import { toastStore } from '@/uni_modules/lucky-ui'
-import { ref } from 'vue'
+import { toastStore } from '@/uni_modules/lucky-ui';
+import { ref } from 'vue';
 
-const toastId = ref<number | null>(null)
+const toastId = ref<number | null>(null);
 
 function open() {
-  toastId.value = toastStore.show({ message: '长时间 Toast，点击关闭', duration: 0 })
+  toastId.value = toastStore.show({ message: '长时间 Toast，点击关闭', duration: 0 });
 }
 
 function close() {
   if (toastId.value !== null) {
-    toastStore.close(toastId.value)
-    toastId.value = null
+    toastStore.close(toastId.value);
+    toastId.value = null;
   }
 }
 </script>
@@ -137,50 +145,112 @@ function close() {
 </template>
 ```
 
+## 受控 Toast 生命周期
+
+直接使用 `LkToast` 时，`v-model` 是显示状态的唯一来源。组件在每次从隐藏进入显示时触发一次 `open` 并重新计算自动关闭计时；计时到期会请求 `update:modelValue=false`，只有实际观察到 `v-model=false` 才触发 `close`。若父层拒绝这次更新并保持显示，组件不会误报关闭，也不会进行微任务忙重试，而是在又一个完整的正数 `duration` 后重新请求。无论关闭来自计时还是外部把 `v-model` 改为 `false`，本轮都只触发一次 `close`，离场动画真正结束后只触发一次 `after-leave`。
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const visible = ref(true);
+const openCount = ref(0);
+const closeCount = ref(0);
+const afterLeaveCount = ref(0);
+
+function onOpen() {
+  openCount.value += 1;
+}
+
+function onClose() {
+  closeCount.value += 1;
+}
+
+function onAfterLeave() {
+  afterLeaveCount.value += 1;
+}
+</script>
+
+<template>
+  <lk-toast
+    v-model="visible"
+    message="保存成功"
+    :duration="1600"
+    @open="onOpen"
+    @close="onClose"
+    @after-leave="onAfterLeave"
+  />
+  <lk-button @click="visible = false">手动关闭</lk-button>
+  <text> open={{ openCount }} / close={{ closeCount }} / after-leave={{ afterLeaveCount }} </text>
+</template>
+```
+
+每个已交付给 Toast 的 `false → true` 边沿都会取消上一轮尚未到期的计时和离场完成信号，并为新一轮重新计时。若父组件在同一个 Vue 渲染批次内先写 `false` 再写 `true`，子组件只会收到最终的 `true`，因此这不构成一次关闭和重开；需要把 `false` 作为真实边沿交付时，应在写入 `false` 后等待一次 `nextTick()` 再重开。显示期间修改 `duration` 会从修改时刻重新计算：改为正数会按新时长调度，改为 `0` 会立即取消自动关闭。组件卸载时也会废弃计时，不会在卸载后继续发出更新或生命周期事件。`duration=0` 表示不自动关闭。
+
 ## API
 
 ### toastStore 方法
 
-| 方法 | 说明 | 参数 | 返回值 |
-|------|------|------|--------|
-| show | 显示 Toast | `string \| ToastOptions` | `id: number` |
-| close | 关闭指定 Toast（带退出动画） | `(id: number) => void` | — |
-| clear | 关闭所有 Toast | `() => void` | — |
+| 方法  | 说明                         | 参数                     | 返回值       |
+| ----- | ---------------------------- | ------------------------ | ------------ |
+| show  | 显示 Toast                   | `string \| ToastOptions` | `id: number` |
+| close | 关闭指定 Toast（带退出动画） | `(id: number) => void`   | —            |
+| clear | 关闭所有 Toast               | `() => void`             | —            |
 
 ### ToastOptions
 
-| 参数 | 说明 | 类型 | 默认值 |
-|------|------|------|--------|
-| customClass | 组件可视根节点自定义类名 | `string \| object \| array` | `''` |
-| customStyle | 组件可视根节点自定义样式 | `string \| object` | `''` |
-| message | 提示内容 | `string` | — |
-| duration | 自动关闭时长（ms），0 表示不关闭 | `number` | `2000` |
-| position | 显示位置 | `top \| center \| bottom` | `center` |
-| transition | 动画效果 | `slide-up \| fade \| zoom` | `slide-up` |
+| 参数        | 说明                             | 类型                        | 默认值     |
+| ----------- | -------------------------------- | --------------------------- | ---------- |
+| customClass | 组件可视根节点自定义类名         | `string \| object \| array` | `''`       |
+| customStyle | 组件可视根节点自定义样式         | `string \| object`          | `''`       |
+| message     | 提示内容                         | `string`                    | —          |
+| duration    | 自动关闭时长（ms），0 表示不关闭 | `number`                    | `2000`     |
+| position    | 显示位置                         | `top \| center \| bottom`   | `center`   |
+| transition  | 动画效果                         | `slide-up \| fade \| zoom`  | `slide-up` |
 
 ### LkToastManager 组件
 
-| 参数 | 说明 | 类型 | 默认值 |
-|------|------|------|--------|
-| customClass | 组件可视根节点自定义类名 | `string \| object \| array` | `''` |
-| customStyle | 组件可视根节点自定义样式 | `string \| object` | `''` |
-| zIndex | 全局 Toast 宿主层级 | `number` | `2000` |
+| 参数        | 说明                     | 类型                        | 默认值 |
+| ----------- | ------------------------ | --------------------------- | ------ |
+| customClass | 组件可视根节点自定义类名 | `string \| object \| array` | `''`   |
+| customStyle | 组件可视根节点自定义样式 | `string \| object`          | `''`   |
+| zIndex      | 全局 Toast 宿主层级      | `number`                    | `2000` |
 
 ### Events
 
-| 事件名 | 说明 | 回调参数 |
-|--------|------|----------|
+| 事件名            | 说明                         | 回调参数           |
+| ----------------- | ---------------------------- | ------------------ |
 | update:modelValue | 显隐状态变化，用于 `v-model` | `(value: boolean)` |
-| open | Toast 显示时触发 | `()` |
-| close | Toast 关闭时触发 | `()` |
-| after-leave | 离开动画结束后触发 | `()` |
+| open              | Toast 显示时触发             | `()`               |
+| close             | Toast 关闭时触发             | `()`               |
+| after-leave       | 离开动画结束后触发           | `()`               |
 
 ## 发布验收
 
 `lk-toast` 已纳入 needs-hardening showcase 回归，发布前按下面边界验收：
 
-| 场景 | 验收方式 | 要点 |
-|------|----------|------|
-| 展示台基线 | 自动回归 | `tests/visual/needs-hardening-showcase.spec.ts` 校验组件路由、verified 状态与中风险标记 |
-| 全局管理 | 自动/人工 | 多个 Toast 连续触发时 id、关闭动画和 `clear()` 行为稳定 |
-| 定位与时序 | 人工验收 | `top/center/bottom` 与自动关闭时长在 H5/App/小程序端一致 |
+| 场景       | 验收方式  | 要点                                                                                    |
+| ---------- | --------- | --------------------------------------------------------------------------------------- |
+| 展示台基线 | 自动回归  | `tests/visual/needs-hardening-showcase.spec.ts` 校验组件路由、verified 状态与中风险标记 |
+| 全局管理   | 自动/人工 | 多个 Toast 连续触发时 id、关闭动画和 `clear()` 行为稳定                                 |
+| 定位与时序 | 人工验收  | `top/center/bottom` 与自动关闭时长在 H5/App/小程序端一致                                |
+
+### H5 与微信小程序 Peekit 验收
+
+Toast 演练页提供了不依赖文案和 DOM 层级的稳定选择器：
+
+| 选择器                          | 用途                                                                                                         |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `#toast-lifecycle-fixture`      | 读取 `data-toast-visible`、`data-toast-open-count`、`data-toast-close-count`、`data-toast-after-leave-count` |
+| `#toast-lifecycle-open`         | 开始一轮新的受控 Toast                                                                                       |
+| `#toast-lifecycle-close`        | 在 duration 到期前手动关闭                                                                                   |
+| `#toast-lifecycle-rapid-reopen` | 触发一次关闭并在下一次响应式刷新后立即重开                                                                   |
+
+H5 和微信小程序必须分别通过 Peekit 连接真实运行页并留存查询结果或快照，按同一套断言验收：
+
+1. 重新载入演练页。初始 `open=1`；经过 `1600ms + 260ms` 后，状态必须收敛为 `visible=false / close=1 / after-leave=1`，且继续等待不再增长。
+2. 点击 `#toast-lifecycle-open`，在 1600ms 内点击 `#toast-lifecycle-close`。本轮三个计数各只增加 1；继续等待超过原 duration，计数不得再次变化。
+3. 再次打开后点击 `#toast-lifecycle-rapid-reopen`。等待 300ms 时必须仍为 `visible=true`，上一轮的 `after-leave` 不得增加；新一轮到期后 `close` 与 `after-leave` 才各增加 1。
+4. 全流程页面错误与控制台错误均为 0，截图中 Toast 位置、文字和离场后的页面布局无跳动。
+
+H5 构建、微信小程序构建和单元测试只是静态门禁，不能替代以上两端运行态证据；任一端未实际连接时，应明确记录为“未验收”，不能标记为通过。
