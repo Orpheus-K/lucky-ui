@@ -16,7 +16,8 @@ phone: card
     { key: 'subTitle', type: 'string', label: '副标题', default: '' },
     { key: 'shadow', type: 'enum', label: '阴影', values: ['none', 'never', 'sm', 'md', 'base', 'lg'], default: 'sm' },
     { key: 'border', type: 'boolean', label: '边框', default: false },
-    { key: 'hoverable', type: 'boolean', label: '悬浮效果', default: false },
+    { key: 'ripple', type: 'boolean', label: '点击波纹', default: false },
+    { key: 'overflow', type: 'enum', label: '内容溢出', values: ['hidden', 'visible'], default: 'hidden' },
     { key: 'transparent', type: 'boolean', label: '透明', default: false },
   ]"
   slot-content="卡片内容示例"
@@ -41,6 +42,8 @@ phone: card
   <view>封面贴边展示，适合图文内容卡片。</view>
 </lk-card>
 ```
+
+`cover` 插槽中的 UniApp `image` 会按块级元素铺满卡片宽度，高度仍由业务内容设置。Card 不会替代 UniApp 的 `mode` 控制裁切；需要等比填充裁切时，请显式设置 `mode="aspectFill"`。H5 也兼容原生 `img`，但在跨端源码中必须用 `<!-- #ifdef H5 -->` 隔离，避免原生标签及其选择器进入小程序构建。
 
 ## 底部操作区
 
@@ -72,8 +75,8 @@ phone: card
 ## 交互卡片
 
 ```vue
-<lk-card hoverable shadow="md" @click="handleClick">
-  <view>点击或按压时会有更明显的浮层感。</view>
+<lk-card ripple shadow="md" @click="handleClick">
+  <view>点击卡片时显示波纹反馈。</view>
 </lk-card>
 ```
 
@@ -83,7 +86,7 @@ phone: card
 
 ```vue
 <script setup lang="ts">
-import CardDemo from '@/components/demos/card-demo.vue'
+import CardDemo from '@/components/demos/card-demo.vue';
 </script>
 
 <template>
@@ -105,37 +108,38 @@ import CardDemo from '@/components/demos/card-demo.vue'
 
 ### Props
 
-| 参数 | 说明 | 类型 | 默认值 |
-|------|------|------|--------|
-| title | 卡片标题 | `string` | `''` |
-| subTitle | 副标题 | `string` | `''` |
-| padding | 内容内边距 | `string` | `'32rpx'` |
-| border | 是否显示边框 | `boolean` | `false` |
-| shadow | 阴影等级 | `none \| never \| sm \| md \| base \| lg` | `sm` |
-| bgColor | 自定义背景色 | `string` | `''` |
-| transparent | 是否透明背景 | `boolean` | `false` |
-| hoverable | 是否启用交互悬浮效果 | `boolean` | `false` |
-| id | 根节点 id | `string` | `''` |
-| customClass | 根节点自定义类名 | `string \| object \| array` | — |
-| customStyle | 根节点自定义样式 | `string \| object` | — |
+| 参数        | 说明             | 类型                                      | 默认值    |
+| ----------- | ---------------- | ----------------------------------------- | --------- |
+| title       | 卡片标题         | `string`                                  | `''`      |
+| subTitle    | 副标题           | `string`                                  | `''`      |
+| padding     | 内容内边距       | `string`                                  | `'32rpx'` |
+| border      | 是否显示边框     | `boolean`                                 | `false`   |
+| shadow      | 阴影等级         | `none \| never \| sm \| md \| base \| lg` | `sm`      |
+| bgColor     | 自定义背景色     | `string`                                  | `''`      |
+| transparent | 是否透明背景     | `boolean`                                 | `false`   |
+| ripple      | 是否启用点击波纹 | `boolean`                                 | `false`   |
+| overflow    | 内容溢出策略     | `hidden \| visible`                       | `hidden`  |
+| id          | 根节点 id        | `string`                                  | `''`      |
+| customClass | 根节点自定义类名 | `string \| object \| array`               | —         |
+| customStyle | 根节点自定义样式 | `string \| object`                        | —         |
 
 ### Events
 
-| 事件名 | 说明 | 回调参数 |
-|--------|------|----------|
-| click | 点击卡片时触发 | `(event)` |
+| 事件名       | 说明               | 回调参数  |
+| ------------ | ------------------ | --------- |
+| click        | 点击卡片时触发     | `(event)` |
 | header-click | 点击卡片头部时触发 | `(event)` |
 | footer-click | 点击卡片底部时触发 | `(event)` |
 
 ### Slots
 
-| 插槽名 | 说明 |
-|--------|------|
-| cover | 顶部封面区域，贴边显示 |
-| header | 自定义头部标题区 |
-| header-extra | 头部右侧附加内容 |
-| default | 卡片主体内容 |
-| footer | 卡片底部区域 |
+| 插槽名       | 说明                                                                                     |
+| ------------ | ---------------------------------------------------------------------------------------- |
+| cover        | 顶部封面区域，贴边显示；`image` 为块级并铺满宽度，等比填充裁切需设置 `mode="aspectFill"` |
+| header       | 自定义头部标题区                                                                         |
+| header-extra | 头部右侧附加内容                                                                         |
+| default      | 卡片主体内容                                                                             |
+| footer       | 卡片底部区域                                                                             |
 
 ## 使用建议
 

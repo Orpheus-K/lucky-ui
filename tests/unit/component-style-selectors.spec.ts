@@ -1,8 +1,12 @@
+import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { initPreContext, preCss } from '@dcloudio/uni-cli-shared';
 import * as sass from 'sass';
 import { describe, expect, it } from 'vitest';
 
 const COMPONENT_ROOT = path.join(process.cwd(), 'src/uni_modules/lucky-ui/components');
+const CARD_STYLE = path.join(COMPONENT_ROOT, 'lk-card', 'lk-card.scss');
 
 function compileStyle(component: string): string {
   return sass.compile(path.join(COMPONENT_ROOT, `lk-${component}`, `lk-${component}.scss`), {
@@ -15,6 +19,17 @@ function selectorBlock(css: string, selector: string): string {
   if (start < 0) throw new Error(`Missing selector: ${selector}`);
   const end = css.indexOf('}', start);
   return css.slice(start, end + 1);
+}
+
+function compileCardStyleForPlatform(platform: 'h5' | 'mp-weixin') {
+  initPreContext(platform);
+  const preprocessed = preCss(fs.readFileSync(CARD_STYLE, 'utf8'));
+  const css = sass.compileString(preprocessed, {
+    style: 'expanded',
+    url: pathToFileURL(CARD_STYLE),
+  }).css;
+
+  return { css, preprocessed };
 }
 
 describe('component style selectors', () => {
@@ -83,5 +98,23 @@ describe('component style selectors', () => {
     expect(indicator).toContain('align-items: center');
     expect(indicator).not.toContain('position: absolute');
     expect(indicator).not.toContain('z-index:');
+  });
+
+  it('isolates the native card cover selector through Uni preCss and Sass', () => {
+    const h5 = compileCardStyleForPlatform('h5');
+    const mpWeixin = compileCardStyleForPlatform('mp-weixin');
+    const h5UniImage = selectorBlock(h5.css, '.lk-card__cover :deep(image)');
+    const h5NativeImage = selectorBlock(h5.css, '.lk-card__cover :deep(img)');
+    const mpUniImage = selectorBlock(mpWeixin.css, '.lk-card__cover :deep(image)');
+
+    for (const block of [h5UniImage, h5NativeImage, mpUniImage]) {
+      expect(block).toContain('display: block');
+      expect(block).toContain('width: 100%');
+      expect(block).toContain('object-fit: cover');
+    }
+
+    expect(h5.preprocessed).toContain(':deep(img)');
+    expect(mpWeixin.preprocessed).not.toContain(':deep(img)');
+    expect(mpWeixin.css).not.toContain(':deep(img)');
   });
 });

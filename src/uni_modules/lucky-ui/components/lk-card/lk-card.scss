@@ -28,11 +28,20 @@
 
   @include e(cover) {
     width: 100%;
-    :deep(image),
+
+    :deep(image) {
+      display: block;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    /* #ifdef H5 */
     :deep(img) {
       display: block;
       width: 100%;
+      object-fit: cover;
     }
+    /* #endif */
   }
 
   @include e(header) {
