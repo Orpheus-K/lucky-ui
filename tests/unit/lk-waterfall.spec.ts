@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   calculateWaterfallCardHeight,
+  createWaterfallLoadMoreGate,
   extractWaterfallScrollTop,
   placeWaterfallCards,
   resolveWaterfallCardStyle,
@@ -9,6 +10,7 @@ import {
   resolveWaterfallContainerStyle,
   resolveWaterfallFooterStyle,
   resolveWaterfallPx,
+  resolveWaterfallPreloadThreshold,
   resolveWaterfallRightColumnLeft,
   resolveWaterfallSkeletonPadding,
   resolveWaterfallTotalHeight,
@@ -23,10 +25,12 @@ describe('lk-waterfall layout and scroll rules', () => {
     expect(resolveWaterfallPx('80px', 0)).toBe(80);
     expect(resolveWaterfallPx('120rpx', 0, { upx2px: value => value / 2 })).toBe(60);
     expect(resolveWaterfallPx('50vh', 0, { systemInfo: { windowHeight: 800 } })).toBe(400);
-    expect(resolveWaterfallPx('50%', 0, {
-      containerHeight: 600,
-      systemInfo: { windowHeight: 800 },
-    })).toBe(300);
+    expect(
+      resolveWaterfallPx('50%', 0, {
+        containerHeight: 600,
+        systemInfo: { windowHeight: 800 },
+      })
+    ).toBe(300);
     expect(resolveWaterfallPx('invalid', 16)).toBe(16);
     expect(resolveWaterfallUnit(12)).toBe('12px');
     expect(resolveWaterfallUnit('12rpx')).toBe('12rpx');
@@ -40,39 +44,49 @@ describe('lk-waterfall layout and scroll rules', () => {
     });
 
     expect(columnWidth).toBe(165.5);
-    expect(resolveWaterfallRightColumnLeft({
-      paddingX: 16,
-      columnWidth,
-      gutter: 12,
-    })).toBe(193.5);
-    expect(resolveWaterfallTotalHeight({
-      leftHeight: 500,
-      rightHeight: 420,
-      paddingY: 16,
-    })).toBe(516);
+    expect(
+      resolveWaterfallRightColumnLeft({
+        paddingX: 16,
+        columnWidth,
+        gutter: 12,
+      })
+    ).toBe(193.5);
+    expect(
+      resolveWaterfallTotalHeight({
+        leftHeight: 500,
+        rightHeight: 420,
+        paddingY: 16,
+      })
+    ).toBe(516);
   });
 
   it('calculates card height by ratio, image size and fallback estimate', () => {
-    expect(calculateWaterfallCardHeight({
-      item: { id: 1, ratio: 1.2, extraHeight: 56 },
-      columnWidth: 160,
-      estimateHeight: 200,
-      defaultExtraHeight: 60,
-    })).toBe(248);
+    expect(
+      calculateWaterfallCardHeight({
+        item: { id: 1, ratio: 1.2, extraHeight: 56 },
+        columnWidth: 160,
+        estimateHeight: 200,
+        defaultExtraHeight: 60,
+      })
+    ).toBe(248);
 
-    expect(calculateWaterfallCardHeight({
-      item: { id: 2, imageWidth: 400, imageHeight: 300 },
-      columnWidth: 200,
-      estimateHeight: 200,
-      defaultExtraHeight: 60,
-    })).toBe(210);
+    expect(
+      calculateWaterfallCardHeight({
+        item: { id: 2, imageWidth: 400, imageHeight: 300 },
+        columnWidth: 200,
+        estimateHeight: 200,
+        defaultExtraHeight: 60,
+      })
+    ).toBe(210);
 
-    expect(calculateWaterfallCardHeight({
-      item: { id: 3 },
-      columnWidth: 0,
-      estimateHeight: 200,
-      defaultExtraHeight: 60,
-    })).toBe(200);
+    expect(
+      calculateWaterfallCardHeight({
+        item: { id: 3 },
+        columnWidth: 0,
+        estimateHeight: 200,
+        defaultExtraHeight: 60,
+      })
+    ).toBe(200);
   });
 
   it('places cards into the currently shorter column', () => {
@@ -94,14 +108,16 @@ describe('lk-waterfall layout and scroll rules', () => {
       defaultExtraHeight: 60,
     });
 
-    expect(result.cards.map(card => ({
-      id: card.id,
-      column: card.column,
-      top: card.top,
-      left: card.left,
-      height: card.height,
-      loadingState: card.loadingState,
-    }))).toEqual([
+    expect(
+      result.cards.map(card => ({
+        id: card.id,
+        column: card.column,
+        top: card.top,
+        left: card.left,
+        height: card.height,
+        loadingState: card.loadingState,
+      }))
+    ).toEqual([
       { id: 'a', column: 0, top: 10, left: 8, height: 120, loadingState: 'loading' },
       { id: 'b', column: 1, top: 10, left: 118, height: 70, loadingState: 'loaded' },
       { id: 'c', column: 1, top: 92, left: 118, height: 120, loadingState: 'loaded' },
@@ -111,39 +127,93 @@ describe('lk-waterfall layout and scroll rules', () => {
     expect(result.processedIndex).toBe(3);
   });
 
+  it('reflows with measured heights while preserving image state', () => {
+    const result = placeWaterfallCards({
+      items: [
+        { id: 'a', image: 'a.png' },
+        { id: 'b', image: 'b.png' },
+        { id: 'c', image: 'c.png' },
+      ],
+      leftHeight: 10,
+      rightHeight: 10,
+      paddingX: 8,
+      rightColumnLeft: 118,
+      columnWidth: 100,
+      rowGap: 10,
+      estimateHeight: 200,
+      defaultExtraHeight: 60,
+      heightOverrides: new Map([['a', 110]]),
+      loadingStates: new Map([['a', 'loaded']]),
+    });
+
+    expect(result.cards.map(card => [card.id, card.column, card.top, card.height])).toEqual([
+      ['a', 0, 10, 110],
+      ['b', 1, 10, 200],
+      ['c', 0, 130, 200],
+    ]);
+    expect(result.cards[0].loadingState).toBe('loaded');
+    expect(result.cards[1].loadingState).toBe('loading');
+  });
+
   it('guards load-more and extracts scroll top from platform events', () => {
-    expect(shouldWaterfallLoadMore({
-      totalHeight: 1000,
-      scrollTop: 650,
-      viewportHeight: 300,
-      lowerThreshold: 80,
-    })).toBe(true);
-    expect(shouldWaterfallLoadMore({
-      totalHeight: 1000,
-      scrollTop: 500,
-      viewportHeight: 300,
-      lowerThreshold: 80,
-    })).toBe(false);
+    const gate = createWaterfallLoadMoreGate();
+    expect(gate.request()).toBe(true);
+    expect(gate.request()).toBe(false);
+    expect(gate.isPending()).toBe(true);
+    gate.reset();
+    expect(gate.request()).toBe(true);
+
+    expect(
+      shouldWaterfallLoadMore({
+        totalHeight: 1000,
+        scrollTop: 650,
+        viewportHeight: 300,
+        lowerThreshold: 80,
+      })
+    ).toBe(true);
+    expect(
+      shouldWaterfallLoadMore({
+        totalHeight: 1000,
+        scrollTop: 500,
+        viewportHeight: 300,
+        lowerThreshold: 80,
+      })
+    ).toBe(false);
     expect(extractWaterfallScrollTop({ detail: { scrollTop: 120 } })).toBe(120);
     expect(extractWaterfallScrollTop({ scrollTop: 240 })).toBe(240);
+    expect(
+      resolveWaterfallPreloadThreshold({
+        viewportHeight: 600,
+        lowerThreshold: 200,
+        preloadScreens: 2,
+      })
+    ).toBe(1200);
+    expect(
+      resolveWaterfallPreloadThreshold({
+        viewportHeight: 600,
+        lowerThreshold: 800,
+        preloadScreens: 0.5,
+      })
+    ).toBe(800);
   });
 
   it('builds root, card, skeleton and footer styles', () => {
     expect(resolveWaterfallClass('feed')).toEqual(['lk-waterfall', 'feed']);
-    expect(resolveWaterfallContainerStyle({
-      heightPx: 600,
-      customStyle: { background: '#fff' },
-    })).toEqual([
-      { height: '600px' },
-      { background: '#fff' },
-    ]);
-    expect(resolveWaterfallCardStyle({
-      top: 10,
-      left: 20,
-      width: 160,
-      height: 240,
-      cardRadius: 12,
-    })).toEqual({
+    expect(
+      resolveWaterfallContainerStyle({
+        heightPx: 600,
+        customStyle: { background: '#fff' },
+      })
+    ).toEqual([{ height: '600px' }, { background: '#fff' }]);
+    expect(
+      resolveWaterfallCardStyle({
+        top: 10,
+        left: 20,
+        width: 160,
+        height: 240,
+        cardRadius: 12,
+      })
+    ).toEqual({
       position: 'absolute',
       top: '10px',
       left: '20px',
@@ -151,14 +221,18 @@ describe('lk-waterfall layout and scroll rules', () => {
       height: '240px',
       borderRadius: '12px',
     });
-    expect(resolveWaterfallSkeletonPadding({
-      paddingY: 12,
-      paddingX: 16,
-    })).toEqual({ padding: '12px 16px' });
-    expect(resolveWaterfallFooterStyle({
-      totalHeight: 800,
-      paddingY: 16,
-    })).toEqual({
+    expect(
+      resolveWaterfallSkeletonPadding({
+        paddingY: 12,
+        paddingX: 16,
+      })
+    ).toEqual({ padding: '12px 16px' });
+    expect(
+      resolveWaterfallFooterStyle({
+        totalHeight: 800,
+        paddingY: 16,
+      })
+    ).toEqual({
       position: 'absolute',
       top: '784px',
       left: 0,

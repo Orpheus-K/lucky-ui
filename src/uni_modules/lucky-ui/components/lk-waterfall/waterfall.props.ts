@@ -112,7 +112,7 @@ export const waterfallProps = {
   lowerThreshold: LkProp.number(200),
 
   /**
-   * 预加载屏数 (提前加载N屏数据)
+   * 提前请求数据的屏数 (与 lowerThreshold 取较大值)
    */
   preloadScreens: LkProp.number(2),
 
@@ -122,12 +122,12 @@ export const waterfallProps = {
   showSkeleton: LkProp.boolean(true),
 
   /**
-   * 是否启用图片高度预计算
+   * 是否提前加载图片；关闭时交由平台懒加载
    */
   preloadImage: LkProp.boolean(true),
 
   /**
-   * 图片加载失败时的占位图
+   * 默认卡片图片加载失败时的占位图，也会透传给 item 插槽
    */
   errorPlaceholder: LkProp.string(''),
 

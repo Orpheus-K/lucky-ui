@@ -128,6 +128,8 @@ export function placeWaterfallCards(options: {
   rowGap: number;
   estimateHeight: number;
   defaultExtraHeight: number;
+  heightOverrides?: ReadonlyMap<string | number, number>;
+  loadingStates?: ReadonlyMap<string | number, PlacedCard['loadingState']>;
 }) {
   let leftHeight = options.leftHeight;
   let rightHeight = options.rightHeight;
@@ -135,23 +137,26 @@ export function placeWaterfallCards(options: {
 
   for (let i = options.startIndex ?? 0; i < options.items.length; i++) {
     const item = options.items[i];
-    const height = calculateWaterfallCardHeight({
-      item,
-      columnWidth: options.columnWidth,
-      estimateHeight: options.estimateHeight,
-      defaultExtraHeight: options.defaultExtraHeight,
-    });
+    const id = item.id ?? i;
+    const height =
+      options.heightOverrides?.get(id) ??
+      calculateWaterfallCardHeight({
+        item,
+        columnWidth: options.columnWidth,
+        estimateHeight: options.estimateHeight,
+        defaultExtraHeight: options.defaultExtraHeight,
+      });
     const isLeft = leftHeight <= rightHeight;
 
     cards.push({
       index: i,
-      id: item.id ?? i,
+      id,
       column: isLeft ? 0 : 1,
       top: isLeft ? leftHeight : rightHeight,
       left: isLeft ? options.paddingX : options.rightColumnLeft,
       width: options.columnWidth,
       height,
-      loadingState: item.image ? 'loading' : 'loaded',
+      loadingState: options.loadingStates?.get(id) ?? (item.image ? 'loading' : 'loaded'),
       item,
     });
 
@@ -174,6 +179,33 @@ export function shouldWaterfallLoadMore(options: {
   lowerThreshold: number;
 }): boolean {
   return options.totalHeight - options.scrollTop - options.viewportHeight < options.lowerThreshold;
+}
+
+export function resolveWaterfallPreloadThreshold(options: {
+  viewportHeight: number;
+  lowerThreshold: number;
+  preloadScreens: number;
+}): number {
+  const screens = Number.isFinite(options.preloadScreens) ? Math.max(0, options.preloadScreens) : 0;
+  return Math.max(options.lowerThreshold, options.viewportHeight * screens);
+}
+
+export function createWaterfallLoadMoreGate() {
+  let pending = false;
+
+  return {
+    request() {
+      if (pending) return false;
+      pending = true;
+      return true;
+    },
+    reset() {
+      pending = false;
+    },
+    isPending() {
+      return pending;
+    },
+  };
 }
 
 export function extractWaterfallScrollTop(event: {

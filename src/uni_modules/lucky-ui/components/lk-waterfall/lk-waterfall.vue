@@ -13,6 +13,7 @@ import {
 import { waterfallProps, waterfallEmits } from './waterfall.props';
 import type { PlacedCard, WaterfallLoadingState } from './waterfall.props';
 import {
+  createWaterfallLoadMoreGate,
   extractWaterfallScrollTop,
   placeWaterfallCards,
   resolveWaterfallCardStyle,
@@ -23,6 +24,7 @@ import {
   resolveWaterfallContentStyle,
   resolveWaterfallFooterStyle,
   resolveWaterfallPx,
+  resolveWaterfallPreloadThreshold,
   resolveWaterfallRightColumnLeft,
   resolveWaterfallSkeletonPadding,
   resolveWaterfallTotalHeight,
@@ -49,7 +51,8 @@ const emit = defineEmits(waterfallEmits);
 
 const instance = getCurrentInstance();
 const uid = instance?.uid ?? Math.floor(Math.random() * 1e6);
-const rootId = `lk-waterfall-${uid}`;
+const generatedRootId = `lk-waterfall-${uid}`;
+const rootId = computed(() => props.id || generatedRootId);
 
 /** 容器宽度 */
 const containerWidth = ref<number>(0);
@@ -63,14 +66,16 @@ const cardList = ref<PlacedCard[]>([]);
 const leftHeight = ref(0);
 /** 右列高度 */
 const rightHeight = ref(0);
-/** 已处理的数据索引 */
-const processedIndex = ref(0);
-/** 是否正在处理 */
-const isProcessing = ref(false);
 /** 初始化完成 */
 const isReady = ref(false);
+const loadMorePending = ref(false);
+const loadMoreGate = createWaterfallLoadMoreGate();
 /** 图片加载超时定时器 */
 const imageLoadTimers = new Map<string | number, ReturnType<typeof setTimeout>>();
+/** 无预设比例图片的运行时测量结果 */
+const measuredImages = new Map<string | number, { src: string; ratio: number }>();
+let active = true;
+let measurementGeneration = 0;
 
 function getSystemInfo() {
   return uni.getSystemInfoSync?.();
@@ -120,51 +125,60 @@ const totalHeight = computed(() =>
   })
 );
 
-/**
- * 同步增量布局，使用绝对定位。
- */
-function processNewItems() {
-  if (isProcessing.value) return;
-  if (processedIndex.value >= props.items.length) return;
+function rebuildLayout() {
+  clearAllImageLoadTimers();
   if (columnWidth.value <= 0) return;
 
-  isProcessing.value = true;
-
+  const previousCards = new Map(cardList.value.map(card => [card.id, card]));
+  const loadingStates = new Map<string | number, WaterfallLoadingState>();
+  const heightOverrides = new Map<string | number, number>();
+  props.items.forEach((item, index) => {
+    const id = item.id ?? index;
+    const previous = previousCards.get(id);
+    if (previous && previous.item.image === item.image) {
+      loadingStates.set(id, previous.loadingState);
+    }
+    const measured = measuredImages.get(id);
+    if (
+      measured &&
+      measured.src === item.image &&
+      !item.ratio &&
+      !(item.imageWidth && item.imageHeight)
+    ) {
+      heightOverrides.set(
+        id,
+        Math.round(
+          columnWidth.value * measured.ratio + (item.extraHeight ?? props.defaultExtraHeight)
+        )
+      );
+    }
+  });
   const result = placeWaterfallCards({
     items: props.items,
-    startIndex: processedIndex.value,
-    leftHeight: leftHeight.value,
-    rightHeight: rightHeight.value,
+    startIndex: 0,
+    leftHeight: paddingYPx.value,
+    rightHeight: paddingYPx.value,
     paddingX: paddingXPx.value,
     rightColumnLeft: rightColumnLeft.value,
     columnWidth: columnWidth.value,
     rowGap: rowGapPx.value,
     estimateHeight: props.estimateHeight,
     defaultExtraHeight: props.defaultExtraHeight,
+    heightOverrides,
+    loadingStates,
   });
 
-  result.cards.forEach(card => {
-    cardList.value.push(card);
-    scheduleImageLoadTimeout(card);
-  });
+  cardList.value = result.cards;
+  result.cards.forEach(scheduleImageLoadTimeout);
   leftHeight.value = result.leftHeight;
   rightHeight.value = result.rightHeight;
-  processedIndex.value = result.processedIndex;
-
-  isProcessing.value = false;
   isReady.value = true;
 }
 
-/**
- * 重置布局
- */
-function resetLayout() {
-  clearAllImageLoadTimers();
-  cardList.value = [];
-  leftHeight.value = paddingYPx.value;
-  rightHeight.value = paddingYPx.value;
-  processedIndex.value = 0;
-  isProcessing.value = false;
+function requestLoadMore() {
+  if (!loadMoreGate.request()) return;
+  loadMorePending.value = true;
+  emit('load-more');
 }
 
 function onScroll(e: { detail?: { scrollTop?: number }; scrollTop?: number }) {
@@ -180,16 +194,20 @@ function onScroll(e: { detail?: { scrollTop?: number }; scrollTop?: number }) {
       totalHeight: totalHeight.value,
       scrollTop: scrollTop.value,
       viewportHeight: heightPx.value,
-      lowerThreshold: props.lowerThreshold,
+      lowerThreshold: resolveWaterfallPreloadThreshold({
+        viewportHeight: heightPx.value,
+        lowerThreshold: props.lowerThreshold,
+        preloadScreens: props.preloadScreens,
+      }),
     })
   ) {
-    emit('load-more');
+    requestLoadMore();
   }
 }
 
 function onScrollToLower() {
   emit('reach-bottom');
-  emit('load-more');
+  requestLoadMore();
 }
 
 function onCardClick(card: PlacedCard) {
@@ -229,19 +247,44 @@ function scheduleImageLoadTimeout(card: PlacedCard) {
   imageLoadTimers.set(card.id, timer);
 }
 
-function onImageLoaded(card: PlacedCard) {
+function onImageLoaded(card: PlacedCard, event?: unknown) {
+  if (cardList.value.find(item => item.id === card.id) !== card) return;
+  if (card.loadingState !== 'loading') return;
   clearImageLoadTimer(card);
   setCardLoadingState(card, 'loaded');
   emit('image-loaded', card.item, card.index);
+
+  const detail = (event as { detail?: { width?: number; height?: number } } | undefined)?.detail;
+  const width = detail?.width;
+  const height = detail?.height;
+  if (
+    card.item.image &&
+    !card.item.ratio &&
+    !(card.item.imageWidth && card.item.imageHeight) &&
+    width &&
+    height &&
+    width > 0 &&
+    height > 0
+  ) {
+    measuredImages.set(card.id, { src: card.item.image, ratio: height / width });
+    rebuildLayout();
+  }
 }
 
 function onImageError(card: PlacedCard) {
+  if (cardList.value.find(item => item.id === card.id) !== card) return;
+  if (card.loadingState !== 'loading') return;
   clearImageLoadTimer(card);
   setCardLoadingState(card, 'error');
   emit('image-error', card.item, card.index);
 }
 
+function getImageLoadHandler(card: PlacedCard) {
+  return (event?: unknown) => onImageLoaded(card, event);
+}
+
 async function measureContainer() {
+  const generation = ++measurementGeneration;
   await nextTick();
 
   return new Promise<void>(resolve => {
@@ -249,10 +292,14 @@ async function measureContainer() {
       ? uni.createSelectorQuery().in(instance.proxy)
       : uni.createSelectorQuery();
     query
-      .select(`#${rootId}`)
+      .select(`#${rootId.value}`)
       .boundingClientRect(rect => {
         const info = Array.isArray(rect) ? rect[0] : rect;
         const sys = uni.getSystemInfoSync?.();
+        if (!active || generation !== measurementGeneration) {
+          resolve();
+          return;
+        }
         if (info && info.width && info.width > 0) {
           containerWidth.value = info.width;
         } else {
@@ -271,32 +318,64 @@ async function measureContainer() {
 
 onMounted(async () => {
   await measureContainer();
-  resetLayout();
-  processNewItems();
+  if (!active) return;
+  rebuildLayout();
+  uni.onWindowResize?.(onWindowResize);
 });
 
 onBeforeUnmount(() => {
+  active = false;
+  uni.offWindowResize?.(onWindowResize);
   clearAllImageLoadTimers();
 });
 
 watch(
-  () => props.items.length,
-  (newLen, oldLen) => {
-    if (newLen > oldLen) {
-      processNewItems();
-    } else if (newLen < oldLen || newLen === 0) {
-      resetLayout();
-      processNewItems();
-    }
+  () => props.items.map(item => item),
+  () => {
+    loadMoreGate.reset();
+    loadMorePending.value = false;
+    const currentImages = new Map(
+      props.items.map((item, index) => [item.id ?? index, item.image || ''])
+    );
+    measuredImages.forEach((measurement, id) => {
+      if (currentImages.get(id) !== measurement.src) measuredImages.delete(id);
+    });
   }
 );
 
-watch(columnWidth, (newWidth, oldWidth) => {
-  if (oldWidth > 0 && newWidth !== oldWidth) {
-    resetLayout();
-    processNewItems();
+watch(
+  () =>
+    props.items.map(item => [
+      item.id,
+      item.image,
+      item.ratio,
+      item.imageWidth,
+      item.imageHeight,
+      item.extraHeight,
+    ]),
+  rebuildLayout
+);
+
+watch(
+  () => [
+    props.gutter,
+    props.rowGap,
+    props.paddingX,
+    props.paddingY,
+    props.height,
+    props.estimateHeight,
+    props.defaultExtraHeight,
+  ],
+  async () => {
+    await measureContainer();
+    if (active) rebuildLayout();
   }
-});
+);
+
+async function onWindowResize() {
+  await measureContainer();
+  if (active) rebuildLayout();
+}
 
 const rootClass = computed(() => resolveWaterfallClass(props.customClass));
 
@@ -338,7 +417,15 @@ function getCardStyle(card: PlacedCard): CSSProperties {
 </script>
 
 <template>
-  <view :id="rootId" :class="rootClass" :style="containerStyle">
+  <view
+    :id="rootId"
+    :class="rootClass"
+    :style="containerStyle"
+    :data-waterfall-ready="isReady"
+    :data-waterfall-items="items.length"
+    :data-waterfall-cards="cardList.length"
+    :data-waterfall-load-pending="loadMorePending"
+  >
     <scroll-view
       class="lk-waterfall__scroll"
       scroll-y
@@ -445,6 +532,10 @@ function getCardStyle(card: PlacedCard): CSSProperties {
             },
           ]"
           :style="getCardStyle(card)"
+          :data-card-id="card.id"
+          :data-card-index="card.index"
+          :data-card-column="card.column"
+          :data-card-state="card.loadingState"
           @tap="onCardClick(card)"
         >
           <!-- 插槽内容 -->
@@ -456,7 +547,9 @@ function getCardStyle(card: PlacedCard): CSSProperties {
             :height="card.height"
             :loading="card.loadingState === 'loading'"
             :image-state="card.loadingState"
-            :on-image-load="() => onImageLoaded(card)"
+            :preload-image="preloadImage"
+            :error-placeholder="errorPlaceholder"
+            :on-image-load="getImageLoadHandler(card)"
             :on-image-error="() => onImageError(card)"
           >
             <!-- 默认卡片 -->
@@ -464,10 +557,14 @@ function getCardStyle(card: PlacedCard): CSSProperties {
               <image
                 v-if="card.item.image"
                 class="lk-waterfall__default-image"
-                :src="card.item.image"
+                :src="
+                  card.loadingState === 'error' && errorPlaceholder
+                    ? errorPlaceholder
+                    : card.item.image
+                "
                 mode="widthFix"
-                :lazy-load="true"
-                @load="onImageLoaded(card)"
+                :lazy-load="!preloadImage"
+                @load="onImageLoaded(card, $event)"
                 @error="onImageError(card)"
               />
               <view class="lk-waterfall__default-content">

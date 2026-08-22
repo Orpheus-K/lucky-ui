@@ -17,6 +17,40 @@ const hasMore = ref(true);
 // 滚动位置
 const scrollPosition = ref(0);
 
+const contractRevision = ref(0);
+const contractLoadMoreCount = ref(0);
+const contractItems = ref<WaterfallItem[]>([]);
+const contractSeed: WaterfallItem[] = [
+  { id: 'runtime-ratio', image: '/static/logo.png', extraHeight: 40, title: '运行时图片比例' },
+  { id: 'declared-ratio', ratio: 0.7, extraHeight: 40, title: '声明比例' },
+  {
+    id: 'error-placeholder',
+    image: '/missing-waterfall-contract.png',
+    ratio: 1,
+    extraHeight: 40,
+    title: '失败占位',
+  },
+];
+
+function restoreContractItems() {
+  contractRevision.value += 1;
+  contractItems.value = contractSeed.map(item => ({ ...item }));
+}
+
+function replaceContractItems() {
+  contractRevision.value += 1;
+  contractItems.value = contractSeed.map(item => ({
+    ...item,
+    ratio: item.id === 'declared-ratio' ? 1.3 : item.ratio,
+    title: `${item.title} R${contractRevision.value}`,
+  }));
+}
+
+function clearContractItems() {
+  contractRevision.value += 1;
+  contractItems.value = [];
+}
+
 // 随机工具函数
 function rand(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -375,6 +409,37 @@ onMounted(() => {
       </view>
     </view>
 
+    <view
+      id="waterfall-contract-probe"
+      class="contract-probe"
+      :data-revision="contractRevision"
+      :data-items="contractItems.length"
+      :data-load-more-count="contractLoadMoreCount"
+    >
+      <view class="contract-probe__actions">
+        <button id="waterfall-contract-restore" size="mini" @tap="restoreContractItems">
+          恢复数据
+        </button>
+        <button id="waterfall-contract-replace" size="mini" @tap="replaceContractItems">
+          同长度替换
+        </button>
+        <button id="waterfall-contract-clear" size="mini" @tap="clearContractItems">清空</button>
+      </view>
+      <lk-waterfall
+        id="waterfall-contract-list"
+        :items="contractItems"
+        :height="360"
+        :padding-x="8"
+        :padding-y="8"
+        :gutter="8"
+        :row-gap="8"
+        :preload-screens="0"
+        :lower-threshold="40"
+        error-placeholder="/static/logo.png"
+        @load-more="contractLoadMoreCount += 1"
+      />
+    </view>
+
     <!-- 瀑布流 -->
     <view class="waterfall-shell">
       <lk-waterfall
@@ -513,6 +578,21 @@ onMounted(() => {
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
+}
+
+.contract-probe {
+  padding: 20rpx 32rpx;
+  background: var(--lk-bg-elevated);
+}
+
+.contract-probe__actions {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 16rpx;
+
+  > :not(:last-child) {
+    margin-right: 12rpx;
+  }
 }
 
 // ======================== 卡片样式 ========================
