@@ -71,8 +71,11 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      - name: Unit Tests
+        run: pnpm run test:unit
+
       - name: Compatibility Check
-        run: pnpm run compat-check
+        run: pnpm run compat-check:strict
 
       - name: ESLint
         run: pnpm run lint:eslint

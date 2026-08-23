@@ -156,9 +156,11 @@ function scanContent(filePath, content) {
     if (isIgnorableLine(line)) return;
 
     if (mpReachable) {
-      findings.push(...matchRules(ERROR_RULES, ext, line, filePath, lineNo, 'error', {
-        isComponentClick: isComponentClickLine(lines, index),
-      }));
+      findings.push(
+        ...matchRules(ERROR_RULES, ext, line, filePath, lineNo, 'error', {
+          isComponentClick: isComponentClickLine(lines, index),
+        })
+      );
     }
 
     findings.push(...matchRules(WARN_RULES, ext, line, filePath, lineNo, 'warn'));
@@ -188,9 +190,10 @@ function applyDirective(stack, directive) {
   }
 
   stack.push({
-    mpReachable: directive.type === 'ifdef'
-      ? expressionAllowsMp(directive.expression)
-      : !expressionRequiresMp(directive.expression),
+    mpReachable:
+      directive.type === 'ifdef'
+        ? expressionAllowsMp(directive.expression)
+        : !expressionRequiresMp(directive.expression),
   });
 }
 
@@ -276,7 +279,9 @@ function formatFinding(finding, cwd = process.cwd()) {
 
 function printResult(result, strict = false) {
   if (result.missingRoot) {
-    console.warn(`[compat-check] 未找到 ${result.root}，跳过检查。`);
+    const message = `[compat-check] 未找到扫描目录：${result.root}`;
+    if (strict) console.error(`${message}；strict 模式失败。`);
+    else console.warn(`${message}；跳过检查。`);
     return;
   }
 
@@ -302,7 +307,7 @@ function main() {
   const result = runCompatCheck(options);
   printResult(result, options.strict);
 
-  if (options.strict && result.errorCount > 0) {
+  if (options.strict && (result.missingRoot || result.errorCount > 0)) {
     process.exitCode = 1;
   }
 }
