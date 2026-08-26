@@ -1,81 +1,68 @@
-# Git Commit Message 规范
+# Lucky UI Git Commit 规范
 
-基于 Angular Commit Convention，适用于 Lucky UI 后续所有日常开发、修复、文档、工程维护和发布准备提交。该规范不是单次发布专用规则，人工编写与 AI 辅助生成都必须遵守。
+遵循 **Angular Commit 规范**，适用于所有人工与 AI 提交。
 
-## 适用范围
+---
 
-- 面向长期开发流程，不随某一次版本发布结束而失效。
-- 单次发布相关提交也使用同一套规范，例如版本号、CHANGELOG、发布文档或 CI 调整。
-- 每个 commit 只描述本次提交实际包含的变更，不把后续计划或发布目标写进提交信息。
+## 1. 提交格式
 
-## 格式
-
-```
+```text
 <type>(<scope>): <subject>
 ```
 
-- `scope` 可选，使用 kebab-case（如 `lk-button`、`utils`）
-- 冒号 `:` 后必须跟一个半角空格
-- `subject` 使用简短中文，不加句号，首字母不大写
-- `subject` 只写核心动作和对象，避免长句、背景说明和发布计划
-- `subject` 中出现英文单词、数字、变量名时，前后都要留一个半角空格
+- **`type`**（必填）：提交类型（小写英文）。
+- **`scope`**（可选）：作用域（小写 kebab-case，如 `lk-button`、`deps`、`utils`）。
+- **`:`** 冒号后必须紧跟一个**半角空格**。
+- **`subject`**（必填）：简要**中文**描述，句末**不加句号**。
 
-## 类型
+---
 
-| type | 说明 |
-| :--- | :--- |
-| `feat` | 新功能 |
-| `fix` | 修复 Bug |
-| `docs` | 文档变更 |
-| `style` | 代码格式（不影响逻辑） |
-| `refactor` | 重构（非新增、非修复） |
-| `perf` | 性能优化 |
-| `test` | 测试相关 |
-| `build` | 构建/依赖变更 |
-| `ci` | CI 配置变更 |
-| `chore` | 其他杂项 |
-| `revert` | 回退提交 |
+## 2. Type 类型表
 
-`style` 只表示代码格式调整，例如缩进、空格、换行、分号、格式化；修改 CSS、SCSS、主题变量或视觉样式时不要使用 `style`，应按实际影响使用 `fix`、`feat`、`refactor` 或 `chore`。
+| Type | 说明 | 适用场景 |
+| :--- | :--- | :--- |
+| `feat` | 新功能 | 新增组件、新增属性或功能特性 |
+| `fix` | 修复缺陷 | 修复组件 Bug、逻辑错误或样式异常 |
+| `style` | **代码格式化** | **仅用于空格、缩进、分号、Prettier 格式化等，不改变代码逻辑** |
+| `refactor`| 代码重构 | 代码结构调整（非新增功能、非修复 Bug） |
+| `perf` | 性能优化 | 提升运行性能、减少重绘等 |
+| `docs` | 文档变更 | 修改 README、组件文档等 |
+| `test` | 测试用例 | 新增或修改单元测试、集成测试 |
+| `build` | 构建系统 | 修改 Vite、打包配置、依赖升级（如 `deps`） |
+| `ci` | CI 配置 | 修改 GitHub Actions、工作流脚本 |
+| `chore` | 日常杂项 | 辅助工具、项目配置、脚本微调 |
+| `revert` | 撤销提交 | 回滚历史 commit |
 
-## 中英文混排空格（盘古之白）
+> [!CAUTION]
+> **关于 `style` 的严格限制：**
+> - ✅ `style` **只能用于代码格式化**（如执行 `prettier` 格式化、调整缩进换行）。
+> - ❌ **严禁用于修改 CSS、SCSS、主题变量或 UI 视觉样式！**
+> - 修改 UI 样式 / 布局时，请根据性质使用 `fix`（修复样式问题）、`feat`（新增视觉特性）或 `refactor`（样式重构）。
 
-中文与英文、数字、变量名之间**必须加一个半角空格**。
+---
 
-```
-x  feat(lk-button): 新增button组件支持disabled属性
-o  feat(lk-button): 新增 button 组件支持 disabled 属性
+## 3. 中英文空格规范
 
-x  chore: 优化vite配置升级webpack5
-o  chore: 优化 vite 配置升级 webpack 5
+中文与英文单词、数字、属性名、组件名之间**必须保留一个半角空格**：
 
-x  fix(lk-input): 修复ios下input显示bug
-o  fix(lk-input): 修复 iOS 下 input 显示 bug
-```
+- ❌ `feat(lk-button): 新增button组件的loading状态`
+- ✅ `feat(lk-button): 新增 button 组件的 loading 状态`
+- ❌ `fix(lk-input): 修复ios端input失去焦点bug`
+- ✅ `fix(lk-input): 修复 iOS 端 input 失去焦点 bug`
+- ❌ `style: 格式化vue代码`
+- ✅ `style: 格式化 Vue 代码`
 
-## 示例
+---
 
-```
-feat(lk-button): 新增 loading 状态与 disabled 属性
-fix(router): 修复 H5 平台路由参数丢失问题
-style(components): 格式化组件代码
-refactor(composables): 将 useRequest 提取为独立 hooks
-chore: 初始化 vite 打包配置
-chore(deps): 升级 vue 至 3.4.0
-build(vite): 修改 build 输出路径
-ci(github): 添加 GitHub Actions 部署流程
-docs: 更新 README 使用说明
-```
+## 4. 提交示例
 
-## AI Prompt
-
-生成 commit message 时可使用以下提示词：
-
-```
-根据 git diff 生成提交信息。格式：<type>(<scope>): <subject>。
-scope 用 kebab-case，subject 用简短中文，符合 Angular Commit Convention，末尾不加句号。
-subject 中的英文单词、数字、变量名前后都要留一个半角空格。
-style 只用于代码格式，不用于 CSS、SCSS、主题变量或视觉样式修改。
-只描述当前 diff 中已经发生的改动，不写发布计划、后续计划或无关背景。
-只输出一行提交信息，不要解释。
+```text
+feat(lk-button): 新增 disabled 禁用状态与 ripple 水波纹效果
+fix(lk-picker): 修复多列模式下联动值不更新的 bug
+style: 运行 prettier 统一代码格式与缩进
+refactor(core): 优化虚拟列表滚动计算逻辑
+docs(form): 更新 form-item 校验规则说明文档
+test(unit): 补充 lk-switch 单元测试用例
+build(deps): 升级 vue 至 3.4.0
+chore: 清理无用临时构建产物
 ```

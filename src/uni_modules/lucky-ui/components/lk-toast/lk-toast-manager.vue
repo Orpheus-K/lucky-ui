@@ -10,10 +10,12 @@ defineOptions({ name: 'LkToastManager' });
 
 const props = defineProps(toastManagerProps);
 const managerClass = computed(() => ['lk-toast-manager', props.customClass]);
-const managerStyle = computed<StyleValue>(() => resolveToastManagerStyle({
-  customStyle: props.customStyle as StyleValue,
-  zIndex: props.zIndex,
-}));
+const managerStyle = computed<StyleValue>(() =>
+  resolveToastManagerStyle({
+    customStyle: props.customStyle as StyleValue,
+    zIndex: props.zIndex,
+  })
+);
 </script>
 
 <template>

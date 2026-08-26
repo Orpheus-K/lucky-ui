@@ -18,11 +18,7 @@ import { PreloadPriority, PreloadResourceType } from './types';
 import { PreloadQueue, getPreloadQueue } from './queue';
 
 type UniPreloadPageApi = typeof uni & {
-  preloadPage?: (options: {
-    url: string;
-    success: () => void;
-    fail: (err: Error) => void;
-  }) => void;
+  preloadPage?: (options: { url: string; success: () => void; fail: (err: Error) => void }) => void;
 };
 
 /** 已加载的资源缓存 */

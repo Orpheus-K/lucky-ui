@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import type { StyleValue } from 'vue';
-import { ref, watch, nextTick, getCurrentInstance, computed, onMounted, onBeforeUnmount } from 'vue';
+import {
+  ref,
+  watch,
+  nextTick,
+  getCurrentInstance,
+  computed,
+  onMounted,
+  onBeforeUnmount,
+} from 'vue';
 import { segmentedProps, segmentedEmits, type SegmentedOption } from './segmented.props';
 import {
   resolveSegmentedRootStyle,
@@ -99,7 +107,7 @@ function applySliderMetrics(wrap: SegmentWrapRect, items: SegmentRect[]) {
 
 function getRootElement(): HTMLElement | null {
   if (typeof HTMLElement === 'undefined') return null;
-  const raw = rootRef.value ? (rootRef.value.$el || rootRef.value) : null;
+  const raw = rootRef.value ? rootRef.value.$el || rootRef.value : null;
   return raw instanceof HTMLElement ? raw : null;
 }
 
@@ -128,11 +136,14 @@ function updateSlider() {
   if (!inst?.proxy) return;
 
   const q = uni.createSelectorQuery().in(inst.proxy);
-  q.select('.lk-segmented').fields({
-    rect: true,
-    size: true,
-    scrollOffset: true,
-  }, () => {});
+  q.select('.lk-segmented').fields(
+    {
+      rect: true,
+      size: true,
+      scrollOffset: true,
+    },
+    () => {}
+  );
   q.selectAll('.lk-segmented__item').boundingClientRect();
   q.exec(res => {
     const wrap = res?.[0];
@@ -148,7 +159,7 @@ onMounted(() => {
   setTimeout(updateSlider, 50);
   // #ifdef H5
   if (typeof ResizeObserver !== 'undefined') {
-    const el = rootRef.value ? (rootRef.value.$el || rootRef.value) : null;
+    const el = rootRef.value ? rootRef.value.$el || rootRef.value : null;
     if (el && el instanceof HTMLElement) {
       resizeObserver = new ResizeObserver(() => {
         updateSlider();

@@ -82,7 +82,10 @@ function createRuntimeFontFace(fontName, css) {
 }
 
 function normalizeRuntimeFontFace(css, fontName) {
-  return css.replace(/@font-face\s*\{[\s\S]*?\}\s*/m, `${createRuntimeFontFace(fontName, css)}\n\n`);
+  return css.replace(
+    /@font-face\s*\{[\s\S]*?\}\s*/m,
+    `${createRuntimeFontFace(fontName, css)}\n\n`
+  );
 }
 
 async function normalizeGeneratedFontStyles(fontsDir, fontName) {

@@ -85,9 +85,7 @@ function onSwiperChange(e: { detail: { current: number } }) {
               <text class="swiper-panel-label">{{ item.label }} Panel</text>
               <text class="swiper-panel-desc">
                 这里是
-                {{
-                  item.label
-                }}
+                {{ item.label }}
                 内容展示区。支持在下方左/右滑动手指触发切换，顶部下划线会自动磁吸平移到对应标签。
               </text>
             </view>

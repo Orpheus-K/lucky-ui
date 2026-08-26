@@ -5,7 +5,10 @@ import LkChartRing from '@/uni_modules/lucky-ui/components/lk-chart-ring/lk-char
 import LkSegmented from '@/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.vue';
 import LkSlider from '@/uni_modules/lucky-ui/components/lk-slider/lk-slider.vue';
 import LkSwitch from '@/uni_modules/lucky-ui/components/lk-switch/lk-switch.vue';
-import { LiteChartEffect, type LiteChartEffect as LiteChartEffectValue } from '@/uni_modules/lucky-ui/core/src/chart';
+import {
+  LiteChartEffect,
+  type LiteChartEffect as LiteChartEffectValue,
+} from '@/uni_modules/lucky-ui/core/src/chart';
 import type { RingChartSegment } from '@/uni_modules/lucky-ui/components/lk-chart-ring/chart-ring.props';
 
 const progress = ref(68);

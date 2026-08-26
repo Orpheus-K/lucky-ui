@@ -58,11 +58,7 @@ const cornerDemos: DropdownCornerDemo[] = [
   <view class="component-demo dropdown-demo">
     <demo-block title="四角触发">
       <view class="corner-stage">
-        <view
-          v-for="item in cornerDemos"
-          :key="item.key"
-          :class="item.className"
-        >
+        <view v-for="item in cornerDemos" :key="item.key" :class="item.className">
           <lk-dropdown
             :placement="item.placement"
             :menu-align="item.menuAlign"
@@ -75,38 +71,21 @@ const cornerDemos: DropdownCornerDemo[] = [
             </lk-button>
             <template #menu-top>
               <view class="dropdown-quick-actions">
-                <view
-                  v-for="name in quickActions"
-                  :key="name"
-                  class="dropdown-quick-actions__item"
-                >
+                <view v-for="name in quickActions" :key="name" class="dropdown-quick-actions__item">
                   <lk-icon :name="name" size="34" />
                 </view>
               </view>
               <lk-dropdown-divider />
             </template>
             <template #menu>
-              <lk-dropdown-item
-                :name="`${item.key}-view`"
-                icon="plus-square"
-                :icon-size="40"
-              >
+              <lk-dropdown-item :name="`${item.key}-view`" icon="plus-square" :icon-size="40">
                 打开新的标签页
               </lk-dropdown-item>
-              <lk-dropdown-item
-                :name="`${item.key}-edit`"
-                icon="grid"
-                :icon-size="40"
-                width="330"
-              >
+              <lk-dropdown-item :name="`${item.key}-edit`" icon="grid" :icon-size="40" width="330">
                 向新分组添加标签页
               </lk-dropdown-item>
               <lk-dropdown-divider />
-              <lk-dropdown-item
-                :name="`${item.key}-remove`"
-                icon="clock-history"
-                :icon-size="40"
-              >
+              <lk-dropdown-item :name="`${item.key}-remove`" icon="clock-history" :icon-size="40">
                 历史记录
               </lk-dropdown-item>
               <lk-dropdown-item :name="`${item.key}-download`" icon="download" :icon-size="40">

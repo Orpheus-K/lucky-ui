@@ -5,7 +5,10 @@ import LkChartRadarLite from '@/uni_modules/lucky-ui/components/lk-chart-radar-l
 import LkSegmented from '@/uni_modules/lucky-ui/components/lk-segmented/lk-segmented.vue';
 import LkSlider from '@/uni_modules/lucky-ui/components/lk-slider/lk-slider.vue';
 import LkSwitch from '@/uni_modules/lucky-ui/components/lk-switch/lk-switch.vue';
-import { LiteChartEffect, type LiteChartEffect as LiteChartEffectValue } from '@/uni_modules/lucky-ui/core/src/chart';
+import {
+  LiteChartEffect,
+  type LiteChartEffect as LiteChartEffectValue,
+} from '@/uni_modules/lucky-ui/core/src/chart';
 import type { RadarLiteItem } from '@/uni_modules/lucky-ui/components/lk-chart-radar-lite/chart-radar-lite.props';
 
 const levels = ref(4);

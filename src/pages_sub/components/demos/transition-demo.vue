@@ -214,7 +214,6 @@ const {
 const toggleCard = () => {
   showCard.value = !showCard.value;
 };
-
 </script>
 
 <template>
