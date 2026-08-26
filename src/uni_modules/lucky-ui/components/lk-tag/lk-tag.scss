@@ -1,16 +1,17 @@
-﻿@use '../../theme/src/mixins/bem' as *;
+@use '../../theme/src/mixins/bem' as *;
 
 @include b(tag) {
   --_fs: var(--lk-rpx-24);
   --_px: var(--lk-rpx-20);
   --_py: var(--lk-rpx-8);
   --_radius: var(--lk-radius-full);
+  --_icon-gap: var(--lk-spacing-xs);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: var(--_fs);
   padding: var(--_py) var(--_px);
-  line-height: 1.4;
+  line-height: 1;
   border-radius: var(--_radius);
   user-select: none;
   box-sizing: border-box;
@@ -27,16 +28,19 @@
     --_fs: var(--lk-rpx-22);
     --_px: var(--lk-rpx-12);
     --_py: var(--lk-rpx-4);
+    --_icon-gap: var(--lk-spacing-xxs);
   }
   @include m(md) {
     --_fs: var(--lk-rpx-26);
     --_px: var(--lk-rpx-20);
     --_py: var(--lk-rpx-12);
+    --_icon-gap: var(--lk-spacing-xs);
   }
   @include m(lg) {
     --_fs: var(--lk-rpx-28);
     --_px: var(--lk-rpx-36);
     --_py: var(--lk-rpx-20);
+    --_icon-gap: var(--lk-spacing-sm);
   }
 
   @include m(light) {
@@ -65,22 +69,37 @@
   }
 
   @include e(content) {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     color: inherit;
-    line-height: inherit;
+    line-height: 1;
+  }
+
+  @include e(icon) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: var(--_icon-gap, var(--lk-spacing-xs));
+    font-size: inherit;
+    line-height: 1;
+    flex-shrink: 0;
   }
 
   @include e(close) {
-    font-size: var(--lk-rpx-28);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: var(--_icon-gap, var(--lk-spacing-xs));
+    font-size: inherit;
     line-height: 1;
     color: inherit;
-    padding: var(--lk-rpx-4);
-    margin-left: var(--lk-spacing-xs);
     border-radius: var(--lk-radius-sm);
+    cursor: pointer;
+    flex-shrink: 0;
+
     &:active {
-      background: var(--lk-fill-2);
+      opacity: 0.7;
     }
   }
 }

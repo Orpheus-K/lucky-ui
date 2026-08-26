@@ -3,6 +3,7 @@ import type { StyleValue } from 'vue';
 import { tagEmits, tagProps } from './tag.props';
 import { computed } from 'vue';
 import { resolveTagClass, resolveTagEventName, resolveTagStyle } from './tag.utils';
+import LkIcon from '../lk-icon/lk-icon.vue';
 
 defineOptions({ name: 'LkTag' });
 
@@ -57,9 +58,18 @@ const customStyle = computed(() =>
     @tap="onClick"
   >
     <view class="lk-tag__content">
+      <view v-if="props.icon || $slots.icon" class="lk-tag__icon">
+        <slot name="icon">
+          <lk-icon :name="props.icon" />
+        </slot>
+      </view>
       <slot />
     </view>
-    <view v-if="props.closable" class="lk-tag__close" @tap.stop="onClose">×</view>
+    <view v-if="props.closable" class="lk-tag__close" @tap.stop="onClose">
+      <slot name="close-icon">
+        <lk-icon :name="props.closeIcon" />
+      </slot>
+    </view>
   </view>
 </template>
 

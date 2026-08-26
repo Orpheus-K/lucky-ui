@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { tagProps } from '../../src/uni_modules/lucky-ui/components/lk-tag/tag.props';
 import {
   expandShortHex,
   resolveTagClass,
@@ -9,6 +10,11 @@ import {
 } from '../../src/uni_modules/lucky-ui/components/lk-tag/tag.utils';
 
 describe('lk-tag style and event rules', () => {
+  it('defines stable defaults for leading and close icons', () => {
+    expect(tagProps.icon.default).toBe('');
+    expect(tagProps.closeIcon.default).toBe('x');
+  });
+
   it('expands short hex and converts hex colors to soft rgba backgrounds', () => {
     expect(expandShortHex('0af')).toBe('00aaff');
     expect(toSoftColor('#0af')).toBe('rgba(0, 170, 255, 0.12)');

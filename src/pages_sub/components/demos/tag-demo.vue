@@ -2,7 +2,6 @@
 import { ref, computed } from 'vue';
 import LkTag from '@/uni_modules/lucky-ui/components/lk-tag/lk-tag.vue';
 import LkButton from '@/uni_modules/lucky-ui/components/lk-button/lk-button.vue';
-import LkIcon from '@/uni_modules/lucky-ui/components/lk-icon/lk-icon.vue';
 import LkSpace from '@/uni_modules/lucky-ui/components/lk-space/lk-space.vue';
 import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.vue';
 
@@ -85,9 +84,9 @@ const toggleTag = (name: string) => {
           v-for="tag in selectableTags"
           :key="tag.name"
           class="selectable-tag"
+          :icon="tag.selected ? 'check-circle-fill' : ''"
           @click="toggleTag(tag.name)"
         >
-          <lk-icon v-if="tag.selected" name="check-circle-fill" class="selectable-tag__icon" />
           {{ tag.label }}
         </lk-tag>
       </lk-space>
@@ -113,15 +112,5 @@ const toggleTag = (name: string) => {
 
 .selectable-tag {
   cursor: pointer;
-}
-
-.selectable-tag__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1em;
-  height: 1em;
-  line-height: 1;
-  margin-right: 8rpx;
 }
 </style>

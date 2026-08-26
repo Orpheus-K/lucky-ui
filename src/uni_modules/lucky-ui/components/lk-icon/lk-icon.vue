@@ -14,7 +14,13 @@ import './fonts/lk-icons.css';
 import './fonts/lk-icons-definitions.css';
 // #endif
 
-defineOptions({ name: 'LkIcon', inheritAttrs: false });
+defineOptions({
+  name: 'LkIcon',
+  options: {
+    virtualHost: true,
+  },
+  inheritAttrs: false,
+});
 
 const props = defineProps(iconProps);
 const emit = defineEmits(iconEmits);
@@ -87,9 +93,7 @@ function handleClick(e: Event) {
   >
     <text class="lk-icon">{{ iconChar }}</text>
   </view>
-  <text v-else :class="iconClass" :style="mergedIconStyle" aria-hidden="true" @tap="handleClick">
-    {{ iconChar }}
-  </text>
+  <text v-else :class="iconClass" :style="mergedIconStyle" aria-hidden="true" @tap="handleClick">{{ iconChar }}</text>
 </template>
 
 <style lang="scss">

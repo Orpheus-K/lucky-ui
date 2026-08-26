@@ -50,7 +50,9 @@ phone: tag
 |------|------|------|--------|
 | type | 样式变体 | `solid / outline / light` | `light` |
 | size | 尺寸 | `sm / md / lg` | `md` |
+| icon | 前置图标名称 | `string` | `''` |
 | closable | 是否可关闭 | `boolean` | `false` |
+| closeIcon | 关闭图标名称 | `string` | `'x'` |
 | disabled | 是否禁用 | `boolean` | `false` |
 | round | 是否胶囊圆角 | `boolean` | `true` |
 | textColor | 自定义文字颜色 | `string` | `''` |
@@ -72,3 +74,5 @@ phone: tag
 | 插槽名 | 说明 |
 |--------|------|
 | default | 标签内容 |
+| icon | 自定义前置图标插槽 |
+| close-icon | 自定义关闭图标插槽 |

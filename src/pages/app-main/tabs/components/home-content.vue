@@ -426,10 +426,6 @@ const goToSearch = () => {
     min-width: 0;
     min-height: 0;
     box-sizing: border-box;
-
-    :deep(.lk-icon) {
-      vertical-align: 0;
-    }
   }
 
   .search-bar {
