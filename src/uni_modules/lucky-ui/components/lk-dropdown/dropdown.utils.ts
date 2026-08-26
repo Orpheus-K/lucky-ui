@@ -81,8 +81,10 @@ export function shouldTeleportDropdown(teleport: unknown): boolean {
   return teleport !== false;
 }
 
-export function resolveDropdownTeleportTarget(teleport: unknown): unknown {
-  if (teleport === true || teleport === undefined || teleport === '') return 'body';
+export function resolveDropdownTeleportTarget(
+  teleport: string | HTMLElement | boolean | undefined
+): string | HTMLElement {
+  if (typeof teleport === 'boolean' || teleport === undefined || teleport === '') return 'body';
   return teleport;
 }
 
