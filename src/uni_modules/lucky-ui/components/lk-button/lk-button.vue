@@ -142,12 +142,7 @@ function emitNativeEvent(name: ButtonNativeEventName, e: unknown) {
     @im="emitNativeEvent('im', $event)"
   >
     <view v-if="loading" class="lk-button__loader" />
-    <lk-icon
-      v-if="icon && !loading"
-      class="lk-button__icon"
-      :name="icon"
-      custom-style="--lk-icon-vertical-align: -0.125em"
-    />
+    <lk-icon v-if="icon && !loading" class="lk-button__icon" :name="icon" />
     <slot />
     <view v-if="isRippleEnabled" class="lk-ripple__wave" :style="rippleWaveStyle" />
   </button>
