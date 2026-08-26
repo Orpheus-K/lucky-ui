@@ -222,6 +222,7 @@ describe('lk-dropdown open and item rules', () => {
     expect(shouldTeleportDropdown(true)).toBe(true);
     expect(shouldTeleportDropdown(false)).toBe(false);
     expect(resolveDropdownTeleportTarget(true)).toBe('body');
+    expect(resolveDropdownTeleportTarget(false)).toBe('body');
     expect(resolveDropdownTeleportTarget('body')).toBe('body');
 
     expect(resolveDropdownTeleportedMenuPosition({
