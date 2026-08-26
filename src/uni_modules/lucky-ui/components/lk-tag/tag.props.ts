@@ -51,6 +51,12 @@ export const tagProps = {
   /** 是否圆角 */
   round: LkProp.boolean(true),
 
+  /** 图标名称 */
+  icon: LkProp.string(''),
+
+  /** 关闭图标名称 */
+  closeIcon: LkProp.string('x'),
+
   /** 主颜色：文字使用该颜色，背景自动生成浅色系，无边框 */
   color: LkProp.string(''),
 
