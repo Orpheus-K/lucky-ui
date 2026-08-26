@@ -15,9 +15,7 @@
   flex-shrink: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* 继承父容器颜色（如按钮、列表等），保证在有背景色的容器内自动匹配 */
-  /* 如果用户传了 color prop，会通过内联样式覆盖 */
-  color: inherit;
+  color: var(--lk-icon-color, var(--lk-text-primary, inherit));
 }
 
 @include b(icon-bg-box) {
@@ -27,7 +25,7 @@
   box-sizing: border-box;
   flex-shrink: 0;
   overflow: hidden;
-  color: inherit;
+  color: var(--lk-icon-color, var(--lk-text-primary, inherit));
   line-height: 1;
   vertical-align: middle;
   transition: var(--lk-transition-fast);
