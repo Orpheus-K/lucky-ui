@@ -96,5 +96,4 @@ const triggerLoading = () => {
 .block-btn {
   margin-top: 16rpx;
 }
-
 </style>

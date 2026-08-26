@@ -317,10 +317,7 @@ defineExpose({ scrollToIndex, scrollToTop });
     </view>
     <template v-else>
       <view class="lk-virtual-list__phantom" :style="{ height: totalScrollable + 'px' }" />
-      <view
-        :class="['lk-virtual-list__container', contentClass]"
-        :style="positionedContentStyle"
-      >
+      <view :class="['lk-virtual-list__container', contentClass]" :style="positionedContentStyle">
         <slot
           :items="visibleItems"
           :start="startIndex"

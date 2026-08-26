@@ -87,13 +87,7 @@ function handleClick(e: Event) {
   >
     <text class="lk-icon">{{ iconChar }}</text>
   </view>
-  <text
-    v-else
-    :class="iconClass"
-    :style="mergedIconStyle"
-    aria-hidden="true"
-    @tap="handleClick"
-  >
+  <text v-else :class="iconClass" :style="mergedIconStyle" aria-hidden="true" @tap="handleClick">
     {{ iconChar }}
   </text>
 </template>

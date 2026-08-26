@@ -392,7 +392,9 @@ export function useChartCanvas<TExtra = unknown>(options: UseChartCanvasOptions)
 
         if (legacyContext) {
           canvasNode.value = createLegacyCanvasNode();
-          ctx.value = createLegacyCanvasAdapter(legacyContext as unknown as LegacyCanvasContextLike);
+          ctx.value = createLegacyCanvasAdapter(
+            legacyContext as unknown as LegacyCanvasContextLike
+          );
         }
       }
     })();
