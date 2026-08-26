@@ -4,6 +4,7 @@
   display: grid;
   width: auto; // 重要：让负 margin 正常工作
   grid-auto-rows: 1fr;
+  color: var(--lk-text-primary);
 
   &-container {
     width: 100%;
@@ -21,6 +22,7 @@
     align-items: center;
     justify-content: center;
     padding: var(--lk-spacing-sm);
+    color: var(--lk-text-primary);
     transition: background var(--lk-transition-fast);
     overflow: visible;
   }

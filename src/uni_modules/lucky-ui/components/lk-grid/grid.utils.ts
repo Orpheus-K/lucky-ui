@@ -64,6 +64,21 @@ export function resolveGridItemClass(options: {
   };
 }
 
+export function resolveGridItemIconColor(itemColor?: string, defaultColor?: string): string {
+  if (itemColor) return itemColor;
+  if (defaultColor) return defaultColor;
+  return '';
+}
+
+export function resolveGridItemIconSize(
+  itemSize?: string | number,
+  defaultSize?: string | number
+): string | number {
+  if (itemSize !== undefined && itemSize !== '') return itemSize;
+  if (defaultSize !== undefined && defaultSize !== '') return defaultSize;
+  return 36;
+}
+
 export function resolveGridClickResult(options: {
   item: GridItem;
   index: number;

@@ -3,6 +3,8 @@ import { baseProps, LkProp } from '../common/props';
 
 export interface GridItem {
   icon?: string;
+  iconColor?: string;
+  iconSize?: string | number;
   text: string;
   disabled?: boolean;
   [key: string]: unknown;
@@ -40,6 +42,12 @@ export const gridProps = {
     type: Number,
     default: undefined,
   },
+
+  /** 图标尺寸 */
+  iconSize: LkProp.stringNumber(36),
+
+  /** 图标颜色 */
+  iconColor: LkProp.string(''),
 
   /** 宫格数据 */
   items: {
