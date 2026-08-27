@@ -57,6 +57,9 @@ export const navbarProps = {
   /** 返回图标 */
   backIcon: LkProp.string('chevron-left'),
 
+  /** 返回图标尺寸 */
+  backIconSize: LkProp.stringNumber('var(--lk-rpx-36)'),
+
   /** 是否显示底部分割线 */
   border: LkProp.boolean(true),
 

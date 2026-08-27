@@ -13,6 +13,19 @@ export type NavbarMenuButtonInfo = {
   left?: number;
 };
 
+export function resolveNavbarSideVisibility(options: {
+  showBack: boolean;
+  leftText: string;
+  rightText: string;
+  hasLeftSlot: boolean;
+  hasRightSlot: boolean;
+}) {
+  return {
+    hasLeft: Boolean(options.showBack || options.leftText || options.hasLeftSlot),
+    hasRight: Boolean(options.rightText || options.hasRightSlot),
+  };
+}
+
 export function resolveNavbarRootClass(options: {
   variant: NavbarVariant;
   titleAlign: NavbarTitleAlign;

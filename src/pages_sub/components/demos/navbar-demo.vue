@@ -45,7 +45,7 @@ const handleMore = () => {
         :fixed="false"
       >
         <template #left>
-          <lk-icon name="house-fill" size="36" />
+          <lk-icon name="house-fill" size="var(--lk-rpx-36)" />
         </template>
       </lk-navbar>
     </demo-block>
@@ -53,8 +53,8 @@ const handleMore = () => {
     <demo-block title="自定义操作区">
       <lk-navbar title="消息中心" subtitle="3 条未读提醒" :fixed="false">
         <template #right>
-          <lk-icon name="search" size="36" />
-          <lk-icon name="three-dots-vertical" size="36" />
+          <lk-icon name="search" size="var(--lk-rpx-36)" />
+          <lk-icon name="three-dots-vertical" size="var(--lk-rpx-36)" />
         </template>
       </lk-navbar>
     </demo-block>
@@ -62,13 +62,13 @@ const handleMore = () => {
     <demo-block title="自定义中间">
       <lk-navbar :fixed="false" variant="frosted">
         <template #left>
-          <lk-icon name="house-fill" size="36" />
+          <lk-icon name="house-fill" size="var(--lk-rpx-36)" />
         </template>
         <template #center>
           <view class="demo-search">搜索组件、文档、示例</view>
         </template>
         <template #right>
-          <lk-icon name="search" size="36" />
+          <lk-icon name="search" size="var(--lk-rpx-36)" />
         </template>
       </lk-navbar>
     </demo-block>
@@ -84,7 +84,7 @@ const handleMore = () => {
         shadow
       >
         <template #right>
-          <lk-icon name="bell" size="36" />
+          <lk-icon name="bell" size="var(--lk-rpx-36)" />
         </template>
       </lk-navbar>
     </demo-block>
@@ -100,7 +100,7 @@ const handleMore = () => {
           :border="false"
         >
           <template #right>
-            <lk-icon name="share" size="36" />
+            <lk-icon name="share" size="var(--lk-rpx-36)" />
           </template>
         </lk-navbar>
         <view class="demo-hero__content">优雅导航可以自然融入页面头图区域。</view>
@@ -114,12 +114,12 @@ const handleMore = () => {
   display: flex;
   flex-direction: column;
   > :not(:first-child) {
-    margin-top: 32rpx;
+    margin-top: var(--lk-spacing-xl);
   }
 }
 
 .demo-search {
-  width: 360rpx;
+  width: var(--lk-rpx-360);
   height: var(--lk-rpx-64);
   display: flex;
   align-items: center;

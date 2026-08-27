@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { navbarProps } from '../../src/uni_modules/lucky-ui/components/lk-navbar/navbar.props';
 import {
   resolveNavbarContentHeight,
   resolveNavbarContentStyle,
@@ -6,6 +7,7 @@ import {
   resolveNavbarPlaceholderStyle,
   resolveNavbarRootClass,
   resolveNavbarSafeStyle,
+  resolveNavbarSideVisibility,
   shouldNavigateBack,
 } from '../../src/uni_modules/lucky-ui/components/lk-navbar/navbar.utils';
 
@@ -104,5 +106,30 @@ describe('lk-navbar layout and back rules', () => {
     expect(shouldNavigateBack([{}, {}])).toBe(true);
     expect(shouldNavigateBack([{}])).toBe(false);
     expect(shouldNavigateBack(undefined)).toBe(false);
+  });
+
+  it('renders only action regions that have content', () => {
+    expect(resolveNavbarSideVisibility({
+      showBack: false,
+      leftText: '',
+      rightText: '',
+      hasLeftSlot: false,
+      hasRightSlot: false,
+    })).toEqual({ hasLeft: false, hasRight: false });
+    expect(resolveNavbarSideVisibility({
+      showBack: true,
+      leftText: '',
+      rightText: '更多',
+      hasLeftSlot: false,
+      hasRightSlot: false,
+    })).toEqual({ hasLeft: true, hasRight: true });
+    expect(resolveNavbarSideVisibility({
+      showBack: false,
+      leftText: '',
+      rightText: '',
+      hasLeftSlot: true,
+      hasRightSlot: true,
+    })).toEqual({ hasLeft: true, hasRight: true });
+    expect(navbarProps.backIconSize.default).toBe('var(--lk-rpx-36)');
   });
 });
