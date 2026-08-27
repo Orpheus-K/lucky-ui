@@ -198,8 +198,10 @@ const mockCustomRequest: InstanceType<typeof LkUpload>['$props']['customRequest'
     <demo-block title="自定义上传按钮" desc="通过 trigger 插槽自定义">
       <lk-upload v-model="fileList7" upload-text="" :max-count="1">
         <template #trigger>
-          <lk-icon name="camera" size="48" />
-          <text class="upload-custom-text">拍照上传</text>
+          <view class="upload-custom-trigger">
+            <lk-icon name="camera" size="48" />
+            <text class="upload-custom-text">拍照上传</text>
+          </view>
         </template>
       </lk-upload>
     </demo-block>
@@ -243,6 +245,13 @@ const mockCustomRequest: InstanceType<typeof LkUpload>['$props']['customRequest'
   > :not(:first-child) {
     margin-top: 32rpx;
   }
+}
+
+.upload-custom-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .upload-custom-text {

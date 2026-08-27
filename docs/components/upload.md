@@ -155,13 +155,15 @@ const customRequest = ({ file, action, name, headers, data, onProgress, onSucces
 
 ## 自定义上传按钮
 
-通过 `trigger` 插槽自定义上传区域内容。
+通过 `trigger` 插槽自定义上传区域内容。插槽会完整替换默认图标、文案和数量提示；如需数量提示，请在插槽内自行渲染。
 
 ```vue
 <lk-upload v-model="fileList">
   <template #trigger>
-    <lk-icon name="camera" size="48" />
-    <text>拍照</text>
+    <view class="custom-trigger">
+      <lk-icon name="camera" size="48" />
+      <text class="custom-trigger-text">拍照上传</text>
+    </view>
   </template>
 </lk-upload>
 ```

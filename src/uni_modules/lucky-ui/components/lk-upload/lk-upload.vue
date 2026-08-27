@@ -788,10 +788,10 @@ defineExpose({
           <text v-if="resolvedUploadText" class="lk-upload__add-text">{{
             resolvedUploadText
           }}</text>
+          <text v-if="maxCount < 99" class="lk-upload__count">
+            {{ fileList.length }}/{{ maxCount }}
+          </text>
         </slot>
-        <text v-if="maxCount < 99" class="lk-upload__count">
-          {{ fileList.length }}/{{ maxCount }}
-        </text>
       </view>
 
       <!-- 内置删除确认弹窗 -->
