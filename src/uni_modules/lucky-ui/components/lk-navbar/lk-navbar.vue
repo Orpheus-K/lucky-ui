@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type StyleValue } from 'vue';
+import { computed, useSlots, type StyleValue } from 'vue';
 import { navbarProps, navbarEmits } from './navbar.props';
 import { useRipple } from '@/uni_modules/lucky-ui/composables/useRipple';
 import {
@@ -9,6 +9,7 @@ import {
   resolveNavbarPlaceholderStyle,
   resolveNavbarRootClass,
   resolveNavbarSafeStyle,
+  resolveNavbarSideVisibility,
   shouldNavigateBack,
 } from './navbar.utils';
 
@@ -16,6 +17,17 @@ defineOptions({ name: 'LkNavbar' });
 
 const props = defineProps(navbarProps);
 const emit = defineEmits(navbarEmits);
+const slots = useSlots();
+
+const sideVisibility = computed(() =>
+  resolveNavbarSideVisibility({
+    showBack: props.showBack,
+    leftText: props.leftText,
+    rightText: props.rightText,
+    hasLeftSlot: Boolean(slots.left),
+    hasRightSlot: Boolean(slots.right),
+  })
+);
 
 const {
   rippleActive: leftActive,
@@ -123,17 +135,13 @@ function tryNavigateBack() {
   }
 }
 
-function onBackTap(event: unknown) {
-  // 点击返回图标：行为更符合直觉
-  triggerLeft(event);
-  emit('click-left');
-  emit('back');
-  tryNavigateBack();
-}
-
 function onLeftClick(event: unknown) {
   triggerLeft(event);
   emit('click-left');
+  if (props.showBack) {
+    emit('back');
+    tryNavigateBack();
+  }
 }
 
 function onRightClick(event: unknown) {
@@ -154,6 +162,7 @@ function onRightClick(event: unknown) {
     <!-- 导航栏内容 -->
     <view class="lk-navbar__content" :style="contentStyle">
       <view
+        v-if="sideVisibility.hasLeft"
         class="lk-navbar__left lk-ripple"
         :class="{ 'lk-ripple--active': leftActive }"
         @tap="onLeftClick"
@@ -161,14 +170,15 @@ function onRightClick(event: unknown) {
         <lk-icon
           v-if="showBack"
           :name="backIcon"
-          size="36"
+          :size="backIconSize"
           class="lk-navbar__back"
-          @tap.stop="onBackTap"
         />
         <text v-if="leftText" class="lk-navbar__text">{{ leftText }}</text>
         <slot name="left" />
         <view class="lk-ripple__wave" :style="leftRippleStyle" />
       </view>
+      <view v-else class="lk-navbar__side-placeholder" />
+
       <view class="lk-navbar__center">
         <slot name="center">
           <view class="lk-navbar__title-wrap">
@@ -178,7 +188,9 @@ function onRightClick(event: unknown) {
           <slot />
         </slot>
       </view>
+
       <view
+        v-if="sideVisibility.hasRight"
         class="lk-navbar__right lk-ripple"
         :class="{ 'lk-ripple--active': rightActive }"
         @tap="onRightClick"
@@ -187,6 +199,7 @@ function onRightClick(event: unknown) {
         <slot name="right" />
         <view class="lk-ripple__wave" :style="rightRippleStyle" />
       </view>
+      <view v-else class="lk-navbar__side-placeholder" />
     </view>
   </view>
 
