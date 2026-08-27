@@ -1,8 +1,15 @@
 import type { StyleValue } from 'vue';
 
+export function resolveLoadingSize(size: string | number): string {
+  if (size === '' || size === undefined || size === null) return '';
+  const value = String(size).trim();
+  return /^\d+(\.\d+)?$/.test(value) ? `${value}rpx` : value;
+}
+
 export function normalizeLoadingSize(size: string | number): number {
   if (typeof size === 'number') return size;
-  return parseInt(size, 10);
+  const num = parseInt(size, 10);
+  return Number.isNaN(num) ? 40 : num;
 }
 
 export function resolveLoadingRootClass(options: {
@@ -33,22 +40,34 @@ export function resolveLoadingRootStyle(options: {
 }
 
 export function resolveLoadingSquareStyle(size: string | number) {
-  const value = normalizeLoadingSize(size);
+  const value = resolveLoadingSize(size);
   return {
-    width: `${value}rpx`,
-    height: `${value}rpx`,
+    width: value,
+    height: value,
   };
 }
 
 export function resolveLoadingHeightStyle(size: string | number) {
   return {
-    height: `${normalizeLoadingSize(size)}rpx`,
+    height: resolveLoadingSize(size),
   };
 }
 
 export function resolveLoadingBarStyle(size: string | number) {
+  const rawValue = String(size).trim();
+  if (/^\d+(\.\d+)?$/.test(rawValue)) {
+    return {
+      width: `${Number(rawValue) * 2}rpx`,
+    };
+  }
+  const value = resolveLoadingSize(size);
+  if (!value) {
+    return {
+      width: '',
+    };
+  }
   return {
-    width: `${Number(size) * 2}rpx`,
+    width: `calc(${value} + ${value})`,
   };
 }
 

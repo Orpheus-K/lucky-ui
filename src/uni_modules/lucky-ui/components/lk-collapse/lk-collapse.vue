@@ -68,9 +68,27 @@ function clickDisabled(name: CollapseName, event?: unknown) {
 
 provide(collapseInjectionKey, {
   active,
-  accordion: props.accordion,
-  animationDuration: props.animationDuration,
-  animationTiming: props.animationTiming,
+  get accordion() {
+    return props.accordion;
+  },
+  get arrow() {
+    return props.arrow;
+  },
+  get arrowIcon() {
+    return props.arrowIcon;
+  },
+  get openIcon() {
+    return props.openIcon;
+  },
+  get animationDuration() {
+    return props.animationDuration;
+  },
+  get animationTiming() {
+    return props.animationTiming;
+  },
+  get beforeToggle() {
+    return props.beforeToggle;
+  },
   toggle,
   clickDisabled,
 });

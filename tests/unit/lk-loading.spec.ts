@@ -6,6 +6,7 @@ import {
   resolveLoadingHeightStyle,
   resolveLoadingRootClass,
   resolveLoadingRootStyle,
+  resolveLoadingSize,
   resolveLoadingSquareStyle,
   resolveLoadingText,
   shouldRenderLoadingText,
@@ -34,7 +35,13 @@ describe('lk-loading display rules', () => {
       height: '48rpx',
     });
     expect(resolveLoadingHeightStyle(32)).toEqual({ height: '32rpx' });
+    expect(resolveLoadingSize(' var(--lk-rpx-28) ')).toBe('var(--lk-rpx-28)');
+    expect(resolveLoadingSquareStyle('var(--lk-rpx-28)')).toEqual({
+      width: 'var(--lk-rpx-28)',
+      height: 'var(--lk-rpx-28)',
+    });
     expect(resolveLoadingBarStyle('30')).toEqual({ width: '60rpx' });
+    expect(resolveLoadingBarStyle('2rem')).toEqual({ width: 'calc(2rem + 2rem)' });
   });
 
   it('builds root class and color style', () => {

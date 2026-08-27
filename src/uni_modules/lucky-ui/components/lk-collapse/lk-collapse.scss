@@ -9,12 +9,17 @@
   --lk-collapse-header-py: var(--lk-spacing-lg);
   --lk-collapse-header-px: var(--lk-spacing-xl);
   --lk-collapse-title-size: var(--lk-font-size-lg);
-  --lk-collapse-body-px: var(--lk-spacing-xl);
-  --lk-collapse-body-pb: var(--lk-spacing-xl);
-  --lk-collapse-body-size: var(--lk-font-size-sm);
+  --lk-collapse-body-pb: var(--lk-spacing-lg);
+  --lk-collapse-body-size: var(--lk-font-size-base);
 
   display: flex;
   flex-direction: column;
+  color: var(--lk-text-primary);
+  width: 100%;
+
+  @include m(default) {
+    background: transparent;
+  }
 
   @include m(group) {
     overflow: hidden;
@@ -27,35 +32,66 @@
   }
 
   @include m(card) {
-    row-gap: var(--lk-collapse-gap);
+    > :not(:first-child) {
+      margin-top: var(--lk-collapse-gap);
+    }
   }
 
   @include m(ghost) {
-    row-gap: var(--lk-collapse-gap);
+    > :not(:first-child) {
+      margin-top: var(--lk-collapse-gap);
+    }
   }
 }
 
 @include b(collapse-item) {
-  background: var(--lk-collapse-bg);
-  border-radius: var(--lk-collapse-radius);
+  position: relative;
   overflow: hidden;
+  color: var(--lk-text-primary);
+  transition: background var(--lk-transition-fast);
 
-  .lk-collapse--card.is-bordered & {
-    border: var(--lk-rpx-1) solid var(--lk-collapse-border-color);
+  /* 默认风格：线条分割列表，默认不使用卡片 */
+  .lk-collapse--default & {
+    background: transparent;
+    border-radius: var(--lk-rpx-0);
+
+    .lk-collapse.is-bordered & {
+      border-bottom: var(--lk-rpx-1) solid var(--lk-collapse-border-color);
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
   }
 
+  /* 整块分组风格 */
   .lk-collapse--group & {
-    border-radius: 0;
-    box-shadow: 0 var(--lk-rpx-1) 0 var(--lk-collapse-border-color);
+    background: var(--lk-collapse-bg);
+    border-radius: var(--lk-rpx-0);
+
+    &:not(:last-child) {
+      border-bottom: var(--lk-rpx-1) solid var(--lk-collapse-border-color);
+    }
   }
 
+  /* 分离卡片风格 */
+  .lk-collapse--card & {
+    background: var(--lk-collapse-bg);
+    border-radius: var(--lk-collapse-radius);
+
+    .lk-collapse.is-bordered & {
+      border: var(--lk-rpx-1) solid var(--lk-collapse-border-color);
+    }
+  }
+
+  /* 轻量无框风格 */
   .lk-collapse--ghost & {
     background: transparent;
     border-radius: var(--lk-collapse-radius);
-  }
 
-  .lk-collapse--ghost.is-bordered & {
-    border: var(--lk-rpx-1) solid var(--lk-collapse-border-color);
+    .lk-collapse.is-bordered & {
+      border: var(--lk-rpx-1) solid var(--lk-collapse-border-color);
+    }
   }
 
   @include e(header) {
@@ -65,22 +101,24 @@
     justify-content: space-between;
     padding: var(--lk-collapse-header-py) var(--lk-collapse-header-px);
     font-size: var(--lk-collapse-title-size);
-    font-weight: 500;
+    font-weight: var(--lk-font-weight-medium);
     transition: background var(--lk-transition-fast);
+
+    .lk-collapse--default & {
+      padding: var(--lk-collapse-header-py) var(--lk-rpx-0);
+    }
+
+    .lk-collapse--ghost & {
+      background: var(--lk-collapse-bg-soft);
+      border-radius: var(--lk-collapse-radius);
+    }
 
     .lk-ripple__content {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       width: 100%;
     }
-
-    .lk-collapse-item__arrow {
-      margin-left: var(--lk-spacing-sm);
-    }
-  }
-
-  .lk-collapse--ghost &__header {
-    background: var(--lk-collapse-bg-soft);
   }
 
   @include e(title) {
@@ -88,38 +126,92 @@
     color: var(--lk-text-primary);
   }
 
+  @include e(action) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: var(--lk-spacing-sm);
+    color: var(--lk-text-secondary);
+    font-size: var(--lk-font-size-sm);
+    flex: none;
+    line-height: 1;
+  }
+
+  @include e(action-text) {
+    color: var(--lk-text-secondary);
+    font-size: var(--lk-font-size-sm);
+    line-height: 1;
+    transition: color var(--lk-transition-fast);
+  }
+
+  @include e(loading) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    line-height: 1;
+  }
+
   @include e(arrow) {
-    transition: transform var(--lk-transition-fast);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     color: var(--lk-text-secondary);
     flex: none;
+    line-height: 1;
+    -webkit-text-stroke: calc(var(--lk-rpx-1) * 0.5) currentColor;
+    transform: rotate(0deg);
+    transform-origin: center;
+    transition: transform var(--lk-collapse-anim-duration) var(--lk-collapse-anim-timing);
+
+    .lk-icon {
+      -webkit-text-stroke: calc(var(--lk-rpx-1) * 0.5) currentColor;
+    }
+
+    &.is-rotate.is-open {
+      transform: rotate(-180deg);
+    }
+  }
+
+  @include e(wrapper) {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    transition: grid-template-rows var(--lk-collapse-anim-duration) var(--lk-collapse-anim-timing);
 
     @include when(open) {
-      transform: rotate(180deg);
+      grid-template-rows: 1fr;
     }
   }
 
   @include e(body) {
-    padding: 0 var(--lk-collapse-body-px) var(--lk-collapse-body-pb);
+    min-height: var(--lk-rpx-0);
+    overflow: hidden;
+  }
+
+  @include e(content) {
+    padding: var(--lk-rpx-0) var(--lk-collapse-header-px) var(--lk-collapse-body-pb);
     font-size: var(--lk-collapse-body-size);
-    line-height: 1.6;
-    color: var(--lk-text-secondary);
-    animation: lk-collapse-expand var(--lk-collapse-anim-duration) var(--lk-collapse-anim-timing);
+    line-height: var(--lk-line-height-loose);
+    opacity: 0;
+    transform: translateY(calc(var(--lk-rpx-8) * -1));
+    transition:
+      opacity var(--lk-collapse-anim-duration) var(--lk-collapse-anim-timing),
+      transform var(--lk-collapse-anim-duration) var(--lk-collapse-anim-timing);
+    will-change: opacity, transform;
+
+    .lk-collapse--default & {
+      padding: var(--lk-rpx-0) var(--lk-rpx-0) var(--lk-collapse-body-pb) var(--lk-rpx-0);
+    }
+
+    .lk-collapse-item__wrapper.is-open & {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @include when(disabled) {
     opacity: 0.5;
-  }
-}
-
-@keyframes lk-collapse-expand {
-  from {
-    opacity: 0;
-    transform: translateY(calc(var(--lk-rpx-12) * -1));
-    max-height: 0;
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    max-height: var(--lk-rpx-2000);
+    cursor: not-allowed;
   }
 }
