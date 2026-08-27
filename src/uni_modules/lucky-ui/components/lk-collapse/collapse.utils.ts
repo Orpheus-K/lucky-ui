@@ -100,9 +100,39 @@ export function resolveCollapseHeaderClass(rippleActive: boolean) {
 export function resolveCollapseBodyStyle(options: {
   animationDuration?: string;
   animationTiming?: string;
-}) {
-  return {
-    '--lk-collapse-anim-duration': options.animationDuration,
-    '--lk-collapse-anim-timing': options.animationTiming,
-  };
+}): Record<string, string> {
+  const style: Record<string, string> = {};
+  if (options.animationDuration) {
+    style['--lk-collapse-anim-duration'] = options.animationDuration;
+  }
+  if (options.animationTiming) {
+    style['--lk-collapse-anim-timing'] = options.animationTiming;
+  }
+  return style;
+}
+
+export function resolveCollapseArrowIcon(options: {
+  open: boolean;
+  itemArrowIcon?: string;
+  itemOpenIcon?: string;
+  parentArrowIcon?: string;
+  parentOpenIcon?: string;
+}): string {
+  if (options.open) {
+    if (options.itemOpenIcon) return options.itemOpenIcon;
+    if (options.parentOpenIcon) return options.parentOpenIcon;
+  }
+  if (options.itemArrowIcon) return options.itemArrowIcon;
+  if (options.parentArrowIcon) return options.parentArrowIcon;
+  return 'chevron-down';
+}
+
+export function resolveCollapseArrowText(options: {
+  open: boolean;
+  arrowText?: string;
+  openText?: string;
+}): string {
+  if (options.open && options.openText) return options.openText;
+  if (!options.open && options.arrowText) return options.arrowText;
+  return '';
 }

@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
+  collapseItemProps,
+  collapseProps,
+} from '../../src/uni_modules/lucky-ui/components/lk-collapse/collapse.props';
+import {
   getCollapseEmitValue,
+  resolveCollapseArrowIcon,
+  resolveCollapseArrowText,
   resolveCollapseBodyStyle,
   resolveCollapseHeaderClass,
   resolveCollapseItemClass,
@@ -101,5 +107,36 @@ describe('lk-collapse state and style rules', () => {
       '--lk-collapse-anim-duration': '0.2s',
       '--lk-collapse-anim-timing': 'ease-out',
     });
+    expect(resolveCollapseBodyStyle({})).toEqual({});
+  });
+
+  it('exposes the lightweight default variant and item icon defaults', () => {
+    expect(collapseProps.variant.default).toBe('default');
+    expect(collapseProps.arrow.default).toBe(true);
+    expect(collapseItemProps.iconSize.default).toBe('var(--lk-rpx-28)');
+  });
+
+  it('resolves item arrow options before collapse defaults', () => {
+    expect(resolveCollapseArrowIcon({
+      open: false,
+      itemArrowIcon: 'plus-lg',
+      parentArrowIcon: 'chevron-down',
+    })).toBe('plus-lg');
+    expect(resolveCollapseArrowIcon({
+      open: true,
+      itemOpenIcon: 'dash-lg',
+      parentOpenIcon: 'chevron-up',
+    })).toBe('dash-lg');
+    expect(resolveCollapseArrowIcon({ open: true })).toBe('chevron-down');
+    expect(resolveCollapseArrowText({
+      open: false,
+      arrowText: '展开',
+      openText: '收起',
+    })).toBe('展开');
+    expect(resolveCollapseArrowText({
+      open: true,
+      arrowText: '展开',
+      openText: '收起',
+    })).toBe('收起');
   });
 });
