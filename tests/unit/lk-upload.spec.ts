@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
   createH5UploadFiles,
@@ -109,5 +110,25 @@ describe('lk-upload file normalization', () => {
     expect(isImageUrl('wxfile://tmp-file')).toBe(true);
     expect(isImageUrl('https://cdn.example.com/a.pdf')).toBe(false);
     expect(getUploadFileName('', 'fallback')).toBe('fallback');
+  });
+});
+
+describe('lk-upload trigger slot contract', () => {
+  it('lets a custom trigger replace every piece of default trigger content', () => {
+    const source = readFileSync(
+      new URL(
+        '../../src/uni_modules/lucky-ui/components/lk-upload/lk-upload.vue',
+        import.meta.url,
+      ),
+      'utf8',
+    );
+    const slotStart = source.indexOf('<slot name="trigger">');
+    const slotEnd = source.indexOf('</slot>', slotStart);
+    const count = source.indexOf('class="lk-upload__count"');
+
+    expect(slotStart).toBeGreaterThanOrEqual(0);
+    expect(count).toBeGreaterThan(slotStart);
+    expect(count).toBeLessThan(slotEnd);
+    expect(source.indexOf('class="lk-upload__count"', count + 1)).toBe(-1);
   });
 });
