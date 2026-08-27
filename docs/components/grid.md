@@ -92,6 +92,8 @@ import GridDemo from '@/pages_sub/components/demos/grid-demo.vue'
 | columns | 列数；不传时自动填充 | `number` | `undefined` |
 | gap | 栅格整体间距 | `number` | `undefined` |
 | itemGap | 单个栅格项内部图标与文本的间距 | `number` | `undefined` |
+| iconColor | 所有宫格项的默认图标颜色 | `string` | `''` |
+| iconSize | 所有宫格项的默认图标尺寸 | `string \| number` | `36` |
 | carousel | 是否启用轮播分页模式 | `boolean` | `false` |
 | rows | 轮播模式下每页行数 | `number` | `undefined` |
 | items | 宫格数据源 | `GridItem[]` | `[]` |
@@ -105,6 +107,8 @@ import GridDemo from '@/pages_sub/components/demos/grid-demo.vue'
 |------|------|------|
 | text | 文本内容 | `string` |
 | icon | 图标名称 | `string` |
+| iconColor | 图标颜色（支持语义色和任意颜色值） | `string` |
+| iconSize | 图标尺寸（默认 36rpx） | `string \| number` |
 | disabled | 是否禁用点击 | `boolean` |
 | ...rest | 其他业务字段，便于外部自行扩展 | `unknown` |
 

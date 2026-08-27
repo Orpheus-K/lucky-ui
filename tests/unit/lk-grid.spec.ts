@@ -6,6 +6,8 @@ import {
   resolveGridGap,
   resolveGridInnerGapStyle,
   resolveGridItemClass,
+  resolveGridItemIconColor,
+  resolveGridItemIconSize,
   resolveGridItemKey,
   resolveGridItemStyle,
   resolveGridStyle,
@@ -34,6 +36,16 @@ describe('lk-grid layout and click rules', () => {
 
   it('builds container class from clipping state', () => {
     expect(resolveGridContainerClass(true)).toEqual(['lk-grid-container', { 'is-clipped': true }]);
+  });
+
+  it('resolves per-item icon options before grid defaults', () => {
+    expect(resolveGridItemIconColor('warning', 'primary')).toBe('warning');
+    expect(resolveGridItemIconColor('', 'primary')).toBe('primary');
+    expect(resolveGridItemIconColor()).toBe('');
+
+    expect(resolveGridItemIconSize(48, 36)).toBe(48);
+    expect(resolveGridItemIconSize('', '40rpx')).toBe('40rpx');
+    expect(resolveGridItemIconSize()).toBe(36);
   });
 
   it('paginates items by columns multiplied by rows', () => {

@@ -12,6 +12,8 @@ import {
   resolveGridGap,
   resolveGridInnerGapStyle,
   resolveGridItemClass,
+  resolveGridItemIconColor,
+  resolveGridItemIconSize,
   resolveGridItemStyle,
   resolveGridStyle,
 } from './grid.utils';
@@ -45,6 +47,14 @@ const pages = computed(() => paginateGridItems(props.items || [], props.columns,
 
 function resolveGridPage(page: unknown): GridItem[] {
   return Array.isArray(page) ? (page as GridItem[]) : [];
+}
+
+function itemIconColor(item: GridItem): string {
+  return resolveGridItemIconColor(item.iconColor, props.iconColor);
+}
+
+function itemIconSize(item: GridItem): string | number {
+  return resolveGridItemIconSize(item.iconSize, props.iconSize);
 }
 
 function onItemClick(item: GridItem, index: number, pageIndex: number = 0, event?: unknown) {
@@ -93,7 +103,12 @@ function onPageChange(index: number, oldIndex?: number) {
           :style="itemStyle"
           @tap="onItemClick(it, Number(idx), Number(pageIndex), $event)"
         >
-          <lk-icon v-if="it.icon" :name="it.icon" size="36" />
+          <lk-icon
+            v-if="it.icon"
+            :name="it.icon"
+            :color="itemIconColor(it)"
+            :size="itemIconSize(it)"
+          />
           <text class="lk-grid__item-text" :style="innerGapStyle">{{ it.text }}</text>
           <view class="lk-ripple__wave" :style="rippleWaveStyle" />
         </view>
@@ -120,7 +135,12 @@ function onPageChange(index: number, oldIndex?: number) {
           :style="itemStyle"
           @tap="onItemClick(item, index, 0, $event)"
         >
-          <lk-icon v-if="item.icon" :name="item.icon" size="36" />
+          <lk-icon
+            v-if="item.icon"
+            :name="item.icon"
+            :color="itemIconColor(item)"
+            :size="itemIconSize(item)"
+          />
           <text class="lk-grid__item-text" :style="innerGapStyle">{{ item.text }}</text>
           <view class="lk-ripple__wave" :style="rippleWaveStyle" />
         </view>
