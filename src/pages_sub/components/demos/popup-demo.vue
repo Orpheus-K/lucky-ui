@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import LkButton from '@/uni_modules/lucky-ui/components/lk-button/lk-button.vue';
 import LkPopup from '@/uni_modules/lucky-ui/components/lk-popup/lk-popup.vue';
 import LkIcon from '@/uni_modules/lucky-ui/components/lk-icon/lk-icon.vue';
+import LkInput from '@/uni_modules/lucky-ui/components/lk-input/lk-input.vue';
 import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.vue';
 import type { TransitionName } from '@/uni_modules/lucky-ui/composables/useTransition';
 
@@ -23,6 +24,8 @@ const visibleWithClose = ref(false);
 const visibleWithBoth = ref(false);
 const visibleCustomTitle = ref(false);
 const reactiveTransitionVisible = ref(false);
+const keyboardAvoidanceVisible = ref(false);
+const keyboardAvoidanceValue = ref('');
 
 type ReactiveTransitionProbeConfig = {
   key: string;
@@ -183,6 +186,32 @@ const showRight = () => {
           </view>
         </template>
         <view class="popup-content">使用插槽自定义标题样式</view>
+      </lk-popup>
+    </demo-block>
+
+    <demo-block title="软键盘自动避让">
+      <lk-button type="primary" @click="keyboardAvoidanceVisible = true">
+        打开输入弹窗
+      </lk-button>
+      <lk-popup
+        v-model="keyboardAvoidanceVisible"
+        position="bottom"
+        round
+        avoid-keyboard
+        title="弹窗键盘避让"
+        closable
+      >
+        <view class="keyboard-popup-content">
+          <view class="keyboard-popup-tip">
+            Popup 统一避让键盘，因此内部 Input 关闭原生 adjust-position。
+          </view>
+          <lk-input
+            v-model="keyboardAvoidanceValue"
+            :adjust-position="false"
+            placeholder="聚焦后观察弹窗平滑抬起"
+            clearable
+          />
+        </view>
       </lk-popup>
     </demo-block>
 
@@ -382,6 +411,16 @@ const showRight = () => {
   font-size: 32rpx;
   font-weight: 600;
   color: var(--lk-color-warning);
+}
+
+.keyboard-popup-content {
+  padding: 32rpx;
+}
+
+.keyboard-popup-tip {
+  margin-bottom: 20rpx;
+  color: var(--lk-text-secondary);
+  font-size: 24rpx;
 }
 
 .popup-content-large {

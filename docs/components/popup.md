@@ -159,6 +159,21 @@ Peekit 基准流程固定为：在 `bottom-default` 模式打开并记录 `slide
 </template>
 ```
 
+## 键盘自动避让 (avoid-keyboard)
+
+当弹窗内部包含输入框时，开启 `avoid-keyboard`。弹窗会自动监听系统软键盘高度并进行平滑抬升避让。此时建议为内部输入框设置 `:adjust-position="false"`，由 Popup 统一进行平滑位移：
+
+```vue
+<template>
+  <lk-popup v-model="show" position="bottom" avoid-keyboard>
+    <view style="padding: 32rpx">
+      <view style="margin-bottom: 24rpx; font-weight: 600">填写信息</view>
+      <lk-input v-model="text" :adjust-position="false" placeholder="键盘弹起时弹窗自动上移" />
+    </view>
+  </lk-popup>
+</template>
+```
+
 ## API
 
 ### Props
@@ -184,6 +199,7 @@ Peekit 基准流程固定为：在 `bottom-default` 模式打开并记录 `slide
 | closeOnOverlay    | 点击遮罩关闭                                                  | `boolean`                                              | `true`                                 |
 | lockScroll        | 锁定背景滚动                                                  | `boolean`                                              | `true`                                 |
 | safeArea          | 底部是否适配安全区                                            | `boolean`                                              | `true`                                 |
+| avoidKeyboard     | 软键盘弹起时是否自动上移避让（支持 bottom 与 center 弹窗）    | `boolean`                                              | `false`                                |
 | height            | 弹层高度；draggable bottom 模式下由 `snapPoints` 接管可见高度 | `string \| number`                                     | `''`                                   |
 | width             | 弹层宽度                                                      | `string \| number`                                     | `''`                                   |
 | animation         | 动画预设名称                                                  | `keyof ANIMATION_PRESETS`                              | `undefined`                            |

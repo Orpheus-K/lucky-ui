@@ -112,11 +112,30 @@ export function resolvePopupWrapperClass(options: {
   ];
 }
 
-export function resolvePopupWrapperStyle(options: { zIndex: number; radius: string }) {
-  return {
+export function resolvePopupWrapperStyle(options: {
+  zIndex: number;
+  radius: string;
+  position?: string;
+  keyboardOffset?: number;
+  avoidKeyboard?: boolean;
+}) {
+  const styles: Record<string, string | number> = {
     zIndex: options.zIndex + 1,
     '--lk-popup-radius': options.radius,
   };
+
+  const offset = Math.max(0, options.keyboardOffset ?? 0);
+  if (options.avoidKeyboard && (options.position === 'bottom' || options.position === 'center')) {
+    styles.transition = 'transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1)';
+    if (options.position === 'bottom') {
+      styles.transform = offset > 0 ? `translateY(-${offset}px)` : 'translateY(0)';
+    } else {
+      styles.transform =
+        offset > 0 ? `translate(-50%, calc(-50% - ${offset / 2}px))` : 'translate(-50%, -50%)';
+    }
+  }
+
+  return styles;
 }
 
 export function normalizePopupSnapPixels(options: {

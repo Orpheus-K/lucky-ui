@@ -142,6 +142,30 @@ function onConfirm(event: any) {
 </template>
 ```
 
+## 键盘推顶与弹窗避让
+
+- **普通页面流**：使用 `:adjust-position="true"` 并在需要时通过 `:cursor-spacing="24"`（单位 px）设置光标与软键盘之间的呼吸间距；
+- **弹窗/抽屉场景**：在 `lk-popup` 上开启 `avoid-keyboard`，同时为内部 `lk-input` 设置 `:adjust-position="false"`，由 Popup 统一进行平滑位移抬起。
+
+```vue
+<template>
+  <!-- 场景 1：普通页面流推顶 + 安全间距 -->
+  <lk-input
+    v-model="text"
+    :adjust-position="true"
+    :cursor-spacing="24"
+    placeholder="页面自动上推并保持 24px 间距"
+  />
+
+  <!-- 场景 2：底部弹窗内联动抬起 -->
+  <lk-popup v-model="showPopup" position="bottom" round avoid-keyboard title="信息输入">
+    <view style="padding: 32rpx">
+      <lk-input v-model="popupText" :adjust-position="false" placeholder="弹层随软键盘平滑抬升" />
+    </view>
+  </lk-popup>
+</template>
+```
+
 ## 与表单验证结合
 
 ```vue
@@ -202,7 +226,7 @@ async function submit() {
 | focus                  | 是否聚焦，受控聚焦状态                       | `boolean`                 | —                                                              | `false`             |
 | prefixIcon             | 前缀图标名                                   | `string`                  | —                                                              | `''`                |
 | suffixIcon             | 后缀图标名                                   | `string`                  | —                                                              | `''`                |
-| showPassword           | 密码输入时是否显示明暗切换按钮               | `boolean`                 | —                                                              | `false`             |
+| showPassword           | 密码输入时是否显示明暗切换按钮（输入内容存在时展示） | `boolean`                 | —                                                              | `false`             |
 | borderless             | 是否无边框，常用于表单列表内                 | `boolean`                 | —                                                              | `false`             |
 | inputAlign             | 输入内容对齐方式                             | `string`                  | `left / center / right`                                        | `left`              |
 | confirmType            | 键盘右下角按钮文字                           | `string`                  | `send / search / next / go / done / return`                    | `done`              |

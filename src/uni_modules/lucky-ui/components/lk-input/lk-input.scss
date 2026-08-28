@@ -8,7 +8,7 @@
   --_border: var(--lk-color-border-light);
   --_border-hover: var(--lk-color-primary);
   --_border-active: var(--lk-color-primary);
-  --_placeholder: var(--lk-text-placeholder);
+  --_placeholder: var(--lk-text-secondary);
   --_bg: var(--lk-bg-input);
 
   position: relative;
@@ -62,7 +62,8 @@
   @include e(inner) {
     flex: 1;
     min-width: 0;
-    height: 100%;
+    height: var(--_height);
+    min-height: var(--_height);
     font-size: var(--_fs);
     background: transparent;
     border: 0 !important;
@@ -70,11 +71,20 @@
     outline: none;
     padding: 0;
     color: var(--lk-text-primary);
-    line-height: normal;
+    caret-color: var(--lk-color-primary);
+    line-height: var(--_height);
 
     &::placeholder {
-      color: var(--lk-text-placeholder);
+      color: var(--_placeholder);
+      line-height: var(--_height);
     }
+  }
+
+  :deep(.input-placeholder),
+  .input-placeholder {
+    color: var(--_placeholder);
+    font-size: var(--_fs);
+    line-height: var(--_height);
   }
 
   @include e(prefix) {
@@ -144,7 +154,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: var(--lk-text-placeholder);
+    color: var(--_placeholder);
     font-size: var(--_fs);
   }
 

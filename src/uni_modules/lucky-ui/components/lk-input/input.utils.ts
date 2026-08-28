@@ -52,13 +52,15 @@ export function shouldShowPasswordToggle(options: {
   disabled: boolean;
   readonly: boolean;
   fake: boolean;
+  value?: unknown;
 }): boolean {
   return (
     options.showPassword &&
     options.type === 'password' &&
     !options.disabled &&
     !options.readonly &&
-    !options.fake
+    !options.fake &&
+    hasInputValue(options.value)
   );
 }
 
