@@ -36,3 +36,5 @@ src/uni_modules/wot-design-uni
 # Peekit
 .peekit/
 peekit_temp/
+.agents/scripts/.cli-throttle.tmp
+.agents/scripts/.peekit-mp.lock

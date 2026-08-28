@@ -35,6 +35,11 @@ If MCP tools are not available in the current client, state that SymbioPulse was
 - 修复后必须回到对应运行页面重新读取元素样式/尺寸确认，再执行 `auto-preview` 刷新手机预览包。
 - 若无法连接自动化端口，先重启 CLI automation；仍失败时，要求开发者在微信开发者工具安全设置中开启全部自动化/CLI/服务端口相关开关后再试。
 
+# WeChat DevTools Cold Start & Anti-Retry Rule (微信工具冷启动防重试守则)
+- **启动时延认知**：微信开发者工具（CLI auto 模式）冷启动拉起进程、加载 NW.js 与编译 WXML 通常需要 20~45 秒。在此期间自动化端口（9420）未就绪属于正常现象，绝非故障报错。
+- **严禁循环重试**：严禁 Agent 因启动过程中的短暂未连通而误判为异常，严禁在 60 秒超时窗口内重复调用 CLI 命令、杀进程或发起高频重试。必须信任 MCP Runner 的渐进就绪轮询，保持单次等待。
+- **排障先验原则**：若 60 秒后仍无法连通，严禁自行无限重试，必须提示开发者核查：① 微信开发者工具 -> 设置 -> 安全设置 -> 开启【服务端口】；② 工具是否已正常登录并信任当前项目目录。
+
 # Runtime Automation Probe Rule
 - 当用户提及抓取 H5、抓取h5、H5 运行态、抓取微信小程序、微信小程序运行态、小程序运行态、DOM/WXML、元素结构、样式、尺寸、offset/size/style、交互结果或跨端 UI 对比时，必须使用 `.agents/skills/runtime-automation-probe/SKILL.md`。
 - 该 skill 负责基于 Playwright / miniprogram-automator 采集 H5 DOM 与小程序 WXML 的元素结构、样式、尺寸、偏移和交互结果。

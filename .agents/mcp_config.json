@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "peekit": {
+      "command": "node",
+      "args": [".agents/scripts/peekit-mcp-runner.cjs"],
+      "env": {
+        "PEEKIT_H5_URL": "http://localhost:5173",
+        "PEEKIT_MP_PORT": "9420",
+        "PEEKIT_MP_PROJECT": "dist/dev/mp-weixin",
+        "PEEKIT_MP_AUTO_START": "true",
+        "PEEKIT_MP_STARTUP_TIMEOUT": "60000"
+      }
+    }
+  }
+}
