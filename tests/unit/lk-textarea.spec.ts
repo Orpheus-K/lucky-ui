@@ -144,6 +144,7 @@ describe('lk-textarea value and display rules', () => {
       resolveTextareaClass({
         variant: 'filled',
         disabled: true,
+        readonly: true,
         focused: true,
         autoHeight: true,
         label: '备注',
@@ -154,6 +155,7 @@ describe('lk-textarea value and display rules', () => {
       'lk-textarea--filled',
       {
         'is-disabled': true,
+        'is-readonly': true,
         'is-focused': true,
         'is-auto-height': true,
         'has-label': true,

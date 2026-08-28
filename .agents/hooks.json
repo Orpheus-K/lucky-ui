@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .agents/scripts/guard-pre-tool.cjs",
+            "command": "node scripts/guard-pre-tool.cjs",
             "timeout": 10
           }
         ]
@@ -16,7 +16,7 @@
     "Stop": [
       {
         "type": "command",
-          "command": "node .agents/scripts/check-delivery-stop.cjs",
+          "command": "node scripts/check-delivery-stop.cjs",
         "timeout": 10
       }
     ]

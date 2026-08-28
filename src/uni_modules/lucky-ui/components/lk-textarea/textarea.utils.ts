@@ -96,6 +96,7 @@ export function shouldShowTextareaFooter(options: {
 export function resolveTextareaClass(options: {
   variant: string;
   disabled: boolean;
+  readonly?: boolean;
   focused: boolean;
   autoHeight: boolean;
   label: string;
@@ -106,6 +107,7 @@ export function resolveTextareaClass(options: {
     `lk-textarea--${options.variant}`,
     {
       'is-disabled': options.disabled,
+      'is-readonly': !!options.readonly,
       'is-focused': options.focused,
       'is-auto-height': options.autoHeight,
       'has-label': !!options.label,
