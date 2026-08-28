@@ -42,9 +42,14 @@ const content = ref('');
 
 ```vue
 <template>
-  <lk-textarea placeholder="默认描边" variant="outline" />
-  <lk-textarea placeholder="填充风格" variant="filled" />
-  <lk-textarea placeholder="无边框列表态" variant="flush" />
+  <!-- 经典描边风格 -->
+  <lk-textarea variant="outline" placeholder="默认 Outline 描边风格" />
+
+  <!-- 浅色填充风格 -->
+  <lk-textarea variant="filled" placeholder="Filled 填充风格" />
+
+  <!-- 无边框列表行风格 -->
+  <lk-textarea variant="flush" label="详细地址" placeholder="Flush 无边框列表态" auto-height />
 </template>
 ```
 

@@ -22,9 +22,10 @@ description: >-
 
 ## 二、 阶段操作要点
 
-### 阶段 1：归因诊断 (Diagnosis)
+### 阶段 1：归因诊断与双轨审查 (Dual-Track Review & Diagnosis)
 * 调起 [`lucky-ui-diagnose`](../lucky-ui-diagnose/SKILL.md) 技能。
-* 判断问题边界：属于组件库核心、Demo 页面局部样式，还是主题 Token。
+* **代码与 UI 双轨审查**：不仅审核 Props / Events / 状态逻辑，必须依据专业 UI 审查标准对暗色/亮色色彩对比度、元素空间节奏、堆叠紧贴、微观基线对齐进行理性判断。
+* **明确问题归因**：准确辨别是组件库核心封装缺陷、Demo 示例组合与排版不当，还是主题 Token 配置问题。
 * 严禁将业务兜底样式硬编码进 `src/uni_modules/lucky-ui/`。
 
 ### 阶段 2：方案对齐与 `/grill-me` (Design Alignment)
