@@ -93,6 +93,9 @@ export const popupProps = {
   /** 是否开启安全区域适配 */
   safeArea: LkProp.boolean(true),
 
+  /** 是否在软键盘弹起时自动上移避让键盘（常用于包含输入框的 bottom 或 center 弹窗） */
+  avoidKeyboard: LkProp.boolean(false),
+
   /** 弹层高度 */
   height: {
     type: [String, Number] as PropType<string | number>,

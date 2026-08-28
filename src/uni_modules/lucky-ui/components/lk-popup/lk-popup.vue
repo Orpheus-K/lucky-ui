@@ -63,6 +63,55 @@ function onCloseClick() {
   emit('update:modelValue', false);
 }
 
+const keyboardHeight = ref(0);
+let keyboardListenerRegistered = false;
+
+function handleKeyboardHeightChange(res?: { height?: number }) {
+  if (!props.modelValue || !props.avoidKeyboard) return;
+  keyboardHeight.value = Math.max(0, Number(res?.height) || 0);
+}
+
+function registerKeyboardListener() {
+  if (keyboardListenerRegistered) return;
+  // #ifdef MP || APP-PLUS || H5
+  try {
+    if (typeof uni !== 'undefined' && typeof uni.onKeyboardHeightChange === 'function') {
+      uni.onKeyboardHeightChange(handleKeyboardHeightChange);
+      keyboardListenerRegistered = true;
+    }
+  } catch {
+    // ignore
+  }
+  // #endif
+}
+
+function unregisterKeyboardListener() {
+  keyboardHeight.value = 0;
+  if (!keyboardListenerRegistered) return;
+  // #ifdef MP || APP-PLUS || H5
+  try {
+    if (typeof uni !== 'undefined' && typeof uni.offKeyboardHeightChange === 'function') {
+      uni.offKeyboardHeightChange(handleKeyboardHeightChange);
+      keyboardListenerRegistered = false;
+    }
+  } catch {
+    // ignore
+  }
+  // #endif
+}
+
+watch(
+  () => [props.modelValue, props.avoidKeyboard],
+  ([visible, avoid]) => {
+    if (visible && avoid) {
+      registerKeyboardListener();
+    } else {
+      unregisterKeyboardListener();
+    }
+  },
+  { immediate: true }
+);
+
 const wrapperClass = computed(() => [
   ...resolvePopupWrapperClass({
     position: props.position,
@@ -75,6 +124,9 @@ const wrapperStyle = computed(() =>
   resolvePopupWrapperStyle({
     zIndex: props.zIndex,
     radius: props.radius,
+    position: props.position,
+    keyboardOffset: keyboardHeight.value,
+    avoidKeyboard: props.avoidKeyboard,
   })
 );
 
@@ -365,6 +417,7 @@ function onContentScrollUpper() {
 }
 
 onBeforeUnmount(() => {
+  unregisterKeyboardListener();
   clearPanelAnimationLock();
 });
 

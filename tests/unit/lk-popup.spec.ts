@@ -99,6 +99,45 @@ describe('lk-popup transition and drag rules', () => {
       zIndex: 1001,
       '--lk-popup-radius': '24rpx',
     });
+
+    expect(resolvePopupWrapperStyle({
+      zIndex: 1000,
+      radius: '24rpx',
+      position: 'bottom',
+      keyboardOffset: 300,
+      avoidKeyboard: true,
+    })).toEqual({
+      zIndex: 1001,
+      '--lk-popup-radius': '24rpx',
+      transform: 'translateY(-300px)',
+      transition: 'transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1)',
+    });
+
+    expect(resolvePopupWrapperStyle({
+      zIndex: 1000,
+      radius: '24rpx',
+      position: 'center',
+      keyboardOffset: 200,
+      avoidKeyboard: true,
+    })).toEqual({
+      zIndex: 1001,
+      '--lk-popup-radius': '24rpx',
+      transform: 'translate(-50%, calc(-50% - 100px))',
+      transition: 'transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1)',
+    });
+
+    expect(resolvePopupWrapperStyle({
+      zIndex: 1000,
+      radius: '24rpx',
+      position: 'bottom',
+      keyboardOffset: 0,
+      avoidKeyboard: true,
+    })).toEqual({
+      zIndex: 1001,
+      '--lk-popup-radius': '24rpx',
+      transition: 'transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1)',
+      transform: 'translateY(0)',
+    });
   });
 
   it('normalizes snap points and resolves drag targets', () => {
