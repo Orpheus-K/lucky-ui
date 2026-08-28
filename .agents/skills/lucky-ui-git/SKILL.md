@@ -123,30 +123,39 @@ git add tests/unit/lk-textarea.spec.ts
 git commit -m "feat(textarea): 优化暗色对比度、清除图标与排版间距"
 ```
 
-### 2. 安全推送
-```bash
-# 首次推送并建立上游跟踪
-git push -u origin feature/textarea-ui-polish
+### 2. 安全推送与准确 PR 链接生成
+推送分支后，生成 PR 链接时**必须显式指定目标为 `develop`**（避免 GitHub 默认选中 `main`）：
+
+```text
+https://github.com/Orpheus-K/lucky-ui/compare/develop...<your-branch-name>?expand=1
 ```
 
-### 3. PR 描述模板 (Target: `develop`)
-创建 Pull Request 时，将 Base 分支选择为 **`develop`**，使用以下标准结构：
+### 3. PR 描述标准模版 (与历史 PR 统一)
+创建 Pull Request 时，统一采用 Lucky UI 规范的 4 段式 Markdown 结构（参考 PR #80 范式）：
 
 ```markdown
-## 📌 变更概述 (Base: develop)
-- 优化 `lk-textarea` 在暗色模式下的边框对比度
-- 统一清空图标为 `LkIcon x-circle` 并完成首行基线补偿
-- 重构 Demo 页面，消除元素堆叠与双重内边距
-- 升级 `lucky-ui-diagnose` 与 `lucky-ui-git` 技能规范
+### 背景
+为 Lucky UI 的 lk-xxx 组件优化暗色模式下的视觉表现、统一清除图标与微观基线对齐，并重构 Demo 消除元素堆叠与间距塌陷。
 
-## 🛠️ 三位一体交付清单
-- [x] 组件源码与样式: `src/uni_modules/lucky-ui/components/lk-textarea/`
-- [x] Demo 交互页面: `src/pages_sub/components/demos/textarea-demo.vue`
-- [x] 官方文档: `docs/components/textarea.md`
-- [x] 单元测试: `tests/unit/lk-textarea.spec.ts`
+### 变更内容
+* **组件与样式优化 (lk-xxx)**
+  * 将边框色绑定为 `--lk-color-border`，修复暗色模式下 Outline 变体隐形问题
+  * 统一清除按钮为 `<lk-icon name="x-circle" size="28" />` 并增加 `margin-top: 4rpx` 首行基线补偿
+  * 增加 `is-readonly` 类名，解耦禁用与只读态的焦点表现
+* **Demo 交互与排版重构**
+  * 拆分单卡片杂糅变体为独立卡片，规范各变体容器语境
+  * 使用 `<lk-space>` 替换脆弱的选择器，确保 24rpx 稳定垂直间距
+  * 清除 Demo 内部私有 Padding 与底色，统一全局 `--lk-bg-page`
+* **技能与规范升级**
+  * 升级 `lucky-ui-diagnose` 视觉工程四维审查标准
+  * 完善 `lucky-ui-git` 为 Develop 驱动的敏捷流转规范
 
-## 📱 视觉与运行态验收
-- [x] H5 亮色 / 暗色预览正常
-- [x] 微信小程序运行态无样式穿透异常
+### 验证结果
+* `tests/unit/lk-xxx.spec.ts` 单元测试全部通过
+* H5 亮暗双色模式渲染正常
+* 微信小程序真机排版间距正常，无样式穿透失效
+
+### 验收说明
+本 PR 聚焦于组件视觉与 Demo 排版体验优化，所有公共 Props/Events 保持 100% 向下兼容。
 ```
 
