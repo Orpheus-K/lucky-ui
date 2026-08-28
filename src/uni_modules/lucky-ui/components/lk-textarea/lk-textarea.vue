@@ -3,6 +3,7 @@ import type { StyleValue } from 'vue';
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import type { TextareaEventPayload } from './textarea.props';
 import { textareaProps, textareaEmits } from './textarea.props';
+import LkIcon from '../lk-icon/lk-icon.vue';
 import { useFormField } from '../lk-form/useFormField';
 import { useLocale } from '../../composables/useLocale';
 import {
@@ -51,6 +52,7 @@ const cls = computed(() => [
   ...resolveTextareaClass({
     variant: props.variant,
     disabled: isDisabled.value,
+    readonly: props.readonly,
     focused: isFocused.value,
     autoHeight: props.autoHeight,
     label: props.label,
@@ -287,7 +289,7 @@ async function onClear() {
       <!-- 清空按钮 -->
       <view v-if="clearable || $slots.suffix" class="lk-textarea__suffix">
         <view v-if="showClear" class="lk-textarea__clear" @tap.stop.prevent="onClear">
-          <view class="lk-icon-close" />
+          <lk-icon name="x-circle" size="28" />
         </view>
         <slot name="suffix" />
       </view>

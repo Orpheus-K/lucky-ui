@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import LkTextarea from '@/uni_modules/lucky-ui/components/lk-textarea/lk-textarea.vue';
+import LkSpace from '@/uni_modules/lucky-ui/components/lk-space/lk-space.vue';
 import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.vue';
 
 const v1 = ref('');
@@ -12,31 +13,33 @@ const v5 = ref('');
 
 <template>
   <view class="component-demo">
-    <demo-block title="风格变体 (Variant)">
-      <view class="demo-col">
-        <!-- 1. 默认描边 -->
-        <lk-textarea v-model="v1" placeholder="Outline (默认): 经典描边风格" clearable />
+    <demo-block title="基础描边风格 (Outline)">
+      <lk-textarea v-model="v1" placeholder="默认 Outline 经典描边风格" clearable />
+    </demo-block>
 
-        <!-- 2. 填充风格 (非常适合现代APP) -->
-        <lk-textarea
-          v-model="v2"
-          variant="filled"
-          placeholder="Filled: 填充风格，聚焦变白"
-          clearable
-        />
+    <demo-block title="填充风格 (Filled)">
+      <lk-textarea
+        v-model="v2"
+        variant="filled"
+        placeholder="Filled: 浅色底填充，聚焦高亮边框"
+        clearable
+      />
+    </demo-block>
 
-        <!-- 3. 无边框 (适合作为列表项) -->
+    <demo-block title="无边框列表态 (Flush)">
+      <view class="demo-cell-wrapper">
         <lk-textarea
           v-model="v3"
           variant="flush"
-          placeholder="Flush: 无边框，适合List"
+          label="详细地址"
+          placeholder="请输入详细收货地址（街道、门牌号等）"
           auto-height
         />
       </view>
     </demo-block>
 
-    <demo-block title="清空与统计">
-      <view class="tips">输入内容后，点击右侧 × 震动清空</view>
+    <demo-block title="清空与字数限制">
+      <view class="tips">支持快捷一键清空与实时字符统计</view>
       <lk-textarea
         v-model="v4"
         variant="filled"
@@ -45,6 +48,13 @@ const v5 = ref('');
         show-count
         clearable
       />
+    </demo-block>
+
+    <demo-block title="禁用与只读 (Disabled & Readonly)">
+      <lk-space direction="vertical" :gap="24" fill>
+        <lk-textarea model-value="禁用状态：不可编辑且不可聚焦" disabled />
+        <lk-textarea model-value="只读状态：内容可查看复制，不弹出键盘" readonly />
+      </lk-space>
     </demo-block>
 
     <demo-block title="高级插槽 (Footer Slot)">
@@ -63,20 +73,11 @@ const v5 = ref('');
 
 <style scoped lang="scss">
 .component-demo {
+  width: 100%;
   display: flex;
   flex-direction: column;
   > :not(:first-child) {
     margin-top: 32rpx;
-  }
-  padding: 30rpx;
-  background-color: var(--lk-bg-page);
-}
-
-.demo-col {
-  display: flex;
-  flex-direction: column;
-  > :not(:first-child) {
-    margin-top: 24rpx;
   }
 }
 
@@ -99,5 +100,11 @@ const v5 = ref('');
     padding: 4rpx 12rpx;
     border-radius: 8rpx;
   }
+}
+
+.demo-cell-wrapper {
+  background-color: var(--lk-bg-container);
+  padding: 16rpx 24rpx;
+  border-radius: var(--lk-radius-lg);
 }
 </style>
