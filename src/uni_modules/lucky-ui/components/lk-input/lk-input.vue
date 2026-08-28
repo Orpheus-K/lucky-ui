@@ -204,6 +204,7 @@ const showPasswordToggle = computed(() => {
     disabled: isDisabled.value,
     readonly: props.readonly,
     fake: props.fake,
+    value: inner.value,
   });
 });
 
@@ -279,7 +280,7 @@ onBeforeUnmount(() => {
   >
     <view v-if="$slots.prefix || prefixIcon" class="lk-input__prefix">
       <slot name="prefix">
-        <lk-icon v-if="prefixIcon" :name="prefixIcon" size="36" />
+        <lk-icon v-if="prefixIcon" :name="prefixIcon" size="32" />
       </slot>
     </view>
 
@@ -336,18 +337,18 @@ onBeforeUnmount(() => {
 
     <!-- 清空按钮 -->
     <view v-if="showClear" class="lk-input__clear" @tap.stop="clear">
-      <lk-icon name="x-circle-fill" size="36" />
+      <lk-icon name="x-circle" size="28" />
     </view>
 
     <!-- 密码明暗切换按钮 -->
     <view v-if="showPasswordToggle" class="lk-input__password-toggle" @tap.stop="togglePassword">
-      <lk-icon :name="passwordVisible ? 'eye' : 'eye-slash'" size="36" />
+      <lk-icon :name="passwordVisible ? 'eye' : 'eye-slash'" size="32" />
     </view>
 
     <!-- 后缀图标/插槽 -->
     <view v-if="showSuffix" class="lk-input__suffix">
       <slot name="suffix">
-        <lk-icon v-if="suffixIcon" :name="suffixIcon" size="36" />
+        <lk-icon v-if="suffixIcon" :name="suffixIcon" size="32" />
       </slot>
     </view>
 

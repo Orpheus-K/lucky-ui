@@ -85,13 +85,14 @@ describe('lk-input value and display rules', () => {
     ).toBe('');
   });
 
-  it('prioritizes password toggle over suffix content', () => {
+  it('prioritizes password toggle over suffix content when value exists', () => {
     const passwordToggle = shouldShowPasswordToggle({
       showPassword: true,
       type: 'password',
       disabled: false,
       readonly: false,
       fake: false,
+      value: 'secret',
     });
 
     expect(passwordToggle).toBe(true);
@@ -99,9 +100,20 @@ describe('lk-input value and display rules', () => {
       shouldShowPasswordToggle({
         showPassword: true,
         type: 'password',
+        disabled: false,
+        readonly: false,
+        fake: false,
+        value: '',
+      })
+    ).toBe(false);
+    expect(
+      shouldShowPasswordToggle({
+        showPassword: true,
+        type: 'password',
         disabled: true,
         readonly: false,
         fake: false,
+        value: 'secret',
       })
     ).toBe(false);
     expect(

@@ -1,6 +1,7 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { ref } from 'vue';
 import LkInput from '@/uni_modules/lucky-ui/components/lk-input/lk-input.vue';
+import type { InputEventPayload } from '@/uni_modules/lucky-ui/components/lk-input/input.props';
 import LkIcon from '@/uni_modules/lucky-ui/components/lk-icon/lk-icon.vue';
 import LkSpace from '@/uni_modules/lucky-ui/components/lk-space/lk-space.vue';
 import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.vue';
@@ -23,9 +24,20 @@ const valueAlign2 = ref('');
 const valueAlign3 = ref('');
 const valueConfirm = ref('');
 const confirmTip = ref('');
+const valueSpacing = ref('');
+const keyboardInfo = ref('');
 
 function onConfirm() {
   confirmTip.value = `已触发确认：${valueConfirm.value}`;
+}
+
+function onKeyboardHeight(e: InputEventPayload) {
+  const detail =
+    typeof e === 'object' && e !== null && 'detail' in e
+      ? (e.detail as { height?: number } | undefined)
+      : undefined;
+  const height = detail?.height ?? 0;
+  keyboardInfo.value = height > 0 ? `当前软键盘高度：${height}px` : '键盘已收起';
 }
 </script>
 
@@ -100,6 +112,20 @@ function onConfirm() {
     <demo-block title="字数统计">
       <lk-input v-model="value9" :maxlength="20" show-word-limit placeholder="最多20个字" />
     </demo-block>
+
+    <demo-block title="页面键盘推顶与安全间距 (cursor-spacing)">
+      <lk-space direction="vertical" :gap="24" fill>
+        <lk-input
+          v-model="valueSpacing"
+          :adjust-position="true"
+          :cursor-spacing="24"
+          placeholder="聚焦时页面上推并保持 24px 间距"
+          @keyboardheightchange="onKeyboardHeight"
+        />
+        <text v-if="keyboardInfo" class="demo-tip">{{ keyboardInfo }}</text>
+      </lk-space>
+    </demo-block>
+
   </view>
 </template>
 
@@ -119,4 +145,5 @@ function onConfirm() {
   font-size: 24rpx;
   color: var(--lk-text-secondary);
 }
+
 </style>
