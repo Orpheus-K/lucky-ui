@@ -61,18 +61,33 @@ describe('lk-keyboard input and layout rules', () => {
     ]);
 
     const provinceLayout = buildPlateProvinceKeyboardLayout('ABC');
+    expect(provinceLayout.length).toBe(4);
     expect(provinceLayout[0][0]).toEqual({ text: '京', value: '京' });
-    expect(provinceLayout.at(-1)).toEqual([
-      { text: 'ABC', type: 'extra', value: '__switch__' },
-      { text: '', type: 'delete' },
-    ]);
+    expect(provinceLayout[3][0]).toEqual({
+      text: 'ABC',
+      type: 'extra',
+      value: '__switch__',
+      flex: 1.5,
+    });
+    expect(provinceLayout[3].at(-1)).toEqual({
+      text: '',
+      type: 'delete',
+      flex: 1.5,
+    });
 
     const alphaNumLayout = buildPlateAlphaNumKeyboardLayout('省份');
-    expect(alphaNumLayout[0][0]).toEqual({ text: 'A', value: 'A' });
-    expect(alphaNumLayout.at(-1)?.[0]).toEqual({
+    expect(alphaNumLayout.length).toBe(4);
+    expect(alphaNumLayout[0][0]).toEqual({ text: '0', value: '0' });
+    expect(alphaNumLayout[3][0]).toEqual({
       text: '省份',
       type: 'extra',
       value: '__switch__',
+      flex: 1.5,
+    });
+    expect(alphaNumLayout[3].at(-1)).toEqual({
+      text: '',
+      type: 'delete',
+      flex: 1.5,
     });
   });
 
@@ -97,7 +112,7 @@ describe('lk-keyboard input and layout rules', () => {
         abcText: 'ABC',
         provinceText: '省份',
       })[0][0]
-    ).toEqual({ text: 'A', value: 'A' });
+    ).toEqual({ text: '0', value: '0' });
   });
 
   it('resolves key press actions without emitting disabled or overflowing input', () => {
@@ -131,6 +146,26 @@ describe('lk-keyboard input and layout rules', () => {
         plateMode: 'province',
       })
     ).toEqual({ kind: 'input', input: '1', nextValue: '121' });
+
+    // value 缺失时回退到 text
+    expect(
+      resolveKeyboardPressAction({
+        key: { text: 'A' },
+        modelValue: '',
+        maxLength: 0,
+        plateMode: 'province',
+      })
+    ).toEqual({ kind: 'input', input: 'A', nextValue: 'A' });
+
+    // 小数点防重复输入
+    expect(
+      resolveKeyboardPressAction({
+        key: { text: '.', value: '.' },
+        modelValue: '12.3',
+        maxLength: 0,
+        plateMode: 'province',
+      })
+    ).toEqual({ kind: 'ignore' });
 
     expect(
       resolveKeyboardPressAction({
@@ -184,7 +219,7 @@ describe('lk-keyboard input and layout rules', () => {
     expect(keyBlock).not.toContain('background:');
     expect(keyBlock).not.toContain('border:');
     expect(keyBlock).not.toContain('box-shadow:');
-    expect(styles).toContain('flex: 0 0 10%');
+    expect(styles).toContain('--kb-key-height: var(--lk-rpx-120)');
   });
 
   it('defaults to the minimal Popup presentation', () => {

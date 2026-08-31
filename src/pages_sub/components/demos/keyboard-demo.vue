@@ -3,7 +3,6 @@ import { ref } from 'vue';
 import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.vue';
 import LkButton from '@/uni_modules/lucky-ui/components/lk-button/lk-button.vue';
 import LkKeyboard from '@/uni_modules/lucky-ui/components/lk-keyboard/lk-keyboard.vue';
-import LkIcon from '@/uni_modules/lucky-ui/components/lk-icon/lk-icon.vue';
 import LkSpace from '@/uni_modules/lucky-ui/components/lk-space/lk-space.vue';
 import type {
   KeyboardKey,
@@ -155,11 +154,6 @@ function onClose() {
       </lk-space>
     </demo-block>
 
-    <view class="tips">
-      <lk-icon name="info-circle" size="28" color="var(--lk-color-primary)" />
-      <text>提示：键盘由 Popup 承载，采用纯色面板、反差文字和无卡片按键。</text>
-    </view>
-
     <!-- 键盘组件 -->
     <lk-keyboard
       v-model:visible="keyboardVisible"
@@ -220,19 +214,5 @@ function onClose() {
   font-size: 24rpx;
   color: var(--lk-text-secondary);
   margin-bottom: 16rpx;
-}
-
-.tips {
-  display: flex;
-  align-items: flex-start;
-  > :not(:first-child) {
-    margin-left: 12rpx;
-  }
-  padding: 24rpx;
-  background: var(--lk-fill-secondary);
-  border-radius: var(--lk-radius-lg);
-  font-size: 24rpx;
-  color: var(--lk-text-secondary);
-  line-height: 1.6;
 }
 </style>

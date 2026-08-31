@@ -192,7 +192,7 @@ function getKeyStyle(key: KeyboardKey): Record<string, number> {
             :data-key="key.text"
             @tap="onKeyPress(key)"
           >
-            <lk-icon v-if="key.type === 'delete'" name="eraser" :size="40" />
+            <lk-icon v-if="key.type === 'delete'" name="eraser" :size="44" />
             <text v-else-if="key.type !== 'empty'" class="lk-keyboard__key-text">
               {{ key.text }}
             </text>
