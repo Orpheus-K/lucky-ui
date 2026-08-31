@@ -224,18 +224,16 @@ defineExpose({
     <view class="lk-form-item__body">
       <view v-if="label || $slots.label" class="lk-form-item__label" :style="labelStyle">
         <text
-          v-if="resolvedAsteriskPosition === 'left'"
+          v-if="requiredMark && resolvedAsteriskPosition === 'left'"
           class="lk-form-item__star"
-          :class="{ 'is-hidden': !requiredMark }"
           >*</text
         >
         <slot name="label">
           <text class="lk-form-item__label-text">{{ label }}</text>
         </slot>
         <text
-          v-if="resolvedAsteriskPosition === 'right'"
+          v-if="requiredMark && resolvedAsteriskPosition === 'right'"
           class="lk-form-item__star lk-form-item__star--right"
-          :class="{ 'is-hidden': !requiredMark }"
           >*</text
         >
       </view>

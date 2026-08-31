@@ -21,6 +21,7 @@ import LkKeyboard from '@/uni_modules/lucky-ui/components/lk-keyboard/lk-keyboar
 import LkVerifyCode from '@/uni_modules/lucky-ui/components/lk-verify-code/lk-verify-code.vue';
 import LkPicker from '@/uni_modules/lucky-ui/components/lk-picker/lk-picker.vue';
 import LkButton from '@/uni_modules/lucky-ui/components/lk-button/lk-button.vue';
+import LkSpace from '@/uni_modules/lucky-ui/components/lk-space/lk-space.vue';
 import type { FormRules } from '@/uni_modules/lucky-ui/components/lk-form/context';
 import type {
   CustomRequestFn,
@@ -29,6 +30,26 @@ import type {
 
 // 基础表单演示引用
 const formRef = ref();
+const showContractProbe = ref(false);
+
+// 登录表单演示
+const loginFormRef = ref();
+const loginForm = reactive({
+  account: '',
+  password: '',
+});
+const loginRules: FormRules = {
+  account: [{ required: true, message: '请输入账号或手机号', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入登录密码', trigger: 'blur' }],
+};
+const handleLogin = async () => {
+  try {
+    await loginFormRef.value?.validate();
+    uni.showToast({ title: '登录成功', icon: 'success' });
+  } catch {
+    uni.showToast({ title: '请填写完整信息', icon: 'none' });
+  }
+};
 
 // ==========================================
 // 契约演练探针 (Contract Probe)
@@ -302,7 +323,106 @@ const controlsForm = reactive({
 
 <template>
   <view class="component-demo form-demo">
-    <!-- 契约演练探针 -->
+    <!-- 1. 基础表单与校验 -->
+    <demo-block title="基础表单与校验 (List Form)">
+      <lk-form ref="formRef" :model="basicForm" :rules="basicRules" label-width="160rpx" border>
+        <lk-form-item label="用户名" prop="username" required>
+          <lk-input v-model="basicForm.username" placeholder="请输入用户名" borderless clearable />
+        </lk-form-item>
+        <lk-form-item label="手机号" prop="phone" required>
+          <lk-input
+            v-model="basicForm.phone"
+            type="tel"
+            placeholder="请输入手机号"
+            borderless
+            clearable
+          />
+        </lk-form-item>
+        <lk-form-item label="备注" prop="remark">
+          <lk-input v-model="basicForm.remark" placeholder="选填，请输入备注" borderless clearable />
+        </lk-form-item>
+        <view class="demo-form-actions">
+          <lk-button type="primary" size="sm" @click="handleBasicSubmit">提交</lk-button>
+          <lk-button size="sm" @click="handleBasicReset">重置</lk-button>
+        </view>
+      </lk-form>
+    </demo-block>
+
+    <!-- 2. 标签顶部对齐与多行反馈 -->
+    <demo-block title="标签顶部对齐与多行反馈">
+      <lk-form :model="layoutForm" label-align="top" border>
+        <lk-form-item label="姓名" prop="name" required>
+          <lk-input v-model="layoutForm.name" placeholder="请输入姓名" borderless clearable />
+        </lk-form-item>
+        <lk-form-item label="反馈内容" prop="intro" required>
+          <lk-textarea
+            v-model="layoutForm.intro"
+            placeholder="请输入详细反馈建议..."
+            :maxlength="100"
+            show-count
+            variant="flush"
+            auto-height
+          />
+        </lk-form-item>
+      </lk-form>
+    </demo-block>
+
+    <!-- 3. 常见表单控件组合 -->
+    <demo-block title="常见控件组合">
+      <lk-form :model="controlsForm" label-width="180rpx" border>
+        <lk-form-item label="通知开关" prop="switchVal">
+          <lk-switch v-model="controlsForm.switchVal" />
+        </lk-form-item>
+        <lk-form-item label="数量" prop="stepperVal">
+          <lk-stepper v-model="controlsForm.stepperVal" :min="1" :max="10" />
+        </lk-form-item>
+        <lk-form-item label="评分" prop="rateVal">
+          <lk-rate v-model="controlsForm.rateVal" />
+        </lk-form-item>
+        <lk-form-item label="单选" prop="radioVal">
+          <lk-radio-group v-model="controlsForm.radioVal">
+            <lk-radio name="1">选项一</lk-radio>
+            <lk-radio name="2">选项二</lk-radio>
+          </lk-radio-group>
+        </lk-form-item>
+        <lk-form-item label="多选" prop="checkboxVal">
+          <lk-checkbox-group v-model="controlsForm.checkboxVal">
+            <lk-checkbox label="1">选项 A</lk-checkbox>
+            <lk-checkbox label="2">选项 B</lk-checkbox>
+          </lk-checkbox-group>
+        </lk-form-item>
+      </lk-form>
+    </demo-block>
+
+    <!-- 4. 移动端卡片登录表单 -->
+    <demo-block title="卡片式登录表单 (Card Login)">
+      <view class="demo-card-form-wrapper">
+        <lk-form ref="loginFormRef" :model="loginForm" :rules="loginRules">
+          <lk-space direction="vertical" :gap="24" fill>
+            <lk-form-item prop="account">
+              <lk-input
+                v-model="loginForm.account"
+                prefix-icon="person"
+                placeholder="请输入手机号 / 账号"
+                clearable
+              />
+            </lk-form-item>
+            <lk-form-item prop="password">
+              <lk-input
+                v-model="loginForm.password"
+                type="password"
+                show-password
+                prefix-icon="lock"
+                placeholder="请输入登录密码"
+              />
+            </lk-form-item>
+            <lk-button type="primary" block @click="handleLogin">立即登录</lk-button>
+          </lk-space>
+        </lk-form>
+      </view>
+    </demo-block>
+
+    <!-- 契约演练探针 (保留于页面底部以确保自动化测试合同兼容) -->
     <view
       id="form-contract-probe"
       class="form-contract-probe"
@@ -326,7 +446,7 @@ const controlsForm = reactive({
       :data-rate="contractModel.rate"
       :data-select="contractModel.select"
     >
-      <text class="form-contract-probe__title">FORM CONTRACT PROBE</text>
+      <text class="form-contract-probe__title">FORM CONTRACT PROBE (AUTOMATION FIXTURE)</text>
       <lk-form
         id="form-contract-probe-form"
         ref="contractFormRef"
@@ -451,7 +571,7 @@ const controlsForm = reactive({
           <lk-calendar
             id="form-contract-probe-calendar"
             v-model="contractCalendarValue"
-            v-model:view-date="contractCalendarViewDate"
+            :view-date="contractCalendarViewDate"
             min-date="2026-08-01"
             max-date="2026-08-31"
             :show-today="false"
@@ -568,70 +688,6 @@ const controlsForm = reactive({
         Disable open overlay probe
       </view>
     </view>
-
-    <!-- 基础表单与校验 -->
-    <demo-block title="基础表单与校验">
-      <lk-form ref="formRef" :model="basicForm" :rules="basicRules" label-width="160rpx" border>
-        <lk-form-item label="用户名" prop="username" required>
-          <lk-input v-model="basicForm.username" placeholder="请输入用户名" borderless />
-        </lk-form-item>
-        <lk-form-item label="手机号" prop="phone" required>
-          <lk-input v-model="basicForm.phone" type="tel" placeholder="请输入手机号" borderless />
-        </lk-form-item>
-        <lk-form-item label="备注" prop="remark">
-          <lk-input v-model="basicForm.remark" placeholder="请输入备注" borderless />
-        </lk-form-item>
-        <view class="demo-form-actions">
-          <lk-button type="primary" size="sm" @click="handleBasicSubmit">提交</lk-button>
-          <lk-button size="sm" @click="handleBasicReset">重置</lk-button>
-        </view>
-      </lk-form>
-    </demo-block>
-
-    <!-- 标签顶部对齐 -->
-    <demo-block title="标签顶部对齐">
-      <lk-form :model="layoutForm" label-align="top" border>
-        <lk-form-item label="姓名" prop="name">
-          <lk-input v-model="layoutForm.name" placeholder="请输入姓名" borderless />
-        </lk-form-item>
-        <lk-form-item label="个人简介" prop="intro">
-          <lk-textarea
-            v-model="layoutForm.intro"
-            placeholder="请输入个人简介"
-            :maxlength="100"
-            show-count
-            borderless
-          />
-        </lk-form-item>
-      </lk-form>
-    </demo-block>
-
-    <!-- 常见表单控件组合 -->
-    <demo-block title="常见控件组合">
-      <lk-form :model="controlsForm" label-width="180rpx" border>
-        <lk-form-item label="通知开关" prop="switchVal">
-          <lk-switch v-model="controlsForm.switchVal" />
-        </lk-form-item>
-        <lk-form-item label="数量" prop="stepperVal">
-          <lk-stepper v-model="controlsForm.stepperVal" :min="1" :max="10" />
-        </lk-form-item>
-        <lk-form-item label="评分" prop="rateVal">
-          <lk-rate v-model="controlsForm.rateVal" />
-        </lk-form-item>
-        <lk-form-item label="单选" prop="radioVal">
-          <lk-radio-group v-model="controlsForm.radioVal">
-            <lk-radio name="1">选项一</lk-radio>
-            <lk-radio name="2">选项二</lk-radio>
-          </lk-radio-group>
-        </lk-form-item>
-        <lk-form-item label="多选" prop="checkboxVal">
-          <lk-checkbox-group v-model="controlsForm.checkboxVal">
-            <lk-checkbox label="1">选项 A</lk-checkbox>
-            <lk-checkbox label="2">选项 B</lk-checkbox>
-          </lk-checkbox-group>
-        </lk-form-item>
-      </lk-form>
-    </demo-block>
   </view>
 </template>
 
@@ -644,6 +700,12 @@ const controlsForm = reactive({
   > :not(:first-child) {
     margin-top: 32rpx;
   }
+}
+
+.demo-card-form-wrapper {
+  padding: var(--lk-spacing-lg) var(--lk-spacing-md);
+  background: var(--lk-bg-container);
+  border-radius: var(--lk-radius-lg);
 }
 
 .demo-form-actions {

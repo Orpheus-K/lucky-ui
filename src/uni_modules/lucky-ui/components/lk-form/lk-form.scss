@@ -57,15 +57,12 @@
 
   @include e(star) {
     color: var(--_error-color);
-    width: var(--lk-rpx-16);
+    font-size: var(--_label-fs);
+    line-height: 1;
     margin-right: var(--lk-rpx-8);
     display: inline-flex;
     justify-content: center;
     flex-shrink: 0;
-
-    @include when(hidden) {
-      visibility: hidden;
-    }
 
     &--right {
       margin-right: 0;
@@ -76,18 +73,14 @@
   @include e(label-text) {
     flex: 1;
     display: inline-block;
-    text-align: justify;
-    text-align-last: justify;
-    // 强制 3 个字匹配 4 个字的视觉宽度
-    // 如果标签对齐方式是右对齐，则不使用两端对齐
-    .lk-form-item--left & {
-      text-align: justify;
-      text-align-last: justify;
-    }
+    text-align: left;
 
     .lk-form-item--right & {
       text-align: right;
-      text-align-last: right;
+    }
+
+    .lk-form-item--top & {
+      text-align: left;
     }
   }
 
@@ -139,10 +132,16 @@
   }
 
   ::v-deep .lk-input {
+    width: 100%;
     text-align: left;
     .lk-input__inner {
       text-align: left;
     }
+  }
+
+  ::v-deep .lk-textarea {
+    width: 100%;
+    text-align: left;
   }
 
   @include m(top) {
