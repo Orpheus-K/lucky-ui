@@ -479,6 +479,11 @@ page,
   --lk-navbar-content-padding-left: var(--lk-spacing-md);
   --lk-navbar-content-padding-right: var(--lk-spacing-md);
 
+  --lk-page-bg: var(--lk-bg-page);
+  --lk-page-left-slot-left: var(--lk-spacing-lg);
+  --lk-page-left-slot-z-index: 100;
+  --lk-page-bottom-slot-z-index: 90;
+
   --lk-tabbar-height: var(--lk-rpx-112);
   --lk-tabbar-item-height: var(--lk-control-height-md);
   --lk-tabbar-safe-area-bottom: env(safe-area-inset-bottom);

@@ -1,4 +1,6 @@
-.lk-page {
+@use '../../theme/src/mixins/bem' as *;
+
+@include b(page) {
   position: absolute;
   top: 0;
   left: 0;
@@ -8,60 +10,71 @@
   flex-direction: column;
   overflow: hidden;
   box-sizing: border-box;
-  background-color: var(--lk-bg-page);
+  background-color: var(--lk-page-bg, var(--lk-bg-page));
   color: var(--lk-text-primary);
   font-family: var(--lk-font-family);
 
-  &__left-slot {
+  @include m(non-scrollable) {
+    position: relative;
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  @include e(left-slot) {
     position: absolute;
-    left: 16px;
+    left: var(--lk-page-left-slot-left, var(--lk-spacing-lg, 16px));
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    z-index: 100;
+    z-index: var(--lk-page-left-slot-z-index, 100);
     box-sizing: border-box;
   }
 
-  &__top-placeholder {
+  @include e(top-placeholder) {
     width: 100%;
     flex-shrink: 0;
     box-sizing: border-box;
     background-color: transparent;
   }
 
-  &__scroll-view {
+  @include e(scroll-view) {
     flex: 1;
     height: 0;
     width: 100%;
     box-sizing: border-box;
   }
 
-  &__normal-view {
+  @include e(normal-view) {
     flex: 1;
     width: 100%;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+
+    > .lk-page__content {
+      flex: 1;
+    }
   }
 
-  &__content {
+  @include e(content) {
     width: 100%;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
 
-    &--safe-area {
+    @include m(safe-area) {
       padding-bottom: env(safe-area-inset-bottom);
     }
   }
 
-  &__bottom-slot {
+  @include e(bottom-slot) {
     width: 100%;
     flex-shrink: 0;
     box-sizing: border-box;
-    z-index: 90;
+    z-index: var(--lk-page-bottom-slot-z-index, 90);
 
-    &--safe-area {
+    @include m(safe-area) {
       padding-bottom: env(safe-area-inset-bottom);
     }
   }
