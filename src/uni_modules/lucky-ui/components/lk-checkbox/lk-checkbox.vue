@@ -151,19 +151,23 @@ function handleLabelClick() {
           :class="[`lk-checkbox__icon--${mergedShape}`]"
           :style="iconStyle"
         >
-          <lk-icon
-            class="lk-checkbox__check"
-            name="check"
-            :size="mergedIconSize"
-            color="var(--lk-checkbox-check-color)"
-          />
-          <lk-icon
-            class="lk-checkbox__dash"
-            name="dash"
-            :size="mergedIconSize"
-            color="var(--lk-checkbox-check-color)"
-          />
-          <view class="lk-checkbox__dot" />
+          <view v-if="props.indeterminate" class="lk-checkbox__dash">
+            <lk-icon
+              name="dash"
+              :size="mergedIconSize"
+              color="var(--lk-checkbox-check-color)"
+            />
+          </view>
+          <template v-else>
+            <view v-if="mergedIconType === 'check'" class="lk-checkbox__check">
+              <lk-icon
+                name="check"
+                :size="mergedIconSize"
+                color="var(--lk-checkbox-check-color)"
+              />
+            </view>
+            <view v-else class="lk-checkbox__dot" />
+          </template>
         </view>
       </slot>
     </view>

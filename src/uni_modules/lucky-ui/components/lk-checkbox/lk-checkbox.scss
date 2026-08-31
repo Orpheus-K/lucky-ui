@@ -12,6 +12,11 @@
 
   @include m(sm) {
     font-size: var(--lk-font-size-sm);
+    .lk-checkbox__icon,
+    .lk-checkbox__icon-wrap {
+      min-width: var(--lk-rpx-36);
+      min-height: var(--lk-rpx-36);
+    }
     .lk-checkbox__icon {
       width: var(--lk-rpx-36);
       height: var(--lk-rpx-36);
@@ -20,6 +25,11 @@
 
   @include m(md) {
     font-size: var(--lk-font-size-md);
+    .lk-checkbox__icon,
+    .lk-checkbox__icon-wrap {
+      min-width: var(--lk-rpx-44);
+      min-height: var(--lk-rpx-44);
+    }
     .lk-checkbox__icon {
       width: var(--lk-rpx-44);
       height: var(--lk-rpx-44);
@@ -28,6 +38,11 @@
 
   @include m(lg) {
     font-size: var(--lk-font-size-lg);
+    .lk-checkbox__icon,
+    .lk-checkbox__icon-wrap {
+      min-width: var(--lk-rpx-52);
+      min-height: var(--lk-rpx-52);
+    }
     .lk-checkbox__icon {
       width: var(--lk-rpx-52);
       height: var(--lk-rpx-52);
@@ -35,9 +50,11 @@
   }
 
   @include e(icon-wrap) {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    line-height: 1;
   }
 
   @include e(icon) {
@@ -71,11 +88,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
     opacity: 0;
-    transform: scale(0.6);
+    transform: scale(0.6) translateZ(0);
+    transform-origin: center center;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
     transition:
       opacity 0.18s ease,
-      transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 
     &::after {
       content: '';
@@ -96,11 +117,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
     opacity: 0;
-    transform: scale(0.6);
+    transform: scale(0.6) translateZ(0);
+    transform-origin: center center;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
     transition:
       opacity 0.18s ease,
-      transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   @include e(dash) {
@@ -112,11 +137,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
     opacity: 0;
-    transform: scale(0.6);
+    transform: scale(0.6) translateZ(0);
+    transform-origin: center center;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
     transition:
       opacity 0.18s ease,
-      transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   @include e(label) {
@@ -141,21 +170,21 @@
   &.lk-checkbox--checked.lk-checkbox--icon-check {
     .lk-checkbox__check {
       opacity: 1;
-      transform: scale(1);
+      transform: scale(1) translateZ(0);
     }
   }
 
   &.lk-checkbox--checked.lk-checkbox--icon-dot {
     .lk-checkbox__dot {
       opacity: 1;
-      transform: scale(1);
+      transform: scale(1) translateZ(0);
     }
   }
 
   &.lk-checkbox--indeterminate {
     .lk-checkbox__dash {
       opacity: 1;
-      transform: scale(1);
+      transform: scale(1) translateZ(0);
     }
   }
 
