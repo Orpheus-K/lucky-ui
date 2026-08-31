@@ -1,426 +1,756 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import LkPage from '@/uni_modules/lucky-ui/components/lk-page/lk-page.vue';
-import LkIcon from '@/uni_modules/lucky-ui/components/lk-icon/lk-icon.vue';
-import LkSwitch from '@/uni_modules/lucky-ui/components/lk-switch/lk-switch.vue';
 import LkButton from '@/uni_modules/lucky-ui/components/lk-button/lk-button.vue';
-import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.vue';
+import LkIcon from '@/uni_modules/lucky-ui/components/lk-icon/lk-icon.vue';
+import LkTag from '@/uni_modules/lucky-ui/components/lk-tag/lk-tag.vue';
+import LkCard from '@/uni_modules/lucky-ui/components/lk-card/lk-card.vue';
+import LkCellGroup from '@/uni_modules/lucky-ui/components/lk-cell/lk-cell-group.vue';
+import LkCell from '@/uni_modules/lucky-ui/components/lk-cell/lk-cell.vue';
+import LkPopup from '@/uni_modules/lucky-ui/components/lk-popup/lk-popup.vue';
+import LkSwitch from '@/uni_modules/lucky-ui/components/lk-switch/lk-switch.vue';
+import { useTheme } from '@/uni_modules/lucky-ui/theme';
 
-// 交互控制
-const reserveTop = ref(true);
-const capsuleAlign = ref(true);
-const safeAreaBottom = ref(true);
-const showBottomSlot = ref(true);
-const scrollable = ref(true);
+type SceneMode = 'order' | 'immersive' | 'result';
 
-type SysInfoLike = {
-  statusBarHeight?: number;
-  windowWidth?: number;
-};
+const currentScene = ref<SceneMode>('order');
+const showConfigDrawer = ref(false);
 
-// 提取系统指标
-const sys: SysInfoLike = typeof uni !== 'undefined' ? (uni.getSystemInfoSync() as SysInfoLike) : {};
-const statusBarHeight = sys.statusBarHeight ?? 0;
-
-// 获取胶囊位置参数
-let menuButtonInfo = { height: 32, top: statusBarHeight + 6, left: 280 };
-// #ifdef MP
-try {
-  if (typeof uni !== 'undefined' && uni.getMenuButtonBoundingClientRect) {
-    const rect = uni.getMenuButtonBoundingClientRect();
-    if (rect && rect.height) {
-      menuButtonInfo = {
-        height: rect.height,
-        top: rect.top,
-        left: rect.left,
-      };
-    }
-  }
-} catch {
-  // ignore
-}
-// #endif
-
-// 计算模拟导航栏的高度
-const navbarHeight = computed(() => {
-  const capsuleHeight = menuButtonInfo.height;
-  const capsuleTop = menuButtonInfo.top;
-  if (capsuleHeight > 0) {
-    return capsuleHeight + (capsuleTop - statusBarHeight) * 2;
-  }
-  return 44;
+const customConfig = ref({
+  reserveTop: true,
+  capsuleAlign: true,
+  safeAreaBottom: true,
+  scrollable: true,
+  showLeftSlot: true,
+  showBottomSlot: true,
 });
 
-const totalNavHeight = computed(() => statusBarHeight + navbarHeight.value);
+const { theme, toggleTheme, themeClass } = useTheme();
+
+const activeProps = computed(() => {
+  if (currentScene.value === 'immersive') {
+    return {
+      reserveTop: false,
+      capsuleAlign: true,
+      safeAreaBottom: true,
+      scrollable: true,
+      showLeftSlot: true,
+      showBottomSlot: true,
+    };
+  }
+  if (currentScene.value === 'result') {
+    return {
+      reserveTop: true,
+      capsuleAlign: true,
+      safeAreaBottom: true,
+      scrollable: false,
+      showLeftSlot: true,
+      showBottomSlot: true,
+    };
+  }
+  return {
+    reserveTop: customConfig.value.reserveTop,
+    capsuleAlign: customConfig.value.capsuleAlign,
+    safeAreaBottom: customConfig.value.safeAreaBottom,
+    scrollable: customConfig.value.scrollable,
+    showLeftSlot: customConfig.value.showLeftSlot,
+    showBottomSlot: customConfig.value.showBottomSlot,
+  };
+});
+
+function switchScene(scene: SceneMode) {
+  currentScene.value = scene;
+  if (scene === 'order') {
+    customConfig.value = {
+      reserveTop: true,
+      capsuleAlign: true,
+      safeAreaBottom: true,
+      scrollable: true,
+      showLeftSlot: true,
+      showBottomSlot: true,
+    };
+  }
+  uni.showToast({
+    title: `已切换：${scene === 'order' ? '标准订单页' : scene === 'immersive' ? '沉浸大图页' : '全屏结果页'}`,
+    icon: 'none',
+  });
+}
+
+function handleBack() {
+  uni.showToast({ title: '返回上一页 (Back)', icon: 'none' });
+}
+
+function handleHome() {
+  uni.showToast({ title: '返回主页 (Home)', icon: 'none' });
+}
+
+function handlePay() {
+  uni.showToast({ title: '正在拉起支付...', icon: 'none' });
+}
+
+function handleCancel() {
+  uni.showToast({ title: '订单已取消', icon: 'none' });
+}
 </script>
 
 <template>
-  <view class="component-demo">
-    <demo-block title="布局参数配置">
-      <view class="demo-controls">
-        <view class="control-item">
-          <view class="control-text">
-            <text class="control-title">顶部导航高度留白 (reserveTop)</text>
-            <text class="control-desc">开启后自动为自定义导航栏预留高度</text>
-          </view>
-          <lk-switch v-model="reserveTop" />
+  <view class="page-component-preview" :class="themeClass">
+    <!-- 核心 Page 容器 -->
+    <lk-page
+      :reserve-top="activeProps.reserveTop"
+      :capsule-align="activeProps.capsuleAlign"
+      :safe-area-bottom="activeProps.safeAreaBottom"
+      :scrollable="activeProps.scrollable"
+      :custom-class="['business-page-root', themeClass]"
+    >
+      <!-- 左侧插槽：胶囊垂直居中 -->
+      <template v-if="activeProps.showLeftSlot" #left>
+        <view
+          v-if="currentScene === 'immersive'"
+          class="immersive-back-btn"
+          @click="handleBack"
+        >
+          <lk-icon name="arrow-left" size="36" color="#ffffff" />
         </view>
-        <view class="control-item">
-          <view class="control-text">
-            <text class="control-title">左侧插槽胶囊对齐 (capsuleAlign)</text>
-            <text class="control-desc">使左侧返回按钮与右侧胶囊按钮垂直物理居中</text>
-          </view>
-          <lk-switch v-model="capsuleAlign" />
-        </view>
-        <view class="control-item">
-          <view class="control-text">
-            <text class="control-title">底部安全区适配 (safeAreaBottom)</text>
-            <text class="control-desc">开启时自动在底部空出系统操作条距离</text>
-          </view>
-          <lk-switch v-model="safeAreaBottom" />
-        </view>
-        <view class="control-item">
-          <view class="control-text">
-            <text class="control-title">使用底部插槽 (showBottomSlot)</text>
-            <text class="control-desc">显示底部的提交/操作固定操作栏</text>
-          </view>
-          <lk-switch v-model="showBottomSlot" />
-        </view>
-        <view class="control-item">
-          <view class="control-text">
-            <text class="control-title">启用默认滚动区域 (scrollable)</text>
-            <text class="control-desc">关闭则为普通容器，方便自定义更复杂的滚动</text>
-          </view>
-          <lk-switch v-model="scrollable" />
-        </view>
-      </view>
-    </demo-block>
 
-    <demo-block title="物理布局模拟器">
-      <view class="simulator-container">
-        <!-- 模拟手机外壳 -->
-        <view class="phone-simulator">
-          <!-- 模拟的小程序右上角胶囊按钮 -->
-          <view
-            class="mock-capsule"
-            :style="{
-              top: menuButtonInfo.top + 'px',
-              height: menuButtonInfo.height + 'px',
-            }"
-          >
-            <view class="capsule-dot" />
-            <view class="capsule-line" />
-            <view class="capsule-circle" />
+        <view v-else class="capsule-nav-actions">
+          <view class="nav-action-btn" @click="handleBack">
+            <lk-icon name="arrow-left" size="34" color="var(--lk-text-primary)" />
+          </view>
+          <view class="nav-action-divider" />
+          <view class="nav-action-btn" @click="handleHome">
+            <lk-icon name="house" size="32" color="var(--lk-text-primary)" />
+          </view>
+        </view>
+      </template>
+
+      <!-- 默认插槽：主体内容 -->
+      <!-- 场景一：标准二级订单详情页 -->
+      <view v-if="currentScene === 'order'" class="business-body">
+        <!-- 顶部效果切换卡片 -->
+        <view class="scene-switcher-card">
+          <view class="switcher-header">
+            <view class="switcher-title-wrap">
+              <lk-icon name="sliders" size="30" color="var(--lk-color-primary)" />
+              <text class="switcher-title">LkPage 效果切换</text>
+            </view>
+            <view class="theme-pill" @click="toggleTheme">
+              <lk-icon :name="theme === 'dark' ? 'sun' : 'moon'" size="24" />
+              <text class="theme-text">{{ theme === 'dark' ? '暗色' : '亮色' }}</text>
+            </view>
           </view>
 
-          <!-- 模拟的顶部自定义导航栏 (当 reserveTop 时配合展示，辅助看清位置关系) -->
-          <view
-            class="mock-navbar"
-            :style="{
-              height: totalNavHeight + 'px',
-              paddingTop: statusBarHeight + 'px',
-            }"
-            :class="{ 'is-transparent': !reserveTop }"
-          >
-            <text class="mock-navbar__title">自定义导航栏</text>
+          <view class="scene-grid">
+            <view class="scene-btn is-active" @click="switchScene('order')">
+              <lk-icon name="receipt" size="34" />
+              <text class="scene-label">标准订单</text>
+            </view>
+            <view class="scene-btn" @click="switchScene('immersive')">
+              <lk-icon name="image" size="34" />
+              <text class="scene-label">沉浸大图</text>
+            </view>
+            <view class="scene-btn" @click="switchScene('result')">
+              <lk-icon name="check-circle" size="34" />
+              <text class="scene-label">全屏结果</text>
+            </view>
+            <view class="scene-btn" @click="showConfigDrawer = true">
+              <lk-icon name="gear" size="34" />
+              <text class="scene-label">参数调试</text>
+            </view>
           </view>
+        </view>
 
-          <!-- 测试的目标组件: LkPage -->
-          <lk-page
-            :reserve-top="reserveTop"
-            :capsule-align="capsuleAlign"
-            :safe-area-bottom="safeAreaBottom"
-            :scrollable="scrollable"
-            custom-class="simulator-page"
-          >
-            <!-- 左侧插槽 -->
-            <template #left>
-              <view class="mock-left-slot">
-                <lk-icon name="arrow-left" size="36" color="var(--lk-text-primary)" />
-                <lk-icon
-                  name="house"
-                  size="34"
-                  color="var(--lk-text-primary)"
-                  style="margin-left: 16rpx"
-                />
+        <!-- 订单状态横幅 -->
+        <view class="order-status-banner">
+          <view class="status-left">
+            <text class="status-main">等待买家付款</text>
+            <text class="status-sub">剩 14:59 自动取消 · 订单 #LK-9824</text>
+          </view>
+          <lk-icon name="clock" size="40" color="var(--lk-color-primary)" />
+        </view>
+
+        <!-- 服务商品卡片 -->
+        <lk-card>
+          <view class="product-item">
+            <view class="product-thumb">
+              <lk-icon name="tools" size="56" color="var(--lk-color-primary)" />
+            </view>
+            <view class="product-info">
+              <text class="product-title">全屋智能家电深度清洗保养</text>
+              <view class="product-tags">
+                <lk-tag size="sm" color="primary">专业认证</lk-tag>
+                <lk-tag size="sm" color="success">极速上门</lk-tag>
               </view>
-            </template>
-
-            <!-- 默认插槽 (滚动内容) -->
-            <view class="simulator-body">
-              <view class="content-info-card">
-                <text class="info-card-title">配置状态监控</text>
-                <view class="info-card-row">
-                  <text class="info-card-label">顶部高度预留:</text>
-                  <text class="info-card-val" :class="{ 'is-active': reserveTop }">{{
-                    reserveTop ? '已开启' : '直接贴顶'
-                  }}</text>
-                </view>
-                <view class="info-card-row">
-                  <text class="info-card-label">左侧返回键对齐:</text>
-                  <text class="info-card-val" :class="{ 'is-active': capsuleAlign }">{{
-                    capsuleAlign ? '胶囊按钮居中' : '标准导航居中'
-                  }}</text>
-                </view>
-                <view class="info-card-row">
-                  <text class="info-card-label">底部安全适配:</text>
-                  <text class="info-card-val" :class="{ 'is-active': safeAreaBottom }">{{
-                    safeAreaBottom ? '自动留空适配' : '无安全留白'
-                  }}</text>
-                </view>
-              </view>
-
-              <view v-for="item in 12" :key="item" class="mock-content-card">
-                <text class="mock-card-title">段落内容示例 #{{ item }}</text>
-                <text class="mock-card-desc"
-                  >此处为页面主体滚动内容。通过滑动可以测试顶部和底部在滚动时的穿透与对齐效果。支持在小程序或全面屏手机上直观查看底部安全区是否被操作条遮挡。</text
-                >
+              <view class="product-price-row">
+                <text class="price-symbol">¥<text class="price-val">249.00</text></text>
+                <text class="price-qty">× 1</text>
               </view>
             </view>
+          </view>
+        </lk-card>
 
-            <!-- 底部插槽 -->
-            <template v-if="showBottomSlot" #bottom>
-              <view class="mock-bottom-bar">
-                <lk-button type="primary" block>保存并提交配置</lk-button>
-              </view>
-            </template>
-          </lk-page>
+        <!-- 费用与地址明细 -->
+        <lk-card>
+          <lk-cell-group>
+            <lk-cell title="服务地址" label="北京市海淀区中关村南大街 1 号 801 室" />
+            <lk-cell title="新客礼券" value="-¥50.00" />
+            <lk-cell title="实付金额" value="¥249.00" />
+          </lk-cell-group>
+        </lk-card>
+      </view>
 
-          <!-- 模拟物理 Home Indicator 安全区操作条 -->
-          <view class="mock-home-indicator" />
+      <!-- 场景二：沉浸大图详情页 -->
+      <view v-else-if="currentScene === 'immersive'" class="business-body is-immersive">
+        <view class="immersive-hero">
+          <view class="hero-content">
+            <lk-tag color="primary" size="sm">探索自然</lk-tag>
+            <text class="hero-heading">山林秘境·高空探索</text>
+            <text class="hero-sub">沉浸大图贴顶穿透 (reserveTop=false)</text>
+          </view>
+        </view>
+
+        <view class="immersive-inner">
+          <view class="scene-strip">
+            <text class="strip-text">当前处于沉浸式模式</text>
+            <lk-button size="sm" type="primary" @click="switchScene('order')">返回标准页</lk-button>
+          </view>
+
+          <lk-card title="亮点特色">
+            <text class="info-desc">全景高空步道，专业领队带队保障，支持提前24小时退订。</text>
+          </lk-card>
         </view>
       </view>
-    </demo-block>
+
+      <!-- 场景三：全屏不可滚动结果页 -->
+      <view v-else-if="currentScene === 'result'" class="business-body is-result">
+        <view class="result-card">
+          <lk-icon name="check-circle-fill" size="108" color="var(--lk-color-success)" />
+          <text class="result-title">预约办理成功</text>
+          <text class="result-desc">服务工单 #YZ-8899201 已派发给工程师</text>
+
+          <view class="result-info-box">
+            <view class="info-line">
+              <text class="info-label">服务人员</text>
+              <text class="info-val">张师傅 (认证工程师)</text>
+            </view>
+            <view class="info-line">
+              <text class="info-label">上门时间</text>
+              <text class="info-val">明日 09:30 - 11:30</text>
+            </view>
+          </view>
+
+          <lk-button block type="primary" @click="switchScene('order')">返回标准订单页</lk-button>
+        </view>
+      </view>
+
+      <!-- 底部吸底操作栏 -->
+      <template v-if="activeProps.showBottomSlot" #bottom>
+        <view v-if="currentScene === 'order'" class="order-bottom-bar">
+          <view class="bottom-price-info">
+            <text class="price-label">实付：</text>
+            <text class="price-symbol">¥<text class="price-num">249.00</text></text>
+          </view>
+          <view class="bottom-actions">
+            <lk-button size="md" @click="handleCancel">取消</lk-button>
+            <lk-button size="md" type="primary" @click="handlePay">立即支付</lk-button>
+          </view>
+        </view>
+
+        <view v-else-if="currentScene === 'immersive'" class="order-bottom-bar">
+          <text class="price-symbol">¥198.00<text class="price-label"> 起</text></text>
+          <lk-button size="md" type="primary" @click="handlePay">立即预订</lk-button>
+        </view>
+
+        <view v-else-if="currentScene === 'result'" class="order-bottom-bar is-center">
+          <text class="footer-tip">Lucky UI · 基础布局容器</text>
+        </view>
+      </template>
+    </lk-page>
+
+    <!-- 自由微调参数抽屉 -->
+    <lk-popup v-model="showConfigDrawer" position="bottom" round title="LkPage 属性微调">
+      <view class="drawer-content">
+        <view class="drawer-item">
+          <view class="item-text">
+            <text class="item-title">预留顶部导航高度 (reserveTop)</text>
+            <text class="item-desc">状态栏 + 胶囊导航区自适应避让</text>
+          </view>
+          <lk-switch v-model="customConfig.reserveTop" />
+        </view>
+
+        <view class="drawer-item">
+          <view class="item-text">
+            <text class="item-title">左侧胶囊物理居中 (capsuleAlign)</text>
+            <text class="item-desc">与小程序右上角胶囊按钮垂直居中</text>
+          </view>
+          <lk-switch v-model="customConfig.capsuleAlign" />
+        </view>
+
+        <view class="drawer-item">
+          <view class="item-text">
+            <text class="item-title">底部安全区留白 (safeAreaBottom)</text>
+            <text class="item-desc">全面屏底条 Home Indicator 避让</text>
+          </view>
+          <lk-switch v-model="customConfig.safeAreaBottom" />
+        </view>
+
+        <view class="drawer-item">
+          <view class="item-text">
+            <text class="item-title">启用滚动容器 (scrollable)</text>
+            <text class="item-desc">关闭则为普通非滚动容器</text>
+          </view>
+          <lk-switch v-model="customConfig.scrollable" />
+        </view>
+
+        <view class="drawer-item">
+          <view class="item-text">
+            <text class="item-title">渲染左侧插槽 (#left)</text>
+            <text class="item-desc">返回与首页操作区</text>
+          </view>
+          <lk-switch v-model="customConfig.showLeftSlot" />
+        </view>
+
+        <view class="drawer-item">
+          <view class="item-text">
+            <text class="item-title">渲染底部插槽 (#bottom)</text>
+            <text class="item-desc">吸底操作结算栏</text>
+          </view>
+          <lk-switch v-model="customConfig.showBottomSlot" />
+        </view>
+
+        <view class="drawer-actions">
+          <lk-button block type="primary" @click="showConfigDrawer = false">完成配置</lk-button>
+        </view>
+      </view>
+    </lk-popup>
   </view>
 </template>
 
 <style scoped lang="scss">
-.component-demo {
-  display: flex;
-  flex-direction: column;
-  gap: 32rpx;
-}
-
-.demo-controls {
-  display: flex;
-  flex-direction: column;
-  background-color: var(--lk-bg-container);
-  border-radius: var(--lk-radius-lg);
-  padding: 12rpx 24rpx;
-  border: 1rpx solid var(--lk-border-color);
-
-  .control-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 24rpx 0;
-
-    &:not(:last-child) {
-      border-bottom: 1rpx solid var(--lk-border-color-light);
-    }
-  }
-
-  .control-text {
-    display: flex;
-    flex-direction: column;
-    gap: 4rpx;
-  }
-
-  .control-title {
-    font-size: 28rpx;
-    font-weight: 600;
-    color: var(--lk-text-primary);
-  }
-
-  .control-desc {
-    font-size: 22rpx;
-    color: var(--lk-text-tertiary);
-  }
-}
-
-.simulator-container {
-  display: flex;
-  justify-content: center;
-  padding: 24rpx 0;
-}
-
-.phone-simulator {
+.page-component-preview {
   position: relative;
   width: 100%;
-  max-width: 700rpx;
-  height: 960rpx;
-  border-radius: 48rpx;
-  border: 12rpx solid #1a1a1a;
-  background-color: var(--lk-bg-page);
+  height: 100vh;
   overflow: hidden;
-  box-shadow: 0 24rpx 48rpx rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
 }
 
-.mock-capsule {
-  position: absolute;
-  right: 20rpx;
-  width: 160rpx;
-  border-radius: 32rpx;
-  background-color: rgba(255, 255, 255, 0.7);
-  border: 1rpx solid rgba(0, 0, 0, 0.08);
-  backdrop-filter: blur(10px);
-  z-index: 210;
+:deep(.business-page-root) {
+  background-color: var(--lk-bg-page);
+}
+
+// 胶囊双按钮
+.capsule-nav-actions {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
-  padding: 0 10rpx;
-  box-sizing: border-box;
+  background-color: var(--lk-bg-container);
+  backdrop-filter: blur(16px);
+  border: 1rpx solid var(--lk-color-border-light);
+  border-radius: 36rpx;
+  padding: 6rpx 14rpx;
+  box-shadow: var(--lk-shadow-sm);
 
-  .capsule-dot {
-    width: 16rpx;
-    height: 16rpx;
-    border-radius: 50%;
-    background-color: #000;
+  .nav-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rpx 6rpx;
+    cursor: pointer;
   }
 
-  .capsule-line {
+  .nav-action-divider {
     width: 2rpx;
-    height: 24rpx;
-    background-color: rgba(0, 0, 0, 0.15);
-  }
-
-  .capsule-circle {
-    width: 24rpx;
-    height: 24rpx;
-    border-radius: 50%;
-    border: 4rpx solid #000;
-    box-sizing: border-box;
+    height: 22rpx;
+    background-color: var(--lk-color-border-light);
+    margin: 0 6rpx;
   }
 }
 
-.mock-navbar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+.immersive-back-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--lk-bg-container);
-  border-bottom: 1rpx solid var(--lk-border-color);
-  z-index: 180;
-  box-sizing: border-box;
-  transition: all 0.3s;
-
-  &.is-transparent {
-    background-color: transparent;
-    border-color: transparent;
-    pointer-events: none;
-    .mock-navbar__title {
-      opacity: 0;
-    }
-  }
-
-  &__title {
-    font-size: 28rpx;
-    font-weight: 600;
-    color: var(--lk-text-primary);
-  }
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
 }
 
-:deep(.simulator-page) {
-  background-color: var(--lk-bg-page);
-}
-
-.mock-left-slot {
-  display: flex;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.75);
-  border: 1rpx solid var(--lk-border-color);
-  padding: 8rpx 16rpx;
-  border-radius: 32rpx;
-  backdrop-filter: blur(10px);
-}
-
-.simulator-body {
-  padding: 24rpx;
+// 业务容器
+.business-body {
   display: flex;
   flex-direction: column;
-  gap: 24rpx;
+  gap: 20rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+
+  &.is-immersive {
+    padding: 0;
+    gap: 0;
+  }
+
+  &.is-result {
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    padding: 32rpx;
+  }
 }
 
-.content-info-card {
+// 场景切换卡片
+.scene-switcher-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  padding: 20rpx;
+  border-radius: var(--lk-radius-lg);
   background: linear-gradient(
     135deg,
     var(--lk-color-primary-soft),
-    rgba(var(--lk-color-primary-rgb), 0.05)
+    rgba(var(--lk-color-primary-rgb), 0.04)
   );
   border: 1rpx solid var(--lk-color-primary-soft);
-  border-radius: 20rpx;
-  padding: 24rpx;
-  display: flex;
-  flex-direction: column;
-  gap: 12rpx;
 
-  .info-card-title {
+  .switcher-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .switcher-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10rpx;
+  }
+
+  .switcher-title {
     font-size: 26rpx;
     font-weight: 700;
     color: var(--lk-color-primary);
   }
 
-  .info-card-row {
+  .theme-pill {
     display: flex;
-    justify-content: space-between;
-    font-size: 22rpx;
+    align-items: center;
+    gap: 6rpx;
+    padding: 4rpx 14rpx;
+    border-radius: 20rpx;
+    background-color: var(--lk-bg-container);
+    border: 1rpx solid var(--lk-border-color-light);
+    cursor: pointer;
+
+    .theme-text {
+      font-size: 20rpx;
+      color: var(--lk-text-secondary);
+    }
   }
 
-  .info-card-label {
-    color: var(--lk-text-secondary);
+  .scene-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10rpx;
   }
 
-  .info-card-val {
-    color: var(--lk-text-tertiary);
-    font-weight: 600;
+  .scene-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6rpx;
+    padding: 14rpx 4rpx;
+    border-radius: var(--lk-radius-md);
+    background-color: var(--lk-bg-container);
+    border: 1rpx solid var(--lk-border-color-light);
+    cursor: pointer;
+    transition: all 0.2s;
 
     &.is-active {
-      color: var(--lk-color-success);
+      border-color: var(--lk-color-primary);
+      background-color: var(--lk-color-primary-soft);
+      color: var(--lk-color-primary);
+    }
+
+    .scene-label {
+      font-size: 20rpx;
+      font-weight: 600;
+      color: var(--lk-text-primary);
     }
   }
 }
 
-.mock-content-card {
-  background-color: var(--lk-bg-container);
-  border: 1rpx solid var(--lk-border-color);
-  border-radius: 16rpx;
-  padding: 20rpx;
+// 订单状态横幅
+.order-status-banner {
   display: flex;
-  flex-direction: column;
-  gap: 8rpx;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx;
+  border-radius: var(--lk-radius-lg);
+  background: linear-gradient(135deg, var(--lk-color-primary-soft), var(--lk-bg-container));
+  border: 1rpx solid var(--lk-color-primary-soft);
 
-  .mock-card-title {
+  .status-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4rpx;
+  }
+
+  .status-main {
+    font-size: 30rpx;
+    font-weight: 700;
+    color: var(--lk-color-primary);
+  }
+
+  .status-sub {
+    font-size: 20rpx;
+    color: var(--lk-text-secondary);
+  }
+}
+
+// 商品卡片
+.product-item {
+  display: flex;
+  gap: 16rpx;
+
+  .product-thumb {
+    width: 110rpx;
+    height: 110rpx;
+    border-radius: var(--lk-radius-md);
+    background-color: var(--lk-color-primary-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .product-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+  }
+
+  .product-title {
     font-size: 26rpx;
     font-weight: 600;
     color: var(--lk-text-primary);
   }
 
-  .mock-card-desc {
+  .product-tags {
+    display: flex;
+    gap: 8rpx;
+    margin: 4rpx 0;
+  }
+
+  .product-price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .price-symbol {
     font-size: 22rpx;
-    color: var(--lk-text-secondary);
-    line-height: 1.4;
+    font-weight: 700;
+    color: var(--lk-color-danger, #ff4d4f);
+
+    .price-val {
+      font-size: 30rpx;
+    }
+  }
+
+  .price-qty {
+    font-size: 22rpx;
+    color: var(--lk-text-tertiary);
   }
 }
 
-.mock-bottom-bar {
-  background-color: var(--lk-bg-container);
-  border-top: 1rpx solid var(--lk-border-color);
-  padding: 20rpx 24rpx;
+// 沉浸页
+.immersive-hero {
+  width: 100%;
+  height: 380rpx;
+  background: linear-gradient(135deg, #1890ff, #722ed1);
+  display: flex;
+  align-items: flex-end;
+  padding: 28rpx;
+  box-sizing: border-box;
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8rpx;
+  }
+
+  .hero-heading {
+    font-size: 36rpx;
+    font-weight: 800;
+    color: #ffffff;
+  }
+
+  .hero-sub {
+    font-size: 20rpx;
+    color: rgba(255, 255, 255, 0.85);
+  }
 }
 
-.mock-home-indicator {
-  position: absolute;
-  bottom: 8rpx;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 240rpx;
-  height: 8rpx;
-  border-radius: 4rpx;
-  background-color: #000000;
-  z-index: 220;
-  pointer-events: none;
+.immersive-inner {
+  padding: 20rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.scene-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12rpx 20rpx;
+  border-radius: var(--lk-radius-md);
+  background-color: var(--lk-bg-container);
+  border: 1rpx solid var(--lk-border-color-light);
+
+  .strip-text {
+    font-size: 22rpx;
+    color: var(--lk-text-secondary);
+  }
+}
+
+.info-desc {
+  font-size: 22rpx;
+  color: var(--lk-text-secondary);
+  line-height: 1.5;
+}
+
+// 结果页
+.result-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx 28rpx;
+  border-radius: var(--lk-radius-xl);
+  background-color: var(--lk-bg-container);
+  border: 1rpx solid var(--lk-border-color-light);
+  box-shadow: var(--lk-shadow-sm);
+
+  .result-title {
+    font-size: 34rpx;
+    font-weight: 800;
+    color: var(--lk-text-primary);
+    margin-top: 16rpx;
+  }
+
+  .result-desc {
+    font-size: 22rpx;
+    color: var(--lk-text-secondary);
+    margin: 6rpx 0 28rpx;
+  }
+
+  .result-info-box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10rpx;
+    padding: 18rpx;
+    border-radius: var(--lk-radius-md);
+    background-color: var(--lk-bg-page);
+    margin-bottom: 32rpx;
+
+    .info-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 22rpx;
+
+      .info-label {
+        color: var(--lk-text-tertiary);
+      }
+      .info-val {
+        color: var(--lk-text-primary);
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+// 底部栏
+.order-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 24rpx;
+  background-color: var(--lk-bg-container);
+  border-top: 1rpx solid var(--lk-border-color-light);
+
+  &.is-center {
+    justify-content: center;
+    padding: 18rpx;
+  }
+
+  .bottom-price-info {
+    display: flex;
+    align-items: baseline;
+
+    .price-label {
+      font-size: 22rpx;
+      color: var(--lk-text-secondary);
+    }
+
+    .price-symbol {
+      font-size: 22rpx;
+      font-weight: 700;
+      color: var(--lk-color-danger, #ff4d4f);
+    }
+
+    .price-num {
+      font-size: 32rpx;
+    }
+  }
+
+  .bottom-actions {
+    display: flex;
+    gap: 12rpx;
+  }
+
+  .footer-tip {
+    font-size: 20rpx;
+    color: var(--lk-text-tertiary);
+  }
+}
+
+// 抽屉
+.drawer-content {
+  padding: 20rpx 28rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+
+  .drawer-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 14rpx;
+    border-bottom: 1rpx solid var(--lk-border-color-light);
+
+    .item-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2rpx;
+    }
+
+    .item-title {
+      font-size: 26rpx;
+      font-weight: 600;
+      color: var(--lk-text-primary);
+    }
+
+    .item-desc {
+      font-size: 20rpx;
+      color: var(--lk-text-tertiary);
+    }
+  }
+
+  .drawer-actions {
+    margin-top: 10rpx;
+  }
 }
 </style>

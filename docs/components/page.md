@@ -85,8 +85,17 @@ phone: page
 | capsule-align | 是否开启左侧插槽与小程序胶囊按钮物理居中对齐 | `boolean` | `false` |
 | safe-area-bottom | 是否开启底部安全区适配 | `boolean` | `true` |
 | scrollable | 默认插槽内容是否包裹在滚动区域中 | `boolean` | `true` |
-| scroll-class | 滚动区域的自定义类名 | `string` | `''` |
+| scroll-class | 滚动区域的自定义类名 | `string \| object \| Array<string \| object>` | `''` |
 | scroll-style | 滚动区域的自定义样式 | `string \| object` | `''` |
+
+### CSS Variables
+
+| 变量 | 说明 | 默认值 |
+|------|------|--------|
+| `--lk-page-bg` | 页面容器背景色 | `var(--lk-bg-page)` |
+| `--lk-page-left-slot-left` | 左侧操作区的水平偏移 | `var(--lk-spacing-lg)` |
+| `--lk-page-left-slot-z-index` | 左侧操作区层级 | `100` |
+| `--lk-page-bottom-slot-z-index` | 底部操作区层级 | `90` |
 
 ### Slots
 

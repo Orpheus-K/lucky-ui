@@ -14,6 +14,8 @@ const componentMark = computed(
 );
 const isFormPreview = computed(() => componentName.value === 'form');
 const isRootPreview = computed(() => componentName.value === 'root');
+const isPagePreview = computed(() => componentName.value === 'page');
+const isStandalonePreview = computed(() => isRootPreview.value || isPagePreview.value);
 
 const { theme, toggleTheme, themeClass } = useTheme();
 
@@ -23,9 +25,12 @@ usePreviewQuery(['component', 'name'], value => {
 </script>
 
 <template>
-  <view class="detail-page" :class="[themeClass, { 'is-native-scroll': isFormPreview }]">
-    <!-- 导航栏 -->
-    <lk-navbar :title="componentTitle">
+  <view
+    class="detail-page"
+    :class="[themeClass, { 'is-native-scroll': isFormPreview, 'is-standalone-page': isPagePreview }]"
+  >
+    <!-- 导航栏 (非独立全屏页面模式展示) -->
+    <lk-navbar v-if="!isPagePreview" :title="componentTitle">
       <template #right>
         <view class="theme-toggle" @click="toggleTheme">
           <lk-icon :name="theme === 'dark' ? 'sun' : 'moon'" size="28" />
@@ -33,8 +38,12 @@ usePreviewQuery(['component', 'name'], value => {
       </template>
     </lk-navbar>
 
+    <!-- 独立页面直接呈现 (如 root, page) -->
+    <preview-demo-renderer v-if="isStandalonePreview" :slug="componentName" />
+
     <!-- 内容区域 -->
     <scroll-view
+      v-else
       class="page-content"
       :class="{ 'is-native-scroll': isFormPreview }"
       :scroll-y="!isFormPreview"
@@ -61,8 +70,7 @@ usePreviewQuery(['component', 'name'], value => {
         </view>
 
         <!-- 演示区域 -->
-        <preview-demo-renderer v-if="isRootPreview" :slug="componentName" />
-        <view v-else class="demo-area" :class="{ 'is-full-screen': isFormPreview }">
+        <view class="demo-area" :class="{ 'is-full-screen': isFormPreview }">
           <preview-demo-renderer :slug="componentName">
             <view class="developing-tip">
               <lk-icon name="code-square" size="100" color="textTertiary" />
@@ -90,6 +98,13 @@ usePreviewQuery(['component', 'name'], value => {
     height: auto;
     min-height: 100vh;
     display: block;
+  }
+
+  &.is-standalone-page {
+    height: 100vh;
+    display: block;
+    overflow: hidden;
+    background: transparent;
   }
 }
 

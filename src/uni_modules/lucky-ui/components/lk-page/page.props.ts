@@ -1,4 +1,4 @@
-import type { ExtractPropTypes } from 'vue';
+import type { ExtractPropTypes, PropType } from 'vue';
 import { baseProps, LkProp } from '../common/props';
 
 export const pageProps = {
@@ -27,12 +27,18 @@ export const pageProps = {
   /**
    * 滚动区域的自定义类名
    */
-  scrollClass: LkProp.string(''),
+  scrollClass: {
+    type: [String, Object, Array] as PropType<string | object | Array<string | object>>,
+    default: '',
+  },
 
   /**
    * 滚动区域的自定义样式
    */
-  scrollStyle: LkProp.string(''),
+  scrollStyle: {
+    type: [String, Object] as PropType<string | Record<string, unknown>>,
+    default: '',
+  },
 } as const;
 
 export type PageProps = ExtractPropTypes<typeof pageProps>;
