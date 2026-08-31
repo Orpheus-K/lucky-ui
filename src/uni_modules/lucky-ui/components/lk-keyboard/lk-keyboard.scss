@@ -1,7 +1,7 @@
 @use '../../theme/src/mixins' as *;
 
 @include b(keyboard) {
-  --kb-key-height: var(--lk-rpx-104);
+  --kb-key-height: var(--lk-rpx-120);
 
   box-sizing: border-box;
   width: 100%;
@@ -19,7 +19,7 @@
   @include e(header) {
     display: flex;
     align-items: center;
-    min-height: var(--lk-rpx-88);
+    min-height: var(--lk-rpx-96);
     padding: var(--lk-spacing-xs) var(--lk-spacing-lg) 0;
   }
 
@@ -63,7 +63,7 @@
   @include e(body) {
     box-sizing: border-box;
     width: 100%;
-    padding: var(--lk-spacing-md) var(--lk-spacing-lg) var(--lk-spacing-lg);
+    padding: var(--lk-spacing-sm) var(--lk-spacing-lg) var(--lk-spacing-xl);
   }
 
   @include e(row) {
@@ -101,25 +101,26 @@
 
     @include m(extra) {
       .lk-keyboard__key-text {
-        font-size: var(--lk-font-size-base);
+        font-size: var(--lk-font-size-md);
+        font-weight: var(--lk-font-weight-regular);
       }
     }
   }
 
   @include e(key-text) {
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
-    font-size: var(--lk-font-size-xl);
+    font-size: var(--lk-rpx-48);
     font-weight: var(--lk-font-weight-medium);
     line-height: 1;
     color: inherit;
   }
 
   @include m(plate) {
-    --kb-key-height: var(--lk-rpx-80);
+    --kb-key-height: var(--lk-rpx-92);
 
     .lk-keyboard__body {
-      padding-right: var(--lk-spacing-sm);
-      padding-left: var(--lk-spacing-sm);
+      padding-right: var(--lk-spacing-xs);
+      padding-left: var(--lk-spacing-xs);
     }
 
     .lk-keyboard__key-text {
@@ -127,14 +128,7 @@
     }
 
     .lk-keyboard__key {
-      flex: 0 0 10%;
-      width: 10%;
-    }
-
-    .lk-keyboard__key--extra,
-    .lk-keyboard__key--delete {
       flex: 1;
-      width: auto;
     }
   }
 }

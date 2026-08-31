@@ -185,23 +185,37 @@ export function buildKeyboardRows(keys: string[], itemsPerRow: number): Keyboard
 }
 
 export function buildPlateProvinceKeyboardLayout(abcText: string): KeyboardKey[][] {
-  return [
-    ...buildKeyboardRows(keyboardPlateProvinces, 10),
-    [
-      { text: abcText, type: 'extra', value: '__switch__' },
-      { text: '', type: 'delete' },
-    ],
+  const row1 = keyboardPlateProvinces.slice(0, 9).map(k => ({ text: k, value: k }));
+  const row2 = keyboardPlateProvinces.slice(9, 18).map(k => ({ text: k, value: k }));
+  const row3 = keyboardPlateProvinces.slice(18, 27).map(k => ({ text: k, value: k }));
+  const remaining = keyboardPlateProvinces.slice(27).map(k => ({ text: k, value: k }));
+
+  const row4: KeyboardKey[] = [
+    { text: abcText, type: 'extra', value: '__switch__', flex: 1.5 },
+    ...remaining,
+    { text: '', type: 'delete', flex: 1.5 },
   ];
+
+  return [row1, row2, row3, row4];
 }
 
 export function buildPlateAlphaNumKeyboardLayout(provinceText: string): KeyboardKey[][] {
-  return [
-    ...buildKeyboardRows(keyboardPlateAlphaNum, 10),
-    [
-      { text: provinceText, type: 'extra', value: '__switch__' },
-      { text: '', type: 'delete' },
-    ],
+  // 数字 0~9：首行 10 个
+  const numbers = keyboardPlateAlphaNum.slice(24).map(k => ({ text: k, value: k }));
+  // 字母前9个 (A-J)
+  const lettersRow1 = keyboardPlateAlphaNum.slice(0, 9).map(k => ({ text: k, value: k }));
+  // 字母次9个 (K-T)
+  const lettersRow2 = keyboardPlateAlphaNum.slice(9, 18).map(k => ({ text: k, value: k }));
+  // 剩余字母 (U-Z 6个)
+  const remainingLetters = keyboardPlateAlphaNum.slice(18, 24).map(k => ({ text: k, value: k }));
+
+  const row4: KeyboardKey[] = [
+    { text: provinceText, type: 'extra', value: '__switch__', flex: 1.5 },
+    ...remainingLetters,
+    { text: '', type: 'delete', flex: 1.5 },
   ];
+
+  return [numbers, lettersRow1, lettersRow2, row4];
 }
 
 export function resolveKeyboardLayout(options: KeyboardLayoutOptions): KeyboardKey[][] {
@@ -252,8 +266,15 @@ export function resolveKeyboardPressAction(options: {
     return { kind: 'switch', nextPlateMode: getNextKeyboardPlateMode(plateMode) };
   }
 
-  if (key.value && canKeyboardInput(modelValue, maxLength)) {
-    return { kind: 'input', input: key.value, nextValue: modelValue + key.value };
+  const inputValue = key.value !== undefined ? key.value : key.text;
+
+  // 小数点重复输入防护
+  if (inputValue === '.' && modelValue.includes('.')) {
+    return { kind: 'ignore' };
+  }
+
+  if (inputValue && canKeyboardInput(modelValue, maxLength)) {
+    return { kind: 'input', input: inputValue, nextValue: modelValue + inputValue };
   }
 
   return { kind: 'ignore' };
