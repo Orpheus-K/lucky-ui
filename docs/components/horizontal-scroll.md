@@ -30,6 +30,30 @@ phone: horizontal-scroll
 </lk-horizontal-scroll>
 ```
 
+## 逐项滑动
+
+默认保留原生自由滚动。设置 `snap` 并使用 `lk-horizontal-scroll-item` 包裹每张卡片后，触摸横滑每次最多前进或后退一个停靠点，按 1 → 2 → 3 的顺序浏览。位移不足 24px 时回到当前项，纵向手势仍用于页面滚动。
+
+```vue
+<lk-horizontal-scroll snap gap="20rpx">
+  <lk-horizontal-scroll-item v-for="i in 6" :key="i">
+    <view style="width: 560rpx">卡片 {{ i }}</view>
+  </lk-horizontal-scroll-item>
+</lk-horizontal-scroll>
+```
+
+逐项模式使用 uni-app 节点查询、模板触摸事件和受控位移，不访问 H5 内部 DOM。子项组件在自己的作用域测量并注册到容器，避免小程序插槽查询限制。请给所有卡片设置明确宽度并逐个包裹，不要只包裹整个列表。未使用子项组件、测量不可用、少于两个子项、内容无需滚动或存在宽于视口的子项时，自动保留自由滚动。末尾能同时显示的子项共享末端停靠点。
+
+窗口尺寸及组件更新后会重新测量；图片加载或外部布局变化后，也可通过组件 ref 调用 `refresh()` 重新测量。逐项模式不显示原生滚动进度。H5 同时支持鼠标拖动、触控板横滑和 Shift + 滚轮，每次手势移动一项，普通纵向滚轮仍用于页面滚动。
+
+需要自由惯性滚动时，设置 `:snap="false"`：
+
+```vue
+<lk-horizontal-scroll :snap="false">
+  <view v-for="i in 10" :key="i" style="width: 180rpx; flex-shrink: 0">Item {{ i }}</view>
+</lk-horizontal-scroll>
+```
+
 ## 显示滚动条
 
 ```vue
@@ -71,6 +95,7 @@ import HorizontalScrollDemo from '@/pages_sub/components/demos/horizontal-scroll
 | gap | 子项间距 | `string \| number` | `'20rpx'` |
 | padding | 内容区域左右内边距 | `string \| number` | `'0rpx'` |
 | hideScrollbar | 是否隐藏滚动条 | `boolean` | `true` |
+| snap | 触摸逐项停靠；配合 `lk-horizontal-scroll-item` 组件使用 | `boolean` | `false` |
 
 ### Events
 

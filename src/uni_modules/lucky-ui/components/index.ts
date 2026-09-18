@@ -172,6 +172,7 @@ export * from './lk-number-roller/number-roller.props';
 export { default as LkCurtain } from './lk-curtain/lk-curtain.vue';
 export * from './lk-curtain/curtain.props';
 export { default as LkHorizontalScroll } from './lk-horizontal-scroll/lk-horizontal-scroll.vue';
+export { default as LkHorizontalScrollItem } from './lk-horizontal-scroll-item/lk-horizontal-scroll-item.vue';
 export * from './lk-horizontal-scroll/horizontal-scroll.props';
 export { default as LkMetaRow } from './lk-meta-row/lk-meta-row.vue';
 export * from './lk-meta-row/meta-row.props';

@@ -7,6 +7,18 @@
   border: 0;
   box-sizing: border-box;
 
+  /* #ifdef H5 */
+  &--snap {
+    touch-action: pan-y;
+    cursor: grab;
+    user-select: none;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+  /* #endif */
+
   & ::-webkit-scrollbar {
     width: 0;
     height: 0;

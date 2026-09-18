@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import DemoBlock from '@/uni_modules/lucky-ui/components/demo-block/demo-block.vue';
 import LkHorizontalScroll from '@/uni_modules/lucky-ui/components/lk-horizontal-scroll/lk-horizontal-scroll.vue';
+import LkHorizontalScrollItem from '@/uni_modules/lucky-ui/components/lk-horizontal-scroll-item/lk-horizontal-scroll-item.vue';
 
 const nearbyCards = [
   {
@@ -32,22 +33,19 @@ const nearbyCards = [
 
 <template>
   <view class="horizontal-scroll-demo">
-    <demo-block title="附近可用权益">
-      <lk-horizontal-scroll gap="20rpx" padding="0rpx">
-        <view
-          v-for="item in nearbyCards"
-          :key="item.name"
-          class="nearby-card"
-          :class="`nearby-card--${item.color}`"
-        >
-          <view class="nearby-card__media">
-            <text class="nearby-card__tag">{{ item.tag }}</text>
+    <demo-block title="附近可用权益 · 逐项滑动">
+      <lk-horizontal-scroll snap gap="20rpx" padding="0rpx">
+        <lk-horizontal-scroll-item v-for="(item, index) in nearbyCards" :key="item.name">
+          <view class="nearby-card" :class="`nearby-card--${item.color}`">
+            <view class="nearby-card__media">
+              <text class="nearby-card__tag">{{ item.tag }}</text>
+            </view>
+            <view class="nearby-card__body">
+              <text class="nearby-card__name">{{ index + 1 }} · {{ item.name }}</text>
+              <text class="nearby-card__meta">{{ item.meta }}</text>
+            </view>
           </view>
-          <view class="nearby-card__body">
-            <text class="nearby-card__name">{{ item.name }}</text>
-            <text class="nearby-card__meta">{{ item.meta }}</text>
-          </view>
-        </view>
+        </lk-horizontal-scroll-item>
       </lk-horizontal-scroll>
     </demo-block>
   </view>
